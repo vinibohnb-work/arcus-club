@@ -1,0 +1,1947 @@
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "./contexts/AuthContext";
+import {
+  supabase,
+  toMentee, toMenteeDb,
+  toLead, toLeadDb,
+  toEvent, toEventDb,
+  toGoalsObj, fromGoalsObj,
+} from "./lib/supabase";
+
+const COLORS = {
+  bg: "#080808",
+  surface: "#111111",
+  card: "#161616",
+  cardHover: "#1C1C1C",
+  border: "#2A2A2A",
+  borderLight: "#222222",
+  accent: "#C9A84C",       // warm gold
+  accentLight: "#E2C37A",
+  accentDim: "#C9A84C33",
+  violet: "#7B6FD4",
+  teal: "#3DBFB0",
+  red: "#E05252",
+  text: "#F2EDE4",         // warm white
+  textMuted: "#8A8070",
+  textDim: "#4A4440",
+};
+
+const FONT_DISPLAY = `'Playfair Display', 'Georgia', serif`;
+const FONT_BODY = `'Cormorant Garamond', 'Garamond', Georgia, serif`;
+const FONT_UI = `'Jost', 'DM Sans', sans-serif`;
+
+const styles = {
+  app: {
+    fontFamily: FONT_UI,
+    background: COLORS.bg,
+    minHeight: "100vh",
+    color: COLORS.text,
+    display: "flex",
+    backgroundImage: `radial-gradient(ellipse at 20% 0%, #1A140833 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, #0D0D1A22 0%, transparent 60%)`,
+  },
+  sidebar: {
+    width: 260,
+    minHeight: "100vh",
+    background: COLORS.surface,
+    borderRight: `1px solid ${COLORS.border}`,
+    display: "flex",
+    flexDirection: "column",
+    padding: "36px 0 24px",
+    position: "fixed",
+    top: 0, left: 0, bottom: 0,
+    zIndex: 100,
+  },
+  logo: {
+    padding: "0 28px 32px",
+    borderBottom: `1px solid ${COLORS.border}`,
+    marginBottom: 16,
+  },
+  logoMark: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+  },
+  logoDot: {
+    width: 28,
+    height: 2,
+    background: `linear-gradient(90deg, ${COLORS.accent}, transparent)`,
+    marginBottom: 10,
+  },
+  logoText: {
+    fontSize: 18,
+    fontFamily: FONT_DISPLAY,
+    fontWeight: 700,
+    fontStyle: "italic",
+    color: COLORS.text,
+    lineHeight: 1.2,
+    letterSpacing: "0.01em",
+  },
+  logoSub: {
+    fontSize: 11,
+    color: COLORS.accent,
+    textTransform: "uppercase",
+    letterSpacing: "0.22em",
+    fontWeight: 400,
+    fontFamily: FONT_UI,
+    marginTop: 4,
+  },
+  navSection: { padding: "8px 12px" },
+  navLabel: {
+    fontSize: 11,
+    color: COLORS.textDim,
+    textTransform: "uppercase",
+    letterSpacing: "0.18em",
+    fontWeight: 600,
+    fontFamily: FONT_UI,
+    padding: "12px 28px 6px",
+  },
+  navItem: (active) => ({
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+    padding: "10px 28px",
+    cursor: "pointer",
+    fontSize: 15,
+    fontWeight: active ? 500 : 400,
+    fontFamily: FONT_UI,
+    color: active ? COLORS.text : COLORS.textMuted,
+    background: active ? `${COLORS.accent}0D` : "transparent",
+    borderLeft: active ? `1px solid ${COLORS.accent}` : "1px solid transparent",
+    letterSpacing: "0.03em",
+    marginBottom: 1,
+    transition: "all 0.2s",
+  }),
+  main: {
+    marginLeft: 260,
+    flex: 1,
+    padding: "48px 56px",
+    minHeight: "100vh",
+    maxWidth: "calc(100vw - 260px)",
+  },
+  pageHeader: { marginBottom: 44 },
+  pageTitle: {
+    fontSize: 34,
+    fontFamily: FONT_DISPLAY,
+    fontWeight: 700,
+    fontStyle: "italic",
+    color: COLORS.text,
+    letterSpacing: "-0.01em",
+    marginBottom: 6,
+    lineHeight: 1.1,
+  },
+  pageSubtitle: {
+    fontSize: 15,
+    color: COLORS.textMuted,
+    fontFamily: FONT_UI,
+    letterSpacing: "0.04em",
+  },
+  grid2: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))", gap: 24 },
+  grid3: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: 24 },
+  grid4: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: 20 },
+  card: (extra = {}) => ({
+    background: COLORS.card,
+    border: `1px solid ${COLORS.border}`,
+    borderRadius: 4,
+    padding: 28,
+    ...extra,
+  }),
+  statCard: (color) => ({
+    background: COLORS.card,
+    border: `1px solid ${COLORS.border}`,
+    borderRadius: 4,
+    padding: "24px 28px",
+    borderLeft: `2px solid ${color}`,
+    position: "relative",
+    overflow: "hidden",
+  }),
+  statValue: {
+    fontSize: 38,
+    fontFamily: FONT_DISPLAY,
+    fontWeight: 700,
+    color: COLORS.text,
+    letterSpacing: "-0.03em",
+    lineHeight: 1,
+    marginBottom: 6,
+  },
+  statLabel: {
+    fontSize: 12,
+    color: COLORS.textMuted,
+    textTransform: "uppercase",
+    letterSpacing: "0.14em",
+    fontWeight: 500,
+    fontFamily: FONT_UI,
+  },
+  statDelta: (pos) => ({
+    fontSize: 13,
+    color: pos ? COLORS.teal : COLORS.red,
+    fontWeight: 500,
+    marginTop: 8,
+    fontFamily: FONT_UI,
+    letterSpacing: "0.03em",
+  }),
+  sectionTitle: {
+    fontSize: 13,
+    fontWeight: 600,
+    fontFamily: FONT_UI,
+    color: COLORS.textMuted,
+    marginBottom: 20,
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
+  },
+  badge: (color) => ({
+    display: "inline-block",
+    padding: "2px 10px",
+    borderRadius: 2,
+    fontSize: 12,
+    fontWeight: 500,
+    fontFamily: FONT_UI,
+    letterSpacing: "0.08em",
+    background: `${color}18`,
+    color: color,
+    border: `1px solid ${color}33`,
+    textTransform: "uppercase",
+  }),
+  btn: (variant = "primary") => ({
+    padding: variant === "sm" ? "7px 16px" : "11px 24px",
+    borderRadius: 2,
+    border: "none",
+    cursor: "pointer",
+    fontSize: variant === "sm" ? 13 : 14,
+    fontWeight: 500,
+    fontFamily: FONT_UI,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    background: variant === "ghost" ? "transparent"
+      : variant === "outline" ? "transparent"
+      : COLORS.accent,
+    color: variant === "ghost" ? COLORS.textMuted
+      : variant === "outline" ? COLORS.accent
+      : "#0A0800",
+    border: variant === "outline" ? `1px solid ${COLORS.accent}` : "none",
+    transition: "all 0.2s",
+  }),
+  input: {
+    background: COLORS.surface,
+    border: `1px solid ${COLORS.border}`,
+    borderRadius: 2,
+    padding: "10px 14px",
+    color: COLORS.text,
+    fontSize: 15,
+    width: "100%",
+    outline: "none",
+    fontFamily: FONT_UI,
+    letterSpacing: "0.02em",
+  },
+  textarea: {
+    background: COLORS.surface,
+    border: `1px solid ${COLORS.border}`,
+    borderRadius: 2,
+    padding: "10px 14px",
+    color: COLORS.text,
+    fontSize: 15,
+    width: "100%",
+    outline: "none",
+    fontFamily: FONT_UI,
+    resize: "vertical",
+    minHeight: 80,
+    letterSpacing: "0.02em",
+  },
+  label: {
+    fontSize: 12,
+    color: COLORS.textMuted,
+    fontWeight: 500,
+    marginBottom: 6,
+    display: "block",
+    textTransform: "uppercase",
+    letterSpacing: "0.12em",
+    fontFamily: FONT_UI,
+  },
+  tag: (color) => ({
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 4,
+    padding: "3px 10px",
+    borderRadius: 2,
+    fontSize: 12,
+    fontWeight: 500,
+    fontFamily: FONT_UI,
+    letterSpacing: "0.06em",
+    background: `${color}14`,
+    color: color,
+    textTransform: "uppercase",
+  }),
+  avatarCircle: (size = 36, color = COLORS.accent) => ({
+    width: size,
+    height: size,
+    borderRadius: 2,
+    background: `${color}18`,
+    border: `1px solid ${color}44`,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: size * 0.33,
+    fontWeight: 600,
+    fontFamily: FONT_UI,
+    letterSpacing: "0.05em",
+    color: color,
+    flexShrink: 0,
+  }),
+  progressBar: (pct, color) => ({
+    height: 2,
+    borderRadius: 1,
+    background: COLORS.borderLight,
+    overflow: "hidden",
+    position: "relative",
+  }),
+  progressFill: (pct, color) => ({
+    height: "100%",
+    width: `${pct}%`,
+    background: color,
+    borderRadius: 1,
+    transition: "width 0.5s ease",
+  }),
+  divider: {
+    height: 1,
+    background: COLORS.border,
+    margin: "20px 0",
+  },
+  pill: (active, color = COLORS.accent) => ({
+    padding: "6px 16px",
+    borderRadius: 2,
+    fontSize: 12,
+    fontWeight: 500,
+    fontFamily: FONT_UI,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    cursor: "pointer",
+    background: active ? `${color}18` : "transparent",
+    color: active ? color : COLORS.textMuted,
+    border: `1px solid ${active ? color + "55" : COLORS.border}`,
+    transition: "all 0.15s",
+  }),
+  modal: {
+    position: "fixed",
+    inset: 0,
+    background: "#000000CC",
+    zIndex: 1000,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 24,
+    backdropFilter: "blur(4px)",
+  },
+  modalBox: {
+    background: COLORS.surface,
+    border: `1px solid ${COLORS.border}`,
+    borderRadius: 4,
+    padding: 36,
+    width: "100%",
+    maxWidth: 520,
+    maxHeight: "85vh",
+    overflowY: "auto",
+  },
+};
+
+// DATA
+const DEMO_MENTEE = {
+  id: "demo",
+  name: "Lucas Ferreira",
+  email: "lucas@email.com",
+  phone: "(11) 99123-4567",
+  stage: "Ativo",
+  goal: "Lançar minha startup de tecnologia",
+  joinDate: "2025-01-10",
+  avatar: "LF",
+  color: "#7B6FD4",
+  tags: ["Startup", "Tecnologia", "Produto"],
+  lastContact: "2025-03-05",
+  notes: "Lucas tem sólida base técnica e grande potencial empreendedor. Foco em validação de mercado e pitch para investidores.",
+  milestones: [true, true, true, false, false, false],
+  customPlan: "1. Validar hipóteses do produto com 20 entrevistas de usuário até 31/03\n2. Definir MVP e roadmap de funcionalidades para Q2\n3. Montar deck de pitch para aceleradoras (Endeavor, Distrito)\n4. Prospectar 3 co-fundadores ou sócios estratégicos\n5. Estruturar modelo de receita e precificação\n6. Apresentar para 2 fundos de seed até 30/06",
+};
+
+const INITIAL_MENTEES = [
+  { id: 1, name: "Ana Souza", email: "ana@email.com", phone: "(11) 99999-0001", stage: "Ativo", goal: "Escalar faturamento", joinDate: "2024-10-01", avatar: "AS", color: "#6C63FF", tags: ["Marketing", "E-commerce"], lastContact: "2025-03-01", notes: "Foco em tráfego pago e conversão", milestones: [true, true, true, false, false, false] },
+  { id: 2, name: "Bruno Lima", email: "bruno@email.com", phone: "(11) 99999-0002", stage: "Ativo", goal: "Lançar produto digital", joinDate: "2024-11-15", avatar: "BL", color: "#F5A623", tags: ["Infoproduto", "Copywriting"], lastContact: "2025-02-28", notes: "Precisa definir nicho", milestones: [true, true, false, false, false, false] },
+  { id: 3, name: "Carla Mendes", email: "carla@email.com", phone: "(11) 99999-0003", stage: "Inativo", goal: "Gestão de equipe", joinDate: "2024-09-01", avatar: "CM", color: "#2DD4BF", tags: ["Liderança", "RH"], lastContact: "2025-02-10", notes: "Pausou por viagem", milestones: [true, false, false, false, false, false] },
+  { id: 4, name: "Diego Costa", email: "diego@email.com", phone: "(11) 99999-0004", stage: "Ativo", goal: "Vendas B2B", joinDate: "2024-08-01", avatar: "DC", color: "#FF6B6B", tags: ["Vendas", "B2B", "Negociação"], lastContact: "2025-03-03", notes: "Evoluindo muito bem", milestones: [true, true, true, true, true, false] },
+  { id: 5, name: "Elena Rocha", email: "elena@email.com", phone: "(11) 99999-0005", stage: "Ativo", goal: "Primeira venda online", joinDate: "2024-07-01", avatar: "ER", color: "#A78BFA", tags: ["Iniciante", "Digital"], lastContact: "2025-01-15", notes: "Progredindo bem", milestones: [true, true, true, false, false, false] },
+  DEMO_MENTEE,
+];
+
+const INITIAL_LEADS = [
+  {
+    id: 101, name: "Fernanda Dias", email: "fernanda@email.com", phone: "(11) 98888-0001",
+    source: "Instagram", interest: "Dobrar faturamento",
+    avatar: "FD", color: "#6C63FF", tags: ["E-commerce"], lastContact: "2026-03-08",
+    notes: "Veio pelo post de case da Ana",
+    interactions: [
+      { id: 1001, type: "Mensagem", note: "Primeiro contato via direct no Instagram. Demonstrou interesse em mentoria para escalar e-commerce.", date: "2026-03-05" },
+      { id: 1002, type: "Ligação", note: "Ligação de 20min. Confirmou interesse. Quer dobrar faturamento de R$15k para R$30k em 3 meses.", date: "2026-03-08" },
+    ],
+    nextSteps: [
+      { id: 2001, type: "Enviar proposta", title: "Enviar proposta comercial por e-mail", note: "Incluir cases similares ao negócio dela", date: "2026-03-11", done: false },
+      { id: 2002, type: "Follow-up", title: "Follow-up da proposta", date: "2026-03-14", done: false },
+    ],
+  },
+  {
+    id: 102, name: "Rafael Pinto", email: "rafael@email.com", phone: "(11) 98888-0002",
+    source: "Indicação", interest: "Criar negócio digital",
+    avatar: "RP", color: "#F5A623", tags: ["Iniciante", "Digital"], lastContact: "2026-03-07",
+    notes: "Indicado pelo Diego Costa",
+    interactions: [
+      { id: 1003, type: "Mensagem", note: "Indicação do Diego. Mandei mensagem apresentando o programa.", date: "2026-03-04" },
+      { id: 1004, type: "Reunião", note: "Reunião de 30min via Google Meet. Muito engajado, quer estruturar um negócio digital do zero.", date: "2026-03-07" },
+    ],
+    nextSteps: [
+      { id: 2003, type: "Ligar", title: "Ligar para tirar dúvidas sobre a proposta", date: "2026-03-10", done: false },
+    ],
+  },
+  {
+    id: 103, name: "Juliana Neves", email: "juliana@email.com", phone: "(11) 98888-0003",
+    source: "LinkedIn", interest: "Liderança e gestão",
+    avatar: "JN", color: "#2DD4BF", tags: ["Liderança", "Corporativo"], lastContact: "2026-03-09",
+    notes: "Muito qualificada, aguardando resposta",
+    interactions: [
+      { id: 1005, type: "E-mail", note: "Entrou em contato pelo LinkedIn pedindo informações sobre mentoria executiva.", date: "2026-03-01" },
+      { id: 1006, type: "Reunião", note: "Reunião de diagnóstico de 1h. Quer desenvolver liderança da equipe de 15 pessoas. Perfil muito qualificado.", date: "2026-03-06" },
+      { id: 1007, type: "Ligação", note: "Apresentamos a proposta. Ela gostou e está avaliando internamente.", date: "2026-03-09" },
+    ],
+    nextSteps: [
+      { id: 2004, type: "Follow-up", title: "Follow-up — fechar contrato", note: "Ela disse que responde até sexta", date: "2026-03-13", done: false },
+    ],
+  },
+  {
+    id: 104, name: "Carlos Motta", email: "carlos@email.com", phone: "(11) 98888-0004",
+    source: "YouTube", interest: "Vendas B2C",
+    avatar: "CA", color: "#FF6B6B", tags: ["Vendas", "B2C"], lastContact: "2026-03-03",
+    notes: "Comentou em vídeo do YouTube",
+    interactions: [
+      { id: 1008, type: "Mensagem", note: "Deixou comentário no YouTube perguntando sobre mentoria. Respondemos e pedimos para entrar em contato.", date: "2026-03-03" },
+    ],
+    nextSteps: [
+      { id: 2005, type: "Ligar", title: "Fazer primeiro contato por WhatsApp", date: "2026-03-10", done: false },
+    ],
+  },
+  {
+    id: 105, name: "Mariana Castro", email: "mariana@email.com", phone: "(11) 98888-0005",
+    source: "Evento", interest: "Marca pessoal",
+    avatar: "MC", color: "#A78BFA", tags: ["Branding", "Redes Sociais"], lastContact: "2026-03-08",
+    notes: "Conheceu no evento de marketing",
+    interactions: [
+      { id: 1009, type: "Reunião", note: "Nos conhecemos no evento de Marketing Digital. Troca de contatos e apresentação do programa.", date: "2026-03-06" },
+      { id: 1010, type: "Mensagem", note: "Mandamos mensagem no WhatsApp com os detalhes do programa. Ela respondeu positivamente.", date: "2026-03-08" },
+    ],
+    nextSteps: [
+      { id: 2006, type: "Agendar reunião", title: "Agendar call de apresentação detalhada", date: "2026-03-12", done: false },
+      { id: 2007, type: "Enviar mensagem", title: "Enviar material de apoio sobre marca pessoal", date: "2026-03-11", done: false },
+    ],
+  },
+];
+
+const LEAD_STAGES = ["Novo Lead", "Contato Feito", "Proposta Enviada", "Negociação", "Convertido", "Perdido"];
+const MENTEE_STAGES = ["Ativo", "Inativo"];
+const LEAD_SOURCES = ["Instagram", "LinkedIn", "YouTube", "Indicação", "Evento", "WhatsApp", "Google", "Outro"];
+const INTERACTION_TYPES = ["Ligação", "Mensagem", "Reunião", "E-mail", "Outro"];
+const NEXT_STEP_TYPES = ["Ligar", "Enviar mensagem", "Enviar proposta", "Agendar reunião", "Follow-up", "Outro"];
+const ASSIGNEES = ["Eu", "Sócio", "Ambos"];
+const STAGE_COLORS = {
+  "Ativo": "#3DBFB0",
+  "Inativo": "#E05252",
+  "Novo Lead": "#6A6A7A",
+  "Contato Feito": "#7B6FD4",
+  "Proposta Enviada": "#C9A84C",
+  "Negociação": "#E09A3D",
+  "Convertido": "#3DBFB0",
+  "Perdido": "#E05252",
+};
+const MILESTONE_LABELS = ["Onboarding", "Diagnóstico", "Plano de Ação", "Execução", "Revisão", "Avanço Contínuo"];
+
+const INITIAL_EVENTS = [
+  { id: 1, title: "Masterclass: Escala de Negócios", date: "2025-03-10", type: "evento", desc: "Live para todos os mentorados", time: "19:00" },
+  { id: 2, title: "Post: Dica de Produtividade", date: "2025-03-07", type: "post", desc: "Instagram + LinkedIn", time: "08:00" },
+  { id: 3, title: "Sessão 1:1 - Ana Souza", date: "2025-03-08", type: "sessao", desc: "Revisão de metas Q1", time: "10:00" },
+  { id: 4, title: "Workshop: Tráfego Pago", date: "2025-03-15", type: "evento", desc: "Para mentorados premium", time: "14:00" },
+  { id: 5, title: "Post: Case de Sucesso Diego", date: "2025-03-12", type: "post", desc: "Depoimento para redes", time: "09:00" },
+  { id: 6, title: "Sessão 1:1 - Bruno Lima", date: "2025-03-11", type: "sessao", desc: "Definição de nicho", time: "16:00" },
+];
+
+const INITIAL_GOALS = {
+  30: [
+    { id: 1, text: "Atingir 10 mentorados ativos", done: true },
+    { id: 2, text: "Publicar 12 conteúdos nas redes", done: true },
+    { id: 3, text: "Criar template de onboarding", done: false },
+  ],
+  60: [
+    { id: 4, text: "Lançar plano VIP", done: false },
+    { id: 5, text: "Realizar 2 masterclasses", done: true },
+    { id: 6, text: "Atingir R$ 25k MRR", done: false },
+  ],
+  90: [
+    { id: 7, text: "Expandir para 20 mentorados", done: false },
+    { id: 8, text: "Criar área de membros", done: false },
+    { id: 9, text: "Parceria com 2 influencers", done: false },
+  ],
+  150: [
+    { id: 10, text: "Atingir R$ 60k MRR", done: false },
+    { id: 11, text: "Contratar assistente", done: false },
+    { id: 12, text: "Lançar curso gravado", done: false },
+    { id: 13, text: "Comunidade com 500 membros", done: false },
+  ],
+};
+
+const DEFAULT_PLAN_ITEMS = [
+  "Onboarding: Definição de objetivos e diagnóstico",
+  "– Plano de ação personalizado (30/60/90 dias)",
+  "– Sessões 1:1 semanais (45 min cada)",
+  "– Acesso à biblioteca de materiais exclusivos",
+  "Suporte via WhatsApp (seg-sex, 9h-18h)",
+  "Gravações das sessões disponíveis por 30 dias",
+  "– Relatório mensal de progresso",
+  "Acesso ao grupo exclusivo de mentorados",
+];
+
+// ICONS
+const Icon = ({ name, size = 16 }) => {
+  const icons = {
+    home: "⬡", users: "👥", calendar: "📅", target: "🎯", crm: "📊", settings: "⚙️",
+    plus: "+", edit: "✏️", trash: "🗑️", check: "✓", close: "✕", eye: "👁",
+    star: "★", fire: "🔥", lock: "◎", unlock: "🔓", bell: "🔔", mail: "✉️",
+    phone: "📞", tag: "🏷️", chart: "📈", award: "🏆", user: "👤", back: "←",
+    send: "→", dot: "•", flag: "⚑", clock: "⏰",
+  };
+  return <span style={{ fontSize: size, lineHeight: 1 }}>{icons[name] || "•"}</span>;
+};
+
+// PROGRESS BAR COMPONENT
+const Progress = ({ value, color = COLORS.accent, height = 6 }) => (
+  <div style={{ ...styles.progressBar(value, color), height }}>
+    <div style={{ ...styles.progressFill(value, color), height: "100%" }} />
+  </div>
+);
+
+// AVATAR
+const Avatar = ({ initials, color, size = 36 }) => (
+  <div style={styles.avatarCircle(size, color)}>{initials}</div>
+);
+
+// ==================== VIEWS ====================
+
+// DASHBOARD
+function Dashboard({ mentees, leads, events }) {
+  const today = new Date().toISOString().split("T")[0];
+  const tomorrow = (() => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toISOString().split("T")[0]; })();
+  const endOfWeek = (() => { const d = new Date(); d.setDate(d.getDate() + 7); return d.toISOString().split("T")[0]; })();
+  const active = mentees.filter(m => m.stage === "Ativo").length;
+  const [expandedKey, setExpandedKey] = useState(null);
+
+  const stepIcon = t => ({ "Ligar": "📞", "Enviar mensagem": "💬", "Enviar proposta": "📄", "Agendar reunião": "🤝", "Follow-up": "🔄", "Outro": "📝" }[t] || "📝");
+
+  // Coleta todos os next steps pendentes de todos os leads
+  const allPending = leads.flatMap(l =>
+    (l.nextSteps || []).filter(s => !s.done).map(s => ({ ...s, leadName: l.name, leadColor: l.color, leadAvatar: l.avatar }))
+  );
+
+  // Agrupa por bucket de data
+  const groups = [];
+
+  const overdue = allPending.filter(s => s.date < today).sort((a, b) => a.date.localeCompare(b.date));
+  if (overdue.length) groups.push({ key: "overdue", label: "Atrasado", color: COLORS.red, highlight: true, steps: overdue });
+
+  const todaySteps = allPending.filter(s => s.date === today);
+  if (todaySteps.length) groups.push({ key: "today", label: "Hoje", color: COLORS.accent, highlight: true, steps: todaySteps });
+
+  const tomorrowSteps = allPending.filter(s => s.date === tomorrow);
+  if (tomorrowSteps.length) groups.push({ key: "tomorrow", label: "Amanhã", color: COLORS.teal, highlight: true, steps: tomorrowSteps });
+
+  // Demais dias até fim da semana, agrupados por data
+  const restDates = [...new Set(
+    allPending.filter(s => s.date > tomorrow && s.date <= endOfWeek).map(s => s.date)
+  )].sort();
+  restDates.forEach(date => {
+    const steps = allPending.filter(s => s.date === date);
+    const label = new Date(date + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "short" });
+    groups.push({ key: date, label, color: COLORS.textMuted, highlight: false, steps });
+  });
+
+  return (
+    <div>
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ ...styles.statCard(COLORS.teal), maxWidth: 260 }}>
+          <div style={styles.statValue}>{active}</div>
+          <div style={styles.statLabel}>Mentorados Ativos</div>
+        </div>
+      </div>
+
+      <div style={{ ...styles.grid2, marginBottom: 24 }}>
+        {/* Card: atividades consolidadas */}
+        <div style={styles.card()}>
+          <div style={styles.sectionTitle}>— Prospecção · Próximos 7 dias</div>
+          {groups.length === 0
+            ? <div style={{ color: COLORS.textMuted, fontSize: 13, paddingTop: 8 }}>Nenhuma atividade pendente.</div>
+            : <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 8 }}>
+                {groups.map(g => {
+                  const isOpen = expandedKey === g.key;
+                  return (
+                    <div key={g.key}>
+                      {/* Linha do grupo */}
+                      <div onClick={() => setExpandedKey(isOpen ? null : g.key)}
+                        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", borderRadius: isOpen ? "4px 4px 0 0" : 4, background: g.highlight ? (isOpen ? `${g.color}30` : `${g.color}1E`) : (isOpen ? `${g.color}14` : COLORS.surface), border: `1px solid ${g.highlight || isOpen ? g.color + "55" : COLORS.border}`, borderLeft: `3px solid ${g.color}`, cursor: "pointer", transition: "all 0.15s" }}>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: g.highlight ? g.color : COLORS.text }}>{g.label}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <span style={{ fontSize: 12, color: g.highlight ? g.color : COLORS.textMuted, background: g.highlight ? `${g.color}22` : COLORS.border, border: g.highlight ? `1px solid ${g.color}44` : "none", borderRadius: 10, padding: "2px 9px", fontWeight: 600 }}>
+                            {g.steps.length} tarefa{g.steps.length !== 1 ? "s" : ""}
+                          </span>
+                          <span style={{ fontSize: 11, color: g.highlight ? g.color : COLORS.textMuted, transition: "transform 0.2s", display: "inline-block", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+                        </div>
+                      </div>
+                      {/* Detalhe expandido */}
+                      {isOpen && (
+                        <div style={{ border: `1px solid ${g.color}44`, borderTop: "none", borderRadius: "0 0 4px 4px", background: COLORS.card, overflow: "hidden" }}>
+                          {g.steps.map((s, i) => (
+                            <div key={s.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 14px", borderTop: i > 0 ? `1px solid ${COLORS.border}` : "none" }}>
+                              <Avatar initials={s.leadAvatar} color={s.leadColor} size={26} />
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontSize: 13, fontWeight: 600, color: COLORS.text }}>{stepIcon(s.type)} {s.title}</div>
+                                <div style={{ fontSize: 11, color: COLORS.textMuted }}>{s.leadName}{s.note ? ` · ${s.note}` : ""}</div>
+                              </div>
+                              <span style={{ fontSize: 11, color: COLORS.textMuted, flexShrink: 0 }}>{s.type}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+          }
+        </div>
+
+        {/* Card: próximos eventos */}
+        <div style={styles.card()}>
+          <div style={styles.sectionTitle}>– Próximos Eventos</div>
+          {events.slice(0, 5).map(e => {
+            const typeColor = e.type === "evento" ? COLORS.accent : e.type === "post" ? COLORS.accent : COLORS.teal;
+            return (
+              <div key={e.id} style={{ display: "flex", gap: 12, marginBottom: 14, alignItems: "flex-start" }}>
+                <div style={{ ...styles.tag(typeColor), fontSize: 12, minWidth: 52, justifyContent: "center" }}>{e.type}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600 }}>{e.title}</div>
+                  <div style={{ fontSize: 13, color: COLORS.textMuted }}>{e.date} • {e.time}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+// CRM — LEADS / PROSPECÇÃO
+function CRM({ leads, setLeads, setMentees }) {
+  const today = new Date().toISOString().split("T")[0];
+  const tomorrow = (() => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toISOString().split("T")[0]; })();
+
+  const [selectedId, setSelectedId] = useState(null);
+  const [tab, setTab] = useState("history");
+  const [search, setSearch] = useState("");
+  const [showLeadModal, setShowLeadModal] = useState(false);
+  const [showInteractionModal, setShowInteractionModal] = useState(false);
+  const [showNextStepModal, setShowNextStepModal] = useState(false);
+  const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "", source: "Instagram", interest: "", tags: "" });
+  const [interactionForm, setInteractionForm] = useState({ type: "Ligação", note: "", date: today });
+  const [nextStepForm, setNextStepForm] = useState({ type: "Ligar", title: "", note: "", date: tomorrow });
+
+  const selectedLead = leads.find(l => l.id === selectedId) || null;
+  const interactionIcon = t => ({ "Ligação": "📞", "Mensagem": "💬", "Reunião": "🤝", "E-mail": "✉️", "Outro": "📝" }[t] || "📝");
+  const stepIcon = t => ({ "Ligar": "📞", "Enviar mensagem": "💬", "Enviar proposta": "📄", "Agendar reunião": "🤝", "Follow-up": "🔄", "Outro": "📝" }[t] || "📝");
+  const stepUrgency = date => { if (date < today) return COLORS.red; if (date === today) return COLORS.accent; return COLORS.textMuted; };
+
+  const filtered = leads.filter(l => l.name.toLowerCase().includes(search.toLowerCase()));
+
+  const addLead = () => {
+    if (!leadForm.name) return;
+    const newL = {
+      id: Date.now(), ...leadForm,
+      avatar: leadForm.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase(),
+      color: ["#6C63FF", "#F5A623", "#2DD4BF", "#FF6B6B", "#A78BFA"][Math.floor(Math.random() * 5)],
+      tags: leadForm.tags.split(",").map(t => t.trim()).filter(Boolean),
+      lastContact: today, interactions: [], nextSteps: [],
+    };
+    setLeads(prev => [...prev, newL]);
+    setSelectedId(newL.id);
+    setShowLeadModal(false);
+    setLeadForm({ name: "", email: "", phone: "", source: "Instagram", interest: "", tags: "" });
+  };
+
+  const addInteraction = () => {
+    if (!interactionForm.note || !selectedId) return;
+    const entry = { id: Date.now(), ...interactionForm };
+    setLeads(prev => prev.map(l => l.id === selectedId ? {
+      ...l,
+      interactions: [...(l.interactions || []), entry].sort((a, b) => b.date.localeCompare(a.date)),
+      lastContact: interactionForm.date,
+    } : l));
+    setShowInteractionModal(false);
+    setInteractionForm({ type: "Ligação", note: "", date: today });
+  };
+
+  const addNextStep = () => {
+    if (!nextStepForm.title || !selectedId) return;
+    const step = { id: Date.now(), ...nextStepForm, done: false };
+    setLeads(prev => prev.map(l => l.id === selectedId ? {
+      ...l,
+      nextSteps: [...(l.nextSteps || []), step].sort((a, b) => a.date.localeCompare(b.date)),
+    } : l));
+    setShowNextStepModal(false);
+    setNextStepForm({ type: "Ligar", title: "", note: "", date: tomorrow });
+  };
+
+  const toggleStepDone = (leadId, stepId) => {
+    setLeads(prev => prev.map(l => l.id === leadId ? {
+      ...l, nextSteps: l.nextSteps.map(s => s.id === stepId ? { ...s, done: !s.done } : s),
+    } : l));
+  };
+
+  const deleteLead = (id) => { setLeads(prev => prev.filter(l => l.id !== id)); if (selectedId === id) setSelectedId(null); };
+
+  return (
+    <div>
+      {/* ── Header ── */}
+      <div style={styles.pageHeader}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div>
+            <div style={styles.pageTitle}>Prospecção</div>
+            <div style={styles.pageSubtitle}>Histórico de interações e próximos passos por lead</div>
+          </div>
+          <button style={styles.btn()} onClick={() => setShowLeadModal(true)}>+ Novo Lead</button>
+        </div>
+      </div>
+
+      {/* ── Layout dois painéis ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "270px 1fr", gap: 16, alignItems: "start" }}>
+
+        {/* Painel esquerdo: lista de leads */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <input style={{ ...styles.input, fontSize: 13 }} placeholder="🔍 Buscar lead..." value={search} onChange={e => setSearch(e.target.value)} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {filtered.length === 0 && (
+              <div style={{ padding: "20px 0", textAlign: "center", color: COLORS.textMuted, fontSize: 14 }}>Nenhum lead encontrado.</div>
+            )}
+            {filtered.map(l => {
+              const pending = (l.nextSteps || []).filter(s => !s.done);
+              const overdue = pending.filter(s => s.date < today);
+              const todayStep = pending.find(s => s.date === today);
+              const nextStep = [...pending].sort((a, b) => a.date.localeCompare(b.date))[0];
+              const isSelected = selectedId === l.id;
+              return (
+                <div key={l.id} onClick={() => setSelectedId(l.id)}
+                  style={{ background: isSelected ? `${COLORS.accent}12` : COLORS.card, border: `1px solid ${isSelected ? COLORS.accent : COLORS.border}`, borderLeft: `3px solid ${l.color}`, borderRadius: 4, padding: "10px 12px", cursor: "pointer", transition: "all 0.15s" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                    <Avatar initials={l.avatar} color={l.color} size={26} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.name}</div>
+                      <div style={{ fontSize: 11, color: COLORS.textMuted }}>{l.source}{l.interest ? ` · ${l.interest}` : ""}</div>
+                    </div>
+                    {overdue.length > 0 && <span style={{ fontSize: 10, background: COLORS.red, color: "#fff", borderRadius: 10, padding: "1px 6px", fontWeight: 700, flexShrink: 0 }}>{overdue.length} atras.</span>}
+                    {overdue.length === 0 && todayStep && <span style={{ fontSize: 10, background: COLORS.accent, color: "#fff", borderRadius: 10, padding: "1px 6px", fontWeight: 700, flexShrink: 0 }}>hoje</span>}
+                  </div>
+                  <div style={{ fontSize: 11, color: COLORS.textMuted, paddingLeft: 34 }}>
+                    {nextStep
+                      ? <>{stepIcon(nextStep.type)} {nextStep.type} · <span style={{ color: stepUrgency(nextStep.date) }}>{nextStep.date}</span></>
+                      : "Sem próximos passos"}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Painel direito: detalhe do lead */}
+        {selectedLead ? (
+          <div>
+            {/* Cabeçalho do lead */}
+            <div style={{ ...styles.card({ marginBottom: 14, padding: "14px 18px" }), display: "flex", alignItems: "center", gap: 14 }}>
+              <Avatar initials={selectedLead.avatar} color={selectedLead.color} size={42} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 17, fontWeight: 800, color: COLORS.text, marginBottom: 3 }}>{selectedLead.name}</div>
+                <div style={{ fontSize: 12, color: COLORS.textMuted }}>
+                  {selectedLead.email} · {selectedLead.phone} · {selectedLead.source}
+                  {selectedLead.interest && <span style={{ marginLeft: 8 }}>— {selectedLead.interest}</span>}
+                </div>
+              </div>
+              <button style={{ ...styles.btn("ghost"), padding: "6px 10px", color: COLORS.red, fontSize: 12, flexShrink: 0 }} onClick={() => deleteLead(selectedLead.id)}>Remover</button>
+            </div>
+
+            {/* Tabs */}
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
+              {[["history", "📋 Histórico"], ["nextsteps", "🗓 Próximos Passos"]].map(([k, label]) => {
+                const badge = k === "nextsteps" ? (selectedLead.nextSteps || []).filter(s => !s.done && s.date <= today).length : 0;
+                return (
+                  <div key={k} onClick={() => setTab(k)}
+                    style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", borderRadius: 4, cursor: "pointer", fontSize: 13, fontWeight: 600, background: tab === k ? COLORS.accent : COLORS.card, color: tab === k ? "#fff" : COLORS.textMuted, border: `1px solid ${tab === k ? COLORS.accent : COLORS.border}`, transition: "all 0.15s" }}>
+                    {label}
+                    {badge > 0 && <span style={{ background: COLORS.red, color: "#fff", borderRadius: 10, padding: "0px 5px", fontSize: 10, fontWeight: 700 }}>{badge}</span>}
+                  </div>
+                );
+              })}
+              <div style={{ marginLeft: "auto" }}>
+                {tab === "history" && (
+                  <button style={{ ...styles.btn("outline"), fontSize: 12, padding: "6px 14px" }} onClick={() => setShowInteractionModal(true)}>+ Registrar Interação</button>
+                )}
+                {tab === "nextsteps" && (
+                  <button style={{ ...styles.btn("outline"), fontSize: 12, padding: "6px 14px" }} onClick={() => setShowNextStepModal(true)}>+ Agendar Passo</button>
+                )}
+              </div>
+            </div>
+
+            {/* Aba: Histórico */}
+            {tab === "history" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {(selectedLead.interactions || []).length === 0
+                  ? <div style={{ ...styles.card({ textAlign: "center", padding: 40 }), color: COLORS.textMuted }}>
+                      <div style={{ fontSize: 28, marginBottom: 8 }}>💬</div>
+                      <div style={{ fontWeight: 600 }}>Nenhuma interação registrada.</div>
+                      <div style={{ fontSize: 13, marginTop: 4 }}>Registre ligações, mensagens, reuniões e e-mails.</div>
+                    </div>
+                  : (selectedLead.interactions || []).map(it => (
+                      <div key={it.id} style={{ ...styles.card({ padding: "12px 16px" }), display: "flex", gap: 12, alignItems: "flex-start" }}>
+                        <div style={{ width: 36, height: 36, borderRadius: "50%", background: `${selectedLead.color}22`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>
+                          {interactionIcon(it.type)}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                            <span style={{ fontSize: 13, fontWeight: 700, color: COLORS.text }}>{it.type}</span>
+                            <span style={{ fontSize: 12, color: COLORS.textMuted, marginLeft: "auto" }}>{it.date}</span>
+                          </div>
+                          <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.6 }}>{it.note}</div>
+                        </div>
+                      </div>
+                    ))
+                }
+              </div>
+            )}
+
+            {/* Aba: Próximos Passos */}
+            {tab === "nextsteps" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {(selectedLead.nextSteps || []).length === 0
+                  ? <div style={{ ...styles.card({ textAlign: "center", padding: 40 }), color: COLORS.textMuted }}>
+                      <div style={{ fontSize: 28, marginBottom: 8 }}>🗓</div>
+                      <div style={{ fontWeight: 600 }}>Nenhum próximo passo agendado.</div>
+                      <div style={{ fontSize: 13, marginTop: 4 }}>Agende ações para você e seu sócio.</div>
+                    </div>
+                  : (selectedLead.nextSteps || []).map(s => {
+                      const isOverdue = s.date < today && !s.done;
+                      const isToday = s.date === today && !s.done;
+                      return (
+                        <div key={s.id} style={{ ...styles.card({ padding: "10px 14px" }), display: "flex", alignItems: "center", gap: 12, opacity: s.done ? 0.5 : 1, borderLeft: `3px solid ${s.done ? COLORS.teal : isOverdue ? COLORS.red : isToday ? COLORS.accent : COLORS.border}` }}>
+                          <div onClick={() => toggleStepDone(selectedLead.id, s.id)}
+                            style={{ width: 20, height: 20, borderRadius: 4, border: `2px solid ${s.done ? COLORS.teal : COLORS.border}`, background: s.done ? COLORS.teal : "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 13, flexShrink: 0, transition: "all 0.2s" }}>
+                            {s.done && "✓"}
+                          </div>
+                          <span style={{ fontSize: 16, flexShrink: 0 }}>{stepIcon(s.type)}</span>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                              <span style={{ fontSize: 13, fontWeight: 700, color: s.done ? COLORS.textMuted : COLORS.text, textDecoration: s.done ? "line-through" : "none" }}>{s.title}</span>
+                              {isOverdue && !s.done && <span style={{ fontSize: 11, color: COLORS.red, fontWeight: 700 }}>⚠ Atrasado</span>}
+                              {isToday && <span style={{ fontSize: 11, color: COLORS.accent, fontWeight: 700 }}>● Hoje</span>}
+                            </div>
+                            {s.note && <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>{s.note}</div>}
+                          </div>
+                          <span style={{ fontSize: 12, color: s.done ? COLORS.textMuted : stepUrgency(s.date), fontWeight: isToday || isOverdue ? 700 : 400, flexShrink: 0 }}>{s.date}</span>
+                        </div>
+                      );
+                    })
+                }
+              </div>
+            )}
+          </div>
+        ) : (
+          <div style={{ ...styles.card({ textAlign: "center", padding: "64px 40px" }), color: COLORS.textMuted }}>
+            <div style={{ fontSize: 36, marginBottom: 12 }}>👈</div>
+            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 6 }}>Selecione um lead</div>
+            <div style={{ fontSize: 14 }}>Clique num lead para ver o histórico de interações e gerenciar os próximos passos.</div>
+          </div>
+        )}
+      </div>
+
+      {/* ── Modal: Novo Lead ── */}
+      {showLeadModal && (
+        <div style={styles.modal} onClick={() => setShowLeadModal(false)}>
+          <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div style={{ fontSize: 19, fontWeight: 700 }}>Novo Lead</div>
+              <button style={styles.btn("ghost")} onClick={() => setShowLeadModal(false)}>✕</button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              {[["name", "Nome completo", "1 / -1"], ["email", "E-mail", ""], ["phone", "Telefone", ""], ["interest", "Interesse / Objetivo", "1 / -1"], ["tags", "Tags (separadas por vírgula)", "1 / -1"]].map(([k, label, span]) => (
+                <div key={k} style={span ? { gridColumn: span } : {}}>
+                  <label style={styles.label}>{label}</label>
+                  <input style={styles.input} value={leadForm[k] || ""} onChange={e => setLeadForm(p => ({ ...p, [k]: e.target.value }))} />
+                </div>
+              ))}
+              <div style={{ gridColumn: "1 / -1" }}>
+                <label style={styles.label}>Origem</label>
+                <select style={styles.input} value={leadForm.source} onChange={e => setLeadForm(p => ({ ...p, source: e.target.value }))}>
+                  {LEAD_SOURCES.map(s => <option key={s}>{s}</option>)}
+                </select>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
+              <button style={styles.btn("outline")} onClick={() => setShowLeadModal(false)}>Cancelar</button>
+              <button style={styles.btn()} onClick={addLead}>Salvar Lead</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal: Registrar Interação ── */}
+      {showInteractionModal && (
+        <div style={styles.modal} onClick={() => setShowInteractionModal(false)}>
+          <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div style={{ fontSize: 19, fontWeight: 700 }}>Registrar Interação — {selectedLead?.name}</div>
+              <button style={styles.btn("ghost")} onClick={() => setShowInteractionModal(false)}>✕</button>
+            </div>
+            <div style={{ display: "grid", gap: 14 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div>
+                  <label style={styles.label}>Tipo</label>
+                  <select style={styles.input} value={interactionForm.type} onChange={e => setInteractionForm(p => ({ ...p, type: e.target.value }))}>
+                    {INTERACTION_TYPES.map(t => <option key={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={styles.label}>Data</label>
+                  <input type="date" style={styles.input} value={interactionForm.date} onChange={e => setInteractionForm(p => ({ ...p, date: e.target.value }))} />
+                </div>
+              </div>
+              <div>
+                <label style={styles.label}>Resumo / Observações</label>
+                <textarea style={{ ...styles.textarea, minHeight: 100 }} value={interactionForm.note} onChange={e => setInteractionForm(p => ({ ...p, note: e.target.value }))} placeholder="O que foi discutido? Qual foi o resultado?" />
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
+              <button style={styles.btn("outline")} onClick={() => setShowInteractionModal(false)}>Cancelar</button>
+              <button style={styles.btn()} onClick={addInteraction}>Salvar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal: Agendar Próximo Passo ── */}
+      {showNextStepModal && (
+        <div style={styles.modal} onClick={() => setShowNextStepModal(false)}>
+          <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div style={{ fontSize: 19, fontWeight: 700 }}>Agendar Próximo Passo — {selectedLead?.name}</div>
+              <button style={styles.btn("ghost")} onClick={() => setShowNextStepModal(false)}>✕</button>
+            </div>
+            <div style={{ display: "grid", gap: 14 }}>
+              <div>
+                <label style={styles.label}>Título / Ação</label>
+                <input style={styles.input} value={nextStepForm.title} onChange={e => setNextStepForm(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Ligar para confirmar interesse" />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div>
+                  <label style={styles.label}>Tipo</label>
+                  <select style={styles.input} value={nextStepForm.type} onChange={e => setNextStepForm(p => ({ ...p, type: e.target.value }))}>
+                    {NEXT_STEP_TYPES.map(t => <option key={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={styles.label}>Data</label>
+                  <input type="date" style={styles.input} value={nextStepForm.date} onChange={e => setNextStepForm(p => ({ ...p, date: e.target.value }))} />
+                </div>
+              </div>
+              <div>
+                <label style={styles.label}>Observação (opcional)</label>
+                <textarea style={{ ...styles.textarea, minHeight: 80 }} value={nextStepForm.note} onChange={e => setNextStepForm(p => ({ ...p, note: e.target.value }))} placeholder="Contexto ou objetivo deste passo" />
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
+              <button style={styles.btn("outline")} onClick={() => setShowNextStepModal(false)}>Cancelar</button>
+              <button style={styles.btn()} onClick={addNextStep}>Agendar</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// MENTORADOS ATIVOS
+function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyPortalLink, copiedId }) {
+  const [filter, setFilter] = useState("Ativo");
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", phone: "", stage: "Ativo", goal: "", tags: "", notes: "" });
+
+  const filtered = mentees.filter(m => {
+    const matchStage = m.stage === filter;
+    const matchSearch = m.name.toLowerCase().includes(search.toLowerCase()) || m.email.toLowerCase().includes(search.toLowerCase());
+    return matchStage && matchSearch;
+  });
+
+  const addMentee = () => {
+    if (!form.name) return;
+    const newM = {
+      id: Date.now(), ...form,
+      joinDate: new Date().toISOString().split("T")[0],
+      avatar: form.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase(),
+      color: ["#6C63FF", "#F5A623", "#2DD4BF", "#FF6B6B", "#A78BFA"][Math.floor(Math.random() * 5)],
+      tags: form.tags.split(",").map(t => t.trim()).filter(Boolean),
+      lastContact: new Date().toISOString().split("T")[0],
+      milestones: [false, false, false, false, false, false],
+    };
+    setMentees(prev => [...prev, newM]);
+    setShowModal(false);
+    setForm({ name: "", email: "", phone: "", stage: "Ativo", goal: "", tags: "", notes: "" });
+  };
+
+  const deleteMentee = (id) => setMentees(prev => prev.filter(m => m.id !== id));
+  const stageColor = (s) => STAGE_COLORS[s] || COLORS.textMuted;
+
+  const active = mentees.filter(m => m.stage === "Ativo").length;
+  const inactive = mentees.filter(m => m.stage === "Inativo").length;
+
+  return (
+    <div>
+      <div style={styles.pageHeader}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div>
+            <div style={styles.pageTitle}>Mentorados</div>
+            <div style={styles.pageSubtitle}>Gerencie seu grupo de mentoria</div>
+          </div>
+          <button style={styles.btn()} onClick={() => setShowModal(true)}>+ Novo Mentorado</button>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
+        <div onClick={() => setFilter("Ativo")} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4, cursor: "pointer", padding: "12px 28px", borderRadius: 4, background: COLORS.card, border: filter === "Ativo" ? `1px solid ${STAGE_COLORS["Ativo"]}` : `1px solid ${COLORS.border}`, borderLeft: `3px solid ${STAGE_COLORS["Ativo"]}`, opacity: filter === "Ativo" ? 1 : 0.45, transition: "all 0.2s", minWidth: 100 }}>
+          <span style={{ fontSize: 28, fontFamily: FONT_DISPLAY, fontWeight: 700, color: COLORS.text, lineHeight: 1, display: "block", textAlign: "center" }}>{active}</span>
+          <span style={{ fontSize: 11, color: COLORS.textMuted, textTransform: "uppercase", letterSpacing: "0.12em", display: "block", textAlign: "center" }}>Ativos</span>
+        </div>
+        <div onClick={() => setFilter("Inativo")} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4, cursor: "pointer", padding: "12px 28px", borderRadius: 4, background: COLORS.card, border: filter === "Inativo" ? `1px solid ${STAGE_COLORS["Inativo"]}` : `1px solid ${COLORS.border}`, borderLeft: `3px solid ${STAGE_COLORS["Inativo"]}`, opacity: filter === "Inativo" ? 1 : 0.45, transition: "all 0.2s", minWidth: 100 }}>
+          <span style={{ fontSize: 28, fontFamily: FONT_DISPLAY, fontWeight: 700, color: COLORS.text, lineHeight: 1, display: "block", textAlign: "center" }}>{inactive}</span>
+          <span style={{ fontSize: 11, color: COLORS.textMuted, textTransform: "uppercase", letterSpacing: "0.12em", display: "block", textAlign: "center" }}>Inativos</span>
+        </div>
+        <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+          <input style={{ ...styles.input, maxWidth: 240 }} placeholder="🔍 Buscar mentorado..."
+            value={search} onChange={e => setSearch(e.target.value)} />
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {filtered.map(m => {
+          const isInactive = m.stage === "Inativo";
+          return (
+            <div key={m.id} style={{ ...styles.card({ background: isInactive ? `#3D2B8B18` : COLORS.card, border: isInactive ? `1px solid #3D2B8B55` : `1px solid ${COLORS.border}`, opacity: isInactive ? 0.85 : 1, padding: "12px 16px" }), display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
+              onClick={() => { setSelectedMentee(m); setView("mentee-detail"); }}>
+              <Avatar initials={m.avatar} color={isInactive ? "#884444" : m.color} size={36} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: isInactive ? COLORS.textMuted : COLORS.text }}>{m.name}</span>
+                  {isInactive && <span style={{ fontSize: 11, color: "#7B6FD4", fontWeight: 600 }}>● Inativo</span>}
+                </div>
+                <div style={{ fontSize: 12, color: COLORS.textMuted, marginBottom: 3 }}>
+                  {m.email} • {m.phone} • Entrou: {m.joinDate}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 12, color: COLORS.textMuted }}>– {m.goal}</span>
+                  {(Array.isArray(m.tags) ? m.tags : []).map(t => (
+                    <span key={t} style={{ fontSize: 11, color: COLORS.textMuted, background: COLORS.border, padding: "1px 7px", borderRadius: 12 }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 6, flexDirection: "row", alignItems: "center", flexShrink: 0 }} onClick={e => e.stopPropagation()}>
+                <button style={{ ...styles.btn("outline"), padding: "4px 10px", fontSize: 12 }}
+                  onClick={() => { setSelectedMentee(m); setView("mentee-detail"); }}>Ver Perfil</button>
+                <button
+                  style={{ ...styles.btn("ghost"), padding: "4px 10px", fontSize: 11, color: copiedId === m.id ? COLORS.teal : COLORS.accent, border: `1px solid ${copiedId === m.id ? COLORS.teal : COLORS.accent}44`, borderRadius: 2 }}
+                  onClick={() => copyPortalLink(m)}
+                  title={`Copiar link do portal: /mentorado/${m.id}`}>
+                  {copiedId === m.id ? "✓ Copiado!" : "🔗 Link do Portal"}
+                </button>
+                {!isInactive
+                  ? <button style={{ ...styles.btn("ghost"), padding: "4px 10px", color: COLORS.red, fontSize: 12 }}
+                      onClick={() => setMentees(prev => prev.map(x => x.id === m.id ? { ...x, stage: "Inativo" } : x))}>Desativar</button>
+                  : <button style={{ ...styles.btn("ghost"), padding: "4px 10px", color: COLORS.teal, fontSize: 12 }}
+                      onClick={() => setMentees(prev => prev.map(x => x.id === m.id ? { ...x, stage: "Ativo" } : x))}>Reativar</button>
+                }
+              </div>
+            </div>
+          );
+        })}
+        {filtered.length === 0 && (
+          <div style={{ ...styles.card({ textAlign: "center", padding: 40 }), color: COLORS.textMuted }}>
+            <div style={{ fontSize: 34, marginBottom: 10 }}>👥</div>
+            <div style={{ fontSize: 16 }}>Nenhum mentorado encontrado.</div>
+          </div>
+        )}
+      </div>
+
+      {showModal && (
+        <div style={styles.modal} onClick={() => setShowModal(false)}>
+          <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div style={{ fontSize: 19, fontWeight: 700 }}>Novo Mentorado</div>
+              <button style={styles.btn("ghost")} onClick={() => setShowModal(false)}>✕</button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              {[["name", "Nome completo", "1 / -1"], ["email", "E-mail", ""], ["phone", "Telefone", ""], ["goal", "Objetivo principal", "1 / -1"]].map(([k, l, span]) => (
+                <div key={k} style={span ? { gridColumn: span } : {}}>
+                  <label style={styles.label}>{l}</label>
+                  <input style={styles.input} value={form[k]} onChange={e => setForm(p => ({ ...p, [k]: e.target.value }))} />
+                </div>
+              ))}
+              <div>
+                <label style={styles.label}>Estágio</label>
+                <select style={styles.input} value={form.stage} onChange={e => setForm(p => ({ ...p, stage: e.target.value }))}>
+                  {MENTEE_STAGES.map(s => <option key={s}>{s}</option>)}
+                </select>
+              </div>
+              <div style={{ gridColumn: "1 / -1" }}>
+                <label style={styles.label}>Tags (separadas por vírgula)</label>
+                <input style={styles.input} value={form.tags} onChange={e => setForm(p => ({ ...p, tags: e.target.value }))} placeholder="Ex: Marketing, E-commerce" />
+              </div>
+              <div style={{ gridColumn: "1 / -1" }}>
+                <label style={styles.label}>Observações</label>
+                <textarea style={styles.textarea} value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))} />
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
+              <button style={styles.btn("outline")} onClick={() => setShowModal(false)}>Cancelar</button>
+              <button style={styles.btn()} onClick={addMentee}>Salvar Mentorado</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// CALENDAR
+function Calendar({ events, setEvents }) {
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ title: "", date: "", type: "evento", desc: "", time: "" });
+  const [filterType, setFilterType] = useState("Todos");
+
+  const filtered = events.filter(e => filterType === "Todos" || e.type === filterType);
+  const sorted = [...filtered].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const addEvent = () => {
+    if (!form.title || !form.date) return;
+    setEvents(prev => [...prev, { id: Date.now(), ...form }]);
+    setShowModal(false);
+    setForm({ title: "", date: "", type: "evento", desc: "", time: "" });
+  };
+
+  const typeColor = (t) => t === "evento" ? COLORS.accent : t === "post" ? COLORS.accent : COLORS.teal;
+  const typeLabel = (t) => t === "evento" ? "Evento" : t === "post" ? "Post" : "Sessão 1:1";
+
+  const today = new Date().toISOString().split("T")[0];
+  const upcoming = sorted.filter(e => e.date >= today);
+  const past = sorted.filter(e => e.date < today);
+
+  return (
+    <div>
+      <div style={styles.pageHeader}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div>
+            <div style={styles.pageTitle}>Calendário</div>
+            <div style={styles.pageSubtitle}>Posts, Eventos e Sessões</div>
+          </div>
+          <button style={styles.btn()} onClick={() => setShowModal(true)}>+ Novo Agendamento</button>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 10, marginBottom: 24 }}>
+        {["Todos", "evento", "post", "sessao"].map(t => (
+          <div key={t} style={styles.pill(filterType === t, typeColor(t))} onClick={() => setFilterType(t)}>
+            {t === "Todos" ? "Todos" : typeLabel(t)}
+          </div>
+        ))}
+      </div>
+
+      <div style={styles.grid2}>
+        <div>
+          <div style={{ ...styles.sectionTitle, color: COLORS.teal, marginBottom: 12 }}>
+            – Próximos ({upcoming.length})
+          </div>
+          {upcoming.map(e => (
+            <div key={e.id} style={{ ...styles.card({ marginBottom: 10, borderLeft: `4px solid ${typeColor(e.type)}` }) }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                    <span style={styles.badge(typeColor(e.type))}>{typeLabel(e.type)}</span>
+                    <span style={{ fontSize: 13, color: COLORS.textMuted }}>{e.date} • {e.time}</span>
+                  </div>
+                  <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{e.title}</div>
+                  <div style={{ fontSize: 14, color: COLORS.textMuted }}>{e.desc}</div>
+                </div>
+                <button style={{ ...styles.btn("ghost"), color: COLORS.red, fontSize: 18, padding: "2px 8px" }}
+                  onClick={() => setEvents(prev => prev.filter(ev => ev.id !== e.id))}>✕</button>
+              </div>
+            </div>
+          ))}
+          {upcoming.length === 0 && <div style={{ color: COLORS.textMuted, fontSize: 15 }}>Nenhum evento futuro.</div>}
+        </div>
+
+        <div>
+          <div style={{ ...styles.sectionTitle, color: COLORS.textMuted, marginBottom: 12 }}>
+            🕐 Passados ({past.length})
+          </div>
+          {past.map(e => (
+            <div key={e.id} style={{ ...styles.card({ marginBottom: 10, opacity: 0.6 }) }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                <span style={styles.badge(typeColor(e.type))}>{typeLabel(e.type)}</span>
+                <span style={{ fontSize: 13, color: COLORS.textMuted }}>{e.date}</span>
+              </div>
+              <div style={{ fontSize: 15, fontWeight: 600 }}>{e.title}</div>
+            </div>
+          ))}
+          {past.length === 0 && <div style={{ color: COLORS.textMuted, fontSize: 15 }}>Nenhum registro anterior.</div>}
+        </div>
+      </div>
+
+      {showModal && (
+        <div style={styles.modal} onClick={() => setShowModal(false)}>
+          <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div style={{ fontSize: 19, fontWeight: 700 }}>Novo Agendamento</div>
+              <button style={styles.btn("ghost")} onClick={() => setShowModal(false)}>✕</button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div>
+                <label style={styles.label}>Título</label>
+                <input style={styles.input} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div>
+                  <label style={styles.label}>Data</label>
+                  <input type="date" style={styles.input} value={form.date} onChange={e => setForm(p => ({ ...p, date: e.target.value }))} />
+                </div>
+                <div>
+                  <label style={styles.label}>Horário</label>
+                  <input type="time" style={styles.input} value={form.time} onChange={e => setForm(p => ({ ...p, time: e.target.value }))} />
+                </div>
+              </div>
+              <div>
+                <label style={styles.label}>Tipo</label>
+                <select style={styles.input} value={form.type} onChange={e => setForm(p => ({ ...p, type: e.target.value }))}>
+                  <option value="evento">Evento</option>
+                  <option value="post">Post</option>
+                  <option value="sessao">Sessão 1:1</option>
+                </select>
+              </div>
+              <div>
+                <label style={styles.label}>Descrição</label>
+                <textarea style={styles.textarea} value={form.desc} onChange={e => setForm(p => ({ ...p, desc: e.target.value }))} />
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
+              <button style={styles.btn("outline")} onClick={() => setShowModal(false)}>Cancelar</button>
+              <button style={styles.btn()} onClick={addEvent}>Salvar</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// GOALS
+function Goals({ goals, setGoals }) {
+  const [activeTab, setActiveTab] = useState(30);
+  const [newGoal, setNewGoal] = useState("");
+
+  const tabColor = { 30: COLORS.teal, 60: COLORS.accent, 90: COLORS.accent, 150: "#FF6B6B" };
+
+  const toggleGoal = (id) => {
+    setGoals(prev => ({
+      ...prev,
+      [activeTab]: prev[activeTab].map(g => g.id === id ? { ...g, done: !g.done } : g)
+    }));
+  };
+
+  const addGoal = () => {
+    if (!newGoal.trim()) return;
+    setGoals(prev => ({
+      ...prev,
+      [activeTab]: [...prev[activeTab], { id: Date.now(), text: newGoal, done: false }]
+    }));
+    setNewGoal("");
+  };
+
+  const deleteGoal = (id) => {
+    setGoals(prev => ({
+      ...prev,
+      [activeTab]: prev[activeTab].filter(g => g.id !== id)
+    }));
+  };
+
+  const current = goals[activeTab];
+  const doneCount = current.filter(g => g.done).length;
+  const pct = current.length ? Math.round((doneCount / current.length) * 100) : 0;
+  const color = tabColor[activeTab];
+
+  const labelMap = { 30: "30 Dias", 60: "60 Dias", 90: "90 Dias", 150: "150 Dias" };
+
+  return (
+    <div>
+      <div style={styles.pageHeader}>
+        <div style={styles.pageTitle}>Metas do Clube</div>
+        <div style={styles.pageSubtitle}>Acompanhe seus objetivos em diferentes horizontes de tempo</div>
+      </div>
+
+      <div style={{ display: "flex", gap: 12, marginBottom: 28 }}>
+        {[30, 60, 90, 150].map(t => {
+          const g = goals[t];
+          const d = g.filter(x => x.done).length;
+          const p = g.length ? Math.round((d / g.length) * 100) : 0;
+          return (
+            <div key={t} style={{ ...styles.card({ flex: 1, cursor: "pointer", borderTop: `3px solid ${activeTab === t ? tabColor[t] : COLORS.border}`, opacity: activeTab === t ? 1 : 0.65 }), transition: "all 0.15s" }}
+              onClick={() => setActiveTab(t)}>
+              <div style={{ fontSize: 24, fontWeight: 800, color: tabColor[t], marginBottom: 2 }}>{p}%</div>
+              <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>{labelMap[t]}</div>
+              <Progress value={p} color={tabColor[t]} />
+              <div style={{ fontSize: 13, color: COLORS.textMuted, marginTop: 6 }}>{d}/{g.length} metas</div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={styles.card()}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <div>
+            <div style={{ fontSize: 18, fontWeight: 800 }}>Metas — {labelMap[activeTab]}</div>
+            <div style={{ fontSize: 14, color: COLORS.textMuted, marginTop: 2 }}>{doneCount} de {current.length} concluídas</div>
+          </div>
+          <div style={{ fontSize: 28, fontWeight: 900, color }}>
+            {pct}%
+          </div>
+        </div>
+
+        <Progress value={pct} color={color} height={10} />
+        <div style={styles.divider} />
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
+          {current.map(g => (
+            <div key={g.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", borderRadius: 10, background: g.done ? `${color}11` : COLORS.surface, border: `1px solid ${g.done ? color + "33" : COLORS.border}` }}>
+              <div onClick={() => toggleGoal(g.id)} style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${g.done ? color : COLORS.border}`, background: g.done ? color : "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, transition: "all 0.15s" }}>
+                {g.done && <span style={{ color: "#fff", fontSize: 15, fontWeight: 800 }}>✓</span>}
+              </div>
+              <span style={{ flex: 1, fontSize: 15, fontWeight: 500, color: g.done ? COLORS.textMuted : COLORS.text, textDecoration: g.done ? "line-through" : "none" }}>{g.text}</span>
+              <button style={{ ...styles.btn("ghost"), padding: "2px 8px", color: COLORS.red }} onClick={() => deleteGoal(g.id)}>✕</button>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", gap: 10 }}>
+          <input
+            style={{ ...styles.input, flex: 1 }}
+            placeholder="Adicionar nova meta..."
+            value={newGoal}
+            onChange={e => setNewGoal(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && addGoal()}
+          />
+          <button style={styles.btn()} onClick={addGoal}>Adicionar</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// MENTEE DETAIL (admin side)
+function MenteeDetail({ mentee, setMentees, setView }) {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [customPlan, setCustomPlan] = useState(mentee.customPlan || "");
+  const [files, setFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const milestones = mentee.milestones || [false, false, false, false, false, false];
+
+  useEffect(() => { loadFiles(); }, []);
+
+  const loadFiles = async () => {
+    const { data } = await supabase
+      .from('files')
+      .select('*')
+      .eq('mentee_id', String(mentee.id))
+      .order('created_at', { ascending: false });
+    if (data) {
+      const withUrls = await Promise.all(data.map(async (f) => {
+        const { data: signed } = await supabase.storage
+          .from('mentee-files')
+          .createSignedUrl(f.storage_path, 3600);
+        return { ...f, url: signed?.signedUrl || '' };
+      }));
+      setFiles(withUrls);
+    }
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const path = `${mentee.id}/${Date.now()}_${file.name}`;
+    const { error: uploadError } = await supabase.storage.from('mentee-files').upload(path, file);
+    if (!uploadError) {
+      await supabase.from('files').insert({
+        mentee_id: String(mentee.id),
+        name: file.name,
+        storage_path: path,
+        file_type: file.type,
+        size: file.size,
+      });
+      await loadFiles();
+    }
+    setUploading(false);
+    e.target.value = '';
+  };
+
+  const deleteFile = async (fileId, storagePath) => {
+    await supabase.storage.from('mentee-files').remove([storagePath]);
+    await supabase.from('files').delete().eq('id', fileId);
+    setFiles(prev => prev.filter(f => f.id !== fileId));
+  };
+
+  const fileIcon = (type) => {
+    if (!type) return '📄';
+    if (type.includes('pdf')) return '📄';
+    if (type.includes('image')) return '🖼️';
+    if (type.includes('video')) return '🎥';
+    if (type.includes('audio')) return '🎧';
+    if (type.includes('spreadsheet') || type.includes('excel') || type.includes('csv')) return '📊';
+    return '📎';
+  };
+
+  const formatSize = (bytes) => {
+    if (!bytes) return '';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  };
+
+  const toggleMilestone = (i) => {
+    const updated = [...milestones];
+    updated[i] = !updated[i];
+    setMentees(prev => prev.map(m => m.id === mentee.id ? { ...m, milestones: updated } : m));
+  };
+
+  const savePlan = () => {
+    setMentees(prev => prev.map(m => m.id === mentee.id ? { ...m, customPlan } : m));
+  };
+
+  const stageColor = STAGE_COLORS[mentee.stage] || COLORS.textMuted;
+  const doneCount = milestones.filter(Boolean).length;
+
+  return (
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <button style={{ ...styles.btn("ghost"), marginBottom: 12 }} onClick={() => setView("mentees")}>← Voltar aos Mentorados</button>
+
+        <div style={styles.card()}>
+          <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+            <Avatar initials={mentee.avatar} color={mentee.color} size={64} />
+            <div style={{ flex: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                <div style={{ fontSize: 24, fontWeight: 800 }}>{mentee.name}</div>
+                <span style={styles.badge(stageColor)}>{mentee.stage}</span>
+              </div>
+              <div style={{ fontSize: 15, color: COLORS.textMuted, marginBottom: 8 }}>
+                ✉️ {mentee.email} &nbsp; 📞 {mentee.phone}
+              </div>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
+                {(Array.isArray(mentee.tags) ? mentee.tags : []).map(t => (
+                  <span key={t} style={styles.tag(mentee.color)}>{t}</span>
+                ))}
+              </div>
+              <div style={{ fontSize: 15, color: COLORS.textMuted }}>– Meta: <strong style={{ color: COLORS.text }}>{mentee.goal}</strong></div>
+            </div>
+            <div style={{ textAlign: "center", minWidth: 100 }}>
+              <div style={{ fontSize: 38, fontWeight: 900, color: mentee.color, lineHeight: 1 }}>{doneCount}<span style={{ fontSize: 20, color: COLORS.textMuted }}>/{milestones.length}</span></div>
+              <div style={{ fontSize: 13, color: COLORS.textMuted, marginTop: 4 }}>marcos atingidos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Milestone tracker */}
+      <div style={{ ...styles.card({ marginBottom: 20 }) }}>
+        <div style={styles.sectionTitle}>— Marcos da Jornada</div>
+        <div style={{ display: "flex", gap: 0, alignItems: "center", overflowX: "auto", paddingBottom: 8 }}>
+          {MILESTONE_LABELS.map((label, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", flex: 1 }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: 70 }}>
+                <div onClick={() => toggleMilestone(i)}
+                  style={{ width: 36, height: 36, borderRadius: 4, background: milestones[i] ? mentee.color : COLORS.surface, border: `2px solid ${milestones[i] ? mentee.color : COLORS.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, cursor: "pointer", transition: "all 0.2s", boxShadow: milestones[i] ? `0 0 14px ${mentee.color}66` : "none" }}>
+                  {milestones[i] ? "✓" : i + 1}
+                </div>
+                <div style={{ fontSize: 12, color: milestones[i] ? mentee.color : COLORS.textMuted, marginTop: 6, textAlign: "center", fontWeight: milestones[i] ? 700 : 400 }}>{label}</div>
+              </div>
+              {i < MILESTONE_LABELS.length - 1 && (
+                <div style={{ flex: 1, height: 2, background: milestones[i] ? mentee.color : COLORS.border, margin: "0 4px", marginBottom: 20, transition: "background 0.3s" }} />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        {[["overview", "Visão Geral"], ["plan", "Plano Personalizado"], ["notes", "Observações"], ["files", `Arquivos${files.length ? ` (${files.length})` : ''}`]].map(([k, l]) => (
+          <div key={k} style={styles.pill(activeTab === k)} onClick={() => setActiveTab(k)}>{l}</div>
+        ))}
+      </div>
+
+      {activeTab === "overview" && (
+        <div style={styles.grid2}>
+          <div style={styles.card()}>
+            <div style={styles.sectionTitle}>– Plano Base da Mentoria</div>
+            {DEFAULT_PLAN_ITEMS.map((item, i) => (
+              <div key={i} style={{ fontSize: 15, padding: "6px 0", borderBottom: `1px solid ${COLORS.border}`, color: COLORS.textMuted }}>{item}</div>
+            ))}
+          </div>
+          <div style={styles.card()}>
+            <div style={styles.sectionTitle}>– Dados do Mentorado</div>
+            {[
+              ["Entrou em", mentee.joinDate],
+              ["Último contato", mentee.lastContact],
+              ["Estágio", mentee.stage],
+            ].map(([k, v]) => (
+              <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: `1px solid ${COLORS.border}`, fontSize: 15 }}>
+                <span style={{ color: COLORS.textMuted }}>{k}</span>
+                <span style={{ fontWeight: 600 }}>{v}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === "plan" && (
+        <div style={styles.card()}>
+          <div style={styles.sectionTitle}>✍️ Plano Personalizado — {mentee.name}</div>
+          <textarea
+            style={{ ...styles.textarea, minHeight: 220, marginBottom: 12 }}
+            placeholder="Descreva aqui o plano personalizado para este mentorado: objetivos específicos, tarefas, prazos, recursos, etc."
+            value={customPlan}
+            onChange={e => setCustomPlan(e.target.value)}
+          />
+          <button style={styles.btn()} onClick={savePlan}>Salvar Plano Personalizado</button>
+        </div>
+      )}
+
+      {activeTab === "notes" && (
+        <div style={styles.card()}>
+          <div style={styles.sectionTitle}>📝 Observações</div>
+          <div style={{ fontSize: 16, color: COLORS.textMuted, lineHeight: 1.7 }}>{mentee.notes || "Sem observações registradas."}</div>
+        </div>
+      )}
+
+      {activeTab === "files" && (
+        <div style={styles.card()}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <div style={styles.sectionTitle}>📎 Arquivos do Mentorado</div>
+            <label style={{ ...styles.btn("outline"), cursor: "pointer", fontSize: 13, display: "inline-block" }}>
+              {uploading ? "Enviando…" : "+ Enviar Arquivo"}
+              <input type="file" style={{ display: "none" }} onChange={handleFileUpload} disabled={uploading} />
+            </label>
+          </div>
+          {files.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px 0", color: COLORS.textMuted }}>
+              <div style={{ fontSize: 36, marginBottom: 10 }}>📂</div>
+              <div style={{ fontSize: 15 }}>Nenhum arquivo enviado ainda.</div>
+              <div style={{ fontSize: 13, marginTop: 6 }}>Envie materiais, gravações, planilhas ou qualquer arquivo para este mentorado.</div>
+            </div>
+          ) : (
+            files.map(f => (
+              <div key={f.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+                <span style={{ fontSize: 24, flexShrink: 0 }}>{fileIcon(f.file_type)}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.name}</div>
+                  <div style={{ fontSize: 12, color: COLORS.textMuted }}>{formatSize(f.size)} · {f.created_at?.split('T')[0]}</div>
+                </div>
+                <a href={f.url} target="_blank" rel="noopener noreferrer"
+                  style={{ ...styles.btn("outline"), fontSize: 12, padding: "4px 12px", textDecoration: "none", display: "inline-block", flexShrink: 0 }}>
+                  Baixar
+                </a>
+                <button style={{ ...styles.btn("ghost"), color: COLORS.red, padding: "4px 8px", fontSize: 13, flexShrink: 0 }}
+                  onClick={() => deleteFile(f.id, f.storage_path)}>✕</button>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// MENTEE PORTAL (user view)
+function MenteePortal({ mentee, setView }) {
+  const [activeTab, setActiveTab] = useState("home");
+  const milestones = mentee.milestones || [false, false, false, false, false, false];
+  const doneCount = milestones.filter(Boolean).length;
+
+  return (
+    <div>
+      <button style={{ ...styles.btn("ghost"), marginBottom: 20 }} onClick={() => setView("mentee-portal-list")}>← Voltar</button>
+
+      {/* Hero */}
+      <div style={{ ...styles.card({ marginBottom: 24, background: `linear-gradient(135deg, ${mentee.color}22, ${mentee.color}08)`, border: `1px solid ${mentee.color}44` }) }}>
+        <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+          <Avatar initials={mentee.avatar} color={mentee.color} size={72} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 12, color: COLORS.textMuted, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 4 }}>Central do Mentorado</div>
+            <div style={{ fontSize: 26, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 4 }}>Olá, {mentee.name.split(" ")[0]}! ,</div>
+            <div style={{ fontSize: 15, color: COLORS.textMuted }}>Sua meta: <strong style={{ color: mentee.color }}>{mentee.goal}</strong></div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 48, fontWeight: 900, color: mentee.color, lineHeight: 1 }}>{doneCount}<span style={{ fontSize: 24, color: COLORS.textMuted }}>/{milestones.length}</span></div>
+            <div style={{ fontSize: 13, color: COLORS.textMuted, marginTop: 4 }}>marcos concluídos</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Milestones */}
+      <div style={{ ...styles.card({ marginBottom: 24 }) }}>
+        <div style={styles.sectionTitle}>— Sua Jornada de Mentoria</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 0, overflowX: "auto", paddingBottom: 8 }}>
+          {MILESTONE_LABELS.map((label, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", flex: 1 }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: 70 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 4, background: milestones[i] ? mentee.color : COLORS.surface, border: `2px solid ${milestones[i] ? mentee.color : COLORS.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, transition: "all 0.3s", boxShadow: milestones[i] ? `0 0 14px ${mentee.color}66` : "none" }}>
+                  {milestones[i] ? "✓" : i + 1}
+                </div>
+                <div style={{ fontSize: 12, color: milestones[i] ? mentee.color : COLORS.textMuted, marginTop: 6, textAlign: "center", fontWeight: milestones[i] ? 700 : 400 }}>{label}</div>
+              </div>
+              {i < MILESTONE_LABELS.length - 1 && (
+                <div style={{ flex: 1, height: 2, background: milestones[i] ? mentee.color : COLORS.border, margin: "0 4px", marginBottom: 20, transition: "background 0.3s" }} />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        {[["home", "– Plano Base"], ["custom", "— Plano Personalizado"], ["resources", "– Recursos"]].map(([k, l]) => (
+          <div key={k} style={styles.pill(activeTab === k, mentee.color)} onClick={() => setActiveTab(k)}>{l}</div>
+        ))}
+      </div>
+
+      {activeTab === "home" && (
+        <div style={styles.card()}>
+          <div style={styles.sectionTitle}>– Plano Base — Mentoria Contínua</div>
+          <div style={{ fontSize: 15, color: COLORS.textMuted, marginBottom: 16 }}>
+            Este é o núcleo da sua jornada. Nossa mentoria é aberta e contínua — você evolui no seu ritmo, sem prazo de término.
+          </div>
+          {DEFAULT_PLAN_ITEMS.map((item, i) => (
+            <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "12px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+              <div style={{ width: 24, height: 24, borderRadius: "50%", background: `${mentee.color}22`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0, color: mentee.color, fontWeight: 700 }}>{i + 1}</div>
+              <div style={{ fontSize: 15, lineHeight: 1.5 }}>{item}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {activeTab === "custom" && (
+        <div style={styles.card()}>
+          <div style={styles.sectionTitle}>— Seu Plano Personalizado</div>
+          {mentee.customPlan ? (
+            <div style={{ fontSize: 15, color: COLORS.text, lineHeight: 1.8, whiteSpace: "pre-wrap", background: COLORS.surface, borderRadius: 10, padding: 16, border: `1px solid ${mentee.color}33` }}>
+              {mentee.customPlan}
+            </div>
+          ) : (
+            <div style={{ textAlign: "center", padding: 40, color: COLORS.textMuted }}>
+              <div style={{ fontSize: 42, marginBottom: 12 }}>◎</div>
+              <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 6 }}>Plano em elaboração</div>
+              <div style={{ fontSize: 15 }}>Seu mentor está preparando um plano exclusivo para você. Em breve ele estará disponível aqui!</div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === "resources" && (
+        <div style={styles.card()}>
+          <div style={styles.sectionTitle}>– Biblioteca de Recursos</div>
+          {[
+            { icon: "🎥", title: "Gravação: Sessão 1 — Diagnóstico", type: "Vídeo", avail: true },
+            { icon: "📄", title: "Template: Plano de 90 dias", type: "PDF", avail: true },
+            { icon: "🎧", title: "Áudio: Mentalidade de crescimento", type: "Áudio", avail: true },
+            { icon: "📊", title: "Planilha: Controle de metas", type: "Planilha", avail: true },
+            { icon: "🎥", title: "Gravação: Masterclass — Escala", type: "Vídeo", avail: true },
+          ].map((r, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+              <div style={{ fontSize: 26, flexShrink: 0 }}>{r.icon}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 2 }}>{r.title}</div>
+                <div style={{ fontSize: 13, color: COLORS.textMuted }}>{r.type}</div>
+              </div>
+              <span style={styles.badge(COLORS.teal)}>Disponível</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// MENTEE PORTAL LIST
+function MenteePortalList({ mentees, setView, setSelectedMentee }) {
+  return (
+    <div>
+      <div style={styles.pageHeader}>
+        <div style={styles.pageTitle}>Minha Jornada</div>
+        <div style={styles.pageSubtitle}>Selecione um mentorado para acessar sua central</div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+        {mentees.map(m => {
+          const doneCount = (m.milestones || []).filter(Boolean).length;
+          return (
+            <div key={m.id}
+              style={{ ...styles.card({ cursor: "pointer", transition: "transform 0.15s, box-shadow 0.15s", border: `1px solid ${m.color}33` }), position: "relative", overflow: "hidden" }}
+              onClick={() => { setSelectedMentee(m); setView("mentee-portal"); }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: `linear-gradient(90deg, ${m.color}, ${m.color}55)` }} />
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <Avatar initials={m.avatar} color={m.color} size={48} />
+                <div>
+                  <div style={{ fontSize: 17, fontWeight: 800 }}>{m.name}</div>
+                  <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+                    <span style={styles.badge(STAGE_COLORS[m.stage] || COLORS.accent)}>{m.stage}</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ fontSize: 14, color: COLORS.textMuted, marginBottom: 12 }}>– {m.goal}</div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ fontSize: 13, color: COLORS.textMuted }}>Marcos atingidos</span>
+                <span style={{ fontSize: 16, fontWeight: 800, color: m.color }}>{doneCount}/{(m.milestones || []).length}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// MAIN APP
+export default function App() {
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
+  const isLoaded = useRef(false);
+
+  const [view, setView] = useState("dashboard");
+  const [mentees, setMentees] = useState(INITIAL_MENTEES);
+  const [leads, setLeads] = useState(INITIAL_LEADS);
+  const [events, setEvents] = useState(INITIAL_EVENTS);
+  const [goals, setGoals] = useState(INITIAL_GOALS);
+  const [selectedMentee, setSelectedMentee] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [copiedId, setCopiedId] = useState(null);
+
+  // Carregar dados do Supabase na inicialização
+  useEffect(() => {
+    (async () => {
+      const [m, l, e, g] = await Promise.all([
+        supabase.from('mentees').select('*'),
+        supabase.from('leads').select('*'),
+        supabase.from('events').select('*'),
+        supabase.from('goals').select('*'),
+      ]);
+      if (m.data?.length) setMentees(m.data.map(toMentee));
+      if (l.data?.length) setLeads(l.data.map(toLead));
+      if (e.data?.length) setEvents(e.data.map(toEvent));
+      if (g.data?.length) setGoals(toGoalsObj(g.data));
+      // Delay para não disparar os useEffects de sync durante o carregamento
+      setTimeout(() => { isLoaded.current = true; }, 0);
+    })();
+  }, []);
+
+  // Sincronizar mentorados com o Supabase
+  useEffect(() => {
+    if (!isLoaded.current) return;
+    (async () => {
+      const { data: existing } = await supabase.from('mentees').select('id');
+      const existingIds = new Set(existing?.map(m => m.id) ?? []);
+      const currentIds = new Set(mentees.map(m => String(m.id)));
+      const toDelete = [...existingIds].filter(id => !currentIds.has(id));
+      if (toDelete.length) await supabase.from('mentees').delete().in('id', toDelete);
+      if (mentees.length) await supabase.from('mentees').upsert(mentees.map(toMenteeDb));
+    })();
+  }, [mentees]);
+
+  // Sincronizar leads com o Supabase
+  useEffect(() => {
+    if (!isLoaded.current) return;
+    (async () => {
+      const { data: existing } = await supabase.from('leads').select('id');
+      const existingIds = new Set(existing?.map(l => l.id) ?? []);
+      const currentIds = new Set(leads.map(l => String(l.id)));
+      const toDelete = [...existingIds].filter(id => !currentIds.has(id));
+      if (toDelete.length) await supabase.from('leads').delete().in('id', toDelete);
+      if (leads.length) await supabase.from('leads').upsert(leads.map(toLeadDb));
+    })();
+  }, [leads]);
+
+  // Sincronizar eventos com o Supabase
+  useEffect(() => {
+    if (!isLoaded.current) return;
+    (async () => {
+      const { data: existing } = await supabase.from('events').select('id');
+      const existingIds = new Set(existing?.map(e => e.id) ?? []);
+      const currentIds = new Set(events.map(e => String(e.id)));
+      const toDelete = [...existingIds].filter(id => !currentIds.has(id));
+      if (toDelete.length) await supabase.from('events').delete().in('id', toDelete);
+      if (events.length) await supabase.from('events').upsert(events.map(toEventDb));
+    })();
+  }, [events]);
+
+  // Sincronizar metas com o Supabase
+  useEffect(() => {
+    if (!isLoaded.current) return;
+    (async () => {
+      const rows = fromGoalsObj(goals);
+      const { data: existing } = await supabase.from('goals').select('id');
+      const existingIds = new Set(existing?.map(g => g.id) ?? []);
+      const currentIds = new Set(rows.map(r => r.id));
+      const toDelete = [...existingIds].filter(id => !currentIds.has(id));
+      if (toDelete.length) await supabase.from('goals').delete().in('id', toDelete);
+      if (rows.length) await supabase.from('goals').upsert(rows);
+    })();
+  }, [goals]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const copyPortalLink = (mentee) => {
+    const url = `${window.location.origin}/mentorado/${mentee.id}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedId(mentee.id);
+      setTimeout(() => setCopiedId(null), 2000);
+    });
+  };
+
+  const nav = [
+    { id: "dashboard", label: "Visão Geral", icon: "◈" },
+    { id: "mentees", label: "Mentorados", icon: "◇" },
+    { id: "crm", label: "Prospecção", icon: "◉" },
+    { id: "calendar", label: "Calendário", icon: "◻" },
+    { id: "goals", label: "Metas", icon: "◎" },
+  ];
+
+  const renderView = () => {
+    if (view === "mentee-detail" && selectedMentee) return <MenteeDetail mentee={selectedMentee} setMentees={setMentees} setView={setView} />;
+    if (view === "mentees") return <MenteesSection mentees={mentees} setMentees={setMentees} setView={setView} setSelectedMentee={setSelectedMentee} copyPortalLink={copyPortalLink} copiedId={copiedId} />;
+    if (view === "crm") return <CRM leads={leads} setLeads={setLeads} setMentees={setMentees} />;
+    if (view === "calendar") return <Calendar events={events} setEvents={setEvents} />;
+    if (view === "goals") return <Goals goals={goals} setGoals={setGoals} />;
+    return <Dashboard mentees={mentees} leads={leads} events={events} />;
+  };
+
+  const activeLeads = leads.filter(l => l.stage !== "Convertido" && l.stage !== "Perdido").length;
+
+  const sidebarStyle = {
+    ...styles.sidebar,
+    ...(isMobile ? {
+      transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
+      transition: "transform 0.3s ease",
+      zIndex: 200,
+    } : {}),
+  };
+
+  const mainStyle = {
+    ...styles.main,
+    marginLeft: isMobile ? 0 : 260,
+    padding: isMobile ? "24px 20px" : "48px 56px",
+    maxWidth: isMobile ? "100vw" : "calc(100vw - 260px)",
+  };
+
+  return (
+    <div style={styles.app}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C9A84C55; }
+        input[type=range] { accent-color: #C9A84C; }
+        select option { background: #161616; color: #F2EDE4; }
+        button:hover { opacity: 0.85; }
+        input:focus, textarea:focus, select:focus { border-color: #C9A84C55 !important; }
+      `}</style>
+
+      {isMobile && sidebarOpen && (
+        <div
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 150 }}
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <div style={sidebarStyle}>
+        <div style={styles.logo}>
+          <div style={styles.logoMark}>
+            <div style={styles.logoDot} />
+            <div style={styles.logoText}>Arcus Club</div>
+            <div style={styles.logoSub}>Sistema de Gestão</div>
+          </div>
+        </div>
+
+        <div style={{ padding: "20px 0 8px" }}>
+          <div style={styles.navLabel}>Administração</div>
+          {nav.map(item => (
+            <div key={item.id} style={styles.navItem(view === item.id || (view === "mentee-detail" && item.id === "mentees"))}
+              onClick={() => { setView(item.id); if (isMobile) setSidebarOpen(false); }}>
+              <span style={{ fontSize: 12, color: (view === item.id || (view === "mentee-detail" && item.id === "mentees")) ? COLORS.accent : COLORS.textDim, lineHeight: 1 }}>{item.icon}</span>
+              <span style={{ flex: 1 }}>{item.label}</span>
+              {item.id === "crm" && activeLeads > 0 && (
+                <span style={{ background: COLORS.accent, color: "#0A0800", borderRadius: 2, fontSize: 11, fontWeight: 600, fontFamily: FONT_UI, padding: "2px 6px", letterSpacing: "0.06em" }}>{activeLeads}</span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginTop: "auto", padding: "0 28px 8px" }}>
+          <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 20 }}>
+            <div style={{ fontSize: 14, color: COLORS.textMuted, fontFamily: FONT_UI, marginBottom: 14 }}>{mentees.filter(m => m.stage === "Ativo").length} mentorados · {activeLeads} leads</div>
+            <button
+              onClick={signOut}
+              style={{ display: "flex", alignItems: "center", gap: 8, background: "transparent", border: "none", cursor: "pointer", color: COLORS.textMuted, fontSize: 13, fontFamily: FONT_UI, letterSpacing: "0.06em", padding: 0, transition: "color 0.2s" }}
+              onMouseEnter={e => { e.currentTarget.style.color = COLORS.text; }}
+              onMouseLeave={e => { e.currentTarget.style.color = COLORS.textMuted; }}
+            >
+              <span style={{ fontSize: 14 }}>⎋</span> Sair da conta
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div style={mainStyle}>
+        {isMobile && (
+          <button
+            onClick={() => setSidebarOpen(true)}
+            style={{
+              background: "none",
+              border: `1px solid ${COLORS.border}`,
+              color: COLORS.text,
+              cursor: "pointer",
+              padding: "8px 14px",
+              borderRadius: 2,
+              marginBottom: 24,
+              fontSize: 20,
+              lineHeight: 1,
+            }}
+          >☰</button>
+        )}
+        {renderView()}
+      </div>
+    </div>
+  );
+}

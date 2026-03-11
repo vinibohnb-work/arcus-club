@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \":*)",
+      "Bash(node \"C:\\\\Users\\\\vinic\\\\AppData\\\\Local\\\\Temp\\\\fix_fonts.js\")",
+      "Bash(npm install react-router-dom)",
+      "Bash(npm run build)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npm install @supabase/supabase-js)",
+      "Bash(where npm)",
+      "Bash(where node)"
+    ]
+  }
+}
