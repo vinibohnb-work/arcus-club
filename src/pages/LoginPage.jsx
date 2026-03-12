@@ -42,18 +42,26 @@ export default function LoginPage() {
     }
 
     // Fetch profile to redirect correctly
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role, mentee_id')
-      .eq('id', data.user.id)
-      .single()
+    try {
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('role, mentee_id')
+        .eq('id', data.user.id)
+        .single()
 
-    if (profile?.role === 'admin') {
-      navigate('/admin', { replace: true })
-    } else if (profile?.role === 'mentee' && profile?.mentee_id) {
-      navigate(`/mentorado/${profile.mentee_id}`, { replace: true })
-    } else {
-      navigate('/admin', { replace: true })
+      if (profileError) throw profileError
+
+      if (profile?.role === 'admin') {
+        navigate('/admin', { replace: true })
+      } else if (profile?.role === 'mentee' && profile?.mentee_id) {
+        navigate(`/mentorado/${profile.mentee_id}`, { replace: true })
+      } else {
+        setError('Perfil não encontrado. Entre em contato com o administrador.')
+        setLoading(false)
+      }
+    } catch (err) {
+      setError('Erro ao carregar perfil. Tente novamente.')
+      setLoading(false)
     }
   }
 
