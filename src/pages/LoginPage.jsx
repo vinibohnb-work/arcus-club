@@ -41,13 +41,18 @@ export default function LoginPage() {
       return
     }
 
-    // Fetch profile to redirect correctly
+    // Fetch profile to redirect correctly (with 6s timeout)
     try {
-      const { data: profile, error: profileError } = await supabase
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('timeout')), 6000)
+      )
+      const query = supabase
         .from('profiles')
         .select('role, mentee_id')
         .eq('id', data.user.id)
         .single()
+
+      const { data: profile, error: profileError } = await Promise.race([query, timeout])
 
       if (profileError) throw profileError
 
@@ -60,7 +65,10 @@ export default function LoginPage() {
         setLoading(false)
       }
     } catch (err) {
-      setError('Erro ao carregar perfil. Tente novamente.')
+      const msg = err?.message === 'timeout'
+        ? 'Tempo esgotado. Verifique sua conexão e tente novamente.'
+        : 'Erro ao carregar perfil. Tente novamente.'
+      setError(msg)
       setLoading(false)
     }
   }
