@@ -49,11 +49,11 @@ export default function LoginPage() {
       .single()
 
     if (profile?.role === 'admin') {
-      navigate('/', { replace: true })
+      navigate('/admin', { replace: true })
     } else if (profile?.role === 'mentee' && profile?.mentee_id) {
       navigate(`/mentorado/${profile.mentee_id}`, { replace: true })
     } else {
-      navigate('/', { replace: true })
+      navigate('/admin', { replace: true })
     }
   }
 
