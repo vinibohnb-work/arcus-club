@@ -9,14 +9,23 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        loadProfile(session.user.id)
-      } else {
+    // Timeout de segurança: se o Supabase não responder em 8s, libera o loading
+    const timeout = setTimeout(() => setLoading(false), 8000)
+
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        clearTimeout(timeout)
+        setUser(session?.user ?? null)
+        if (session?.user) {
+          loadProfile(session.user.id)
+        } else {
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        clearTimeout(timeout)
         setLoading(false)
-      }
-    })
+      })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
