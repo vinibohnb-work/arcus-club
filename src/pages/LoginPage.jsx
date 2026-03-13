@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
@@ -20,12 +20,19 @@ const FONT_DISPLAY = `'Playfair Display', 'Georgia', serif`
 const FONT_UI = `'Jost', 'DM Sans', sans-serif`
 
 export default function LoginPage() {
-  const { signIn, loading: authLoading } = useAuth()
+  const { signIn, loading: authLoading, isAdmin, isMentee, menteeId } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  // Se já tem sessão ativa, redireciona automaticamente
+  useEffect(() => {
+    if (authLoading) return
+    if (isAdmin) navigate('/admin', { replace: true })
+    else if (isMentee && menteeId) navigate(`/mentorado/${menteeId}`, { replace: true })
+  }, [authLoading, isAdmin, isMentee, menteeId, navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
