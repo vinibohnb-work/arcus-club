@@ -336,10 +336,12 @@ export default function MenteePage() {
       backgroundImage:`radial-gradient(ellipse at 15% 50%, ${COLORS.surface}CC 0%, transparent 55%)`,
       color:COLORS.text,
       fontFamily:FONT_UI,
+      overflowX:"hidden",
     }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Jost:wght@300;400;500;600&display=swap');
         * { box-sizing:border-box; margin:0; padding:0; }
+        html, body { overflow-x:hidden; }
         ::-webkit-scrollbar { width:4px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:#333; border-radius:2px; }
