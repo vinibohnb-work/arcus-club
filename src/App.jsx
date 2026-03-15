@@ -373,7 +373,7 @@ const INITIAL_MENTEES = [
 const INITIAL_LEADS = [
   {
     id: 101, name: "Fernanda Dias", email: "fernanda@email.com", phone: "(11) 98888-0001",
-    source: "Instagram", interest: "Dobrar faturamento",
+    source: "Instagram", interest: "Dobrar faturamento", awareness: "Consciente",
     avatar: "FD", color: "#6C63FF", tags: ["E-commerce"], lastContact: "2026-03-08",
     notes: "Veio pelo post de case da Ana",
     interactions: [
@@ -387,7 +387,7 @@ const INITIAL_LEADS = [
   },
   {
     id: 102, name: "Rafael Pinto", email: "rafael@email.com", phone: "(11) 98888-0002",
-    source: "Indicação", interest: "Criar negócio digital",
+    source: "Indicação", interest: "Criar negócio digital", awareness: "Ligar!",
     avatar: "RP", color: "#F5A623", tags: ["Iniciante", "Digital"], lastContact: "2026-03-07",
     notes: "Indicado pelo Diego Costa",
     interactions: [
@@ -400,7 +400,7 @@ const INITIAL_LEADS = [
   },
   {
     id: 103, name: "Juliana Neves", email: "juliana@email.com", phone: "(11) 98888-0003",
-    source: "LinkedIn", interest: "Liderança e gestão",
+    source: "LinkedIn", interest: "Liderança e gestão", awareness: "Ligar!",
     avatar: "JN", color: "#2DD4BF", tags: ["Liderança", "Corporativo"], lastContact: "2026-03-09",
     notes: "Muito qualificada, aguardando resposta",
     interactions: [
@@ -414,7 +414,7 @@ const INITIAL_LEADS = [
   },
   {
     id: 104, name: "Carlos Motta", email: "carlos@email.com", phone: "(11) 98888-0004",
-    source: "YouTube", interest: "Vendas B2C",
+    source: "YouTube", interest: "Vendas B2C", awareness: "Seguidor",
     avatar: "CA", color: "#FF6B6B", tags: ["Vendas", "B2C"], lastContact: "2026-03-03",
     notes: "Comentou em vídeo do YouTube",
     interactions: [
@@ -426,7 +426,7 @@ const INITIAL_LEADS = [
   },
   {
     id: 105, name: "Mariana Castro", email: "mariana@email.com", phone: "(11) 98888-0005",
-    source: "Evento", interest: "Marca pessoal",
+    source: "Evento", interest: "Marca pessoal", awareness: "Engajado",
     avatar: "MC", color: "#A78BFA", tags: ["Branding", "Redes Sociais"], lastContact: "2026-03-08",
     notes: "Conheceu no evento de marketing",
     interactions: [
@@ -456,6 +456,15 @@ const STAGE_COLORS = {
   "Convertido": "#3DBFB0",
   "Perdido": "#E05252",
 };
+
+const AWARENESS_LEVELS = [
+  { key: "Frio",       color: "#6A6A7A", desc: "Sem contato anterior" },
+  { key: "Seguidor",   color: "#7B6FD4", desc: "Segue nas redes sociais" },
+  { key: "Engajado",   color: "#3DBFB0", desc: "Interage com conteúdo" },
+  { key: "Consciente", color: "#C9A84C", desc: "Conhece e entende o clube" },
+  { key: "Ligar!",     color: "#E09A3D", desc: "Pronto para contato direto" },
+  { key: "Recusa",     color: "#E05252", desc: "Não tem interesse" },
+];
 const MILESTONE_LABELS = ["Onboarding", "Diagnóstico", "Plano de Ação", "Execução", "Revisão", "Avanço Contínuo"];
 
 const INITIAL_EVENTS = [
@@ -645,13 +654,14 @@ function CRM({ leads, setLeads, setMentees }) {
   const today = new Date().toISOString().split("T")[0];
   const tomorrow = (() => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toISOString().split("T")[0]; })();
 
+  const [viewMode, setViewMode] = useState("kanban");
   const [selectedId, setSelectedId] = useState(null);
-  const [tab, setTab] = useState("history");
+  const [detailTab, setDetailTab] = useState("history");
   const [search, setSearch] = useState("");
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [showInteractionModal, setShowInteractionModal] = useState(false);
   const [showNextStepModal, setShowNextStepModal] = useState(false);
-  const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "", source: "Instagram", interest: "", tags: "" });
+  const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "", source: "Instagram", interest: "", tags: "", awareness: "Frio" });
   const [interactionForm, setInteractionForm] = useState({ type: "Ligação", note: "", date: today });
   const [nextStepForm, setNextStepForm] = useState({ type: "Ligar", title: "", note: "", date: tomorrow });
 
@@ -674,7 +684,11 @@ function CRM({ leads, setLeads, setMentees }) {
     setLeads(prev => [...prev, newL]);
     setSelectedId(newL.id);
     setShowLeadModal(false);
-    setLeadForm({ name: "", email: "", phone: "", source: "Instagram", interest: "", tags: "" });
+    setLeadForm({ name: "", email: "", phone: "", source: "Instagram", interest: "", tags: "", awareness: "Frio" });
+  };
+
+  const moveAwareness = (leadId, newLevel) => {
+    setLeads(prev => prev.map(l => l.id === leadId ? { ...l, awareness: newLevel } : l));
   };
 
   const addInteraction = () => {
@@ -706,168 +720,243 @@ function CRM({ leads, setLeads, setMentees }) {
     } : l));
   };
 
-  const deleteLead = (id) => { setLeads(prev => prev.filter(l => l.id !== id)); if (selectedId === id) setSelectedId(null); };
+  const deleteLead = (id) => { setLeads(prev => prev.filter(l => l.id !== id)); setSelectedId(null); };
+
+  const LeadCard = ({ lead }) => {
+    const pending = (lead.nextSteps || []).filter(s => !s.done);
+    const overdue = pending.filter(s => s.date < today).length > 0;
+    const nextStep = [...pending].sort((a, b) => a.date.localeCompare(b.date))[0];
+    const bg = overdue ? `${COLORS.red}18` : COLORS.card;
+    const borderColor = overdue ? COLORS.red : COLORS.border;
+    const hoverBg = overdue ? `${COLORS.red}28` : COLORS.cardHover;
+    return (
+      <div
+        onClick={() => { setSelectedId(lead.id); setDetailTab("history"); }}
+        style={{ background: bg, border: `1px solid ${borderColor}`, borderRadius: 4, padding: "10px 12px", cursor: "pointer", transition: "background 0.15s" }}
+        onMouseEnter={e => e.currentTarget.style.background = hoverBg}
+        onMouseLeave={e => e.currentTarget.style.background = bg}
+      >
+        <div style={{ fontSize: 13, fontWeight: 600, color: overdue ? COLORS.red : COLORS.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{lead.name}</div>
+        {nextStep && (
+          <div style={{ fontSize: 11, color: overdue ? COLORS.red : COLORS.textDim, marginTop: 3 }}>{nextStep.date}</div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div>
       {/* ── Header ── */}
       <div style={styles.pageHeader}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
           <div>
             <div style={styles.pageTitle}>Prospecção</div>
-            <div style={styles.pageSubtitle}>Histórico de interações e próximos passos por lead</div>
+            <div style={styles.pageSubtitle}>Leads organizados por nível de consciência do clube</div>
           </div>
-          <button style={styles.btn()} onClick={() => setShowLeadModal(true)}>+ Novo Lead</button>
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            <div style={{ display: "flex", border: `1px solid ${COLORS.border}`, borderRadius: 4, overflow: "hidden" }}>
+              {[["kanban", "⊞ Kanban"], ["list", "≡ Lista"]].map(([v, label]) => (
+                <button key={v} onClick={() => setViewMode(v)} style={{ padding: "8px 18px", border: "none", cursor: "pointer", fontSize: 12, fontWeight: 600, fontFamily: FONT_UI, letterSpacing: "0.08em", background: viewMode === v ? COLORS.accent : COLORS.surface, color: viewMode === v ? "#0A0800" : COLORS.textMuted, transition: "all 0.15s" }}>
+                  {label}
+                </button>
+              ))}
+            </div>
+            <button style={styles.btn()} onClick={() => setShowLeadModal(true)}>+ Novo Lead</button>
+          </div>
+        </div>
+        <div style={{ marginTop: 20 }}>
+          <input style={{ ...styles.input, fontSize: 13, maxWidth: 480 }} placeholder="🔍 Buscar lead..." value={search} onChange={e => setSearch(e.target.value)} />
         </div>
       </div>
 
-      {/* ── Layout dois painéis ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "270px 1fr", gap: 16, alignItems: "start" }}>
-
-        {/* Painel esquerdo: lista de leads */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <input style={{ ...styles.input, fontSize: 13 }} placeholder="🔍 Buscar lead..." value={search} onChange={e => setSearch(e.target.value)} />
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {filtered.length === 0 && (
-              <div style={{ padding: "20px 0", textAlign: "center", color: COLORS.textMuted, fontSize: 14 }}>Nenhum lead encontrado.</div>
-            )}
-            {filtered.map(l => {
-              const pending = (l.nextSteps || []).filter(s => !s.done);
-              const overdue = pending.filter(s => s.date < today);
-              const todayStep = pending.find(s => s.date === today);
-              const nextStep = [...pending].sort((a, b) => a.date.localeCompare(b.date))[0];
-              const isSelected = selectedId === l.id;
+      {/* ── KANBAN ── */}
+      {viewMode === "kanban" && (
+        <div style={{ overflowX: "auto", paddingBottom: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 10, alignItems: "flex-start" }}>
+            {AWARENESS_LEVELS.map(level => {
+              const colLeads = filtered.filter(l => (l.awareness || "Frio") === level.key);
               return (
-                <div key={l.id} onClick={() => setSelectedId(l.id)}
-                  style={{ background: isSelected ? `${COLORS.accent}12` : COLORS.card, border: `1px solid ${isSelected ? COLORS.accent : COLORS.border}`, borderLeft: `3px solid ${l.color}`, borderRadius: 4, padding: "10px 12px", cursor: "pointer", transition: "all 0.15s" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
-                    <Avatar initials={l.avatar} color={l.color} size={26} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.name}</div>
-                      <div style={{ fontSize: 11, color: COLORS.textMuted }}>{l.source}{l.interest ? ` · ${l.interest}` : ""}</div>
+                <div key={level.key} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {/* Cabeçalho da coluna */}
+                  <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderTop: `3px solid ${level.color}`, borderRadius: 4, padding: "12px 16px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: level.color, letterSpacing: "0.1em", textTransform: "uppercase" }}>{level.key}</div>
+                      <div style={{ fontSize: 12, background: `${level.color}22`, color: level.color, borderRadius: 10, padding: "1px 8px", fontWeight: 700 }}>{colLeads.length}</div>
                     </div>
-                    {overdue.length > 0 && <span style={{ fontSize: 10, background: COLORS.red, color: "#fff", borderRadius: 10, padding: "1px 6px", fontWeight: 700, flexShrink: 0 }}>{overdue.length} atras.</span>}
-                    {overdue.length === 0 && todayStep && <span style={{ fontSize: 10, background: COLORS.accent, color: "#fff", borderRadius: 10, padding: "1px 6px", fontWeight: 700, flexShrink: 0 }}>hoje</span>}
+                    <div style={{ fontSize: 11, color: COLORS.textDim, marginTop: 3 }}>{level.desc}</div>
                   </div>
-                  <div style={{ fontSize: 11, color: COLORS.textMuted, paddingLeft: 34 }}>
-                    {nextStep
-                      ? <>{stepIcon(nextStep.type)} {nextStep.type} · <span style={{ color: stepUrgency(nextStep.date) }}>{nextStep.date}</span></>
-                      : "Sem próximos passos"}
+                  {/* Cards */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {colLeads.map(l => <LeadCard key={l.id} lead={l} />)}
+                    {colLeads.length === 0 && (
+                      <div style={{ border: `1px dashed ${COLORS.border}`, borderRadius: 4, padding: "28px 12px", textAlign: "center", color: COLORS.textDim, fontSize: 12 }}>
+                        Nenhum lead
+                      </div>
+                    )}
                   </div>
                 </div>
               );
             })}
           </div>
         </div>
+      )}
 
-        {/* Painel direito: detalhe do lead */}
-        {selectedLead ? (
-          <div>
-            {/* Cabeçalho do lead */}
-            <div style={{ ...styles.card({ marginBottom: 14, padding: "14px 18px" }), display: "flex", alignItems: "center", gap: 14 }}>
-              <Avatar initials={selectedLead.avatar} color={selectedLead.color} size={42} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 17, fontWeight: 800, color: COLORS.text, marginBottom: 3 }}>{selectedLead.name}</div>
-                <div style={{ fontSize: 12, color: COLORS.textMuted }}>
-                  {selectedLead.email} · {selectedLead.phone} · {selectedLead.source}
-                  {selectedLead.interest && <span style={{ marginLeft: 8 }}>— {selectedLead.interest}</span>}
+      {/* ── LISTA ── */}
+      {viewMode === "list" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          {AWARENESS_LEVELS.map(level => {
+            const colLeads = filtered.filter(l => (l.awareness || "Frio") === level.key);
+            if (colLeads.length === 0) return null;
+            return (
+              <div key={level.key} style={{ marginBottom: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderLeft: `3px solid ${level.color}`, borderRadius: 4, marginBottom: 6 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: level.color, textTransform: "uppercase", letterSpacing: "0.1em" }}>{level.key}</div>
+                  <div style={{ fontSize: 11, color: COLORS.textDim }}>{level.desc}</div>
+                  <div style={{ marginLeft: "auto", fontSize: 12, color: level.color, fontWeight: 700 }}>{colLeads.length}</div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingLeft: 12 }}>
+                  {colLeads.map(l => {
+                    const pending = (l.nextSteps || []).filter(s => !s.done);
+                    const overdue = pending.filter(s => s.date < today);
+                    const todayStep = pending.find(s => s.date === today);
+                    const nextStep = [...pending].sort((a, b) => a.date.localeCompare(b.date))[0];
+                    return (
+                      <div key={l.id} onClick={() => { setSelectedId(l.id); setDetailTab("history"); }}
+                        style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderLeft: `3px solid ${l.color}`, borderRadius: 4, padding: "10px 14px", cursor: "pointer", display: "flex", alignItems: "center", gap: 12, transition: "background 0.15s" }}
+                        onMouseEnter={e => e.currentTarget.style.background = COLORS.cardHover}
+                        onMouseLeave={e => e.currentTarget.style.background = COLORS.card}
+                      >
+                        <Avatar initials={l.avatar} color={l.color} size={28} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.text }}>{l.name}</div>
+                          <div style={{ fontSize: 11, color: COLORS.textMuted }}>{l.source}{l.interest ? ` · ${l.interest}` : ""}</div>
+                        </div>
+                        {nextStep && <div style={{ fontSize: 11, color: stepUrgency(nextStep.date), flexShrink: 0 }}>{stepIcon(nextStep.type)} {nextStep.date}</div>}
+                        {overdue.length > 0 && <span style={{ fontSize: 10, background: COLORS.red, color: "#fff", borderRadius: 10, padding: "1px 6px", fontWeight: 700, flexShrink: 0 }}>{overdue.length} atras.</span>}
+                        {overdue.length === 0 && todayStep && <span style={{ fontSize: 10, background: COLORS.accent, color: "#000", borderRadius: 10, padding: "1px 6px", fontWeight: 700, flexShrink: 0 }}>hoje</span>}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-              <button style={{ ...styles.btn("ghost"), padding: "6px 10px", color: COLORS.red, fontSize: 12, flexShrink: 0 }} onClick={() => deleteLead(selectedLead.id)}>Remover</button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ── MODAL: Detalhe do Lead ── */}
+      {selectedLead && (
+        <div style={styles.modal} onClick={() => setSelectedId(null)}>
+          <div style={{ ...styles.modalBox, maxWidth: 640, maxHeight: "90vh" }} onClick={e => e.stopPropagation()}>
+            {/* Cabeçalho */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20, paddingBottom: 20, borderBottom: `1px solid ${COLORS.border}` }}>
+              <Avatar initials={selectedLead.avatar} color={selectedLead.color} size={48} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 18, fontWeight: 800, color: COLORS.text, marginBottom: 2 }}>{selectedLead.name}</div>
+                <div style={{ fontSize: 12, color: COLORS.textMuted }}>{selectedLead.email}{selectedLead.phone ? ` · ${selectedLead.phone}` : ""} · {selectedLead.source}</div>
+                {selectedLead.interest && <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>{selectedLead.interest}</div>}
+              </div>
+              <button style={{ ...styles.btn("ghost"), padding: "4px 8px" }} onClick={() => setSelectedId(null)}>✕</button>
+            </div>
+
+            {/* Seletor de nível de consciência */}
+            <div style={{ marginBottom: 20 }}>
+              <div style={styles.label}>Nível de Consciência</div>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {AWARENESS_LEVELS.map(lvl => (
+                  <button key={lvl.key} onClick={() => moveAwareness(selectedLead.id, lvl.key)}
+                    style={{ ...styles.pill((selectedLead.awareness || "Frio") === lvl.key, lvl.color), fontSize: 11 }}>
+                    {lvl.key}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Tabs */}
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
               {[["history", "📋 Histórico"], ["nextsteps", "🗓 Próximos Passos"]].map(([k, label]) => {
                 const badge = k === "nextsteps" ? (selectedLead.nextSteps || []).filter(s => !s.done && s.date <= today).length : 0;
                 return (
-                  <div key={k} onClick={() => setTab(k)}
-                    style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", borderRadius: 4, cursor: "pointer", fontSize: 13, fontWeight: 600, background: tab === k ? COLORS.accent : COLORS.card, color: tab === k ? "#fff" : COLORS.textMuted, border: `1px solid ${tab === k ? COLORS.accent : COLORS.border}`, transition: "all 0.15s" }}>
+                  <div key={k} onClick={() => setDetailTab(k)}
+                    style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", borderRadius: 4, cursor: "pointer", fontSize: 13, fontWeight: 600, background: detailTab === k ? COLORS.accent : COLORS.card, color: detailTab === k ? "#fff" : COLORS.textMuted, border: `1px solid ${detailTab === k ? COLORS.accent : COLORS.border}`, transition: "all 0.15s" }}>
                     {label}
                     {badge > 0 && <span style={{ background: COLORS.red, color: "#fff", borderRadius: 10, padding: "0px 5px", fontSize: 10, fontWeight: 700 }}>{badge}</span>}
                   </div>
                 );
               })}
-              <div style={{ marginLeft: "auto" }}>
-                {tab === "history" && (
-                  <button style={{ ...styles.btn("outline"), fontSize: 12, padding: "6px 14px" }} onClick={() => setShowInteractionModal(true)}>+ Registrar Interação</button>
+              <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+                {detailTab === "history" && (
+                  <button style={{ ...styles.btn("outline"), fontSize: 12, padding: "6px 14px" }} onClick={() => setShowInteractionModal(true)}>+ Interação</button>
                 )}
-                {tab === "nextsteps" && (
-                  <button style={{ ...styles.btn("outline"), fontSize: 12, padding: "6px 14px" }} onClick={() => setShowNextStepModal(true)}>+ Agendar Passo</button>
+                {detailTab === "nextsteps" && (
+                  <button style={{ ...styles.btn("outline"), fontSize: 12, padding: "6px 14px" }} onClick={() => setShowNextStepModal(true)}>+ Passo</button>
                 )}
+                <button style={{ ...styles.btn("ghost"), padding: "6px 10px", color: COLORS.red, fontSize: 12 }} onClick={() => deleteLead(selectedLead.id)}>Remover</button>
               </div>
             </div>
 
-            {/* Aba: Histórico */}
-            {tab === "history" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {(selectedLead.interactions || []).length === 0
-                  ? <div style={{ ...styles.card({ textAlign: "center", padding: 40 }), color: COLORS.textMuted }}>
-                      <div style={{ fontSize: 28, marginBottom: 8 }}>💬</div>
-                      <div style={{ fontWeight: 600 }}>Nenhuma interação registrada.</div>
-                      <div style={{ fontSize: 13, marginTop: 4 }}>Registre ligações, mensagens, reuniões e e-mails.</div>
-                    </div>
-                  : (selectedLead.interactions || []).map(it => (
-                      <div key={it.id} style={{ ...styles.card({ padding: "12px 16px" }), display: "flex", gap: 12, alignItems: "flex-start" }}>
-                        <div style={{ width: 36, height: 36, borderRadius: "50%", background: `${selectedLead.color}22`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>
-                          {interactionIcon(it.type)}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                            <span style={{ fontSize: 13, fontWeight: 700, color: COLORS.text }}>{it.type}</span>
-                            <span style={{ fontSize: 12, color: COLORS.textMuted, marginLeft: "auto" }}>{it.date}</span>
-                          </div>
-                          <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.6 }}>{it.note}</div>
-                        </div>
+            {/* Conteúdo da aba */}
+            <div style={{ overflowY: "auto", maxHeight: 360 }}>
+              {detailTab === "history" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {(selectedLead.interactions || []).length === 0
+                    ? <div style={{ textAlign: "center", padding: "32px 0", color: COLORS.textMuted }}>
+                        <div style={{ fontSize: 24, marginBottom: 8 }}>💬</div>
+                        <div style={{ fontWeight: 600 }}>Nenhuma interação registrada.</div>
+                        <div style={{ fontSize: 13, marginTop: 4 }}>Registre ligações, mensagens, reuniões e e-mails.</div>
                       </div>
-                    ))
-                }
-              </div>
-            )}
-
-            {/* Aba: Próximos Passos */}
-            {tab === "nextsteps" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {(selectedLead.nextSteps || []).length === 0
-                  ? <div style={{ ...styles.card({ textAlign: "center", padding: 40 }), color: COLORS.textMuted }}>
-                      <div style={{ fontSize: 28, marginBottom: 8 }}>🗓</div>
-                      <div style={{ fontWeight: 600 }}>Nenhum próximo passo agendado.</div>
-                      <div style={{ fontSize: 13, marginTop: 4 }}>Agende ações para você e seu sócio.</div>
-                    </div>
-                  : (selectedLead.nextSteps || []).map(s => {
-                      const isOverdue = s.date < today && !s.done;
-                      const isToday = s.date === today && !s.done;
-                      return (
-                        <div key={s.id} style={{ ...styles.card({ padding: "10px 14px" }), display: "flex", alignItems: "center", gap: 12, opacity: s.done ? 0.5 : 1, borderLeft: `3px solid ${s.done ? COLORS.teal : isOverdue ? COLORS.red : isToday ? COLORS.accent : COLORS.border}` }}>
-                          <div onClick={() => toggleStepDone(selectedLead.id, s.id)}
-                            style={{ width: 20, height: 20, borderRadius: 4, border: `2px solid ${s.done ? COLORS.teal : COLORS.border}`, background: s.done ? COLORS.teal : "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 13, flexShrink: 0, transition: "all 0.2s" }}>
-                            {s.done && "✓"}
-                          </div>
-                          <span style={{ fontSize: 16, flexShrink: 0 }}>{stepIcon(s.type)}</span>
+                    : (selectedLead.interactions || []).map(it => (
+                        <div key={it.id} style={{ ...styles.card({ padding: "12px 16px" }), display: "flex", gap: 12, alignItems: "flex-start" }}>
+                          <div style={{ width: 32, height: 32, borderRadius: "50%", background: `${selectedLead.color}22`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>{interactionIcon(it.type)}</div>
                           <div style={{ flex: 1 }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                              <span style={{ fontSize: 13, fontWeight: 700, color: s.done ? COLORS.textMuted : COLORS.text, textDecoration: s.done ? "line-through" : "none" }}>{s.title}</span>
-                              {isOverdue && !s.done && <span style={{ fontSize: 11, color: COLORS.red, fontWeight: 700 }}>⚠ Atrasado</span>}
-                              {isToday && <span style={{ fontSize: 11, color: COLORS.accent, fontWeight: 700 }}>● Hoje</span>}
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                              <span style={{ fontSize: 13, fontWeight: 700, color: COLORS.text }}>{it.type}</span>
+                              <span style={{ fontSize: 12, color: COLORS.textMuted, marginLeft: "auto" }}>{it.date}</span>
                             </div>
-                            {s.note && <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>{s.note}</div>}
+                            <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.6 }}>{it.note}</div>
                           </div>
-                          <span style={{ fontSize: 12, color: s.done ? COLORS.textMuted : stepUrgency(s.date), fontWeight: isToday || isOverdue ? 700 : 400, flexShrink: 0 }}>{s.date}</span>
                         </div>
-                      );
-                    })
-                }
-              </div>
-            )}
+                      ))
+                  }
+                </div>
+              )}
+              {detailTab === "nextsteps" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {(selectedLead.nextSteps || []).length === 0
+                    ? <div style={{ textAlign: "center", padding: "32px 0", color: COLORS.textMuted }}>
+                        <div style={{ fontSize: 24, marginBottom: 8 }}>🗓</div>
+                        <div style={{ fontWeight: 600 }}>Nenhum próximo passo agendado.</div>
+                        <div style={{ fontSize: 13, marginTop: 4 }}>Agende ações para avançar com este lead.</div>
+                      </div>
+                    : (selectedLead.nextSteps || []).map(s => {
+                        const isOverdue = s.date < today && !s.done;
+                        const isToday = s.date === today && !s.done;
+                        return (
+                          <div key={s.id} style={{ ...styles.card({ padding: "10px 14px" }), display: "flex", alignItems: "center", gap: 12, opacity: s.done ? 0.5 : 1, borderLeft: `3px solid ${s.done ? COLORS.teal : isOverdue ? COLORS.red : isToday ? COLORS.accent : COLORS.border}` }}>
+                            <div onClick={() => toggleStepDone(selectedLead.id, s.id)}
+                              style={{ width: 20, height: 20, borderRadius: 4, border: `2px solid ${s.done ? COLORS.teal : COLORS.border}`, background: s.done ? COLORS.teal : "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 13, flexShrink: 0, transition: "all 0.2s" }}>
+                              {s.done && "✓"}
+                            </div>
+                            <span style={{ fontSize: 16, flexShrink: 0 }}>{stepIcon(s.type)}</span>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                                <span style={{ fontSize: 13, fontWeight: 700, color: s.done ? COLORS.textMuted : COLORS.text, textDecoration: s.done ? "line-through" : "none" }}>{s.title}</span>
+                                {isOverdue && <span style={{ fontSize: 11, color: COLORS.red, fontWeight: 700 }}>⚠ Atrasado</span>}
+                                {isToday && <span style={{ fontSize: 11, color: COLORS.accent, fontWeight: 700 }}>● Hoje</span>}
+                              </div>
+                              {s.note && <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>{s.note}</div>}
+                            </div>
+                            <span style={{ fontSize: 12, color: s.done ? COLORS.textMuted : stepUrgency(s.date), fontWeight: isToday || isOverdue ? 700 : 400, flexShrink: 0 }}>{s.date}</span>
+                          </div>
+                        );
+                      })
+                  }
+                </div>
+              )}
+            </div>
           </div>
-        ) : (
-          <div style={{ ...styles.card({ textAlign: "center", padding: "64px 40px" }), color: COLORS.textMuted }}>
-            <div style={{ fontSize: 36, marginBottom: 12 }}>👈</div>
-            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 6 }}>Selecione um lead</div>
-            <div style={{ fontSize: 14 }}>Clique num lead para ver o histórico de interações e gerenciar os próximos passos.</div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* ── Modal: Novo Lead ── */}
       {showLeadModal && (
@@ -884,10 +973,16 @@ function CRM({ leads, setLeads, setMentees }) {
                   <input style={styles.input} value={leadForm[k] || ""} onChange={e => setLeadForm(p => ({ ...p, [k]: e.target.value }))} />
                 </div>
               ))}
-              <div style={{ gridColumn: "1 / -1" }}>
-                <label style={styles.label}>Origem</label>
+              <div>
+                <label style={styles.label}>Canal de Aquisição</label>
                 <select style={styles.input} value={leadForm.source} onChange={e => setLeadForm(p => ({ ...p, source: e.target.value }))}>
                   {LEAD_SOURCES.map(s => <option key={s}>{s}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={styles.label}>Nível de Consciência</label>
+                <select style={styles.input} value={leadForm.awareness} onChange={e => setLeadForm(p => ({ ...p, awareness: e.target.value }))}>
+                  {AWARENESS_LEVELS.map(a => <option key={a.key}>{a.key}</option>)}
                 </select>
               </div>
             </div>
