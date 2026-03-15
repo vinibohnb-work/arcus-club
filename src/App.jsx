@@ -370,75 +370,7 @@ const INITIAL_MENTEES = [
   DEMO_MENTEE,
 ];
 
-const INITIAL_LEADS = [
-  {
-    id: 101, name: "Fernanda Dias", email: "fernanda@email.com", phone: "(11) 98888-0001",
-    source: "Instagram", interest: "Dobrar faturamento", awareness: "Consciente",
-    avatar: "FD", color: "#6C63FF", tags: ["E-commerce"], lastContact: "2026-03-08",
-    notes: "Veio pelo post de case da Ana",
-    interactions: [
-      { id: 1001, type: "Mensagem", note: "Primeiro contato via direct no Instagram. Demonstrou interesse em mentoria para escalar e-commerce.", date: "2026-03-05" },
-      { id: 1002, type: "Ligação", note: "Ligação de 20min. Confirmou interesse. Quer dobrar faturamento de R$15k para R$30k em 3 meses.", date: "2026-03-08" },
-    ],
-    nextSteps: [
-      { id: 2001, type: "Enviar proposta", title: "Enviar proposta comercial por e-mail", note: "Incluir cases similares ao negócio dela", date: "2026-03-11", done: false },
-      { id: 2002, type: "Follow-up", title: "Follow-up da proposta", date: "2026-03-14", done: false },
-    ],
-  },
-  {
-    id: 102, name: "Rafael Pinto", email: "rafael@email.com", phone: "(11) 98888-0002",
-    source: "Indicação", interest: "Criar negócio digital", awareness: "Ligar!",
-    avatar: "RP", color: "#F5A623", tags: ["Iniciante", "Digital"], lastContact: "2026-03-07",
-    notes: "Indicado pelo Diego Costa",
-    interactions: [
-      { id: 1003, type: "Mensagem", note: "Indicação do Diego. Mandei mensagem apresentando o programa.", date: "2026-03-04" },
-      { id: 1004, type: "Reunião", note: "Reunião de 30min via Google Meet. Muito engajado, quer estruturar um negócio digital do zero.", date: "2026-03-07" },
-    ],
-    nextSteps: [
-      { id: 2003, type: "Ligar", title: "Ligar para tirar dúvidas sobre a proposta", date: "2026-03-10", done: false },
-    ],
-  },
-  {
-    id: 103, name: "Juliana Neves", email: "juliana@email.com", phone: "(11) 98888-0003",
-    source: "LinkedIn", interest: "Liderança e gestão", awareness: "Ligar!",
-    avatar: "JN", color: "#2DD4BF", tags: ["Liderança", "Corporativo"], lastContact: "2026-03-09",
-    notes: "Muito qualificada, aguardando resposta",
-    interactions: [
-      { id: 1005, type: "E-mail", note: "Entrou em contato pelo LinkedIn pedindo informações sobre mentoria executiva.", date: "2026-03-01" },
-      { id: 1006, type: "Reunião", note: "Reunião de diagnóstico de 1h. Quer desenvolver liderança da equipe de 15 pessoas. Perfil muito qualificado.", date: "2026-03-06" },
-      { id: 1007, type: "Ligação", note: "Apresentamos a proposta. Ela gostou e está avaliando internamente.", date: "2026-03-09" },
-    ],
-    nextSteps: [
-      { id: 2004, type: "Follow-up", title: "Follow-up — fechar contrato", note: "Ela disse que responde até sexta", date: "2026-03-13", done: false },
-    ],
-  },
-  {
-    id: 104, name: "Carlos Motta", email: "carlos@email.com", phone: "(11) 98888-0004",
-    source: "YouTube", interest: "Vendas B2C", awareness: "Seguidor",
-    avatar: "CA", color: "#FF6B6B", tags: ["Vendas", "B2C"], lastContact: "2026-03-03",
-    notes: "Comentou em vídeo do YouTube",
-    interactions: [
-      { id: 1008, type: "Mensagem", note: "Deixou comentário no YouTube perguntando sobre mentoria. Respondemos e pedimos para entrar em contato.", date: "2026-03-03" },
-    ],
-    nextSteps: [
-      { id: 2005, type: "Ligar", title: "Fazer primeiro contato por WhatsApp", date: "2026-03-10", done: false },
-    ],
-  },
-  {
-    id: 105, name: "Mariana Castro", email: "mariana@email.com", phone: "(11) 98888-0005",
-    source: "Evento", interest: "Marca pessoal", awareness: "Engajado",
-    avatar: "MC", color: "#A78BFA", tags: ["Branding", "Redes Sociais"], lastContact: "2026-03-08",
-    notes: "Conheceu no evento de marketing",
-    interactions: [
-      { id: 1009, type: "Reunião", note: "Nos conhecemos no evento de Marketing Digital. Troca de contatos e apresentação do programa.", date: "2026-03-06" },
-      { id: 1010, type: "Mensagem", note: "Mandamos mensagem no WhatsApp com os detalhes do programa. Ela respondeu positivamente.", date: "2026-03-08" },
-    ],
-    nextSteps: [
-      { id: 2006, type: "Agendar reunião", title: "Agendar call de apresentação detalhada", date: "2026-03-12", done: false },
-      { id: 2007, type: "Enviar mensagem", title: "Enviar material de apoio sobre marca pessoal", date: "2026-03-11", done: false },
-    ],
-  },
-];
+const INITIAL_LEADS = [];
 
 const LEAD_STAGES = ["Novo Lead", "Contato Feito", "Proposta Enviada", "Negociação", "Convertido", "Perdido"];
 const MENTEE_STAGES = ["Ativo", "Inativo"];
