@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 // ─── Design tokens (mesma identidade visual) ──────────────────────────────────
@@ -121,6 +121,52 @@ const STEPS = [
   },
 ];
 
+const PILLARS = [
+  {
+    id: "cultura",
+    num: "01",
+    label: "Cultura",
+    icon: "◉",
+    color: "#7B6FD4",
+    desc: "Valores, comportamentos e ambiente que sustentam o crescimento. Sem cultura clara, o caos se replica na escala.",
+  },
+  {
+    id: "lideranca",
+    num: "02",
+    label: "Liderança",
+    icon: "▲",
+    color: COLORS.accent,
+    desc: "O empresário que não lidera estrategicamente está gerenciando, não construindo. Liderança é multiplicação.",
+    elevated: true,
+  },
+  {
+    id: "processos",
+    num: "03",
+    label: "Processos",
+    icon: "◈",
+    color: COLORS.teal,
+    desc: "Processos bem desenhados libertam o dono do operacional e tornam o crescimento previsível e replicável.",
+  },
+];
+
+const DEMO_MILESTONES = [
+  { label: "Onboarding", done: true },
+  { label: "Diagnóstico", done: true },
+  { label: "Plano de Ação", done: false, isNext: true },
+  { label: "Execução", done: false },
+  { label: "Revisão", done: false },
+  { label: "Avanço Contínuo", done: false },
+];
+
+const DEMO_PLAN = [
+  "Onboarding: Definição de objetivos e diagnóstico inicial",
+  "Plano de ação personalizado (30/60/90 dias)",
+  "Sessões semanais em grupo (1h cada)",
+  "Suporte direto com os mentores 24/7",
+  "Acesso à biblioteca de materiais exclusivos",
+  "Relatório mensal de progresso",
+];
+
 // ─── Componentes auxiliares ───────────────────────────────────────────────────
 function CTAButton({ text = "Quero fazer parte", size = "md", style: extraStyle = {} }) {
   const isLg = size === "lg";
@@ -217,7 +263,7 @@ function Navbar({ scrolled }) {
 
       {/* Nav links */}
       <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
-        {["Sobre", "Benefícios", "Como funciona"].map((item) => (
+        {["Sobre", "Metodologia", "Benefícios", "Plataforma", "Como funciona"].map((item) => (
           <a
             key={item}
             href={`#${item.toLowerCase().replace(/ /g, "-").normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}
@@ -657,6 +703,523 @@ function ProcessSection() {
   );
 }
 
+function MethodologySection() {
+  return (
+    <section id="metodologia" style={{
+      padding: "120px 48px",
+      background: COLORS.surface,
+      borderTop: `1px solid ${COLORS.border}`,
+      borderBottom: `1px solid ${COLORS.border}`,
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      {/* Background arch glow */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        background: `radial-gradient(ellipse 80% 60% at 50% 100%, ${COLORS.accent}06 0%, transparent 65%)`,
+      }} />
+
+      <div style={{ maxWidth: 960, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <div style={{ display: "flex", gap: 80, alignItems: "flex-start", flexWrap: "wrap" }}>
+
+          {/* ── Texto esquerdo ── */}
+          <div style={{ flex: "1 1 360px", maxWidth: 440 }}>
+            <SectionLabel>A metodologia</SectionLabel>
+            <h2 style={{
+              fontFamily: FONT_DISPLAY,
+              fontSize: "clamp(32px, 4vw, 48px)",
+              fontWeight: 700,
+              fontStyle: "italic",
+              color: COLORS.text,
+              lineHeight: 1.1,
+              marginBottom: 32,
+            }}>
+              Arcus — a estrutura<br />
+              <span style={{ color: COLORS.accent }}>que se sustenta.</span>
+            </h2>
+
+            {/* Story */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <p style={{ fontFamily: FONT_UI, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.8 }}>
+                Em arquitetura, um arco é a única estrutura que se sustenta pela{" "}
+                <em style={{ color: COLORS.text, fontStyle: "normal", fontWeight: 500 }}>tensão entre suas partes</em>.
+                Retire uma pedra e o arco cai. Adicione mais peso ao topo e ele fica mais forte.
+              </p>
+              <p style={{ fontFamily: FONT_UI, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.8 }}>
+                A metodologia Arcus funciona da mesma forma. Cultura, liderança e processos não são pilares independentes
+                — eles se sustentam mutuamente. Quando os três estão no lugar certo, o negócio não só resiste: ele cresce.
+              </p>
+
+              {/* Insight destacado */}
+              <div style={{
+                marginTop: 8,
+                padding: "20px 24px",
+                borderLeft: `2px solid ${COLORS.accent}`,
+                background: `${COLORS.accent}08`,
+                borderRadius: "0 4px 4px 0",
+              }}>
+                <p style={{
+                  fontFamily: FONT_DISPLAY,
+                  fontSize: 17,
+                  fontStyle: "italic",
+                  color: COLORS.text,
+                  lineHeight: 1.6,
+                  margin: 0,
+                }}>
+                  "O lucro que você deixa na mesa não some — ele está escondido na desorganização."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Pilares visuais ── */}
+          <div style={{ flex: "1 1 360px" }}>
+            {/* Arch SVG decorativa */}
+            <div style={{ position: "relative", paddingTop: 40 }}>
+              <svg
+                viewBox="0 0 420 80"
+                style={{
+                  position: "absolute",
+                  top: 0, left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "90%",
+                  opacity: 0.18,
+                  pointerEvents: "none",
+                }}
+              >
+                <path
+                  d="M 10 75 L 10 40 Q 10 5 210 5 Q 410 5 410 40 L 410 75"
+                  fill="none"
+                  stroke={COLORS.accent}
+                  strokeWidth="2"
+                  strokeDasharray="6 4"
+                />
+              </svg>
+
+              {/* Cards dos três pilares */}
+              <div style={{ display: "flex", alignItems: "flex-end", gap: 12 }}>
+                {PILLARS.map((p) => (
+                  <div
+                    key={p.id}
+                    style={{
+                      flex: 1,
+                      background: COLORS.card,
+                      border: `1px solid ${p.elevated ? p.color + "66" : COLORS.border}`,
+                      borderRadius: 6,
+                      padding: "28px 20px",
+                      position: "relative",
+                      overflow: "hidden",
+                      transform: p.elevated ? "translateY(-24px)" : "none",
+                      boxShadow: p.elevated ? `0 0 40px ${p.color}22, 0 8px 32px rgba(0,0,0,0.4)` : "none",
+                      transition: "transform 0.25s, box-shadow 0.25s",
+                    }}
+                  >
+                    {/* Top accent bar */}
+                    <div style={{
+                      position: "absolute", top: 0, left: 0, right: 0, height: 2,
+                      background: `linear-gradient(90deg, ${p.color}, transparent)`,
+                    }} />
+
+                    {/* Number */}
+                    <div style={{
+                      fontSize: 10,
+                      fontFamily: FONT_UI,
+                      color: p.color,
+                      letterSpacing: "0.16em",
+                      fontWeight: 600,
+                      marginBottom: 14,
+                      opacity: 0.7,
+                    }}>{p.num}</div>
+
+                    {/* Icon + Label */}
+                    <div style={{
+                      fontSize: 22,
+                      color: p.color,
+                      marginBottom: 10,
+                      fontFamily: FONT_UI,
+                    }}>{p.icon}</div>
+                    <div style={{
+                      fontFamily: FONT_UI,
+                      fontSize: 15,
+                      fontWeight: 700,
+                      color: COLORS.text,
+                      marginBottom: 12,
+                    }}>{p.label}</div>
+                    <div style={{
+                      fontFamily: FONT_UI,
+                      fontSize: 12,
+                      color: COLORS.textMuted,
+                      lineHeight: 1.7,
+                    }}>{p.desc}</div>
+
+                    {/* Keystone indicator */}
+                    {p.elevated && (
+                      <div style={{
+                        position: "absolute",
+                        bottom: 12, right: 14,
+                        fontSize: 9,
+                        color: p.color,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.12em",
+                        opacity: 0.6,
+                        fontFamily: FONT_UI,
+                      }}>pedra angular</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Base line */}
+              <div style={{
+                height: 1,
+                background: `linear-gradient(90deg, transparent, ${COLORS.accent}44, transparent)`,
+                marginTop: 8,
+              }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Mini demo tabs ────────────────────────────────────────────────────────────
+const DEMO_TABS = [
+  { id: "milestones", label: "Minha Jornada",      icon: "🎯" },
+  { id: "plan",       label: "Plano Base",          icon: "📋" },
+  { id: "custom",     label: "Plano Pessoal",       icon: "✍️" },
+  { id: "resources",  label: "Recursos",            icon: "📚" },
+];
+
+function DemoContent({ tab }) {
+  const accent = "#C9A84C";
+  const color  = "#A78BFA";
+
+  if (tab === "milestones") return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+      {/* Hero card */}
+      <div style={{
+        background: `linear-gradient(135deg, ${color}16, ${color}06)`,
+        border: `1px solid ${color}33`,
+        borderRadius: 6, padding: "16px 18px", marginBottom: 16, position: "relative",
+      }}>
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${color}, transparent)` }} />
+        <div style={{ fontSize: 10, color: COLORS.textMuted, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 4 }}>Central do Mentorado</div>
+        <div style={{ fontSize: 16, fontWeight: 700, fontFamily: FONT_DISPLAY, fontStyle: "italic", marginBottom: 4, color: COLORS.text }}>
+          Olá, Marcos!
+        </div>
+        <div style={{ fontSize: 12, color: COLORS.textMuted }}>
+          Sua meta: <strong style={{ color }}>Aumentar margem de lucro em 30%</strong>
+        </div>
+        <div style={{ marginTop: 10, height: 4, borderRadius: 2, background: COLORS.border }}>
+          <div style={{ height: "100%", width: "33%", background: color, borderRadius: 2, transition: "width 0.6s" }} />
+        </div>
+        <div style={{ fontSize: 10, color: COLORS.textMuted, marginTop: 4 }}>33% da jornada concluída</div>
+      </div>
+
+      {/* Timeline */}
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {DEMO_MILESTONES.map((m, i) => (
+          <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
+              <div style={{
+                width: 26, height: 26, borderRadius: 4,
+                background: m.done ? color : m.isNext ? `${color}22` : COLORS.surface,
+                border: `2px solid ${m.done ? color : m.isNext ? color : COLORS.border}`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 11, fontWeight: 700,
+                color: m.done ? "#fff" : m.isNext ? color : COLORS.textDim,
+                boxShadow: m.done ? `0 0 10px ${color}55` : "none",
+              }}>
+                {m.done ? "✓" : i + 1}
+              </div>
+              {i < DEMO_MILESTONES.length - 1 && (
+                <div style={{ width: 2, height: 22, background: m.done ? color : COLORS.border }} />
+              )}
+            </div>
+            <div style={{ paddingTop: 4, paddingBottom: i < DEMO_MILESTONES.length - 1 ? 22 : 0 }}>
+              <div style={{ fontSize: 12, fontWeight: m.done || m.isNext ? 600 : 400, color: m.done || m.isNext ? COLORS.text : COLORS.textMuted }}>
+                {m.label}
+              </div>
+              <div style={{ fontSize: 10, color: m.done ? color : m.isNext ? COLORS.textMuted : COLORS.textDim }}>
+                {m.done ? "Concluído ✓" : m.isNext ? "Em andamento…" : "Próximo passo"}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (tab === "plan") return (
+    <div>
+      <div style={{ fontSize: 12, color: COLORS.textMuted, marginBottom: 16, lineHeight: 1.6 }}>
+        O núcleo da sua jornada — mentoria aberta e contínua, no seu ritmo.
+      </div>
+      {DEMO_PLAN.map((item, i) => (
+        <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "10px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+          <div style={{
+            width: 22, height: 22, borderRadius: "50%",
+            background: `${accent}22`, display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 10, flexShrink: 0, color: accent, fontWeight: 700,
+          }}>{i + 1}</div>
+          <div style={{ fontSize: 12, lineHeight: 1.6, color: COLORS.text }}>{item}</div>
+        </div>
+      ))}
+    </div>
+  );
+
+  if (tab === "custom") return (
+    <div style={{
+      fontSize: 12.5, color: COLORS.text, lineHeight: 1.9,
+      background: COLORS.surface, borderRadius: 6, padding: "16px 18px",
+      border: `1px solid ${accent}33`, whiteSpace: "pre-wrap",
+    }}>
+      {`1. Mapear todos os centros de custo e identificar vazamentos até 30/04\n2. Implementar DRE gerencial simples (planilha modelo)\n3. Definir meta de margem líquida por linha de produto\n4. Estruturar rotina de reuniões de resultado (semanal, 30min)\n5. Delegar 3 tarefas operacionais recorrentes para equipe\n6. Revisão e ajuste do plano em 60 dias`}
+    </div>
+  );
+
+  return (
+    <div style={{ textAlign: "center", padding: "32px 0", color: COLORS.textMuted }}>
+      <div style={{ fontSize: 32, marginBottom: 10 }}>📂</div>
+      <div style={{ fontSize: 13, fontWeight: 600, color: COLORS.text, marginBottom: 6 }}>Biblioteca de materiais</div>
+      <div style={{ fontSize: 12, lineHeight: 1.6 }}>Templates, planilhas e gravações de sessões —<br />disponíveis exclusivamente para mentorados.</div>
+    </div>
+  );
+}
+
+function PlatformPreviewSection() {
+  const [activeTab, setActiveTab] = useState("milestones");
+  const accentColor = "#A78BFA";
+
+  return (
+    <section id="plataforma" style={{
+      padding: "120px 48px",
+      background: COLORS.bg,
+      borderTop: `1px solid ${COLORS.border}`,
+    }}>
+      <div style={{ maxWidth: 960, margin: "0 auto" }}>
+
+        {/* Header */}
+        <div style={{ display: "flex", gap: 48, alignItems: "flex-end", flexWrap: "wrap", marginBottom: 64 }}>
+          <div style={{ flex: "1 1 360px" }}>
+            <SectionLabel>Plataforma exclusiva</SectionLabel>
+            <h2 style={{
+              fontFamily: FONT_DISPLAY,
+              fontSize: "clamp(32px, 4vw, 48px)",
+              fontWeight: 700,
+              fontStyle: "italic",
+              color: COLORS.text,
+              lineHeight: 1.1,
+              marginBottom: 20,
+            }}>
+              Sua central de<br />
+              <span style={{ color: COLORS.accent }}>desenvolvimento.</span>
+            </h2>
+          </div>
+          <p style={{
+            flex: "1 1 300px",
+            fontFamily: FONT_UI,
+            fontSize: 15,
+            color: COLORS.textMuted,
+            lineHeight: 1.8,
+            maxWidth: 400,
+          }}>
+            Cada mentorado tem acesso à sua própria central — com plano personalizado, marcos da jornada,
+            materiais do mentor e acompanhamento em tempo real. Tudo num só lugar.
+          </p>
+        </div>
+
+        {/* Browser frame */}
+        <div style={{
+          background: COLORS.surface,
+          border: `1px solid ${COLORS.border}`,
+          borderRadius: 10,
+          overflow: "hidden",
+          boxShadow: `0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px ${COLORS.border}`,
+        }}>
+          {/* Browser chrome */}
+          <div style={{
+            background: COLORS.card,
+            borderBottom: `1px solid ${COLORS.border}`,
+            padding: "10px 16px",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+          }}>
+            <div style={{ display: "flex", gap: 6 }}>
+              {["#E05252", "#C9A84C", "#3DBFB0"].map((c, i) => (
+                <div key={i} style={{ width: 10, height: 10, borderRadius: "50%", background: c, opacity: 0.7 }} />
+              ))}
+            </div>
+            <div style={{
+              flex: 1, maxWidth: 280,
+              background: COLORS.surface,
+              border: `1px solid ${COLORS.border}`,
+              borderRadius: 4,
+              padding: "3px 10px",
+              fontSize: 11,
+              color: COLORS.textDim,
+              fontFamily: FONT_UI,
+              letterSpacing: "0.04em",
+            }}>
+              arcusclub.com.br/mentorado/demo
+            </div>
+            <div style={{
+              fontSize: 9,
+              color: COLORS.accent,
+              textTransform: "uppercase",
+              letterSpacing: "0.14em",
+              fontFamily: FONT_UI,
+              background: `${COLORS.accent}14`,
+              padding: "3px 8px",
+              borderRadius: 2,
+              border: `1px solid ${COLORS.accent}33`,
+            }}>Área restrita</div>
+          </div>
+
+          {/* App header */}
+          <div style={{
+            height: 44,
+            display: "flex",
+            alignItems: "center",
+            padding: "0 24px",
+            borderBottom: `1px solid ${COLORS.border}`,
+            background: `${COLORS.surface}EE`,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div style={{ width: 18, height: 1.5, background: `linear-gradient(90deg, ${COLORS.accent}, transparent)` }} />
+              <span style={{ fontFamily: FONT_DISPLAY, fontSize: 13, fontStyle: "italic", fontWeight: 700, color: COLORS.text }}>
+                Arcus Club
+              </span>
+            </div>
+          </div>
+
+          {/* App body */}
+          <div style={{ display: "flex", minHeight: 440 }}>
+
+            {/* Left panel */}
+            <div style={{
+              width: 200,
+              flexShrink: 0,
+              borderRight: `1px solid ${COLORS.border}`,
+              padding: "28px 20px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+              background: `${COLORS.bg}88`,
+            }}>
+              {/* Avatar */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+                <div style={{
+                  width: 64, height: 64, borderRadius: "50%",
+                  background: `${accentColor}22`,
+                  border: `2px solid ${accentColor}55`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 22, fontWeight: 700, color: accentColor, fontFamily: FONT_UI,
+                  boxShadow: `0 0 20px ${accentColor}33`,
+                }}>MC</div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, textAlign: "center", fontFamily: FONT_UI }}>
+                    Marcos Costa
+                  </div>
+                  <div style={{ fontSize: 10, color: COLORS.textMuted, textAlign: "center", marginTop: 2, fontFamily: FONT_UI }}>
+                    2/6 marcos · 33%
+                  </div>
+                </div>
+                {/* Progress bar */}
+                <div style={{ width: "100%", height: 3, borderRadius: 2, background: COLORS.border }}>
+                  <div style={{ height: "100%", width: "33%", background: accentColor, borderRadius: 2 }} />
+                </div>
+              </div>
+
+              {/* Nav menu */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 8 }}>
+                {DEMO_TABS.map((tab) => {
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 8,
+                        padding: "8px 12px", borderRadius: 6,
+                        background: isActive ? `${accentColor}18` : "transparent",
+                        border: `1px solid ${isActive ? accentColor + "55" : "transparent"}`,
+                        cursor: "pointer",
+                        transition: "all 0.2s",
+                        textAlign: "left",
+                        width: "100%",
+                      }}
+                    >
+                      <span style={{ fontSize: 14 }}>{tab.icon}</span>
+                      <span style={{
+                        fontSize: 11.5,
+                        fontFamily: FONT_UI,
+                        fontWeight: isActive ? 600 : 400,
+                        color: isActive ? accentColor : COLORS.textMuted,
+                        whiteSpace: "nowrap",
+                      }}>{tab.label}</span>
+                      {isActive && <span style={{ marginLeft: "auto", fontSize: 9, color: accentColor }}>◂</span>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Meta */}
+              <div style={{ marginTop: "auto", paddingTop: 16, borderTop: `1px solid ${COLORS.border}` }}>
+                <div style={{ fontSize: 10, color: COLORS.textDim, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4, fontFamily: FONT_UI }}>Meta</div>
+                <div style={{ fontSize: 11, color: COLORS.textMuted, lineHeight: 1.5, fontFamily: FONT_UI }}>
+                  Aumentar margem de lucro em 30%
+                </div>
+                <div style={{ fontSize: 10, color: COLORS.textDim, marginTop: 6, fontFamily: FONT_UI }}>
+                  Membro desde jan/2026
+                </div>
+              </div>
+            </div>
+
+            {/* Right panel */}
+            <div style={{
+              flex: 1,
+              padding: "28px 32px",
+              overflowY: "auto",
+              maxHeight: 440,
+            }}>
+              <DemoContent tab={activeTab} />
+            </div>
+          </div>
+
+          {/* Demo overlay badge */}
+          <div style={{
+            borderTop: `1px solid ${COLORS.border}`,
+            padding: "8px 20px",
+            textAlign: "center",
+            background: COLORS.card,
+            fontSize: 10,
+            color: COLORS.textDim,
+            fontFamily: FONT_UI,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+          }}>
+            ◈ Demonstração interativa — dados fictícios para fins de apresentação
+          </div>
+        </div>
+
+        {/* CTA below demo */}
+        <div style={{ textAlign: "center", marginTop: 48 }}>
+          <p style={{
+            fontFamily: FONT_UI, fontSize: 15, color: COLORS.textMuted,
+            marginBottom: 24, lineHeight: 1.7,
+          }}>
+            Ao entrar para o Arcus Club, você recebe acesso imediato à sua central personalizada.
+          </p>
+          <CTAButton text="Quero minha central" size="lg" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function FinalCTA() {
   return (
     <section style={{
@@ -838,7 +1401,9 @@ export default function LandingPage() {
       <HeroSection />
       <StatsBar />
       <ProblemsSection />
+      <MethodologySection />
       <BenefitsSection />
+      <PlatformPreviewSection />
       <ProcessSection />
       <FinalCTA />
       <Footer />
