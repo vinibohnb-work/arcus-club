@@ -1205,16 +1205,6 @@ function PlatformPreviewSection() {
           </div>
         </div>
 
-        {/* CTA below demo */}
-        <div style={{ textAlign: "center", marginTop: 48 }}>
-          <p style={{
-            fontFamily: FONT_UI, fontSize: 15, color: COLORS.textMuted,
-            marginBottom: 24, lineHeight: 1.7,
-          }}>
-            Ao entrar para o Arcus Club, você recebe acesso imediato à sua central personalizada.
-          </p>
-          <CTAButton text="Quero minha central" size="lg" />
-        </div>
       </div>
     </section>
   );
