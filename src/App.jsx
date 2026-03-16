@@ -1747,6 +1747,7 @@ export default function App() {
 
   // Carregar dados do Supabase — só roda depois da sessão estar confirmada
   useEffect(() => {
+    console.log('[App] user changed:', user?.id ?? 'null');
     if (!user) return;
     isLoaded.current = false;
     (async () => {
