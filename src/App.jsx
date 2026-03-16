@@ -1805,12 +1805,19 @@ export default function App() {
   useEffect(() => {
     if (!isLoaded.current) return;
     (async () => {
-      const { data: existing } = await supabase.from('leads').select('id');
+      const { data: existing, error: selErr } = await supabase.from('leads').select('id');
+      if (selErr) { console.error('[leads sync] select error:', selErr); return; }
       const existingIds = new Set(existing?.map(l => l.id) ?? []);
       const currentIds = new Set(leads.map(l => String(l.id)));
       const toDelete = [...existingIds].filter(id => !currentIds.has(id));
-      if (toDelete.length) await supabase.from('leads').delete().in('id', toDelete);
-      if (leads.length) await supabase.from('leads').upsert(leads.map(toLeadDb));
+      if (toDelete.length) {
+        const { error: delErr } = await supabase.from('leads').delete().in('id', toDelete);
+        if (delErr) console.error('[leads sync] delete error:', delErr);
+      }
+      if (leads.length) {
+        const { error: upsErr } = await supabase.from('leads').upsert(leads.map(toLeadDb));
+        if (upsErr) console.error('[leads sync] upsert error:', upsErr);
+      }
     })();
   }, [leads]);
 
