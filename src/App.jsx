@@ -344,31 +344,6 @@ const styles = {
 };
 
 // DATA
-const DEMO_MENTEE = {
-  id: "demo",
-  name: "Lucas Ferreira",
-  email: "lucas@email.com",
-  phone: "(11) 99123-4567",
-  stage: "Ativo",
-  goal: "Lançar minha startup de tecnologia",
-  joinDate: "2025-01-10",
-  avatar: "LF",
-  color: "#7B6FD4",
-  tags: ["Startup", "Tecnologia", "Produto"],
-  lastContact: "2025-03-05",
-  notes: "Lucas tem sólida base técnica e grande potencial empreendedor. Foco em validação de mercado e pitch para investidores.",
-  milestones: [true, true, true, false, false, false],
-  customPlan: "1. Validar hipóteses do produto com 20 entrevistas de usuário até 31/03\n2. Definir MVP e roadmap de funcionalidades para Q2\n3. Montar deck de pitch para aceleradoras (Endeavor, Distrito)\n4. Prospectar 3 co-fundadores ou sócios estratégicos\n5. Estruturar modelo de receita e precificação\n6. Apresentar para 2 fundos de seed até 30/06",
-};
-
-const INITIAL_MENTEES = [
-  { id: 1, name: "Ana Souza", email: "ana@email.com", phone: "(11) 99999-0001", stage: "Ativo", goal: "Escalar faturamento", joinDate: "2024-10-01", avatar: "AS", color: "#6C63FF", tags: ["Marketing", "E-commerce"], lastContact: "2025-03-01", notes: "Foco em tráfego pago e conversão", milestones: [true, true, true, false, false, false] },
-  { id: 2, name: "Bruno Lima", email: "bruno@email.com", phone: "(11) 99999-0002", stage: "Ativo", goal: "Lançar produto digital", joinDate: "2024-11-15", avatar: "BL", color: "#F5A623", tags: ["Infoproduto", "Copywriting"], lastContact: "2025-02-28", notes: "Precisa definir nicho", milestones: [true, true, false, false, false, false] },
-  { id: 3, name: "Carla Mendes", email: "carla@email.com", phone: "(11) 99999-0003", stage: "Inativo", goal: "Gestão de equipe", joinDate: "2024-09-01", avatar: "CM", color: "#2DD4BF", tags: ["Liderança", "RH"], lastContact: "2025-02-10", notes: "Pausou por viagem", milestones: [true, false, false, false, false, false] },
-  { id: 4, name: "Diego Costa", email: "diego@email.com", phone: "(11) 99999-0004", stage: "Ativo", goal: "Vendas B2B", joinDate: "2024-08-01", avatar: "DC", color: "#FF6B6B", tags: ["Vendas", "B2B", "Negociação"], lastContact: "2025-03-03", notes: "Evoluindo muito bem", milestones: [true, true, true, true, true, false] },
-  { id: 5, name: "Elena Rocha", email: "elena@email.com", phone: "(11) 99999-0005", stage: "Ativo", goal: "Primeira venda online", joinDate: "2024-07-01", avatar: "ER", color: "#A78BFA", tags: ["Iniciante", "Digital"], lastContact: "2025-01-15", notes: "Progredindo bem", milestones: [true, true, true, false, false, false] },
-  DEMO_MENTEE,
-];
 
 const INITIAL_LEADS = [];
 
@@ -1757,12 +1732,12 @@ function MenteePortalList({ mentees, setView, setSelectedMentee }) {
 // MAIN APP
 export default function App() {
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const isLoaded = useRef(false);
 
   const [view, setView] = useState("dashboard");
-  const [mentees, setMentees] = useState(INITIAL_MENTEES);
-  const [leads, setLeads] = useState(INITIAL_LEADS);
+  const [mentees, setMentees] = useState([]);
+  const [leads, setLeads] = useState([]);
   const [events, setEvents] = useState(INITIAL_EVENTS);
   const [goals, setGoals] = useState(INITIAL_GOALS);
   const [selectedMentee, setSelectedMentee] = useState(null);
@@ -1770,8 +1745,10 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
 
-  // Carregar dados do Supabase na inicialização
+  // Carregar dados do Supabase — só roda depois da sessão estar confirmada
   useEffect(() => {
+    if (!user) return;
+    isLoaded.current = false;
     (async () => {
       const [m, l, e, g] = await Promise.all([
         supabase.from('mentees').select('*'),
@@ -1786,7 +1763,7 @@ export default function App() {
       // Delay para não disparar os useEffects de sync durante o carregamento
       setTimeout(() => { isLoaded.current = true; }, 0);
     })();
-  }, []);
+  }, [user]);
 
   // Sincronizar mentorados com o Supabase
   useEffect(() => {
