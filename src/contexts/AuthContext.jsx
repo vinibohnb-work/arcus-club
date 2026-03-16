@@ -12,23 +12,11 @@ export function AuthProvider({ children }) {
     // Timeout de segurança: se o Supabase não responder em 8s, libera o loading
     const timeout = setTimeout(() => setLoading(false), 8000)
 
-    supabase.auth.getSession()
-      .then(({ data: { session } }) => {
-        clearTimeout(timeout)
-        setUser(session?.user ?? null)
-        if (session?.user) {
-          loadProfile(session.user.id)
-        } else {
-          setLoading(false)
-        }
-      })
-      .catch(() => {
-        clearTimeout(timeout)
-        setLoading(false)
-      })
-
+    // onAuthStateChange já dispara INITIAL_SESSION no carregamento da página
+    // (após renovar o token se necessário), então não precisamos do getSession() separado.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
+        clearTimeout(timeout)
         setUser(session?.user ?? null)
         if (session?.user) {
           await loadProfile(session.user.id)
