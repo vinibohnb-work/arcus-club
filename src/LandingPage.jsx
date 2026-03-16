@@ -22,7 +22,7 @@ const FONT_UI = `'Jost', 'DM Sans', sans-serif`;
 
 // ─── Configurações ────────────────────────────────────────────────────────────
 // Substitua pelo número real com DDI (ex: 5511999999999)
-const WHATSAPP_NUMBER = "5511999999999";
+const WHATSAPP_NUMBER = "5551996567044";
 const WHATSAPP_MSG = encodeURIComponent(
   "Olá! Tenho interesse em fazer parte do Arcus Club. Gostaria de saber mais sobre a mentoria."
 );
