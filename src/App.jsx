@@ -1753,6 +1753,8 @@ export default function App() {
     (async () => {
       try {
         console.log('[App] fetching data...');
+        // Garante token renovado antes das queries (evita hang no refresh)
+        await supabase.auth.getSession();
         const [m, l, e, g] = await Promise.all([
           supabase.from('mentees').select('*'),
           supabase.from('leads').select('*'),
