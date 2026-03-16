@@ -1732,7 +1732,7 @@ function MenteePortalList({ mentees, setView, setSelectedMentee }) {
 // MAIN APP
 export default function App() {
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, authReady, signOut } = useAuth();
   const isLoaded = useRef(false);
 
   const [view, setView] = useState("dashboard");
@@ -1745,38 +1745,34 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
 
-  // Carregar dados do Supabase uma única vez — dispara quando onAuthStateChange confirma sessão ativa
+  // Carregar dados após onAuthStateChange ter confirmado sessão (token renovado)
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('[App] auth event:', event, session?.user?.id ?? 'null');
-      if (!session) return;
-      if (isLoaded.current) return; // já carregou, ignora eventos subsequentes
-      isLoaded.current = false;
-      ;(async () => {
-        try {
-          console.log('[App] fetching data...');
-          const [m, l, e, g] = await Promise.all([
-            supabase.from('mentees').select('*'),
-            supabase.from('leads').select('*'),
-            supabase.from('events').select('*'),
-            supabase.from('goals').select('*'),
-          ]);
-          console.log('[load] mentees:', m.data?.length ?? 0, m.error ?? 'ok');
-          console.log('[load] leads:',   l.data?.length ?? 0, l.error ?? 'ok');
-          console.log('[load] events:',  e.data?.length ?? 0, e.error ?? 'ok');
-          console.log('[load] goals:',   g.data?.length ?? 0, g.error ?? 'ok');
-          if (m.data?.length) setMentees(m.data.map(toMentee));
-          if (l.data?.length) setLeads(l.data.map(toLead));
-          if (e.data?.length) setEvents(e.data.map(toEvent));
-          if (g.data?.length) setGoals(toGoalsObj(g.data));
-          setTimeout(() => { isLoaded.current = true; }, 0);
-        } catch (err) {
-          console.error('[App] fetch error:', err);
-        }
-      })();
-    });
-    return () => subscription.unsubscribe();
-  }, []);
+    if (!authReady || !user) return;
+    if (isLoaded.current) return;
+    isLoaded.current = false;
+    ;(async () => {
+      try {
+        console.log('[App] fetching data...');
+        const [m, l, e, g] = await Promise.all([
+          supabase.from('mentees').select('*'),
+          supabase.from('leads').select('*'),
+          supabase.from('events').select('*'),
+          supabase.from('goals').select('*'),
+        ]);
+        console.log('[load] mentees:', m.data?.length ?? 0, m.error ?? 'ok');
+        console.log('[load] leads:',   l.data?.length ?? 0, l.error ?? 'ok');
+        console.log('[load] events:',  e.data?.length ?? 0, e.error ?? 'ok');
+        console.log('[load] goals:',   g.data?.length ?? 0, g.error ?? 'ok');
+        if (m.data?.length) setMentees(m.data.map(toMentee));
+        if (l.data?.length) setLeads(l.data.map(toLead));
+        if (e.data?.length) setEvents(e.data.map(toEvent));
+        if (g.data?.length) setGoals(toGoalsObj(g.data));
+        setTimeout(() => { isLoaded.current = true; }, 0);
+      } catch (err) {
+        console.error('[App] fetch error:', err);
+      }
+    })();
+  }, [authReady, user]);
 
   // Sincronizar mentorados com o Supabase
   useEffect(() => {

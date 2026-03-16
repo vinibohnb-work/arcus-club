@@ -7,6 +7,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [authReady, setAuthReady] = useState(false)
 
   useEffect(() => {
     // Timeout de segurança: se o Supabase não responder em 8s, libera o loading
@@ -29,6 +30,7 @@ export function AuthProvider({ children }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
+        setAuthReady(true)
         setUser(session?.user ?? null)
         if (session?.user) {
           await loadProfile(session.user.id)
@@ -77,7 +79,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, profile, loading, isAdmin, isMentee, menteeId, signIn, signOut }}
+      value={{ user, profile, loading, authReady, isAdmin, isMentee, menteeId, signIn, signOut }}
     >
       {children}
     </AuthContext.Provider>
