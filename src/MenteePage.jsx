@@ -393,7 +393,7 @@ export default function MenteePage() {
       </header>
 
       {/* ── Body: left panel + right content ── */}
-      <div style={{ display:"flex", paddingTop:56, minHeight:"calc(100vh - 56px)" }}>
+      <div style={{ display:"flex", paddingTop:56, height:"calc(100vh - 56px)", overflow:"hidden" }}>
 
         {/* ════════════ LEFT PANEL ════════════ */}
         <div style={{
@@ -600,7 +600,7 @@ export default function MenteePage() {
           flex:1,
           padding:"44px 52px 60px",
           overflowY:"auto",
-          minHeight:"calc(100vh - 56px)",
+          height:"100%",
         }}>
           {renderContent()}
 
