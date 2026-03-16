@@ -13,28 +13,14 @@ export function AuthProvider({ children }) {
     // Timeout de segurança: se o Supabase não responder em 8s, libera o loading
     const timeout = setTimeout(() => setLoading(false), 8000)
 
-    supabase.auth.getSession()
-      .then(({ data: { session } }) => {
-        clearTimeout(timeout)
-        setUser(session?.user ?? null)
-        if (session?.user) {
-          loadProfile(session.user.id)
-        } else {
-          setLoading(false)
-        }
-      })
-      .catch(() => {
-        clearTimeout(timeout)
-        setLoading(false)
-      })
-
+    // Não fazemos queries dentro do onAuthStateChange para não segurar o lock interno
+    // do Supabase (causaria hang em todas as outras queries enquanto o perfil carrega).
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      (_event, session) => {
+        clearTimeout(timeout)
         setAuthReady(true)
         setUser(session?.user ?? null)
-        if (session?.user) {
-          await loadProfile(session.user.id)
-        } else {
+        if (!session?.user) {
           setProfile(null)
           setLoading(false)
         }
@@ -43,6 +29,13 @@ export function AuthProvider({ children }) {
 
     return () => subscription.unsubscribe()
   }, [])
+
+  // Carrega perfil fora do callback do onAuthStateChange (evita lock do Supabase)
+  useEffect(() => {
+    if (!authReady) return
+    if (!user) return
+    loadProfile(user.id)
+  }, [authReady, user?.id])
 
   async function loadProfile(userId) {
     // Tenta até 4 vezes com backoff (1s, 2s, 3s) para cobrir falhas de rede/RLS temporárias
