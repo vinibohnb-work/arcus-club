@@ -405,6 +405,7 @@ const INITIAL_GOALS = {
     { id: 12, text: "Lançar curso gravado", done: false },
     { id: 13, text: "Comunidade com 500 membros", done: false },
   ],
+  360: [],
 };
 
 const DEFAULT_PLAN_ITEMS = [
@@ -1262,7 +1263,7 @@ function Goals({ goals, setGoals }) {
   const [activeTab, setActiveTab] = useState(30);
   const [newGoal, setNewGoal] = useState("");
 
-  const tabColor = { 30: COLORS.teal, 60: COLORS.accent, 90: COLORS.accent, 150: "#FF6B6B" };
+  const tabColor = { 30: COLORS.teal, 60: COLORS.accent, 90: COLORS.accent, 150: "#FF6B6B", 360: "#A78BFA" };
 
   const toggleGoal = (id) => {
     setGoals(prev => ({
@@ -1292,7 +1293,7 @@ function Goals({ goals, setGoals }) {
   const pct = current.length ? Math.round((doneCount / current.length) * 100) : 0;
   const color = tabColor[activeTab];
 
-  const labelMap = { 30: "30 Dias", 60: "60 Dias", 90: "90 Dias", 150: "150 Dias" };
+  const labelMap = { 30: "30 Dias", 60: "60 Dias", 90: "90 Dias", 150: "150 Dias", 360: "360 Dias" };
 
   return (
     <div>
@@ -1302,7 +1303,7 @@ function Goals({ goals, setGoals }) {
       </div>
 
       <div style={{ display: "flex", gap: 12, marginBottom: 28 }}>
-        {[30, 60, 90, 150].map(t => {
+        {[30, 60, 90, 150, 360].map(t => {
           const g = goals[t];
           const d = g.filter(x => x.done).length;
           const p = g.length ? Math.round((d / g.length) * 100) : 0;

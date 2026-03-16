@@ -98,7 +98,7 @@ export const toEventDb = (e) => ({
 })
 
 export const toGoalsObj = (rows) => {
-  const obj = { 30: [], 60: [], 90: [], 150: [] }
+  const obj = { 30: [], 60: [], 90: [], 150: [], 360: [] }
   ;(rows || []).forEach((row) => {
     if (obj[row.period]) {
       obj[row.period].push({ id: row.id, text: row.text, done: row.done })
