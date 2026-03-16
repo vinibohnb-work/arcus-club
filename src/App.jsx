@@ -1756,11 +1756,14 @@ export default function App() {
         supabase.from('events').select('*'),
         supabase.from('goals').select('*'),
       ]);
+      console.log('[load] mentees:', m.data?.length ?? 0, m.error ?? 'ok');
+      console.log('[load] leads:',   l.data?.length ?? 0, l.error ?? 'ok');
+      console.log('[load] events:',  e.data?.length ?? 0, e.error ?? 'ok');
+      console.log('[load] goals:',   g.data?.length ?? 0, g.error ?? 'ok');
       if (m.data?.length) setMentees(m.data.map(toMentee));
       if (l.data?.length) setLeads(l.data.map(toLead));
       if (e.data?.length) setEvents(e.data.map(toEvent));
       if (g.data?.length) setGoals(toGoalsObj(g.data));
-      // Delay para não disparar os useEffects de sync durante o carregamento
       setTimeout(() => { isLoaded.current = true; }, 0);
     })();
   }, [user]);
