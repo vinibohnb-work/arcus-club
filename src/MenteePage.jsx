@@ -407,7 +407,7 @@ export default function MenteePage() {
           flexDirection:"column",
           justifyContent:"center",
           padding:"0 0 0 52px",
-          overflowX:"visible",
+          overflowX:"hidden",
           overflowY:"hidden",
         }}>
 
