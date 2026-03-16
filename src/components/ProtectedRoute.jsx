@@ -24,9 +24,15 @@ export function AdminRoute({ children }) {
   const { user, profile, loading } = useAuth()
 
   if (loading) return <LoadingScreen />
-  if (!user || !profile) return <Navigate to="/login" replace />
+
+  // Não autenticado → login
+  if (!user) return <Navigate to="/login" replace />
+
+  // Autenticado mas profile ainda não carregou (falha de rede/RLS) → aguarda
+  if (!profile) return <LoadingScreen />
+
+  // Mentorado tentou acessar admin → redireciona para sua página
   if (profile.role !== 'admin') {
-    // Mentorado tentou acessar o painel admin → redireciona para sua página
     return <Navigate to={`/mentorado/${profile.mentee_id}`} replace />
   }
 

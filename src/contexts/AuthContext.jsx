@@ -43,18 +43,27 @@ export function AuthProvider({ children }) {
   }, [])
 
   async function loadProfile(userId) {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single()
-      if (!error) setProfile(data)
-    } catch (_) {
-      // ignora erros de rede/RLS
-    } finally {
-      setLoading(false)
+    // Tenta até 4 vezes com backoff (1s, 2s, 3s) para cobrir falhas de rede/RLS temporárias
+    for (let attempt = 0; attempt < 4; attempt++) {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single()
+        if (!error && data) {
+          setProfile(data)
+          setLoading(false)
+          return
+        }
+        // PGRST116 = "no rows found" — não adianta retry
+        if (error?.code === 'PGRST116') break
+      } catch (_) {
+        // erro de rede — tenta novamente
+      }
+      if (attempt < 3) await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
     }
+    setLoading(false)
   }
 
   const signIn = (email, password) =>
