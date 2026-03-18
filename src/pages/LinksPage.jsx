@@ -192,32 +192,20 @@ export default function LinksPage() {
       overflow: "hidden",
     }}>
       {/* Foto Vinícius — esquerda com fade para o centro */}
-      <div style={{
-        position: "fixed",
-        top: 0, left: 0,
-        width: "28%",
-        height: "100%",
-        backgroundImage: "url('/vini-links.jpeg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center top",
+      <div style={{ position: "fixed", top: 0, left: 0, width: "28%", height: "100%", zIndex: 0,
         maskImage: "linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 100%)",
-        zIndex: 0,
-      }} />
+      }}>
+        <img src="/vini-links.jpeg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+      </div>
 
       {/* Foto Victor — direita com fade para o centro */}
-      <div style={{
-        position: "fixed",
-        top: 0, right: 0,
-        width: "28%",
-        height: "100%",
-        backgroundImage: "url('/victor-links.jpeg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center top",
+      <div style={{ position: "fixed", top: 0, right: 0, width: "28%", height: "100%", zIndex: 0,
         maskImage: "linear-gradient(to left, rgba(0,0,0,0.7) 0%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(to left, rgba(0,0,0,0.7) 0%, transparent 100%)",
-        zIndex: 0,
-      }} />
+      }}>
+        <img src="/victor-links.jpeg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+      </div>
 
       {/* Conteúdo central */}
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
