@@ -1908,11 +1908,7 @@ export default function App() {
 
       <div style={sidebarStyle}>
         <div style={styles.logo}>
-          <div style={styles.logoMark}>
-            <div style={styles.logoDot} />
-            <div style={styles.logoText}>Arcus Club</div>
-            <div style={styles.logoSub}>Sistema de Gestão</div>
-          </div>
+          <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 36, width: "auto", objectFit: "contain" }} />
         </div>
 
         <div style={{ padding: "20px 0 8px" }}>

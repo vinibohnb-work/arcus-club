@@ -383,13 +383,7 @@ export default function MenteePage() {
         background:`${COLORS.surface}EE`, borderBottom:`1px solid ${COLORS.border}`,
         backdropFilter:"blur(16px)",
       }}>
-        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-          <div style={{ width:24, height:2, background:`linear-gradient(90deg, ${COLORS.accent}, transparent)` }} />
-          <span style={{ fontFamily:FONT_DISPLAY, fontSize:15, fontStyle:"italic",
-            fontWeight:700, color:COLORS.text }}>
-            Arcus Club
-          </span>
-        </div>
+        <img src="/arcus_logo.png" alt="Arcus Club" style={{ height:28, width:"auto", objectFit:"contain" }} />
       </header>
 
       {/* ── Body: left panel + right content ── */}

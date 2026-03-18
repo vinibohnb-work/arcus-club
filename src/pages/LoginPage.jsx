@@ -111,13 +111,7 @@ export default function LoginPage() {
       <div style={{ width: '100%', maxWidth: 400 }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 8 }}>
-            <div style={{ width: 32, height: 2, background: `linear-gradient(90deg, transparent, ${COLORS.accent})` }} />
-            <span style={{ fontFamily: FONT_DISPLAY, fontSize: 22, fontStyle: 'italic', fontWeight: 700, color: COLORS.text }}>
-              Arcus Club
-            </span>
-            <div style={{ width: 32, height: 2, background: `linear-gradient(90deg, ${COLORS.accent}, transparent)` }} />
-          </div>
+          <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 48, width: 'auto', objectFit: 'contain', marginBottom: 12 }} />
           <div style={{ fontSize: 11, color: COLORS.accent, textTransform: 'uppercase', letterSpacing: '0.22em', fontWeight: 400 }}>
             Plataforma de Mentoria
           </div>
