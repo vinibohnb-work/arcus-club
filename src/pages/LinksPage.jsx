@@ -19,7 +19,7 @@ const FONT_UI = `'Jost', 'DM Sans', sans-serif`;
 const FOUNDERS = [
   {
     name: "Vinícius Bohn",
-    bio: "Faço empresários pararem de rasgar dinheiro por falta de processos, estratégia e mau uso da tecnologia.",
+    bio: "Faço empresários pararem de rasgar dinheiro por falta de processos, estratégia e mau uso da tecnologia. Menos caos e mais resultado.",
     color: "#C9A84C",
   },
   {
