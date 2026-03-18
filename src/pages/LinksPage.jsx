@@ -191,6 +191,14 @@ export default function LinksPage() {
       position: "relative",
       overflow: "hidden",
     }}>
+      {/* Barra dourada no topo */}
+      <div style={{
+        position: "fixed",
+        top: 0, left: 0, right: 0,
+        height: 3,
+        background: `linear-gradient(90deg, transparent 0%, ${COLORS.accent} 30%, ${COLORS.accentLight} 50%, ${COLORS.accent} 70%, transparent 100%)`,
+        zIndex: 10,
+      }} />
       {/* Foto Vinícius — esquerda com fade para o centro */}
       <div style={{ position: "fixed", top: 0, left: 0, width: "28%", height: "100%", zIndex: 0,
         maskImage: "linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 100%)",
