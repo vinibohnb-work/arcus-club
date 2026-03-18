@@ -1908,7 +1908,7 @@ export default function App() {
 
       <div style={sidebarStyle}>
         <div style={styles.logo}>
-          <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 50, width: "auto", objectFit: "contain" }} />
+          <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 80, width: "auto", objectFit: "contain" }} />
         </div>
 
         <div style={{ padding: "20px 0 8px" }}>
