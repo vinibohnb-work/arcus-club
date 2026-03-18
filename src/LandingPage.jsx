@@ -250,16 +250,7 @@ function Navbar({ scrolled }) {
       transition: "all 0.35s ease",
     }}>
       {/* Logo */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{ width: 24, height: 2, background: `linear-gradient(90deg, ${COLORS.accent}, transparent)` }} />
-        <span style={{
-          fontFamily: FONT_DISPLAY,
-          fontSize: 18,
-          fontStyle: "italic",
-          fontWeight: 700,
-          color: COLORS.text,
-        }}>Arcus Club</span>
-      </div>
+      <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 32, width: "auto", objectFit: "contain" }} />
 
       {/* Nav links */}
       <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
@@ -1309,16 +1300,7 @@ function Footer() {
         gap: 16,
       }}>
         {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 20, height: 1.5, background: `linear-gradient(90deg, ${COLORS.accent}, transparent)` }} />
-          <span style={{
-            fontFamily: FONT_DISPLAY,
-            fontSize: 16,
-            fontStyle: "italic",
-            fontWeight: 700,
-            color: COLORS.textMuted,
-          }}>Arcus Club</span>
-        </div>
+        <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 24, width: "auto", objectFit: "contain", opacity: 0.6 }} />
 
         <div style={{
           fontFamily: FONT_UI,

@@ -197,22 +197,8 @@ export default function LinksPage() {
 
       {/* Logo */}
       <div style={{ textAlign: "center", marginBottom: 52 }}>
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 12,
-          marginBottom: 8,
-        }}>
-          <div style={{ width: 32, height: 1.5, background: `linear-gradient(90deg, transparent, ${COLORS.accent})` }} />
-          <span style={{
-            fontFamily: FONT_DISPLAY,
-            fontSize: 26,
-            fontStyle: "italic",
-            fontWeight: 700,
-            color: COLORS.text,
-          }}>Arcus Club</span>
-          <div style={{ width: 32, height: 1.5, background: `linear-gradient(90deg, ${COLORS.accent}, transparent)` }} />
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+          <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 52, width: "auto", objectFit: "contain" }} />
         </div>
         <div style={{
           fontSize: 11,
