@@ -250,7 +250,7 @@ function Navbar({ scrolled }) {
       transition: "all 0.35s ease",
     }}>
       {/* Logo */}
-      <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 32, width: "auto", objectFit: "contain" }} />
+      <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 45, width: "auto", objectFit: "contain" }} />
 
       {/* Nav links */}
       <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
@@ -1300,7 +1300,7 @@ function Footer() {
         gap: 16,
       }}>
         {/* Logo */}
-        <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 24, width: "auto", objectFit: "contain", opacity: 0.6 }} />
+        <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 34, width: "auto", objectFit: "contain", opacity: 0.6 }} />
 
         <div style={{
           fontFamily: FONT_UI,
