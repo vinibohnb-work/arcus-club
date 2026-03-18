@@ -24,7 +24,7 @@ const FOUNDERS = [
   },
   {
     name: "Victor Godoi",
-    bio: "Faço empresários transformarem equipes comuns em times de alta performance através de cultura e liderança. O lucro está na organização.",
+    bio: "Faço empresários lucrarem mais construindo cultura forte e liderança que engaja, retém e entrega resultado. O lucro está na organização.",
     color: "#C9A84C",
   },
 ];
