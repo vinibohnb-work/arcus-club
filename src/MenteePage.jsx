@@ -383,7 +383,7 @@ export default function MenteePage() {
         background:`${COLORS.surface}EE`, borderBottom:`1px solid ${COLORS.border}`,
         backdropFilter:"blur(16px)",
       }}>
-        <img src="/arcus_logo.png" alt="Arcus Club" style={{ height:40, width:"auto", objectFit:"contain" }} />
+        <img src="/arcus_logo.png" alt="Arcus Club" style={{ height:46, width:"auto", objectFit:"contain" }} />
       </header>
 
       {/* ── Body: left panel + right content ── */}

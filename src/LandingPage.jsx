@@ -250,7 +250,7 @@ function Navbar({ scrolled }) {
       transition: "all 0.35s ease",
     }}>
       {/* Logo */}
-      <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 40, width: "auto", objectFit: "contain" }} />
+      <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 46, width: "auto", objectFit: "contain" }} />
 
       {/* Nav links */}
       <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
