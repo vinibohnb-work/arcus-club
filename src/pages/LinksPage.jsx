@@ -19,7 +19,7 @@ const FONT_UI = `'Jost', 'DM Sans', sans-serif`;
 const FOUNDERS = [
   {
     name: "Vinícius Bohn",
-    bio: "Empresário e mentor, ajuda donos de negócio a organizarem suas empresas para crescer com menos caos e mais resultado.",
+    bio: "Faço empresários pararem de rasgar dinheiro por falta de processos, estratégia e mau uso da tecnologia.",
     color: "#C9A84C",
   },
   {
