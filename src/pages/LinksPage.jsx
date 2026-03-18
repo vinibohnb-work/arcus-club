@@ -183,13 +183,44 @@ export default function LinksPage() {
     <div style={{
       minHeight: "100vh",
       background: COLORS.bg,
-      backgroundImage: `radial-gradient(ellipse 70% 40% at 50% 0%, ${COLORS.accent}08 0%, transparent 60%)`,
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       padding: "60px 24px 80px",
       fontFamily: FONT_UI,
+      position: "relative",
+      overflow: "hidden",
     }}>
+      {/* Foto Vinícius — esquerda com fade para o centro */}
+      <div style={{
+        position: "fixed",
+        top: 0, left: 0,
+        width: "28%",
+        height: "100%",
+        backgroundImage: "url('/vini-links.jpeg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center top",
+        maskImage: "linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 100%)",
+        zIndex: 0,
+      }} />
+
+      {/* Foto Victor — direita com fade para o centro */}
+      <div style={{
+        position: "fixed",
+        top: 0, right: 0,
+        width: "28%",
+        height: "100%",
+        backgroundImage: "url('/victor-links.jpeg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center top",
+        maskImage: "linear-gradient(to left, rgba(0,0,0,0.7) 0%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to left, rgba(0,0,0,0.7) 0%, transparent 100%)",
+        zIndex: 0,
+      }} />
+
+      {/* Conteúdo central */}
+      <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Jost:wght@300;400;500;600;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -262,6 +293,7 @@ export default function LinksPage() {
       }}>
         arcusclub.com.br
       </div>
+      </div> {/* fim conteúdo central */}
     </div>
   );
 }
