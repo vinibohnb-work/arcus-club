@@ -24,7 +24,7 @@ const FOUNDERS = [
   },
   {
     name: "Victor Godoi",
-    bio: "Mini-bio do Victor aqui. Descreva sua trajetória e especialidade em uma ou duas frases.",  // ← edite aqui
+    bio: "Faço empresários transformarem equipes comuns em times de alta performance através de cultura e liderança. O lucro está na organização.",
     color: "#C9A84C",
   },
 ];
