@@ -210,6 +210,15 @@ function CTAButton({ text = "Quero fazer parte", size = "md", style: extraStyle 
   );
 }
 
+function SectionDivider() {
+  return (
+    <div style={{
+      height: 1,
+      background: `linear-gradient(90deg, transparent, ${COLORS.accent}33, transparent)`,
+    }} />
+  );
+}
+
 function SectionLabel({ children }) {
   return (
     <div style={{
@@ -467,8 +476,6 @@ function BenefitsSection() {
     <section id="beneficios" style={{
       padding: "120px 48px",
       background: COLORS.bg,
-      borderTop: `1px solid ${COLORS.border}`,
-      borderBottom: `1px solid ${COLORS.border}`,
     }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <SectionLabel>O que você recebe</SectionLabel>
@@ -646,8 +653,6 @@ function MethodologySection() {
     <section id="metodologia" style={{
       padding: "120px 48px",
       background: COLORS.bg,
-      borderTop: `1px solid ${COLORS.border}`,
-      borderBottom: `1px solid ${COLORS.border}`,
       position: "relative",
       overflow: "hidden",
     }}>
@@ -934,7 +939,6 @@ function PlatformPreviewSection() {
     <section id="plataforma" style={{
       padding: "120px 48px",
       background: COLORS.bg,
-      borderTop: `1px solid ${COLORS.border}`,
     }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
 
@@ -1234,7 +1238,6 @@ function Footer() {
   return (
     <footer style={{
       background: COLORS.bg,
-      borderTop: `1px solid ${COLORS.border}`,
       padding: "40px 48px",
     }}>
       <div style={{
@@ -1319,8 +1322,11 @@ export default function LandingPage() {
       <Navbar scrolled={scrolled} />
       <HeroSection />
       <MethodologySection />
+      <SectionDivider />
       <BenefitsSection />
+      <SectionDivider />
       <PlatformPreviewSection />
+      <SectionDivider />
       <ProcessSection />
       <FinalCTA />
       <Footer />
