@@ -321,7 +321,7 @@ function HeroSection() {
       }} />
 
 
-      {/* Foto — lado direito com gradientes de fusão */}
+      {/* Foto — lado direito com mask fade */}
       <div style={{
         position: "absolute",
         right: 0,
@@ -330,32 +330,16 @@ function HeroSection() {
         width: "56%",
         zIndex: 2,
         pointerEvents: "none",
+        maskImage: "linear-gradient(to right, transparent 0%, black 42%, black 75%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 18%, black 72%, transparent 100%)",
+        maskComposite: "intersect",
+        WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 42%, black 75%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 18%, black 72%, transparent 100%)",
+        WebkitMaskComposite: "source-in",
       }}>
         <img
           src="/vini-e-victor.jpeg"
           alt=""
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", opacity: 0.55 }}
         />
-        {/* Fade esquerda — funde com o texto */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: `linear-gradient(to right, ${COLORS.bg} 0%, transparent 55%)`,
-        }} />
-        {/* Fade topo */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: `linear-gradient(to bottom, ${COLORS.bg} 0%, transparent 22%)`,
-        }} />
-        {/* Fade base */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: `linear-gradient(to top, ${COLORS.bg} 0%, transparent 38%)`,
-        }} />
-        {/* Véu escuro — alinha a tonalidade com a paleta */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "rgba(8,8,8,0.50)",
-        }} />
         {/* Brilho dourado sutil — amarra à identidade */}
         <div style={{
           position: "absolute", inset: 0,
