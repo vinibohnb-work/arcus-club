@@ -184,6 +184,7 @@ export default function LinksPage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Jost:wght@300;400;500;600;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { background: #080808; }
         .links-photo { display: block; }
         @media (max-width: 640px) {
           .links-photo { display: none !important; }
@@ -218,7 +219,7 @@ export default function LinksPage() {
       {/* Conteúdo central */}
       <div style={{
         minHeight: "100vh",
-        background: COLORS.bg,
+        background: "transparent",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
