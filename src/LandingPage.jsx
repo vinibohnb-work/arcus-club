@@ -261,8 +261,8 @@ function Navbar({ scrolled }) {
       {/* Logo */}
       <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 46, width: "auto", objectFit: "contain" }} />
 
-      {/* Nav links */}
-      <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
+      {/* Nav links — ocultos no mobile */}
+      <div className="nav-links" style={{ display: "flex", alignItems: "center", gap: 36 }}>
         {["Sobre", "Metodologia", "Benefícios", "Plataforma", "Como funciona"].map((item) => (
           <a
             key={item}
@@ -279,7 +279,10 @@ function Navbar({ scrolled }) {
             onMouseLeave={(e) => { e.target.style.color = COLORS.textMuted; }}
           >{item}</a>
         ))}
-        <Link
+      </div>
+
+      {/* Botão Área do Mentorado — sempre visível */}
+      <Link
           to="/login"
           style={{
             padding: "10px 20px",
@@ -1311,7 +1314,8 @@ export default function LandingPage() {
 
         @media (max-width: 768px) {
           nav { padding: 0 24px !important; }
-          nav > div:last-child > a { display: none !important; }
+          .nav-links { display: none !important; }
+          nav { padding: 0 20px !important; }
           section { padding-left: 24px !important; padding-right: 24px !important; }
           .grid-2 { grid-template-columns: 1fr !important; }
           .grid-3 { grid-template-columns: 1fr !important; }
