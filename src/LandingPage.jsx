@@ -461,85 +461,6 @@ function StatsBar() {
   );
 }
 
-function ProblemsSection() {
-  return (
-    <section id="sobre" style={{ padding: "120px 48px" }}>
-      <div style={{ maxWidth: 960, margin: "0 auto" }}>
-        <SectionLabel>Você se identifica?</SectionLabel>
-        <h2 style={{
-          fontFamily: FONT_DISPLAY,
-          fontSize: "clamp(32px, 4vw, 52px)",
-          fontWeight: 700,
-          fontStyle: "italic",
-          color: COLORS.text,
-          lineHeight: 1.1,
-          marginBottom: 16,
-          maxWidth: 600,
-        }}>
-          Crescer ficou difícil.<br />
-          <span style={{ color: COLORS.textMuted, fontWeight: 400 }}>Mas não é falta de esforço.</span>
-        </h2>
-        <p style={{
-          fontFamily: FONT_UI,
-          fontSize: 16,
-          color: COLORS.textMuted,
-          lineHeight: 1.7,
-          maxWidth: 520,
-          marginBottom: 72,
-        }}>
-          A maioria dos empresários trabalha mais do que deveria e lucra menos do que poderia. O problema quase nunca é produto ou vendas — é estrutura.
-        </p>
-
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: 2,
-        }}>
-          {PROBLEMS.map((p, i) => (
-            <div
-              key={i}
-              style={{
-                padding: "36px 40px",
-                background: COLORS.card,
-                border: `1px solid ${COLORS.border}`,
-                borderRadius: i === 0 ? "6px 0 0 0" : i === 1 ? "0 6px 0 0" : i === 2 ? "0 0 0 6px" : "0 0 6px 0",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              <div style={{
-                position: "absolute",
-                top: 0, left: 0,
-                width: "100%", height: 2,
-                background: `linear-gradient(90deg, ${COLORS.red}66, transparent)`,
-              }} />
-              <div style={{
-                fontFamily: FONT_DISPLAY,
-                fontSize: 28,
-                color: `${COLORS.red}44`,
-                marginBottom: 16,
-                fontStyle: "italic",
-              }}>{p.icon}</div>
-              <div style={{
-                fontFamily: FONT_UI,
-                fontSize: 17,
-                fontWeight: 600,
-                color: COLORS.text,
-                marginBottom: 10,
-              }}>{p.title}</div>
-              <div style={{
-                fontFamily: FONT_UI,
-                fontSize: 14,
-                color: COLORS.textMuted,
-                lineHeight: 1.7,
-              }}>{p.desc}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function BenefitsSection() {
   return (
@@ -1397,7 +1318,6 @@ export default function LandingPage() {
 
       <Navbar scrolled={scrolled} />
       <HeroSection />
-      <ProblemsSection />
       <MethodologySection />
       <BenefitsSection />
       <PlatformPreviewSection />
