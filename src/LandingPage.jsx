@@ -327,7 +327,7 @@ function HeroSection() {
         right: 0,
         top: 0,
         bottom: 0,
-        width: "46%",
+        width: "56%",
         zIndex: 2,
         pointerEvents: "none",
       }}>
@@ -339,7 +339,7 @@ function HeroSection() {
         {/* Fade esquerda — funde com o texto */}
         <div style={{
           position: "absolute", inset: 0,
-          background: `linear-gradient(to right, ${COLORS.bg} 0%, ${COLORS.bg}BB 18%, transparent 52%)`,
+          background: `linear-gradient(to right, ${COLORS.bg} 0%, ${COLORS.bg}CC 22%, transparent 58%)`,
         }} />
         {/* Fade topo */}
         <div style={{
@@ -354,7 +354,7 @@ function HeroSection() {
         {/* Véu escuro — alinha a tonalidade com a paleta */}
         <div style={{
           position: "absolute", inset: 0,
-          background: "rgba(8,8,8,0.30)",
+          background: "rgba(8,8,8,0.50)",
         }} />
         {/* Brilho dourado sutil — amarra à identidade */}
         <div style={{
