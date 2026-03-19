@@ -321,7 +321,49 @@ function HeroSection() {
       }} />
 
 
-      <div style={{ position: "relative", zIndex: 10, maxWidth: 720 }}>
+      {/* Foto — lado direito com gradientes de fusão */}
+      <div style={{
+        position: "absolute",
+        right: 0,
+        top: 0,
+        bottom: 0,
+        width: "46%",
+        zIndex: 2,
+        pointerEvents: "none",
+      }}>
+        <img
+          src="/vini-e-victor.jpeg"
+          alt=""
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+        />
+        {/* Fade esquerda — funde com o texto */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: `linear-gradient(to right, ${COLORS.bg} 0%, ${COLORS.bg}BB 18%, transparent 52%)`,
+        }} />
+        {/* Fade topo */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: `linear-gradient(to bottom, ${COLORS.bg} 0%, transparent 22%)`,
+        }} />
+        {/* Fade base */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: `linear-gradient(to top, ${COLORS.bg} 0%, transparent 38%)`,
+        }} />
+        {/* Véu escuro — alinha a tonalidade com a paleta */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "rgba(8,8,8,0.30)",
+        }} />
+        {/* Brilho dourado sutil — amarra à identidade */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: `radial-gradient(ellipse 70% 60% at 60% 35%, ${COLORS.accent}14 0%, transparent 65%)`,
+        }} />
+      </div>
+
+      <div style={{ position: "relative", zIndex: 10, maxWidth: 620 }}>
         {/* Pre-headline */}
         <div style={{
           display: "inline-flex",
