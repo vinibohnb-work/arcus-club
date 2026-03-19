@@ -307,7 +307,6 @@ function Navbar({ scrolled }) {
         >
           Área do Mentorado
         </Link>
-      </div>
     </nav>
   );
 }
