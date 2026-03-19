@@ -545,7 +545,7 @@ function BenefitsSection() {
   return (
     <section id="beneficios" style={{
       padding: "120px 48px",
-      background: COLORS.surface,
+      background: COLORS.bg,
       borderTop: `1px solid ${COLORS.border}`,
       borderBottom: `1px solid ${COLORS.border}`,
     }}>
@@ -724,7 +724,7 @@ function MethodologySection() {
   return (
     <section id="metodologia" style={{
       padding: "120px 48px",
-      background: COLORS.surface,
+      background: COLORS.bg,
       borderTop: `1px solid ${COLORS.border}`,
       borderBottom: `1px solid ${COLORS.border}`,
       position: "relative",
@@ -1312,7 +1312,7 @@ function FinalCTA() {
 function Footer() {
   return (
     <footer style={{
-      background: COLORS.surface,
+      background: COLORS.bg,
       borderTop: `1px solid ${COLORS.border}`,
       padding: "40px 48px",
     }}>
@@ -1397,7 +1397,6 @@ export default function LandingPage() {
 
       <Navbar scrolled={scrolled} />
       <HeroSection />
-      <StatsBar />
       <ProblemsSection />
       <MethodologySection />
       <BenefitsSection />
