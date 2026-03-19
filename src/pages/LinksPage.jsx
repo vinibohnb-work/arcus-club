@@ -34,13 +34,13 @@ const SHARED_LINKS = [
   {
     label: "Comunidade no WhatsApp",
     description: "Entre para a nossa comunidade gratuita",
-    url: "https://chat.whatsapp.com/LINK_AQUI",  // ← cole o link da comunidade
+    url: "https://chat.whatsapp.com/DhhJJ0xiSF04dtYyrbncne",  // ← cole o link da comunidade
     icon: "whatsapp",
   },
   {
     label: "Onboarding Podcast",
     description: "Assista no YouTube",
-    url: "https://youtube.com/@CANAL_AQUI",       // ← cole o link do canal/vídeo
+    url: "https://www.youtube.com/channel/UCpLgszGrxmGV4dC6ab4AFww",       // ← cole o link do canal/vídeo
     icon: "youtube",
   },
   {
