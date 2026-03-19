@@ -180,17 +180,16 @@ function SharedLinkButton({ link }) {
 
 export default function LinksPage() {
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: COLORS.bg,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      padding: "60px 24px 80px",
-      fontFamily: FONT_UI,
-      position: "relative",
-      overflow: "hidden",
-    }}>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Jost:wght@300;400;500;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .links-photo { display: block; }
+        @media (max-width: 640px) {
+          .links-photo { display: none !important; }
+        }
+      `}</style>
+
       {/* Barra dourada no topo */}
       <div style={{
         position: "fixed",
@@ -199,16 +198,17 @@ export default function LinksPage() {
         background: `linear-gradient(90deg, transparent 0%, ${COLORS.accent} 30%, ${COLORS.accentLight} 50%, ${COLORS.accent} 70%, transparent 100%)`,
         zIndex: 10,
       }} />
-      {/* Foto Vinícius — esquerda com fade para o centro */}
-      <div style={{ position: "fixed", top: 0, left: 0, width: "28%", height: "100%", zIndex: 0,
+
+      {/* Foto Vinícius — esquerda (fora do overflow:hidden para position:fixed funcionar) */}
+      <div className="links-photo" style={{ position: "fixed", top: 0, left: 0, width: "24%", height: "100%", zIndex: 0,
         maskImage: "linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 100%)",
       }}>
         <img src="/vini-links.jpeg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
       </div>
 
-      {/* Foto Victor — direita com fade para o centro */}
-      <div style={{ position: "fixed", top: 0, right: 0, width: "28%", height: "100%", zIndex: 0,
+      {/* Foto Victor — direita */}
+      <div className="links-photo" style={{ position: "fixed", top: 0, right: 0, width: "28%", height: "100%", zIndex: 0,
         maskImage: "linear-gradient(to left, rgba(0,0,0,0.7) 0%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(to left, rgba(0,0,0,0.7) 0%, transparent 100%)",
       }}>
@@ -216,11 +216,17 @@ export default function LinksPage() {
       </div>
 
       {/* Conteúdo central */}
+      <div style={{
+        minHeight: "100vh",
+        background: COLORS.bg,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "60px 24px 80px",
+        fontFamily: FONT_UI,
+        position: "relative",
+      }}>
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Jost:wght@300;400;500;600;700&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-      `}</style>
 
       {/* Logo */}
       <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -290,6 +296,7 @@ export default function LinksPage() {
         arcusclub.com.br
       </div>
       </div> {/* fim conteúdo central */}
-    </div>
+      </div> {/* fim wrapper central */}
+    </>
   );
 }
