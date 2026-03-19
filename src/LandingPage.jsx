@@ -339,7 +339,7 @@ function HeroSection() {
         {/* Fade esquerda — funde com o texto */}
         <div style={{
           position: "absolute", inset: 0,
-          background: `linear-gradient(to right, ${COLORS.bg} 0%, ${COLORS.bg}CC 22%, transparent 58%)`,
+          background: `linear-gradient(to right, ${COLORS.bg} 0%, transparent 55%)`,
         }} />
         {/* Fade topo */}
         <div style={{
