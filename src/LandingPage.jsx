@@ -718,7 +718,7 @@ function MethodologySection() {
           </div>
 
           {/* ── Pilares visuais ── */}
-          <div style={{ flex: "1 1 360px" }}>
+          <div className="methodology-pillars" style={{ flex: "1 1 360px" }}>
             {/* Arch SVG decorativa */}
             <div style={{ position: "relative", paddingTop: 40 }}>
               <svg
@@ -1319,6 +1319,7 @@ export default function LandingPage() {
           .grid-2 { grid-template-columns: 1fr !important; }
           .grid-3 { grid-template-columns: 1fr !important; }
           .grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+          .methodology-pillars { transform: scale(0.82); transform-origin: top left; }
         }
       `}</style>
 
