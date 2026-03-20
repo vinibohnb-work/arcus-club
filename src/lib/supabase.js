@@ -53,7 +53,7 @@ export const toLead = (row) => ({
   source: row.source || '',
   interest: row.interest || '',
   stage: row.stage || 'Novo Lead',
-  awareness: row.awareness || 'Frio',
+  awareness: ({"Ligar!": "Quente", "Decidido": "Quente"}[row.awareness] ?? row.awareness) || 'Frio',
   avatar: row.avatar || '',
   color: row.color || '#C9A84C',
   tags: row.tags || [],

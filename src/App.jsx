@@ -369,7 +369,7 @@ const AWARENESS_LEVELS = [
   { key: "Seguidor",   color: "#7B6FD4", desc: "Segue nas redes sociais" },
   { key: "Engajado",   color: "#3DBFB0", desc: "Interage com conteúdo" },
   { key: "Consciente", color: "#C9A84C", desc: "Conhece e entende o clube" },
-  { key: "Decidido",   color: "#E09A3D", desc: "Pronto para contato direto" },
+  { key: "Quente",     color: "#E09A3D", desc: "Pronto para contato direto" },
   { key: "Recusa",     color: "#E05252", desc: "Não tem interesse" },
 ];
 const MILESTONE_LABELS = ["Onboarding", "Diagnóstico", "Plano de Ação", "Execução", "Revisão", "Avanço Contínuo"];
