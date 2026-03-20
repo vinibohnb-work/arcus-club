@@ -933,6 +933,108 @@ function DemoContent({ tab }) {
   );
 }
 
+function PhoneMockup({ activeTab, setActiveTab }) {
+  const accentColor = "#A78BFA";
+  return (
+    <div style={{ display: "flex", justifyContent: "center", paddingTop: 8 }}>
+      {/* Phone shell */}
+      <div style={{
+        width: 280,
+        borderRadius: 36,
+        border: `2px solid ${COLORS.border}`,
+        background: COLORS.surface,
+        overflow: "hidden",
+        boxShadow: `0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px ${COLORS.border}`,
+        position: "relative",
+      }}>
+        {/* Notch bar */}
+        <div style={{
+          background: COLORS.card,
+          height: 28,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderBottom: `1px solid ${COLORS.border}`,
+        }}>
+          <div style={{ width: 60, height: 8, borderRadius: 4, background: COLORS.bg }} />
+        </div>
+
+        {/* App header */}
+        <div style={{
+          height: 44,
+          background: `${COLORS.surface}EE`,
+          borderBottom: `1px solid ${COLORS.border}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 16px",
+        }}>
+          <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 26, width: "auto", objectFit: "contain", mixBlendMode: "screen" }} />
+          {/* Hamburger icon */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, padding: 4 }}>
+            <div style={{ width: 16, height: 1.5, background: COLORS.textMuted, borderRadius: 1 }} />
+            <div style={{ width: 16, height: 1.5, background: COLORS.textMuted, borderRadius: 1 }} />
+            <div style={{ width: 10, height: 1.5, background: COLORS.textMuted, borderRadius: 1 }} />
+          </div>
+        </div>
+
+        {/* Content area */}
+        <div style={{
+          height: 400,
+          overflowY: "auto",
+          padding: "16px 14px",
+          background: COLORS.bg,
+        }}>
+          <DemoContent tab={activeTab} />
+        </div>
+
+        {/* Bottom nav */}
+        <div style={{
+          borderTop: `1px solid ${COLORS.border}`,
+          background: COLORS.card,
+          display: "flex",
+        }}>
+          {DEMO_TABS.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                style={{
+                  flex: 1,
+                  padding: "10px 4px 12px",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 3,
+                  borderTop: `2px solid ${isActive ? accentColor : "transparent"}`,
+                }}
+              >
+                <span style={{ fontSize: 16 }}>{tab.icon}</span>
+                <span style={{
+                  fontSize: 9,
+                  fontFamily: FONT_UI,
+                  color: isActive ? accentColor : COLORS.textDim,
+                  fontWeight: isActive ? 600 : 400,
+                  letterSpacing: "0.04em",
+                }}>{tab.label.split(" ")[0]}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Home indicator */}
+        <div style={{ background: COLORS.card, padding: "8px 0", display: "flex", justifyContent: "center" }}>
+          <div style={{ width: 80, height: 4, borderRadius: 2, background: COLORS.border }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PlatformPreviewSection() {
   const [activeTab, setActiveTab] = useState("milestones");
   const accentColor = "#A78BFA";
@@ -974,8 +1076,13 @@ function PlatformPreviewSection() {
           </p>
         </div>
 
-        {/* Browser frame */}
-        <div style={{
+        {/* Phone mockup — mobile only */}
+        <div className="platform-phone">
+          <PhoneMockup activeTab={activeTab} setActiveTab={setActiveTab} />
+        </div>
+
+        {/* Browser frame — desktop only */}
+        <div className="platform-browser" style={{
           background: COLORS.surface,
           border: `1px solid ${COLORS.border}`,
           borderRadius: 10,
@@ -1311,6 +1418,9 @@ export default function LandingPage() {
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
         ::-webkit-scrollbar-thumb:hover { background: #C9A84C55; }
 
+        .platform-phone { display: none; }
+        .platform-browser { display: block; }
+
         @media (max-width: 768px) {
           nav { padding: 0 24px !important; }
           .nav-links { display: none !important; }
@@ -1320,6 +1430,8 @@ export default function LandingPage() {
           .grid-3 { grid-template-columns: 1fr !important; }
           .grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
           .methodology-pillars { transform: scale(0.82); transform-origin: top left; }
+          .platform-browser { display: none !important; }
+          .platform-phone { display: block !important; }
         }
       `}</style>
 
