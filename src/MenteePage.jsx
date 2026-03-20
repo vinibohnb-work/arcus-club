@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { supabase, toMentee } from "./lib/supabase";
+import { useAuth } from "./contexts/AuthContext";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const COLORS = {
@@ -256,6 +257,7 @@ function ResourcesContent({ files = [] }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function MenteePage() {
+  const { signOut }                   = useAuth();
   const { id }                        = useParams();
   const [mentee, setMentee]           = useState(null);
   const [activeTab, setActiveTab]     = useState("milestones");
@@ -414,7 +416,31 @@ export default function MenteePage() {
       }}>
         <img src="/arcus_logo.png" alt="Arcus Club" style={{ height:46, width:"auto", objectFit:"contain" }} />
 
-        {/* Botão hambúrguer — apenas mobile */}
+        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          {/* Botão sair */}
+          <button
+            onClick={signOut}
+            style={{
+              display:"flex", alignItems:"center", gap:6,
+              padding:"6px 14px", borderRadius:4,
+              background:"transparent",
+              border:`1px solid ${COLORS.border}`,
+              color:COLORS.textMuted, fontFamily:FONT_UI,
+              fontSize:12, fontWeight:500, letterSpacing:"0.05em",
+              cursor:"pointer", transition:"all 0.2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.textMuted; e.currentTarget.style.color = COLORS.text; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Sair
+          </button>
+
+          {/* Botão hambúrguer — apenas mobile */}
         <button
           className="mobile-menu-btn"
           onClick={() => setSidebarOpen(o => !o)}
@@ -436,6 +462,7 @@ export default function MenteePage() {
             </>
           )}
         </button>
+        </div>
       </header>
 
       {/* Overlay escuro ao abrir sidebar no mobile */}
