@@ -256,13 +256,14 @@ function ResourcesContent({ files = [] }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function MenteePage() {
-  const { id }                    = useParams();
-  const [mentee, setMentee]       = useState(null);
-  const [activeTab, setActiveTab] = useState("milestones");
-  const [notFound, setNotFound]   = useState(false);
-  const [photoErr, setPhotoErr]   = useState(false);
-  const [hoverId, setHoverId]     = useState(null);
-  const [files, setFiles]         = useState([]);
+  const { id }                        = useParams();
+  const [mentee, setMentee]           = useState(null);
+  const [activeTab, setActiveTab]     = useState("milestones");
+  const [notFound, setNotFound]       = useState(false);
+  const [photoErr, setPhotoErr]       = useState(false);
+  const [hoverId, setHoverId]         = useState(null);
+  const [files, setFiles]             = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -373,24 +374,89 @@ export default function MenteePage() {
         .balloon-3 { animation: floatD 4.0s ease-in-out infinite; animation-delay:1.8s; }
         .balloon:hover { transform:scale(1.05) !important; filter:brightness(1.15); }
         .balloon { transition: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease, filter 0.2s ease; cursor:pointer; }
+
+        .mobile-menu-btn { display: none; }
+        .sidebar-overlay { display: none; }
+
+        @media (max-width: 768px) {
+          .mobile-menu-btn { display: flex !important; }
+          .sidebar-overlay { display: block !important; }
+          .body-layout { height: auto !important; overflow: visible !important; }
+          .left-panel {
+            position: fixed !important;
+            left: 0 !important; top: 56px !important;
+            width: 100% !important;
+            height: calc(100vh - 56px) !important;
+            z-index: 150 !important;
+            overflow-y: auto !important; overflow-x: hidden !important;
+            background: #080808 !important;
+            transform: translateX(-110%) !important;
+            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1) !important;
+            padding: 28px 20px 40px !important;
+          }
+          .left-panel.open { transform: translateX(0) !important; }
+          .circular-menu-area {
+            transform: scale(0.7) !important;
+            transform-origin: top left !important;
+            margin-bottom: -128px !important;
+          }
+          .right-panel { overflow-y: visible !important; height: auto !important; padding: 28px 20px 60px !important; }
+        }
       `}</style>
 
       {/* ── Fixed header ── */}
       <header style={{
         position:"fixed", top:0, left:0, right:0, zIndex:200,
         height:56, display:"flex", alignItems:"center", justifyContent:"space-between",
-        padding:"0 36px",
+        padding:"0 20px 0 36px",
         background:`${COLORS.surface}EE`, borderBottom:`1px solid ${COLORS.border}`,
         backdropFilter:"blur(16px)",
       }}>
         <img src="/arcus_logo.png" alt="Arcus Club" style={{ height:46, width:"auto", objectFit:"contain" }} />
+
+        {/* Botão hambúrguer — apenas mobile */}
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setSidebarOpen(o => !o)}
+          style={{
+            alignItems:"center", justifyContent:"center",
+            width:40, height:40, borderRadius:6,
+            background: sidebarOpen ? `${mentee.color}22` : "transparent",
+            border:`1px solid ${sidebarOpen ? mentee.color : COLORS.border}`,
+            cursor:"pointer", flexDirection:"column", gap:5, padding:0,
+          }}
+        >
+          {sidebarOpen ? (
+            <span style={{ fontSize:18, color:COLORS.textMuted, lineHeight:1 }}>✕</span>
+          ) : (
+            <>
+              <span style={{ display:"block", width:18, height:1.5, background:COLORS.textMuted, borderRadius:1 }} />
+              <span style={{ display:"block", width:18, height:1.5, background:COLORS.textMuted, borderRadius:1 }} />
+              <span style={{ display:"block", width:12, height:1.5, background:COLORS.textMuted, borderRadius:1 }} />
+            </>
+          )}
+        </button>
       </header>
 
+      {/* Overlay escuro ao abrir sidebar no mobile */}
+      <div
+        className="sidebar-overlay"
+        onClick={() => setSidebarOpen(false)}
+        style={{
+          position:"fixed", inset:0, top:56, zIndex:140,
+          background:"rgba(0,0,0,0.65)",
+          backdropFilter:"blur(2px)",
+          opacity: sidebarOpen ? 1 : 0,
+          pointerEvents: sidebarOpen ? "auto" : "none",
+          transition:"opacity 0.3s ease",
+        }}
+      />
+
       {/* ── Body: left panel + right content ── */}
-      <div style={{ display:"flex", paddingTop:56, height:"calc(100vh - 56px)", overflow:"hidden" }}>
+      <div className="body-layout" style={{ display:"flex", paddingTop:56, height:"calc(100vh - 56px)", overflow:"hidden" }}>
 
         {/* ════════════ LEFT PANEL ════════════ */}
-        <div style={{
+        <div className={`left-panel${sidebarOpen ? " open" : ""}`} style={{
           width:560,
           flexShrink:0,
           position:"sticky",
@@ -423,7 +489,7 @@ export default function MenteePage() {
           </div>
 
           {/* ── Circular menu area ── */}
-          <div style={{ position:"relative", width:510, height:430, flexShrink:0 }}>
+          <div className="circular-menu-area" style={{ position:"relative", width:510, height:430, flexShrink:0 }}>
 
             {/* SVG overlay: arc + connectors + ring */}
             <svg
@@ -540,7 +606,7 @@ export default function MenteePage() {
                 <div
                   key={item.id}
                   className={`balloon balloon-${idx}`}
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => { setActiveTab(item.id); setSidebarOpen(false); }}
                   onMouseEnter={() => setHoverId(item.id)}
                   onMouseLeave={() => setHoverId(null)}
                   style={{
@@ -590,7 +656,7 @@ export default function MenteePage() {
         </div>
 
         {/* ════════════ RIGHT PANEL ════════════ */}
-        <div style={{
+        <div className="right-panel" style={{
           flex:1,
           padding:"44px 52px 60px",
           overflowY:"auto",
