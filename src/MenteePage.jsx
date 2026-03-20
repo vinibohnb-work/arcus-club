@@ -672,14 +672,6 @@ export default function MenteePage() {
             })}
           </div>
 
-          {/* Goal + join date */}
-          <div style={{ marginTop:4, maxWidth:260 }}>
-            <div style={{ fontSize:12, color:COLORS.textMuted, marginBottom:4, letterSpacing:"0.06em" }}>Meta</div>
-            <div style={{ fontSize:14, color:COLORS.text, fontWeight:500, lineHeight:1.5 }}>{mentee.goal}</div>
-            <div style={{ fontSize:11, color:COLORS.textDim, marginTop:8 }}>
-              Membro desde {new Date(mentee.joinDate).toLocaleDateString("pt-BR", { month:"long", year:"numeric" })}
-            </div>
-          </div>
         </div>
 
         {/* ════════════ RIGHT PANEL ════════════ */}
@@ -691,11 +683,6 @@ export default function MenteePage() {
         }}>
           {renderContent()}
 
-          {/* Footer */}
-          <div style={{ marginTop:48, textAlign:"center", color:COLORS.textDim,
-            fontSize:11, fontFamily:FONT_UI, letterSpacing:"0.12em" }}>
-            O LUCRO ESTÁ NA ORGANIZAÇÃO · SISTEMA DE MENTORIA
-          </div>
         </div>
       </div>
     </div>
