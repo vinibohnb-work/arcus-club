@@ -351,7 +351,7 @@ const LEAD_STAGES = ["Novo Lead", "Contato Feito", "Proposta Enviada", "Negocia�
 const MENTEE_STAGES = ["Ativo", "Inativo"];
 const LEAD_SOURCES = ["Instagram", "LinkedIn", "YouTube", "Indicação", "Evento", "WhatsApp", "Google", "Outro"];
 const INTERACTION_TYPES = ["Ligação", "Mensagem", "Reunião", "E-mail", "Outro"];
-const NEXT_STEP_TYPES = ["Ligar", "Enviar mensagem", "Enviar proposta", "Agendar reunião", "Follow-up", "Outro"];
+const NEXT_STEP_TYPES = ["Ligar", "Enviar mensagem", "Enviar proposta", "Agendar reunião", "Reunião de fechamento", "Follow-up", "Outro"];
 const ASSIGNEES = ["Eu", "Sócio", "Ambos"];
 const STAGE_COLORS = {
   "Ativo": "#3DBFB0",
@@ -369,7 +369,7 @@ const AWARENESS_LEVELS = [
   { key: "Seguidor",   color: "#7B6FD4", desc: "Segue nas redes sociais" },
   { key: "Engajado",   color: "#3DBFB0", desc: "Interage com conteúdo" },
   { key: "Consciente", color: "#C9A84C", desc: "Conhece e entende o clube" },
-  { key: "Ligar!",     color: "#E09A3D", desc: "Pronto para contato direto" },
+  { key: "Decidido",   color: "#E09A3D", desc: "Pronto para contato direto" },
   { key: "Recusa",     color: "#E05252", desc: "Não tem interesse" },
 ];
 const MILESTONE_LABELS = ["Onboarding", "Diagnóstico", "Plano de Ação", "Execução", "Revisão", "Avanço Contínuo"];
@@ -453,7 +453,7 @@ function Dashboard({ mentees, leads, events }) {
   const active = mentees.filter(m => m.stage === "Ativo").length;
   const [expandedKey, setExpandedKey] = useState(null);
 
-  const stepIcon = t => ({ "Ligar": "📞", "Enviar mensagem": "💬", "Enviar proposta": "📄", "Agendar reunião": "🤝", "Follow-up": "🔄", "Outro": "📝" }[t] || "📝");
+  const stepIcon = t => ({ "Ligar": "📞", "Enviar mensagem": "💬", "Enviar proposta": "📄", "Agendar reunião": "🤝", "Reunião de fechamento": "🏁", "Follow-up": "🔄", "Outro": "📝" }[t] || "📝");
 
   // Coleta todos os next steps pendentes de todos os leads
   const allPending = leads.flatMap(l =>
@@ -575,7 +575,7 @@ function CRM({ leads, setLeads, setMentees }) {
 
   const selectedLead = leads.find(l => l.id === selectedId) || null;
   const interactionIcon = t => ({ "Ligação": "📞", "Mensagem": "💬", "Reunião": "🤝", "E-mail": "✉️", "Outro": "📝" }[t] || "📝");
-  const stepIcon = t => ({ "Ligar": "📞", "Enviar mensagem": "💬", "Enviar proposta": "📄", "Agendar reunião": "🤝", "Follow-up": "🔄", "Outro": "📝" }[t] || "📝");
+  const stepIcon = t => ({ "Ligar": "📞", "Enviar mensagem": "💬", "Enviar proposta": "📄", "Agendar reunião": "🤝", "Reunião de fechamento": "🏁", "Follow-up": "🔄", "Outro": "📝" }[t] || "📝");
   const stepUrgency = date => { if (date < today) return COLORS.red; if (date === today) return COLORS.accent; return COLORS.textMuted; };
 
   const filtered = leads.filter(l => l.name.toLowerCase().includes(search.toLowerCase()));
