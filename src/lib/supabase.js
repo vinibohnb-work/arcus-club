@@ -21,6 +21,7 @@ export const toMentee = (row) => ({
   milestones: row.milestones || [false, false, false, false, false, false],
   notes: row.notes || '',
   customPlan: row.custom_plan || '',
+  basePlan: row.base_plan || null,
   photoUrl: row.photo_url || '',
   lastContact: row.last_contact || '',
 })
@@ -39,6 +40,7 @@ export const toMenteeDb = (m) => ({
   milestones: m.milestones,
   notes: m.notes,
   custom_plan: m.customPlan,
+  base_plan: m.basePlan,
   photo_url: m.photoUrl,
   last_contact: m.lastContact,
 })

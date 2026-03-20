@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { supabase, toMentee } from "./lib/supabase";
 import { useAuth } from "./contexts/AuthContext";
@@ -103,10 +103,10 @@ const Badge = ({ color, children }) => (
 );
 
 // ─── Content panels ───────────────────────────────────────────────────────────
-function MilestonesContent({ mentee, milestones, doneCount, pct }) {
+function MilestonesContent({ mentee, milestones, doneCount, pct, isAdmin, onToggleMilestone }) {
   return (
     <div>
-      {/* Greeting hero */}
+      {/* Greeting hero - unchanged */}
       <Card extra={{ marginBottom:24, background:`linear-gradient(135deg, ${mentee.color}16, ${mentee.color}06)`, border:`1px solid ${mentee.color}33`, position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:`linear-gradient(90deg, ${mentee.color}, transparent)` }} />
         <div style={{ fontSize:12, color:COLORS.textMuted, textTransform:"uppercase", letterSpacing:"0.14em", marginBottom:6 }}>Central do Mentorado</div>
@@ -122,16 +122,21 @@ function MilestonesContent({ mentee, milestones, doneCount, pct }) {
         <div style={{ fontSize:12, color:COLORS.textMuted, marginTop:6 }}>{pct}% da jornada concluída</div>
       </Card>
 
-      {/* Timeline de marcos */}
       <Card>
-        <SectionTitle>— Sua Jornada de Mentoria</SectionTitle>
+        <SectionTitle>— Sua Jornada de Mentoria {isAdmin && <span style={{fontSize:10,color:COLORS.accent,letterSpacing:"0.1em",fontWeight:400}}> · clique para alternar</span>}</SectionTitle>
         <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
           {MILESTONE_LABELS.map((label, i) => {
             const done = milestones[i];
             const isNext = !done && (i === 0 || milestones[i - 1]);
             return (
-              <div key={i} style={{ display:"flex", gap:16, alignItems:"flex-start", paddingBottom: i < MILESTONE_LABELS.length - 1 ? 0 : 0 }}>
-                {/* Linha vertical + círculo */}
+              <div key={i}
+                onClick={() => isAdmin && onToggleMilestone(i)}
+                style={{ display:"flex", gap:16, alignItems:"flex-start", cursor: isAdmin ? "pointer" : "default",
+                  borderRadius:6, padding: isAdmin ? "2px 6px" : 0, margin: isAdmin ? "0 -6px" : 0,
+                  transition:"background 0.15s" }}
+                onMouseEnter={e => { if(isAdmin) e.currentTarget.style.background = `${mentee.color}0A`; }}
+                onMouseLeave={e => { if(isAdmin) e.currentTarget.style.background = "transparent"; }}
+              >
                 <div style={{ display:"flex", flexDirection:"column", alignItems:"center", flexShrink:0 }}>
                   <div style={{
                     width:38, height:38, borderRadius:6,
@@ -149,7 +154,6 @@ function MilestonesContent({ mentee, milestones, doneCount, pct }) {
                     <div style={{ width:2, height:36, background: done ? mentee.color : COLORS.border, transition:"background 0.3s" }} />
                   )}
                 </div>
-                {/* Texto */}
                 <div style={{ paddingTop:8, paddingBottom:i < MILESTONE_LABELS.length - 1 ? 36 : 0 }}>
                   <div style={{ fontSize:15, fontWeight: done ? 600 : isNext ? 500 : 400, color: done ? COLORS.text : isNext ? COLORS.text : COLORS.textMuted, marginBottom:3 }}>
                     {label}
@@ -167,30 +171,137 @@ function MilestonesContent({ mentee, milestones, doneCount, pct }) {
   );
 }
 
-function PlanBaseContent({ mentee }) {
+function PlanBaseContent({ mentee, isAdmin, basePlan, onSaveBasePlan }) {
+  const items = basePlan || DEFAULT_PLAN;
+  const [editingIdx, setEditingIdx] = useState(null);
+  const [editText, setEditText] = useState('');
+  const [newText, setNewText] = useState('');
+  const [adding, setAdding] = useState(false);
+
+  const commit = (newItems) => onSaveBasePlan(newItems);
+
+  const startEdit = (i) => { setEditingIdx(i); setEditText(items[i]); };
+  const saveEdit = () => {
+    if (!editText.trim()) return;
+    const next = items.map((it,i) => i === editingIdx ? editText.trim() : it);
+    commit(next);
+    setEditingIdx(null);
+  };
+  const remove = (i) => commit(items.filter((_,idx) => idx !== i));
+  const addItem = () => {
+    if (!newText.trim()) return;
+    commit([...items, newText.trim()]);
+    setNewText('');
+    setAdding(false);
+  };
+
+  const inputStyle = {
+    width:"100%", background:COLORS.surface, border:`1px solid ${COLORS.accent}55`,
+    borderRadius:4, padding:"6px 10px", color:COLORS.text, fontFamily:FONT_UI,
+    fontSize:14, outline:"none",
+  };
+
   return (
     <Card>
       <SectionTitle>— Plano Base · Mentoria Contínua</SectionTitle>
       <div style={{ fontSize:15, color:COLORS.textMuted, marginBottom:24, lineHeight:1.7 }}>
         Este é o núcleo da sua jornada. Nossa mentoria é aberta e contínua — você evolui no seu ritmo, sem prazo de término.
       </div>
-      {DEFAULT_PLAN.map((item, i) => (
+      {items.map((item, i) => (
         <div key={i} style={{ display:"flex", gap:14, alignItems:"flex-start", padding:"14px 0", borderBottom:`1px solid ${COLORS.border}` }}>
           <div style={{ width:28, height:28, borderRadius:"50%", background:`${mentee.color}22`,
             display:"flex", alignItems:"center", justifyContent:"center",
             fontSize:13, flexShrink:0, color:mentee.color, fontWeight:700 }}>{i + 1}</div>
-          <div style={{ fontSize:15, lineHeight:1.6 }}>{item}</div>
+          {editingIdx === i ? (
+            <div style={{ flex:1, display:"flex", gap:8, alignItems:"center" }}>
+              <input value={editText} onChange={e => setEditText(e.target.value)}
+                onKeyDown={e => { if(e.key==='Enter') saveEdit(); if(e.key==='Escape') setEditingIdx(null); }}
+                style={inputStyle} autoFocus />
+              <button onClick={saveEdit} style={{ padding:"4px 12px", background:`${COLORS.accent}22`, border:`1px solid ${COLORS.accent}55`, borderRadius:4, color:COLORS.accent, fontFamily:FONT_UI, fontSize:12, cursor:"pointer" }}>✓</button>
+              <button onClick={() => setEditingIdx(null)} style={{ padding:"4px 10px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:12, cursor:"pointer" }}>✕</button>
+            </div>
+          ) : (
+            <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"space-between", gap:8 }}>
+              <div style={{ fontSize:15, lineHeight:1.6 }}>{item}</div>
+              {isAdmin && (
+                <div style={{ display:"flex", gap:6, flexShrink:0 }}>
+                  <button onClick={() => startEdit(i)} style={{ padding:"3px 8px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontSize:11, cursor:"pointer", fontFamily:FONT_UI }}>✎</button>
+                  <button onClick={() => remove(i)} style={{ padding:"3px 8px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.red, fontSize:11, cursor:"pointer", fontFamily:FONT_UI }}>✕</button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ))}
+      {isAdmin && (
+        <div style={{ marginTop:16 }}>
+          {adding ? (
+            <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+              <input value={newText} onChange={e => setNewText(e.target.value)}
+                onKeyDown={e => { if(e.key==='Enter') addItem(); if(e.key==='Escape') { setAdding(false); setNewText(''); } }}
+                placeholder="Novo item do plano…"
+                style={{ ...inputStyle, flex:1 }} autoFocus />
+              <button onClick={addItem} style={{ padding:"6px 14px", background:`${COLORS.accent}22`, border:`1px solid ${COLORS.accent}55`, borderRadius:4, color:COLORS.accent, fontFamily:FONT_UI, fontSize:13, cursor:"pointer" }}>Adicionar</button>
+              <button onClick={() => { setAdding(false); setNewText(''); }} style={{ padding:"6px 10px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:13, cursor:"pointer" }}>✕</button>
+            </div>
+          ) : (
+            <button onClick={() => setAdding(true)} style={{ display:"flex", alignItems:"center", gap:8, padding:"10px 16px", background:"transparent", border:`1px dashed ${COLORS.border}`, borderRadius:6, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:13, cursor:"pointer", width:"100%", transition:"all 0.2s" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.color = COLORS.accent; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}
+            >
+              <span style={{ fontSize:16 }}>+</span> Adicionar item
+            </button>
+          )}
+        </div>
+      )}
     </Card>
   );
 }
 
-function CustomPlanContent({ mentee }) {
+function CustomPlanContent({ mentee, isAdmin, onSaveCustomPlan }) {
+  const [editing, setEditing] = useState(false);
+  const [text, setText] = useState(mentee.customPlan || '');
+  const [saving, setSaving] = useState(false);
+
+  // sync if mentee prop changes
+  useEffect(() => { if (!editing) setText(mentee.customPlan || ''); }, [mentee.customPlan, editing]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    await onSaveCustomPlan(text);
+    setSaving(false);
+    setEditing(false);
+  };
+
   return (
     <Card>
-      <SectionTitle>— Seu Plano Personalizado</SectionTitle>
-      {mentee.customPlan ? (
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
+        <SectionTitle style={{ marginBottom:0 }}>— Seu Plano Personalizado</SectionTitle>
+        {isAdmin && !editing && (
+          <button onClick={() => setEditing(true)} style={{ padding:"5px 14px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:12, cursor:"pointer", transition:"all 0.2s" }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor=COLORS.accent; e.currentTarget.style.color=COLORS.accent; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor=COLORS.border; e.currentTarget.style.color=COLORS.textMuted; }}
+          >✎ Editar</button>
+        )}
+        {isAdmin && editing && (
+          <div style={{ display:"flex", gap:8 }}>
+            <button onClick={handleSave} disabled={saving} style={{ padding:"5px 14px", background:`${COLORS.accent}22`, border:`1px solid ${COLORS.accent}55`, borderRadius:4, color:COLORS.accent, fontFamily:FONT_UI, fontSize:12, cursor:"pointer" }}>
+              {saving ? "Salvando…" : "✓ Salvar"}
+            </button>
+            <button onClick={() => { setEditing(false); setText(mentee.customPlan || ''); }} style={{ padding:"5px 10px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:12, cursor:"pointer" }}>✕</button>
+          </div>
+        )}
+      </div>
+      {editing ? (
+        <textarea
+          value={text}
+          onChange={e => setText(e.target.value)}
+          rows={12}
+          style={{ width:"100%", background:COLORS.surface, border:`1px solid ${COLORS.accent}55`, borderRadius:6, padding:"16px", color:COLORS.text, fontFamily:FONT_UI, fontSize:14, lineHeight:1.8, outline:"none", resize:"vertical" }}
+          placeholder="Digite o plano personalizado do mentorado…"
+          autoFocus
+        />
+      ) : mentee.customPlan ? (
         <div style={{ fontSize:15, color:COLORS.text, lineHeight:1.9, whiteSpace:"pre-wrap",
           background:COLORS.surface, borderRadius:6, padding:"20px 24px",
           border:`1px solid ${mentee.color}33` }}>
@@ -201,7 +312,7 @@ function CustomPlanContent({ mentee }) {
           <div style={{ fontSize:44, marginBottom:14 }}>◎</div>
           <div style={{ fontSize:18, fontWeight:700, marginBottom:8, color:COLORS.text }}>Plano em elaboração</div>
           <div style={{ fontSize:14, lineHeight:1.7 }}>
-            Seu mentor está preparando um plano exclusivo para você.<br />Em breve estará disponível aqui!
+            {isAdmin ? "Clique em \"Editar\" para adicionar o plano personalizado." : "Seu mentor está preparando um plano exclusivo para você.\nEm breve estará disponível aqui!"}
           </div>
         </div>
       )}
@@ -209,7 +320,11 @@ function CustomPlanContent({ mentee }) {
   );
 }
 
-function ResourcesContent({ files = [] }) {
+function ResourcesContent({ menteeId, files, isAdmin, onRefresh }) {
+  const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState(null);
+  const fileRef = useRef(null);
+
   const fileIcon = (type) => {
     if (!type) return '📄';
     if (type.includes('pdf')) return '📄';
@@ -224,30 +339,71 @@ function ResourcesContent({ files = [] }) {
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
+
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const path = `${menteeId}/${Date.now()}_${file.name}`;
+    const { error } = await supabase.storage.from('mentee-files').upload(path, file);
+    if (!error) {
+      await supabase.from('files').insert({ mentee_id: menteeId, name: file.name, storage_path: path, file_type: file.type, size: file.size });
+      await onRefresh();
+    }
+    setUploading(false);
+    e.target.value = '';
+  };
+
+  const handleDelete = async (f) => {
+    setDeleting(f.id);
+    await supabase.storage.from('mentee-files').remove([f.storage_path]);
+    await supabase.from('files').delete().eq('id', f.id);
+    await onRefresh();
+    setDeleting(null);
+  };
+
   return (
     <Card>
-      <SectionTitle>— Biblioteca de Recursos</SectionTitle>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
+        <SectionTitle style={{ marginBottom:0 }}>— Biblioteca de Recursos</SectionTitle>
+        {isAdmin && (
+          <>
+            <input ref={fileRef} type="file" style={{ display:"none" }} onChange={handleUpload} />
+            <button onClick={() => fileRef.current?.click()} disabled={uploading}
+              style={{ padding:"5px 14px", background:`${COLORS.accent}18`, border:`1px solid ${COLORS.accent}55`, borderRadius:4, color:COLORS.accent, fontFamily:FONT_UI, fontSize:12, cursor:"pointer", transition:"all 0.2s" }}>
+              {uploading ? "Enviando…" : "+ Enviar arquivo"}
+            </button>
+          </>
+        )}
+      </div>
       {files.length === 0 ? (
         <div style={{ textAlign:"center", padding:"40px 0", color:COLORS.textMuted }}>
           <div style={{ fontSize:36, marginBottom:10 }}>📂</div>
           <div style={{ fontSize:15, fontWeight:600, marginBottom:6 }}>Nenhum arquivo disponível ainda</div>
-          <div style={{ fontSize:13 }}>Seu mentor irá compartilhar materiais em breve.</div>
+          <div style={{ fontSize:13 }}>{isAdmin ? "Clique em \"+ Enviar arquivo\" para adicionar materiais." : "Seu mentor irá compartilhar materiais em breve."}</div>
         </div>
       ) : (
         files.map((f) => (
-          <div key={f.id} style={{ display:"flex", alignItems:"center", gap:16, padding:"14px 0",
-            borderBottom:`1px solid ${COLORS.border}` }}>
+          <div key={f.id} style={{ display:"flex", alignItems:"center", gap:16, padding:"14px 0", borderBottom:`1px solid ${COLORS.border}` }}>
             <div style={{ fontSize:28, flexShrink:0 }}>{fileIcon(f.file_type)}</div>
             <div style={{ flex:1, minWidth:0 }}>
               <div style={{ fontSize:15, fontWeight:600, marginBottom:4, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{f.name}</div>
               <div style={{ fontSize:12, color:COLORS.textMuted }}>{formatSize(f.size)} · {f.created_at?.split('T')[0]}</div>
             </div>
-            <a href={f.url} target="_blank" rel="noopener noreferrer"
-              style={{ display:"inline-block", padding:"6px 16px", borderRadius:2, fontSize:12, fontWeight:500,
-                background:`${COLORS.accent}18`, color:COLORS.accent, border:`1px solid ${COLORS.accent}44`,
-                textDecoration:"none", flexShrink:0 }}>
-              Baixar
-            </a>
+            <div style={{ display:"flex", gap:8, flexShrink:0, alignItems:"center" }}>
+              <a href={f.url} target="_blank" rel="noopener noreferrer"
+                style={{ display:"inline-block", padding:"6px 16px", borderRadius:2, fontSize:12, fontWeight:500,
+                  background:`${COLORS.accent}18`, color:COLORS.accent, border:`1px solid ${COLORS.accent}44`,
+                  textDecoration:"none" }}>
+                Baixar
+              </a>
+              {isAdmin && (
+                <button onClick={() => handleDelete(f)} disabled={deleting === f.id}
+                  style={{ padding:"6px 10px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:2, color: deleting===f.id ? COLORS.textDim : COLORS.red, fontSize:12, cursor:"pointer", fontFamily:FONT_UI }}>
+                  {deleting === f.id ? "…" : "✕"}
+                </button>
+              )}
+            </div>
           </div>
         ))
       )}
@@ -257,7 +413,7 @@ function ResourcesContent({ files = [] }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function MenteePage() {
-  const { signOut }                   = useAuth();
+  const { signOut, isAdmin }          = useAuth();
   const { id }                        = useParams();
   const [mentee, setMentee]           = useState(null);
   const [activeTab, setActiveTab]     = useState("milestones");
@@ -265,20 +421,25 @@ export default function MenteePage() {
   const [photoErr, setPhotoErr]       = useState(false);
   const [hoverId, setHoverId]         = useState(null);
   const [files, setFiles]             = useState([]);
+  const [basePlan, setBasePlan]       = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const loadFiles = async () => {
+    const { data } = await supabase.from('files').select('*').eq('mentee_id', id).order('created_at', { ascending: false });
+    if (data?.length) {
+      const withUrls = await Promise.all(data.map(async (f) => {
+        const { data: signed } = await supabase.storage.from('mentee-files').createSignedUrl(f.storage_path, 3600);
+        return { ...f, url: signed?.signedUrl || '' };
+      }));
+      setFiles(withUrls);
+    } else {
+      setFiles([]);
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
-    supabase.from('files').select('*').eq('mentee_id', id).order('created_at', { ascending: false })
-      .then(async ({ data }) => {
-        if (data?.length) {
-          const withUrls = await Promise.all(data.map(async (f) => {
-            const { data: signed } = await supabase.storage.from('mentee-files').createSignedUrl(f.storage_path, 3600);
-            return { ...f, url: signed?.signedUrl || '' };
-          }));
-          setFiles(withUrls);
-        }
-      });
+    loadFiles();
   }, [id]);
 
   useEffect(() => {
@@ -291,7 +452,9 @@ export default function MenteePage() {
       if (error || !data) {
         setNotFound(true);
       } else {
-        setMentee(toMentee(data));
+        const mapped = toMentee(data);
+        setMentee(mapped);
+        setBasePlan(mapped.basePlan || null);
       }
     })();
   }, [id]);
@@ -322,12 +485,27 @@ export default function MenteePage() {
   const pct        = Math.round((doneCount / milestones.length) * 100);
   const photoUrl   = mentee.photoUrl || null;
 
+  const saveMilestones = async (newMilestones) => {
+    setMentee(m => ({ ...m, milestones: newMilestones }));
+    await supabase.from('mentees').update({ milestones: newMilestones }).eq('id', id);
+  };
+
+  const saveBasePlan = async (newPlan) => {
+    setBasePlan(newPlan);
+    await supabase.from('mentees').update({ base_plan: newPlan }).eq('id', id);
+  };
+
+  const saveCustomPlan = async (text) => {
+    setMentee(m => ({ ...m, customPlan: text }));
+    await supabase.from('mentees').update({ custom_plan: text }).eq('id', id);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
-      case "milestones": return <MilestonesContent mentee={mentee} milestones={milestones} doneCount={doneCount} pct={pct} />;
-      case "home":       return <PlanBaseContent mentee={mentee} />;
-      case "custom":     return <CustomPlanContent mentee={mentee} />;
-      case "resources":  return <ResourcesContent files={files} />;
+      case "milestones": return <MilestonesContent mentee={mentee} milestones={milestones} doneCount={doneCount} pct={pct} isAdmin={isAdmin} onToggleMilestone={(i) => { const next = milestones.map((v,idx) => idx===i ? !v : v); saveMilestones(next); }} />;
+      case "home":       return <PlanBaseContent mentee={mentee} isAdmin={isAdmin} basePlan={basePlan} onSaveBasePlan={saveBasePlan} />;
+      case "custom":     return <CustomPlanContent mentee={mentee} isAdmin={isAdmin} onSaveCustomPlan={saveCustomPlan} />;
+      case "resources":  return <ResourcesContent menteeId={id} files={files} isAdmin={isAdmin} onRefresh={loadFiles} />;
       default:           return null;
     }
   };

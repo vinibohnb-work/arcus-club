@@ -161,6 +161,10 @@ create policy "Mentorado baixa os próprios arquivos"
   );
 
 
+-- Run this if base_plan column doesn't exist yet:
+alter table public.mentees add column if not exists base_plan jsonb;
+
+
 -- ============================================================
 -- COMO CRIAR USUÁRIOS
 -- ============================================================
