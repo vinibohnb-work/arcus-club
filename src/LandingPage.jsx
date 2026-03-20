@@ -319,7 +319,7 @@ function HeroSection() {
       alignItems: "center",
       padding: "120px 80px 80px",
       position: "relative",
-      overflowX: "hidden",
+      overflow: "hidden",
     }}>
       {/* Background radial glows */}
       <div style={{
