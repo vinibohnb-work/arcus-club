@@ -129,7 +129,7 @@ export default function PropostaPage() {
 
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 36 }}>
-              <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 32, width: 'auto', objectFit: 'contain' }} />
+              <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 32, width: 'auto', objectFit: 'contain', mixBlendMode: 'screen' }} />
               <span style={{ fontSize: 10, color: COLORS.accent, textTransform: 'uppercase', letterSpacing: '0.22em', fontWeight: 400 }}>
                 O lucro está na organização
               </span>
@@ -281,7 +281,7 @@ export default function PropostaPage() {
 
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 36 }}>
-              <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 32, width: 'auto', objectFit: 'contain' }} />
+              <img src="/arcus_logo.png" alt="Arcus Club" style={{ height: 32, width: 'auto', objectFit: 'contain', mixBlendMode: 'screen' }} />
               <span style={{ fontSize: 10, color: COLORS.accent, textTransform: 'uppercase', letterSpacing: '0.22em', fontWeight: 400 }}>O lucro está na organização</span>
             </div>
 
