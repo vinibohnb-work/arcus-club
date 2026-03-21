@@ -5,85 +5,68 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
 )
 
-const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!
-const TO_EMAILS = ['vinibohnb@gmail.com', 'viictor.godoi@gmail.com']
-
 function fmt(date: string) {
   const [y, m, d] = date.split('-')
   return `${d}/${m}`
 }
 
-function buildHtml(todayStr: string, overdue: any[], upcoming: any[]) {
-  const overdueRows = overdue.map(({ lead, step }) => `
-    <tr>
-      <td style="padding:8px 12px;border-bottom:1px solid #1C1C1C;color:#E05252;font-weight:600;">${fmt(step.date)}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #1C1C1C;color:#F2EDE4;">${lead}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #1C1C1C;color:#F2EDE4;">${step.title}</td>
-    </tr>`).join('')
+function fmtBRL(value: number) {
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
 
-  const upcomingRows = upcoming.map(({ lead, step }) => `
-    <tr>
-      <td style="padding:8px 12px;border-bottom:1px solid #1C1C1C;color:#C9A84C;font-weight:600;">${fmt(step.date)}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #1C1C1C;color:#F2EDE4;">${lead}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #1C1C1C;color:#F2EDE4;">${step.title}</td>
-    </tr>`).join('')
+function buildMessage(
+  todayStr: string,
+  overdue: any[],
+  upcoming: any[],
+  overduePayments: any[],
+  upcomingPayments: any[],
+) {
+  const lines: string[] = []
+  lines.push(`📋 *Arcus Club — ${fmt(todayStr)}*`)
+  lines.push('')
 
-  const overdueSection = overdue.length > 0 ? `
-    <h2 style="font-size:14px;font-weight:700;color:#E05252;text-transform:uppercase;letter-spacing:0.1em;margin:28px 0 10px;">
-      🔴 Atrasadas (${overdue.length})
-    </h2>
-    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#161616;border-radius:4px;overflow:hidden;">
-      <thead>
-        <tr style="background:#111;">
-          <th style="padding:8px 12px;text-align:left;font-size:11px;color:#8A8070;text-transform:uppercase;letter-spacing:0.1em;">Data</th>
-          <th style="padding:8px 12px;text-align:left;font-size:11px;color:#8A8070;text-transform:uppercase;letter-spacing:0.1em;">Lead</th>
-          <th style="padding:8px 12px;text-align:left;font-size:11px;color:#8A8070;text-transform:uppercase;letter-spacing:0.1em;">Tarefa</th>
-        </tr>
-      </thead>
-      <tbody>${overdueRows}</tbody>
-    </table>` : ''
+  const hasLeadAlerts    = overdue.length > 0 || upcoming.length > 0
+  const hasPaymentAlerts = overduePayments.length > 0 || upcomingPayments.length > 0
 
-  const upcomingSection = upcoming.length > 0 ? `
-    <h2 style="font-size:14px;font-weight:700;color:#C9A84C;text-transform:uppercase;letter-spacing:0.1em;margin:28px 0 10px;">
-      🟡 Próximos 7 dias (${upcoming.length})
-    </h2>
-    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#161616;border-radius:4px;overflow:hidden;">
-      <thead>
-        <tr style="background:#111;">
-          <th style="padding:8px 12px;text-align:left;font-size:11px;color:#8A8070;text-transform:uppercase;letter-spacing:0.1em;">Data</th>
-          <th style="padding:8px 12px;text-align:left;font-size:11px;color:#8A8070;text-transform:uppercase;letter-spacing:0.1em;">Lead</th>
-          <th style="padding:8px 12px;text-align:left;font-size:11px;color:#8A8070;text-transform:uppercase;letter-spacing:0.1em;">Tarefa</th>
-        </tr>
-      </thead>
-      <tbody>${upcomingRows}</tbody>
-    </table>` : ''
+  if (!hasLeadAlerts && !hasPaymentAlerts) {
+    lines.push('✅ Nenhuma tarefa ou cobrança pendente para os próximos 7 dias.')
+    return lines.join('\n')
+  }
 
-  const emptyMsg = overdue.length === 0 && upcoming.length === 0
-    ? `<p style="color:#8A8070;text-align:center;padding:32px 0;">✅ Nenhuma tarefa pendente para os próximos 7 dias.</p>`
-    : ''
+  // ── Tarefas de prospecção ──
+  if (overdue.length > 0) {
+    lines.push(`🔴 *Tarefas atrasadas (${overdue.length})*`)
+    for (const { lead, step } of overdue) {
+      lines.push(`• ${fmt(step.date)} — ${lead}: ${step.title}`)
+    }
+    lines.push('')
+  }
 
-  return `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#080808;font-family:'Helvetica Neue',Arial,sans-serif;">
-  <div style="max-width:600px;margin:0 auto;padding:32px 24px;">
+  if (upcoming.length > 0) {
+    lines.push(`🟡 *Tarefas — próximos 7 dias (${upcoming.length})*`)
+    for (const { lead, step } of upcoming) {
+      lines.push(`• ${fmt(step.date)} — ${lead}: ${step.title}`)
+    }
+    lines.push('')
+  }
 
-    <div style="text-align:center;margin-bottom:32px;">
-      <p style="font-size:11px;color:#C9A84C;text-transform:uppercase;letter-spacing:0.2em;margin:0 0 6px;">Arcus Club</p>
-      <h1 style="font-size:22px;color:#F2EDE4;margin:0;">Resumo do dia</h1>
-      <p style="font-size:13px;color:#8A8070;margin:6px 0 0;">${fmt(todayStr)}</p>
-    </div>
+  // ── Cobranças ──
+  if (overduePayments.length > 0) {
+    lines.push(`🔴 *Cobranças atrasadas (${overduePayments.length})*`)
+    for (const { mentee, payment } of overduePayments) {
+      lines.push(`• ${fmt(payment.dueDate)} — ${mentee}: ${payment.description} (${fmtBRL(payment.amount)})`)
+    }
+    lines.push('')
+  }
 
-    ${emptyMsg}
-    ${overdueSection}
-    ${upcomingSection}
+  if (upcomingPayments.length > 0) {
+    lines.push(`🟡 *Cobranças — próximos 7 dias (${upcomingPayments.length})*`)
+    for (const { mentee, payment } of upcomingPayments) {
+      lines.push(`• ${fmt(payment.dueDate)} — ${mentee}: ${payment.description} (${fmtBRL(payment.amount)})`)
+    }
+  }
 
-    <p style="text-align:center;font-size:11px;color:#4A4440;margin-top:40px;letter-spacing:0.12em;">
-      O LUCRO ESTÁ NA ORGANIZAÇÃO · SISTEMA DE MENTORIA
-    </p>
-  </div>
-</body>
-</html>`
+  return lines.join('\n')
 }
 
 Deno.serve(async () => {
@@ -95,8 +78,9 @@ Deno.serve(async () => {
   in7.setDate(in7.getDate() + 7)
   const in7Str = in7.toISOString().slice(0, 10)
 
-  const { data: leads, error } = await supabase.from('leads').select('name, next_steps')
-  if (error) return new Response('Erro: ' + error.message, { status: 500 })
+  // ── Fetch leads (próximas etapas) ──
+  const { data: leads, error: leadsErr } = await supabase.from('leads').select('name, next_steps')
+  if (leadsErr) return new Response('Erro leads: ' + leadsErr.message, { status: 500 })
 
   type Step = { title: string; date: string; done: boolean }
   const overdue:  { lead: string; step: Step }[] = []
@@ -113,28 +97,39 @@ Deno.serve(async () => {
   overdue.sort((a, b) => a.step.date.localeCompare(b.step.date))
   upcoming.sort((a, b) => a.step.date.localeCompare(b.step.date))
 
-  const html = buildHtml(todayStr, overdue, upcoming)
-  const subject = overdue.length > 0
-    ? `⚠️ ${overdue.length} tarefa(s) atrasada(s) — Arcus Club ${fmt(todayStr)}`
-    : `📋 Resumo Arcus Club — ${fmt(todayStr)}`
+  // ── Fetch mentees (cobranças) ──
+  const { data: mentees, error: menteesErr } = await supabase.from('mentees').select('name, payments')
+  if (menteesErr) return new Response('Erro mentees: ' + menteesErr.message, { status: 500 })
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: 'Arcus Club <onboarding@resend.dev>',
-      to: TO_EMAILS,
-      subject,
-      html,
-    }),
-  })
+  type Payment = { id: number; description: string; amount: number; dueDate: string; paidAt: string | null }
+  const overduePayments:  { mentee: string; payment: Payment }[] = []
+  const upcomingPayments: { mentee: string; payment: Payment }[] = []
 
-  const data = await res.json()
-  return new Response(JSON.stringify(data), {
-    status: res.ok ? 200 : 500,
-    headers: { 'Content-Type': 'application/json' },
-  })
+  for (const m of mentees ?? []) {
+    for (const p of (m.payments ?? []) as Payment[]) {
+      if (p.paidAt) continue // já pago
+      if (p.dueDate < todayStr) overduePayments.push({ mentee: m.name, payment: p })
+      else if (p.dueDate <= in7Str) upcomingPayments.push({ mentee: m.name, payment: p })
+    }
+  }
+
+  overduePayments.sort((a, b) => a.payment.dueDate.localeCompare(b.payment.dueDate))
+  upcomingPayments.sort((a, b) => a.payment.dueDate.localeCompare(b.payment.dueDate))
+
+  const message = buildMessage(todayStr, overdue, upcoming, overduePayments, upcomingPayments)
+
+  const phone  = Deno.env.get('CALLMEBOT_PHONE')
+  const apikey = Deno.env.get('CALLMEBOT_APIKEY')
+
+  if (!phone || !apikey) {
+    return new Response('CALLMEBOT_PHONE ou CALLMEBOT_APIKEY não configurados', { status: 500 })
+  }
+
+  const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(message)}&apikey=${apikey}`
+  const res = await fetch(url)
+  const body = await res.text()
+
+  console.log('[callmebot] status:', res.status, '| body:', body)
+
+  return new Response(body, { status: res.ok ? 200 : 500 })
 })

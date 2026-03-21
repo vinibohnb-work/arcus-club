@@ -164,6 +164,9 @@ create policy "Mentorado baixa os próprios arquivos"
 -- Run this if base_plan column doesn't exist yet:
 alter table public.mentees add column if not exists base_plan jsonb;
 
+-- Run this to add financial payments history per mentee:
+alter table public.mentees add column if not exists payments jsonb default '[]'::jsonb;
+
 
 -- ============================================================
 -- COMO CRIAR USUÁRIOS
