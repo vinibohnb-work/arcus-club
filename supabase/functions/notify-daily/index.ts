@@ -118,22 +118,30 @@ Deno.serve(async () => {
 
   const message = buildMessage(todayStr, overdue, upcoming, overduePayments, upcomingPayments)
 
-  const instance = Deno.env.get('ULTRAMSG_INSTANCE')
-  const token    = Deno.env.get('ULTRAMSG_TOKEN')
-  const to       = Deno.env.get('ULTRAMSG_TO')
+  const accountSid = Deno.env.get('TWILIO_ACCOUNT_SID')
+  const authToken  = Deno.env.get('TWILIO_AUTH_TOKEN')
+  const from       = Deno.env.get('TWILIO_FROM') // ex: whatsapp:+14155238886
+  const to         = Deno.env.get('TWILIO_TO')   // ex: whatsapp:+5511999999999
 
-  if (!instance || !token || !to) {
-    return new Response('ULTRAMSG_INSTANCE, ULTRAMSG_TOKEN ou ULTRAMSG_TO não configurados', { status: 500 })
+  if (!accountSid || !authToken || !from || !to) {
+    return new Response('TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM ou TWILIO_TO não configurados', { status: 500 })
   }
 
-  const res = await fetch(`https://api.ultramsg.com/${instance}/messages/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ token, to, body: message }),
-  })
+  const credentials = btoa(`${accountSid}:${authToken}`)
+  const res = await fetch(
+    `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${credentials}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({ From: from, To: to, Body: message }),
+    },
+  )
   const resBody = await res.text()
 
-  console.log('[ultramsg] status:', res.status, '| body:', resBody)
+  console.log('[twilio] status:', res.status, '| body:', resBody)
 
   return new Response(resBody, { status: res.ok ? 200 : 500 })
 })
