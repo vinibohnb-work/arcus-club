@@ -38,24 +38,24 @@ const STATS = [
 
 const PROBLEMS = [
   {
-    icon: "◌",
-    title: "Trabalha muito e lucra pouco",
-    desc: "O faturamento cresce, mas o dinheiro some. Você sente que trabalha para pagar contas.",
+    title: "Trabalha 12 horas e no fim do mês o lucro não aparece",
+    desc: "O faturamento cresce, o movimento aumenta — mas o dinheiro não fica. Parece que você trabalha para pagar contas.",
   },
   {
-    icon: "◌",
-    title: "Falta clareza e direção",
-    desc: "Tem energia, tem vontade — mas não sabe qual próximo passo vai realmente mover o negócio.",
+    title: "Tudo depende de você. Sem você, o negócio para.",
+    desc: "Você não consegue tirar férias, delegar de verdade ou pensar no futuro. Está preso dentro da operação.",
   },
   {
-    icon: "◌",
-    title: "Decisões tomadas no improviso",
-    desc: "Sem dados, sem processo. Cada decisão é uma aposta. E o risco cansa.",
+    title: "Todo dia é apagar incêndio. Nunca sobra tempo para pensar.",
+    desc: "A urgência do cotidiano engole a estratégia. Você sabe que precisa mudar, mas nunca encontra o momento.",
   },
   {
-    icon: "◌",
-    title: "Isolamento do topo",
-    desc: "Quem você consulta quando o problema é com o negócio? Sócios têm interesse, amigos não entendem.",
+    title: "Decisões no feeling — e aquela sensação de estar apostando.",
+    desc: "Sem indicadores claros, cada decisão parece um risco. Você age por intuição e torce para dar certo.",
+  },
+  {
+    title: "Seus concorrentes crescem e você não entende por quê.",
+    desc: "Produto bom, trabalho duro — mas algo está errado. Falta o sistema que transforma esforço em resultado.",
   },
 ];
 
@@ -69,8 +69,8 @@ const BENEFITS = [
   {
     icon: "◈",
     color: COLORS.teal,
-    title: "Acompanhamento contínuo",
-    desc: "Sessões 1:1 semanais e suporte direto. Você nunca toma uma decisão importante sozinho.",
+    title: "Suporte direto via WhatsApp",
+    desc: "Acesso direto aos mentores pelo WhatsApp. Tire dúvidas, valide decisões e tenha apoio quando precisar — não apenas nas sessões.",
   },
   {
     icon: "◉",
@@ -112,7 +112,7 @@ const STEPS = [
   {
     num: "03",
     title: "Execução com acompanhamento",
-    desc: "Sessões semanais, suporte direto e ajustes em tempo real conforme o negócio evolui.",
+    desc: "Sessões semanais, suporte direto via WhatsApp e ajustes em tempo real conforme o negócio evolui.",
   },
   {
     num: "04",
@@ -241,6 +241,124 @@ function SectionLabel({ children }) {
 }
 
 // ─── Seções ───────────────────────────────────────────────────────────────────
+
+function PainSection() {
+  return (
+    <section style={{
+      padding: "100px 48px",
+      background: COLORS.surface,
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      {/* Subtle red glow */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        background: `radial-gradient(ellipse 60% 50% at 50% 100%, ${COLORS.red}07 0%, transparent 70%)`,
+      }} />
+
+      <div style={{ maxWidth: 960, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <SectionLabel>A realidade de quem não tem suporte</SectionLabel>
+
+        <h2 style={{
+          fontFamily: FONT_DISPLAY,
+          fontSize: "clamp(30px, 4vw, 50px)",
+          fontWeight: 700,
+          fontStyle: "italic",
+          color: COLORS.text,
+          lineHeight: 1.1,
+          marginBottom: 16,
+          maxWidth: 640,
+        }}>
+          Você se identifica com<br />
+          <span style={{ color: COLORS.red }}>alguma dessas situações?</span>
+        </h2>
+        <p style={{
+          fontFamily: FONT_UI,
+          fontSize: 15,
+          color: COLORS.textMuted,
+          lineHeight: 1.7,
+          marginBottom: 64,
+          maxWidth: 520,
+        }}>
+          Se sim, você não está sozinho — e o problema raramente é esforço.<br />
+          É falta de sistema, clareza e alguém do lado certo.
+        </p>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: 1,
+          background: COLORS.border,
+          borderRadius: 6,
+          overflow: "hidden",
+        }}>
+          {PROBLEMS.map((p, i) => (
+            <div
+              key={i}
+              style={{
+                background: COLORS.card,
+                padding: "32px 36px",
+                position: "relative",
+                transition: "background 0.2s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "#1A1212"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = COLORS.card; }}
+            >
+              {/* Red accent left border */}
+              <div style={{
+                position: "absolute", left: 0, top: 0, bottom: 0,
+                width: 3,
+                background: `linear-gradient(180deg, ${COLORS.red}66, transparent)`,
+              }} />
+              <div style={{
+                fontFamily: FONT_UI,
+                fontSize: 15,
+                fontWeight: 700,
+                color: COLORS.text,
+                marginBottom: 10,
+                lineHeight: 1.4,
+              }}>{p.title}</div>
+              <div style={{
+                fontFamily: FONT_UI,
+                fontSize: 13,
+                color: COLORS.textMuted,
+                lineHeight: 1.7,
+              }}>{p.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bridge to solution */}
+        <div style={{
+          marginTop: 52,
+          padding: "28px 36px",
+          border: `1px solid ${COLORS.accent}33`,
+          borderRadius: 6,
+          background: `${COLORS.accent}06`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 20,
+        }}>
+          <p style={{
+            fontFamily: FONT_DISPLAY,
+            fontSize: "clamp(16px, 2vw, 20px)",
+            fontStyle: "italic",
+            color: COLORS.text,
+            lineHeight: 1.5,
+            margin: 0,
+            maxWidth: 520,
+          }}>
+            "O problema não é o mercado, não é a equipe, não é a economia.<br />
+            É que ninguém te ensinou como <em style={{ color: COLORS.accent }}>organizar o lucro que já existe.</em>"
+          </p>
+          <CTAButton text="Quero resolver isso" />
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function Navbar({ scrolled }) {
   return (
@@ -454,6 +572,25 @@ function HeroSection() {
           >
             Ver como funciona →
           </a>
+        </div>
+
+        {/* Credenciais */}
+        <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 40, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 28, height: 1, background: `${COLORS.accent}55` }} />
+            <span style={{ fontFamily: FONT_UI, fontSize: 12, color: COLORS.textMuted, letterSpacing: "0.04em" }}>
+              Ao lado de <strong style={{ color: COLORS.text, fontWeight: 600 }}>Joel Jota</strong>
+            </span>
+          </div>
+          <div style={{ width: 1, height: 14, background: COLORS.border }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill={COLORS.teal}>
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            <span style={{ fontFamily: FONT_UI, fontSize: 12, color: COLORS.textMuted }}>
+              Suporte direto via <strong style={{ color: COLORS.teal, fontWeight: 600 }}>WhatsApp</strong>
+            </span>
+          </div>
         </div>
 
       </div>
@@ -1437,6 +1574,9 @@ export default function LandingPage() {
 
       <Navbar scrolled={scrolled} />
       <HeroSection />
+      <SectionDivider />
+      <PainSection />
+      <SectionDivider />
       <MethodologySection />
       <SectionDivider />
       <BenefitsSection />
@@ -1446,6 +1586,42 @@ export default function LandingPage() {
       <ProcessSection />
       <FinalCTA />
       <Footer />
+
+      {/* ── Botão flutuante WhatsApp ── */}
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Falar no WhatsApp"
+        style={{
+          position: "fixed",
+          bottom: 28,
+          right: 28,
+          zIndex: 400,
+          width: 58,
+          height: 58,
+          borderRadius: "50%",
+          background: "#25D366",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 4px 20px rgba(37,211,102,0.45), 0 2px 10px rgba(0,0,0,0.5)",
+          transition: "transform 0.2s, box-shadow 0.2s",
+          textDecoration: "none",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.1)";
+          e.currentTarget.style.boxShadow = "0 6px 28px rgba(37,211,102,0.65), 0 4px 14px rgba(0,0,0,0.5)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.boxShadow = "0 4px 20px rgba(37,211,102,0.45), 0 2px 10px rgba(0,0,0,0.5)";
+        }}
+      >
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+      </a>
     </div>
   );
 }
