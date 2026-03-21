@@ -332,26 +332,6 @@ function PainSection() {
           ))}
         </div>
 
-        {/* Bridge to solution */}
-        <div style={{
-          marginTop: 52,
-          padding: "28px 36px",
-          border: `1px solid ${COLORS.accent}33`,
-          borderRadius: 6,
-          background: `${COLORS.accent}06`,
-        }}>
-          <p style={{
-            fontFamily: FONT_DISPLAY,
-            fontSize: "clamp(16px, 2vw, 20px)",
-            fontStyle: "italic",
-            color: COLORS.text,
-            lineHeight: 1.5,
-            margin: 0,
-          }}>
-            "O problema não é o mercado, não é a equipe, não é a economia.<br />
-            É que ninguém te ensinou como <em style={{ color: COLORS.accent }}>organizar o lucro que já existe.</em>"
-          </p>
-        </div>
       </div>
     </section>
   );
