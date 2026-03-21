@@ -1366,6 +1366,7 @@ function MenteeDetail({ mentee, setMentees, setView }) {
   const [customPlan, setCustomPlan] = useState(mentee.customPlan || "");
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [payments, setPayments] = useState(mentee.payments || []);
   const milestones = mentee.milestones || [false, false, false, false, false, false];
 
   useEffect(() => { loadFiles(); }, []);
@@ -1439,6 +1440,12 @@ function MenteeDetail({ mentee, setMentees, setView }) {
     setMentees(prev => prev.map(m => m.id === mentee.id ? { ...m, customPlan } : m));
   };
 
+  const savePayments = async (newPayments) => {
+    setPayments(newPayments);
+    setMentees(prev => prev.map(m => m.id === mentee.id ? { ...m, payments: newPayments } : m));
+    await supabase.from('mentees').update({ payments: newPayments }).eq('id', String(mentee.id));
+  };
+
   const stageColor = STAGE_COLORS[mentee.stage] || COLORS.textMuted;
   const doneCount = milestones.filter(Boolean).length;
 
@@ -1495,7 +1502,13 @@ function MenteeDetail({ mentee, setMentees, setView }) {
       </div>
 
       <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
-        {[["overview", "Visão Geral"], ["plan", "Plano Personalizado"], ["notes", "Observações"], ["files", `Arquivos${files.length ? ` (${files.length})` : ''}`]].map(([k, l]) => (
+        {[
+          ["overview",    "Visão Geral"],
+          ["plan",        "Plano Personalizado"],
+          ["notes",       "Observações"],
+          ["files",       `Arquivos${files.length ? ` (${files.length})` : ''}`],
+          ["financeiro",  `💰 Financeiro${payments.filter(p => !p.paidAt).length ? ` (${payments.filter(p => !p.paidAt).length})` : ''}`],
+        ].map(([k, l]) => (
           <div key={k} style={styles.pill(activeTab === k)} onClick={() => setActiveTab(k)}>{l}</div>
         ))}
       </div>
@@ -1578,6 +1591,171 @@ function MenteeDetail({ mentee, setMentees, setView }) {
           )}
         </div>
       )}
+      {activeTab === "financeiro" && (() => {
+        const today = new Date().toISOString().slice(0, 10);
+        const METHODS = ["PIX", "Transferência", "Cartão", "Outro"];
+        const statusOf = p => p.paidAt ? "pago" : p.dueDate < today ? "atrasado" : "pendente";
+        const STATUS_COLOR = { pago: COLORS.teal, pendente: COLORS.accent, atrasado: COLORS.red };
+        const STATUS_LABEL = { pago: "Pago", pendente: "Pendente", atrasado: "Atrasado" };
+        const fmtBRL  = v => Number(v || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+        const fmtDate = d => d ? d.split("-").reverse().join("/") : "—";
+
+        const withStatus = payments.map(p => ({ ...p, _status: statusOf(p) }));
+        const sorted = [...withStatus].sort((a, b) => {
+          const o = { atrasado: 0, pendente: 1, pago: 2 };
+          if (o[a._status] !== o[b._status]) return o[a._status] - o[b._status];
+          return a.dueDate.localeCompare(b.dueDate);
+        });
+        const totalPago     = withStatus.filter(p => p._status === "pago").reduce((s, p) => s + (p.amount || 0), 0);
+        const totalPendente = withStatus.filter(p => p._status === "pendente").reduce((s, p) => s + (p.amount || 0), 0);
+        const totalAtrasado = withStatus.filter(p => p._status === "atrasado").reduce((s, p) => s + (p.amount || 0), 0);
+
+        const clean = list => list.map(({ _status, ...p }) => p);
+
+        return <FinanceiroAdmin
+          withStatus={withStatus} sorted={sorted}
+          totalPago={totalPago} totalPendente={totalPendente} totalAtrasado={totalAtrasado}
+          fmtBRL={fmtBRL} fmtDate={fmtDate}
+          STATUS_COLOR={STATUS_COLOR} STATUS_LABEL={STATUS_LABEL}
+          METHODS={METHODS} today={today} clean={clean}
+          onSave={savePayments} payments={payments}
+        />;
+      })()}
+    </div>
+  );
+}
+
+function FinanceiroAdmin({ withStatus, sorted, totalPago, totalPendente, totalAtrasado, fmtBRL, fmtDate, STATUS_COLOR, STATUS_LABEL, METHODS, today, clean, onSave, payments }) {
+  const empty = { description: "", amount: "", method: "PIX", dueDate: today, paidAt: "" };
+  const [mode, setMode] = useState(null); // null | "add" | payment.id
+  const [form, setForm] = useState(empty);
+
+  const commit = () => {
+    if (!form.description.trim() || !form.amount || !form.dueDate) return;
+    const entry = { ...form, amount: Number(form.amount), paidAt: form.paidAt || null };
+    if (mode === "add") {
+      onSave(clean([...withStatus, { ...entry, id: Date.now() }]));
+    } else {
+      onSave(clean(withStatus.map(p => p.id === mode ? { ...p, ...entry } : p)));
+    }
+    setMode(null); setForm(empty);
+  };
+
+  const del      = id => onSave(clean(withStatus.filter(p => p.id !== id)));
+  const markPaid = id => onSave(clean(withStatus.map(p => p.id === id ? { ...p, paidAt: today } : p)));
+  const startEdit = p => { setMode(p.id); setForm({ description: p.description, amount: String(p.amount), method: p.method, dueDate: p.dueDate, paidAt: p.paidAt || "" }); };
+
+  const inp = { ...styles.input, fontSize: 13 };
+
+  return (
+    <div>
+      {/* Summary */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, marginBottom: 20 }}>
+        {[
+          { label: "Recebido", value: totalPago,     color: COLORS.teal  },
+          { label: "Pendente", value: totalPendente, color: COLORS.accent },
+          { label: "Atrasado", value: totalAtrasado, color: COLORS.red   },
+        ].map(({ label, value, color }) => (
+          <div key={label} style={{ ...styles.card(), padding: "14px 18px", border: `1px solid ${color}33` }}>
+            <div style={{ fontSize: 11, color, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6 }}>{label}</div>
+            <div style={{ fontSize: 20, fontWeight: 700, color }}>{fmtBRL(value)}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* List */}
+      <div style={styles.card()}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+          <div style={styles.sectionTitle}>— Histórico de Pagamentos</div>
+          {mode !== "add" && (
+            <button style={{ ...styles.btn("outline"), fontSize: 12, padding: "5px 14px" }}
+              onClick={() => { setMode("add"); setForm(empty); }}>+ Adicionar</button>
+          )}
+        </div>
+
+        {sorted.length === 0 && mode !== "add" && (
+          <div style={{ textAlign: "center", padding: "36px 0", color: COLORS.textMuted }}>
+            <div style={{ fontSize: 30, marginBottom: 10 }}>💰</div>
+            <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 6 }}>Nenhum pagamento registrado</div>
+            <div style={{ fontSize: 13 }}>Clique em "+ Adicionar" para registrar o primeiro pagamento.</div>
+          </div>
+        )}
+
+        {sorted.map(p => (
+          mode === p.id ? (
+            <div key={p.id} style={{ background: COLORS.surface, borderRadius: 6, padding: 14, marginBottom: 8, border: `1px solid ${COLORS.accent}33` }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 130px", gap: 8, marginBottom: 8 }}>
+                <input style={inp} placeholder="Descrição" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} autoFocus />
+                <input style={inp} type="number" placeholder="Valor (R$)" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "auto 1fr 1fr", gap: 8, marginBottom: 10 }}>
+                <select style={inp} value={form.method} onChange={e => setForm(f => ({ ...f, method: e.target.value }))}>
+                  {METHODS.map(m => <option key={m}>{m}</option>)}
+                </select>
+                <div>
+                  <label style={{ ...styles.label, marginBottom: 4 }}>Vencimento</label>
+                  <input style={{ ...inp, width: "100%" }} type="date" value={form.dueDate} onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))} />
+                </div>
+                <div>
+                  <label style={{ ...styles.label, marginBottom: 4 }}>Data de pagamento</label>
+                  <input style={{ ...inp, width: "100%" }} type="date" value={form.paidAt || ""} onChange={e => setForm(f => ({ ...f, paidAt: e.target.value }))} />
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                <button style={{ ...styles.btn("ghost"), fontSize: 13 }} onClick={() => setMode(null)}>Cancelar</button>
+                <button style={{ ...styles.btn(), fontSize: 13 }} onClick={commit}>Salvar</button>
+              </div>
+            </div>
+          ) : (
+            <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{p.description}</div>
+                <div style={{ fontSize: 12, color: COLORS.textMuted }}>
+                  Venc: {fmtDate(p.dueDate)}{p.paidAt ? ` · Pago: ${fmtDate(p.paidAt)}` : ""} · {p.method}
+                </div>
+              </div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: STATUS_COLOR[p._status], flexShrink: 0 }}>{fmtBRL(p.amount)}</div>
+              <span style={{ ...styles.badge(STATUS_COLOR[p._status]), fontSize: 10 }}>{STATUS_LABEL[p._status]}</span>
+              <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                {p._status !== "pago" && (
+                  <button onClick={() => markPaid(p.id)}
+                    style={{ padding: "4px 10px", background: `${COLORS.teal}18`, border: `1px solid ${COLORS.teal}44`, borderRadius: 4, color: COLORS.teal, fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}>
+                    ✓ Pago
+                  </button>
+                )}
+                <button style={{ ...styles.btn("ghost"), padding: "4px 8px", fontSize: 12 }} onClick={() => startEdit(p)}>✎</button>
+                <button style={{ ...styles.btn("ghost"), padding: "4px 8px", fontSize: 12, color: COLORS.red }} onClick={() => del(p.id)}>✕</button>
+              </div>
+            </div>
+          )
+        ))}
+
+        {mode === "add" && (
+          <div style={{ background: COLORS.surface, borderRadius: 6, padding: 14, marginTop: 12, border: `1px solid ${COLORS.accent}33` }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 130px", gap: 8, marginBottom: 8 }}>
+              <input style={inp} placeholder="Descrição (ex: Mensalidade março/25)" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} autoFocus />
+              <input style={inp} type="number" placeholder="Valor (R$)" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} />
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr 1fr", gap: 8, marginBottom: 10 }}>
+              <select style={inp} value={form.method} onChange={e => setForm(f => ({ ...f, method: e.target.value }))}>
+                {METHODS.map(m => <option key={m}>{m}</option>)}
+              </select>
+              <div>
+                <label style={{ ...styles.label, marginBottom: 4 }}>Vencimento</label>
+                <input style={{ ...inp, width: "100%" }} type="date" value={form.dueDate} onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))} />
+              </div>
+              <div>
+                <label style={{ ...styles.label, marginBottom: 4 }}>Data de pagamento (opcional)</label>
+                <input style={{ ...inp, width: "100%" }} type="date" value={form.paidAt || ""} onChange={e => setForm(f => ({ ...f, paidAt: e.target.value }))} />
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <button style={{ ...styles.btn("ghost"), fontSize: 13 }} onClick={() => setMode(null)}>Cancelar</button>
+              <button style={{ ...styles.btn(), fontSize: 13 }} onClick={commit}>Adicionar</button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -103,7 +103,57 @@ const Badge = ({ color, children }) => (
 );
 
 // ─── Content panels ───────────────────────────────────────────────────────────
-function MilestonesContent({ mentee, milestones, doneCount, pct, isAdmin, onToggleMilestone }) {
+function PaymentSummary({ payments }) {
+  const today = new Date().toISOString().slice(0, 10);
+  const fmtBRL  = v => Number(v || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const fmtDate = d => d ? d.split("-").reverse().join("/") : "—";
+
+  const pending = (payments || []).filter(p => !p.paidAt);
+  const overdue = pending.filter(p => p.dueDate < today);
+  const upcoming = pending.filter(p => p.dueDate >= today);
+
+  if (pending.length === 0) return (
+    <Card extra={{ marginTop: 24 }}>
+      <SectionTitle>— Situação Financeira</SectionTitle>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, color: COLORS.teal }}>
+        <span style={{ fontSize: 20 }}>✅</span>
+        <span style={{ fontSize: 14 }}>Pagamentos em dia. Obrigado!</span>
+      </div>
+    </Card>
+  );
+
+  return (
+    <Card extra={{ marginTop: 24 }}>
+      <SectionTitle>— Situação Financeira</SectionTitle>
+      {overdue.map(p => (
+        <div key={p.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 600 }}>{p.description}</div>
+            <div style={{ fontSize: 12, color: COLORS.red }}>Venceu em {fmtDate(p.dueDate)}</div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: COLORS.red }}>{fmtBRL(p.amount)}</span>
+            <Badge color={COLORS.red}>Atrasado</Badge>
+          </div>
+        </div>
+      ))}
+      {upcoming.map(p => (
+        <div key={p.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 600 }}>{p.description}</div>
+            <div style={{ fontSize: 12, color: COLORS.textMuted }}>Vence em {fmtDate(p.dueDate)}</div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: COLORS.accent }}>{fmtBRL(p.amount)}</span>
+            <Badge color={COLORS.accent}>Pendente</Badge>
+          </div>
+        </div>
+      ))}
+    </Card>
+  );
+}
+
+function MilestonesContent({ mentee, milestones, doneCount, pct, isAdmin, onToggleMilestone, payments }) {
   return (
     <div>
       {/* Greeting hero - unchanged */}
@@ -167,6 +217,7 @@ function MilestonesContent({ mentee, milestones, doneCount, pct, isAdmin, onTogg
           })}
         </div>
       </Card>
+      {!isAdmin && <PaymentSummary payments={mentee.payments} />}
     </div>
   );
 }
@@ -411,171 +462,6 @@ function ResourcesContent({ menteeId, files, isAdmin, onRefresh }) {
   );
 }
 
-function PaymentForm({ form, setForm, methods, inputS, onSave, onCancel, isNew }) {
-  return (
-    <div style={{ background: COLORS.surface, borderRadius: 6, padding: "16px", marginTop: 12, border: `1px solid ${COLORS.accent}33` }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 140px", gap: 10, marginBottom: 10 }}>
-        <input
-          placeholder="Descrição (ex: Mensalidade março/25)"
-          value={form.description}
-          onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-          style={inputS}
-          autoFocus
-        />
-        <input
-          type="number"
-          placeholder="Valor (R$)"
-          value={form.amount}
-          onChange={e => setForm(p => ({ ...p, amount: e.target.value }))}
-          style={inputS}
-        />
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "auto 1fr 1fr", gap: 10, marginBottom: 14 }}>
-        <select value={form.method} onChange={e => setForm(p => ({ ...p, method: e.target.value }))} style={inputS}>
-          {methods.map(m => <option key={m}>{m}</option>)}
-        </select>
-        <div>
-          <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 4 }}>Vencimento</div>
-          <input type="date" value={form.dueDate} onChange={e => setForm(p => ({ ...p, dueDate: e.target.value }))} style={{ ...inputS, width: "100%" }} />
-        </div>
-        <div>
-          <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 4 }}>Data de pagamento (opcional)</div>
-          <input type="date" value={form.paidAt || ""} onChange={e => setForm(p => ({ ...p, paidAt: e.target.value }))} style={{ ...inputS, width: "100%" }} />
-        </div>
-      </div>
-      <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-        <button onClick={onCancel} style={{ padding: "6px 14px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 13, cursor: "pointer" }}>Cancelar</button>
-        <button onClick={onSave} style={{ padding: "6px 18px", background: `${COLORS.accent}22`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 13, cursor: "pointer" }}>
-          {isNew ? "Adicionar" : "✓ Salvar"}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function FinanceiroContent({ mentee, payments, onSavePayments }) {
-  const today = new Date().toISOString().slice(0, 10);
-  const METHODS = ["PIX", "Transferência", "Cartão", "Outro"];
-  const empty = { description: "", amount: "", method: "PIX", dueDate: today, paidAt: "" };
-  const [form, setForm] = useState(empty);
-  const [mode, setMode] = useState(null); // null | "add" | payment.id (edit)
-
-  const statusOf = p => p.paidAt ? "pago" : p.dueDate < today ? "atrasado" : "pendente";
-  const STATUS_COLOR = { pago: COLORS.teal, pendente: COLORS.accent, atrasado: COLORS.red };
-  const STATUS_LABEL = { pago: "Pago", pendente: "Pendente", atrasado: "Atrasado" };
-
-  const fmtBRL  = v => Number(v || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-  const fmtDate = d => d ? d.split("-").reverse().join("/") : "—";
-
-  const withStatus = payments.map(p => ({ ...p, _status: statusOf(p) }));
-  const sorted = [...withStatus].sort((a, b) => {
-    const o = { atrasado: 0, pendente: 1, pago: 2 };
-    if (o[a._status] !== o[b._status]) return o[a._status] - o[b._status];
-    return a.dueDate.localeCompare(b.dueDate);
-  });
-
-  const totalPago     = withStatus.filter(p => p._status === "pago").reduce((s, p) => s + (p.amount || 0), 0);
-  const totalPendente = withStatus.filter(p => p._status === "pendente").reduce((s, p) => s + (p.amount || 0), 0);
-  const totalAtrasado = withStatus.filter(p => p._status === "atrasado").reduce((s, p) => s + (p.amount || 0), 0);
-
-  const clean = list => list.map(({ _status, ...p }) => p);
-  const save  = list => onSavePayments(clean(list));
-
-  const commit = () => {
-    if (!form.description.trim() || !form.amount || !form.dueDate) return;
-    const entry = { ...form, amount: Number(form.amount), paidAt: form.paidAt || null };
-    if (mode === "add") {
-      save([...withStatus, { ...entry, id: Date.now() }]);
-    } else {
-      save(withStatus.map(p => p.id === mode ? { ...p, ...entry } : p));
-    }
-    setMode(null);
-    setForm(empty);
-  };
-
-  const del      = id  => save(withStatus.filter(p => p.id !== id));
-  const markPaid = id  => save(withStatus.map(p => p.id === id ? { ...p, paidAt: today } : p));
-  const startEdit = p  => { setMode(p.id); setForm({ description: p.description, amount: String(p.amount), method: p.method, dueDate: p.dueDate, paidAt: p.paidAt || "" }); };
-
-  const inputS = { background: COLORS.surface, border: `1px solid ${COLORS.accent}44`, borderRadius: 4, padding: "6px 10px", color: COLORS.text, fontFamily: FONT_UI, fontSize: 13, outline: "none" };
-
-  return (
-    <div>
-      {/* ── Summary ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 24 }}>
-        {[
-          { label: "Recebido", value: totalPago,     color: COLORS.teal  },
-          { label: "Pendente", value: totalPendente, color: COLORS.accent },
-          { label: "Atrasado", value: totalAtrasado, color: COLORS.red   },
-        ].map(({ label, value, color }) => (
-          <div key={label} style={{ background: COLORS.card, border: `1px solid ${color}33`, borderRadius: 6, padding: "16px 20px" }}>
-            <div style={{ fontSize: 11, color, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6 }}>{label}</div>
-            <div style={{ fontSize: 20, fontWeight: 700, color }}>{fmtBRL(value)}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Payment list ── */}
-      <Card>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-          <SectionTitle style={{ marginBottom: 0 }}>— Histórico de Pagamentos</SectionTitle>
-          {mode !== "add" && (
-            <button onClick={() => { setMode("add"); setForm(empty); }}
-              style={{ padding: "5px 14px", background: `${COLORS.accent}18`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>
-              + Adicionar
-            </button>
-          )}
-        </div>
-
-        {sorted.length === 0 && mode !== "add" && (
-          <div style={{ textAlign: "center", padding: "40px 0", color: COLORS.textMuted }}>
-            <div style={{ fontSize: 32, marginBottom: 10 }}>💰</div>
-            <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 6 }}>Nenhum pagamento registrado</div>
-            <div style={{ fontSize: 13 }}>Clique em "+ Adicionar" para registrar o primeiro pagamento.</div>
-          </div>
-        )}
-
-        {sorted.map(p => (
-          mode === p.id ? (
-            <PaymentForm key={p.id} form={form} setForm={setForm} methods={METHODS} inputS={inputS}
-              onSave={commit} onCancel={() => setMode(null)} />
-          ) : (
-            <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 0", borderBottom: `1px solid ${COLORS.border}` }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 3 }}>{p.description}</div>
-                <div style={{ fontSize: 12, color: COLORS.textMuted }}>
-                  Venc: {fmtDate(p.dueDate)}{p.paidAt ? ` · Pago: ${fmtDate(p.paidAt)}` : ""} · {p.method}
-                </div>
-              </div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: STATUS_COLOR[p._status], flexShrink: 0 }}>
-                {fmtBRL(p.amount)}
-              </div>
-              <Badge color={STATUS_COLOR[p._status]}>{STATUS_LABEL[p._status]}</Badge>
-              <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                {p._status !== "pago" && (
-                  <button onClick={() => markPaid(p.id)}
-                    style={{ padding: "4px 10px", background: `${COLORS.teal}18`, border: `1px solid ${COLORS.teal}44`, borderRadius: 4, color: COLORS.teal, fontSize: 11, cursor: "pointer", fontFamily: FONT_UI }}>
-                    ✓ Pago
-                  </button>
-                )}
-                <button onClick={() => startEdit(p)}
-                  style={{ padding: "4px 8px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontSize: 11, cursor: "pointer", fontFamily: FONT_UI }}>✎</button>
-                <button onClick={() => del(p.id)}
-                  style={{ padding: "4px 8px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.red, fontSize: 11, cursor: "pointer", fontFamily: FONT_UI }}>✕</button>
-              </div>
-            </div>
-          )
-        ))}
-
-        {mode === "add" && (
-          <PaymentForm form={form} setForm={setForm} methods={METHODS} inputS={inputS}
-            onSave={commit} onCancel={() => setMode(null)} isNew />
-        )}
-      </Card>
-    </div>
-  );
-}
-
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function MenteePage() {
   const { signOut, isAdmin }          = useAuth();
@@ -587,7 +473,6 @@ export default function MenteePage() {
   const [hoverId, setHoverId]         = useState(null);
   const [files, setFiles]             = useState([]);
   const [basePlan, setBasePlan]       = useState(null);
-  const [payments, setPayments]       = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const loadFiles = async () => {
@@ -621,7 +506,6 @@ export default function MenteePage() {
         const mapped = toMentee(data);
         setMentee(mapped);
         setBasePlan(mapped.basePlan || null);
-        setPayments(mapped.payments || []);
       }
     })();
   }, [id]);
@@ -667,19 +551,13 @@ export default function MenteePage() {
     await supabase.from('mentees').update({ custom_plan: text }).eq('id', id);
   };
 
-  const savePayments = async (newPayments) => {
-    setPayments(newPayments);
-    await supabase.from('mentees').update({ payments: newPayments }).eq('id', id);
-  };
-
   const renderContent = () => {
     switch (activeTab) {
-      case "milestones": return <MilestonesContent mentee={mentee} milestones={milestones} doneCount={doneCount} pct={pct} isAdmin={isAdmin} onToggleMilestone={(i) => { const next = milestones.map((v,idx) => idx===i ? !v : v); saveMilestones(next); }} />;
+      case "milestones": return <MilestonesContent mentee={mentee} milestones={milestones} doneCount={doneCount} pct={pct} isAdmin={isAdmin} payments={mentee.payments} onToggleMilestone={(i) => { const next = milestones.map((v,idx) => idx===i ? !v : v); saveMilestones(next); }} />;
       case "home":       return <PlanBaseContent mentee={mentee} isAdmin={isAdmin} basePlan={basePlan} onSaveBasePlan={saveBasePlan} />;
       case "custom":     return <CustomPlanContent mentee={mentee} isAdmin={isAdmin} onSaveCustomPlan={saveCustomPlan} />;
-      case "resources":   return <ResourcesContent menteeId={id} files={files} isAdmin={isAdmin} onRefresh={loadFiles} />;
-      case "financeiro":  return isAdmin ? <FinanceiroContent mentee={mentee} payments={payments} onSavePayments={savePayments} /> : null;
-      default:            return null;
+      case "resources":  return <ResourcesContent menteeId={id} files={files} isAdmin={isAdmin} onRefresh={loadFiles} />;
+      default:           return null;
     }
   };
 
@@ -1022,30 +900,6 @@ export default function MenteePage() {
               );
             })}
           </div>
-
-          {/* ── Admin-only: financial tab ── */}
-          {isAdmin && (
-            <button
-              onClick={() => { setActiveTab("financeiro"); setSidebarOpen(false); }}
-              style={{
-                marginTop: 8, alignSelf: "flex-start",
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "8px 20px",
-                background: activeTab === "financeiro" ? `${COLORS.accent}22` : "transparent",
-                border: `1px solid ${activeTab === "financeiro" ? COLORS.accent : COLORS.border}`,
-                borderRadius: 100,
-                color: activeTab === "financeiro" ? COLORS.accent : COLORS.textMuted,
-                fontFamily: FONT_UI, fontSize: 13, cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-              onMouseEnter={e => { if (activeTab !== "financeiro") { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.color = COLORS.accent; }}}
-              onMouseLeave={e => { if (activeTab !== "financeiro") { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}}
-            >
-              <span style={{ fontSize: 16 }}>💰</span>
-              <span>Financeiro</span>
-              {activeTab === "financeiro" && <span style={{ fontSize: 9, opacity: 0.8 }}>◂</span>}
-            </button>
-          )}
 
         </div>
 
