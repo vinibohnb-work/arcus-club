@@ -250,7 +250,7 @@ function PainSection() {
   return (
     <section style={{
       padding: "100px 48px",
-      background: COLORS.surface,
+      background: COLORS.bg,
       position: "relative",
       overflow: "hidden",
     }}>
@@ -339,11 +339,6 @@ function PainSection() {
           border: `1px solid ${COLORS.accent}33`,
           borderRadius: 6,
           background: `${COLORS.accent}06`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 20,
         }}>
           <p style={{
             fontFamily: FONT_DISPLAY,
@@ -352,12 +347,10 @@ function PainSection() {
             color: COLORS.text,
             lineHeight: 1.5,
             margin: 0,
-            maxWidth: 520,
           }}>
             "O problema não é o mercado, não é a equipe, não é a economia.<br />
             É que ninguém te ensinou como <em style={{ color: COLORS.accent }}>organizar o lucro que já existe.</em>"
           </p>
-          <CTAButton text="Quero resolver isso" />
         </div>
       </div>
     </section>
