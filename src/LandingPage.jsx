@@ -39,7 +39,7 @@ const STATS = [
 const PROBLEMS = [
   {
     title: "Trabalha 12 horas e no fim do mês o lucro não aparece",
-    desc: "O faturamento cresce, o movimento aumenta — mas o dinheiro não fica. Parece que você trabalha para pagar contas.",
+    desc: "O faturamento cresce, o movimento aumenta, mas o dinheiro não fica. Parece que você trabalha para pagar contas.",
   },
   {
     title: "Tudo depende de você. Sem você, o negócio para.",
@@ -50,12 +50,16 @@ const PROBLEMS = [
     desc: "A urgência do cotidiano engole a estratégia. Você sabe que precisa mudar, mas nunca encontra o momento.",
   },
   {
-    title: "Decisões no feeling — e aquela sensação de estar apostando.",
+    title: "Decisões no feeling: aquela sensação de estar apostando.",
     desc: "Sem indicadores claros, cada decisão parece um risco. Você age por intuição e torce para dar certo.",
   },
   {
     title: "Seus concorrentes crescem e você não entende por quê.",
-    desc: "Produto bom, trabalho duro — mas algo está errado. Falta o sistema que transforma esforço em resultado.",
+    desc: "Produto bom, trabalho duro, mas algo está errado. Falta o sistema que transforma esforço em resultado.",
+  },
+  {
+    title: "Sentimento de estagnação que não passa.",
+    desc: "Você se esforça, inova, tenta de tudo. Mas a sensação de que o negócio não avança de verdade insiste em ficar.",
   },
 ];
 
@@ -69,14 +73,14 @@ const BENEFITS = [
   {
     icon: "◈",
     color: COLORS.teal,
-    title: "Suporte direto via WhatsApp",
-    desc: "Acesso direto aos mentores pelo WhatsApp. Tire dúvidas, valide decisões e tenha apoio quando precisar — não apenas nas sessões.",
+    title: "Acesso direto aos mentores via WhatsApp (24/7)",
+    desc: "Tire dúvidas, valide decisões e tenha apoio quando precisar, não apenas nas sessões.",
   },
   {
     icon: "◉",
     color: "#7B6FD4",
     title: "Metodologia proprietária",
-    desc: "O framework \"O Lucro está na Organização\" — sistema comprovado para estruturar e escalar negócios.",
+    desc: "O framework \"O Lucro está na Organização\": sistema comprovado para estruturar e escalar negócios.",
   },
   {
     icon: "◎",
@@ -280,7 +284,7 @@ function PainSection() {
           marginBottom: 64,
           maxWidth: 520,
         }}>
-          Se sim, você não está sozinho — e o problema raramente é esforço.<br />
+          Se sim, você não está sozinho. O problema raramente é esforço.<br />
           É falta de sistema, clareza e alguém do lado certo.
         </p>
 
@@ -575,22 +579,13 @@ function HeroSection() {
         </div>
 
         {/* Credenciais */}
-        <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 40, flexWrap: "wrap" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 28, height: 1, background: `${COLORS.accent}55` }} />
-            <span style={{ fontFamily: FONT_UI, fontSize: 12, color: COLORS.textMuted, letterSpacing: "0.04em" }}>
-              Ao lado de <strong style={{ color: COLORS.text, fontWeight: 600 }}>Joel Jota</strong>
-            </span>
-          </div>
-          <div style={{ width: 1, height: 14, background: COLORS.border }} />
-          <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill={COLORS.teal}>
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
-            <span style={{ fontFamily: FONT_UI, fontSize: 12, color: COLORS.textMuted }}>
-              Suporte direto via <strong style={{ color: COLORS.teal, fontWeight: 600 }}>WhatsApp</strong>
-            </span>
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 40 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill={COLORS.teal}>
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          <span style={{ fontFamily: FONT_UI, fontSize: 12, color: COLORS.textMuted }}>
+            Acesso direto aos mentores via <strong style={{ color: COLORS.teal, fontWeight: 600 }}>WhatsApp (24/7)</strong>
+          </span>
         </div>
 
       </div>
@@ -638,7 +633,7 @@ function BenefitsSection() {
             lineHeight: 1.7,
             maxWidth: 340,
           }}>
-            Uma mentoria completa — não só sessões. Você entra com um problema e sai com um sistema.
+            Uma mentoria completa, não só sessões. Você entra com um problema e sai com um sistema.
           </p>
         </div>
 
@@ -816,7 +811,7 @@ function MethodologySection() {
               lineHeight: 1.1,
               marginBottom: 32,
             }}>
-              Arcus — a estrutura<br />
+              Arcus: a estrutura<br />
               <span style={{ color: COLORS.accent }}>que se sustenta.</span>
             </h2>
 
@@ -829,7 +824,7 @@ function MethodologySection() {
               </p>
               <p style={{ fontFamily: FONT_UI, fontSize: 15, color: COLORS.textMuted, lineHeight: 1.8 }}>
                 A metodologia Arcus funciona da mesma forma. Cultura, liderança e processos não são pilares independentes
-                — eles se sustentam mutuamente. Quando os três estão no lugar certo, o negócio não só resiste: ele cresce.
+                Eles se sustentam mutuamente. Quando os três estão no lugar certo, o negócio não só resiste: ele cresce.
               </p>
 
               {/* Insight destacado */}
@@ -848,7 +843,7 @@ function MethodologySection() {
                   lineHeight: 1.6,
                   margin: 0,
                 }}>
-                  "O lucro que você deixa na mesa não some — ele está escondido na desorganização."
+                  "O lucro que você deixa na mesa não some: ele está escondido na desorganização."
                 </p>
               </div>
             </div>
@@ -1036,7 +1031,7 @@ function DemoContent({ tab }) {
   if (tab === "plan") return (
     <div>
       <div style={{ fontSize: 12, color: COLORS.textMuted, marginBottom: 16, lineHeight: 1.6 }}>
-        O núcleo da sua jornada — mentoria aberta e contínua, no seu ritmo.
+        O núcleo da sua jornada: mentoria aberta e contínua, no seu ritmo.
       </div>
       {DEMO_PLAN.map((item, i) => (
         <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "10px 0", borderBottom: `1px solid ${COLORS.border}` }}>
@@ -1065,7 +1060,7 @@ function DemoContent({ tab }) {
     <div style={{ textAlign: "center", padding: "32px 0", color: COLORS.textMuted }}>
       <div style={{ fontSize: 32, marginBottom: 10 }}>📂</div>
       <div style={{ fontSize: 13, fontWeight: 600, color: COLORS.text, marginBottom: 6 }}>Biblioteca de materiais</div>
-      <div style={{ fontSize: 12, lineHeight: 1.6 }}>Templates, planilhas e gravações de sessões —<br />disponíveis exclusivamente para mentorados.</div>
+      <div style={{ fontSize: 12, lineHeight: 1.6 }}>Templates, planilhas e gravações de sessões,<br />disponíveis exclusivamente para mentorados.</div>
     </div>
   );
 }
@@ -1208,7 +1203,7 @@ function PlatformPreviewSection() {
             lineHeight: 1.8,
             maxWidth: 400,
           }}>
-            Cada mentorado tem acesso à sua própria central — com plano personalizado, marcos da jornada,
+            Cada mentorado tem acesso à sua própria central: plano personalizado, marcos da jornada,
             materiais do mentor e acompanhamento em tempo real. Tudo num só lugar.
           </p>
         </div>
@@ -1389,7 +1384,7 @@ function PlatformPreviewSection() {
             letterSpacing: "0.12em",
             textTransform: "uppercase",
           }}>
-            ◈ Demonstração interativa — dados fictícios para fins de apresentação
+            ◈ Demonstração interativa · dados fictícios para fins de apresentação
           </div>
         </div>
 
@@ -1470,7 +1465,7 @@ function FinalCTA() {
           maxWidth: 480,
           margin: "0 auto 48px",
         }}>
-          Clique abaixo para iniciar uma conversa no WhatsApp. Sem compromisso — vamos entender seu momento e ver se faz sentido trabalharmos juntos.
+          Clique abaixo para iniciar uma conversa no WhatsApp. Sem compromisso: vamos entender seu momento e ver se faz sentido trabalharmos juntos.
         </p>
 
         <CTAButton text="Falar com o mentor agora" size="lg" />
