@@ -118,18 +118,22 @@ Deno.serve(async () => {
 
   const message = buildMessage(todayStr, overdue, upcoming, overduePayments, upcomingPayments)
 
-  const phone  = Deno.env.get('CALLMEBOT_PHONE')
-  const apikey = Deno.env.get('CALLMEBOT_APIKEY')
+  const instance = Deno.env.get('ULTRAMSG_INSTANCE')
+  const token    = Deno.env.get('ULTRAMSG_TOKEN')
+  const to       = Deno.env.get('ULTRAMSG_TO')
 
-  if (!phone || !apikey) {
-    return new Response('CALLMEBOT_PHONE ou CALLMEBOT_APIKEY não configurados', { status: 500 })
+  if (!instance || !token || !to) {
+    return new Response('ULTRAMSG_INSTANCE, ULTRAMSG_TOKEN ou ULTRAMSG_TO não configurados', { status: 500 })
   }
 
-  const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(message)}&apikey=${apikey}`
-  const res = await fetch(url)
-  const body = await res.text()
+  const res = await fetch(`https://api.ultramsg.com/${instance}/messages/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ token, to, body: message }),
+  })
+  const resBody = await res.text()
 
-  console.log('[callmebot] status:', res.status, '| body:', body)
+  console.log('[ultramsg] status:', res.status, '| body:', resBody)
 
-  return new Response(body, { status: res.ok ? 200 : 500 })
+  return new Response(resBody, { status: res.ok ? 200 : 500 })
 })
