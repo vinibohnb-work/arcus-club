@@ -572,6 +572,8 @@ function CRM({ leads, setLeads, setMentees }) {
   const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "", source: "Instagram", interest: "", tags: "", awareness: "Frio" });
   const [interactionForm, setInteractionForm] = useState({ type: "Ligação", note: "", date: today });
   const [nextStepForm, setNextStepForm] = useState({ type: "Ligar", title: "", note: "", date: tomorrow });
+  const [editingInteraction, setEditingInteraction] = useState(null);
+  const [editingStep, setEditingStep] = useState(null);
 
   const selectedLead = leads.find(l => l.id === selectedId) || null;
   const interactionIcon = t => ({ "Ligação": "📞", "Mensagem": "💬", "Reunião": "🤝", "E-mail": "✉️", "Outro": "📝" }[t] || "📝");
@@ -601,23 +603,53 @@ function CRM({ leads, setLeads, setMentees }) {
 
   const addInteraction = () => {
     if (!interactionForm.note || !selectedId) return;
-    const entry = { id: Date.now(), ...interactionForm };
-    setLeads(prev => prev.map(l => l.id === selectedId ? {
-      ...l,
-      interactions: [...(l.interactions || []), entry].sort((a, b) => b.date.localeCompare(a.date)),
-      lastContact: interactionForm.date,
-    } : l));
+    if (editingInteraction) {
+      setLeads(prev => prev.map(l => l.id === selectedId ? {
+        ...l,
+        interactions: (l.interactions || []).map(it => it.id === editingInteraction ? { ...it, ...interactionForm } : it)
+          .sort((a, b) => b.date.localeCompare(a.date)),
+      } : l));
+      setEditingInteraction(null);
+    } else {
+      const entry = { id: Date.now(), ...interactionForm };
+      setLeads(prev => prev.map(l => l.id === selectedId ? {
+        ...l,
+        interactions: [...(l.interactions || []), entry].sort((a, b) => b.date.localeCompare(a.date)),
+        lastContact: interactionForm.date,
+      } : l));
+    }
     setShowInteractionModal(false);
     setInteractionForm({ type: "Ligação", note: "", date: today });
   };
 
+  const deleteInteraction = (leadId, interactionId) => {
+    setLeads(prev => prev.map(l => l.id === leadId ? {
+      ...l, interactions: (l.interactions || []).filter(it => it.id !== interactionId),
+    } : l));
+  };
+
+  const deleteStep = (leadId, stepId) => {
+    setLeads(prev => prev.map(l => l.id === leadId ? {
+      ...l, nextSteps: (l.nextSteps || []).filter(s => s.id !== stepId),
+    } : l));
+  };
+
   const addNextStep = () => {
     if (!nextStepForm.title || !selectedId) return;
-    const step = { id: Date.now(), ...nextStepForm, done: false };
-    setLeads(prev => prev.map(l => l.id === selectedId ? {
-      ...l,
-      nextSteps: [...(l.nextSteps || []), step].sort((a, b) => a.date.localeCompare(b.date)),
-    } : l));
+    if (editingStep) {
+      setLeads(prev => prev.map(l => l.id === selectedId ? {
+        ...l,
+        nextSteps: (l.nextSteps || []).map(s => s.id === editingStep ? { ...s, ...nextStepForm } : s)
+          .sort((a, b) => a.date.localeCompare(b.date)),
+      } : l));
+      setEditingStep(null);
+    } else {
+      const step = { id: Date.now(), ...nextStepForm, done: false };
+      setLeads(prev => prev.map(l => l.id === selectedId ? {
+        ...l,
+        nextSteps: [...(l.nextSteps || []), step].sort((a, b) => a.date.localeCompare(b.date)),
+      } : l));
+    }
     setShowNextStepModal(false);
     setNextStepForm({ type: "Ligar", title: "", note: "", date: tomorrow });
   };
@@ -820,6 +852,8 @@ function CRM({ leads, setLeads, setMentees }) {
                             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
                               <span style={{ fontSize: 13, fontWeight: 700, color: COLORS.text }}>{it.type}</span>
                               <span style={{ fontSize: 12, color: COLORS.textMuted, marginLeft: "auto" }}>{it.date}</span>
+                              <button style={{ ...styles.btn("ghost"), padding: "2px 6px", fontSize: 12 }} onClick={() => { setEditingInteraction(it.id); setInteractionForm({ type: it.type, note: it.note, date: it.date }); setShowInteractionModal(true); }}>✎</button>
+                              <button style={{ ...styles.btn("ghost"), padding: "2px 6px", fontSize: 12, color: COLORS.red }} onClick={() => deleteInteraction(selectedLead.id, it.id)}>✕</button>
                             </div>
                             <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.6 }}>{it.note}</div>
                           </div>
@@ -855,6 +889,8 @@ function CRM({ leads, setLeads, setMentees }) {
                               {s.note && <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>{s.note}</div>}
                             </div>
                             <span style={{ fontSize: 12, color: s.done ? COLORS.textMuted : stepUrgency(s.date), fontWeight: isToday || isOverdue ? 700 : 400, flexShrink: 0 }}>{s.date}</span>
+                            <button style={{ ...styles.btn("ghost"), padding: "2px 6px", fontSize: 12 }} onClick={() => { setEditingStep(s.id); setNextStepForm({ type: s.type, title: s.title, note: s.note || "", date: s.date }); setShowNextStepModal(true); }}>✎</button>
+                            <button style={{ ...styles.btn("ghost"), padding: "2px 6px", fontSize: 12, color: COLORS.red }} onClick={() => deleteStep(selectedLead.id, s.id)}>✕</button>
                           </div>
                         );
                       })
@@ -904,11 +940,11 @@ function CRM({ leads, setLeads, setMentees }) {
 
       {/* ── Modal: Registrar Interação ── */}
       {showInteractionModal && (
-        <div style={styles.modal} onClick={() => setShowInteractionModal(false)}>
+        <div style={styles.modal} onClick={() => { setShowInteractionModal(false); setEditingInteraction(null); }}>
           <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-              <div style={{ fontSize: 19, fontWeight: 700 }}>Registrar Interação — {selectedLead?.name}</div>
-              <button style={styles.btn("ghost")} onClick={() => setShowInteractionModal(false)}>✕</button>
+              <div style={{ fontSize: 19, fontWeight: 700 }}>{editingInteraction ? "Editar Interação" : "Registrar Interação"} — {selectedLead?.name}</div>
+              <button style={styles.btn("ghost")} onClick={() => { setShowInteractionModal(false); setEditingInteraction(null); }}>✕</button>
             </div>
             <div style={{ display: "grid", gap: 14 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
@@ -929,8 +965,8 @@ function CRM({ leads, setLeads, setMentees }) {
               </div>
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
-              <button style={styles.btn("outline")} onClick={() => setShowInteractionModal(false)}>Cancelar</button>
-              <button style={styles.btn()} onClick={addInteraction}>Salvar</button>
+              <button style={styles.btn("outline")} onClick={() => { setShowInteractionModal(false); setEditingInteraction(null); }}>Cancelar</button>
+              <button style={styles.btn()} onClick={addInteraction}>{editingInteraction ? "Salvar alterações" : "Salvar"}</button>
             </div>
           </div>
         </div>
@@ -938,11 +974,11 @@ function CRM({ leads, setLeads, setMentees }) {
 
       {/* ── Modal: Agendar Próximo Passo ── */}
       {showNextStepModal && (
-        <div style={styles.modal} onClick={() => setShowNextStepModal(false)}>
+        <div style={styles.modal} onClick={() => { setShowNextStepModal(false); setEditingStep(null); }}>
           <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-              <div style={{ fontSize: 19, fontWeight: 700 }}>Agendar Próximo Passo — {selectedLead?.name}</div>
-              <button style={styles.btn("ghost")} onClick={() => setShowNextStepModal(false)}>✕</button>
+              <div style={{ fontSize: 19, fontWeight: 700 }}>{editingStep ? "Editar Próximo Passo" : "Agendar Próximo Passo"} — {selectedLead?.name}</div>
+              <button style={styles.btn("ghost")} onClick={() => { setShowNextStepModal(false); setEditingStep(null); }}>✕</button>
             </div>
             <div style={{ display: "grid", gap: 14 }}>
               <div>
@@ -967,8 +1003,8 @@ function CRM({ leads, setLeads, setMentees }) {
               </div>
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
-              <button style={styles.btn("outline")} onClick={() => setShowNextStepModal(false)}>Cancelar</button>
-              <button style={styles.btn()} onClick={addNextStep}>Agendar</button>
+              <button style={styles.btn("outline")} onClick={() => { setShowNextStepModal(false); setEditingStep(null); }}>Cancelar</button>
+              <button style={styles.btn()} onClick={addNextStep}>{editingStep ? "Salvar alterações" : "Agendar"}</button>
             </div>
           </div>
         </div>
