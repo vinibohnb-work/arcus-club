@@ -567,6 +567,8 @@ function CRM({ leads, setLeads, setMentees }) {
   const [detailTab, setDetailTab] = useState("history");
   const [search, setSearch] = useState("");
   const [showLeadModal, setShowLeadModal] = useState(false);
+  const [showEditLeadModal, setShowEditLeadModal] = useState(false);
+  const [editLeadForm, setEditLeadForm] = useState({});
   const [showInteractionModal, setShowInteractionModal] = useState(false);
   const [showNextStepModal, setShowNextStepModal] = useState(false);
   const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "", source: "Instagram", interest: "", tags: "", awareness: "Frio" });
@@ -595,6 +597,21 @@ function CRM({ leads, setLeads, setMentees }) {
     setSelectedId(newL.id);
     setShowLeadModal(false);
     setLeadForm({ name: "", email: "", phone: "", source: "Instagram", interest: "", tags: "", awareness: "Frio" });
+  };
+
+  const updateLead = () => {
+    if (!editLeadForm.name) return;
+    setLeads(prev => prev.map(l => l.id === editLeadForm.id ? {
+      ...l,
+      name: editLeadForm.name,
+      email: editLeadForm.email,
+      phone: editLeadForm.phone,
+      source: editLeadForm.source,
+      interest: editLeadForm.interest,
+      tags: typeof editLeadForm.tags === "string" ? editLeadForm.tags.split(",").map(t => t.trim()).filter(Boolean) : editLeadForm.tags,
+      avatar: editLeadForm.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase(),
+    } : l));
+    setShowEditLeadModal(false);
   };
 
   const moveAwareness = (leadId, newLevel) => {
@@ -796,6 +813,7 @@ function CRM({ leads, setLeads, setMentees }) {
                 <div style={{ fontSize: 12, color: COLORS.textMuted }}>{selectedLead.email}{selectedLead.phone ? ` · ${selectedLead.phone}` : ""} · {selectedLead.source}</div>
                 {selectedLead.interest && <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>{selectedLead.interest}</div>}
               </div>
+              <button style={{ ...styles.btn("outline"), padding: "4px 10px", fontSize: 12 }} onClick={() => { setEditLeadForm({ ...selectedLead, tags: (selectedLead.tags || []).join(", ") }); setShowEditLeadModal(true); }}>✎ Editar</button>
               <button style={{ ...styles.btn("ghost"), padding: "4px 8px" }} onClick={() => setSelectedId(null)}>✕</button>
             </div>
 
@@ -933,6 +951,36 @@ function CRM({ leads, setLeads, setMentees }) {
             <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
               <button style={styles.btn("outline")} onClick={() => setShowLeadModal(false)}>Cancelar</button>
               <button style={styles.btn()} onClick={addLead}>Salvar Lead</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal: Editar Lead ── */}
+      {showEditLeadModal && (
+        <div style={styles.modal} onClick={() => setShowEditLeadModal(false)}>
+          <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div style={{ fontSize: 19, fontWeight: 700 }}>Editar Lead</div>
+              <button style={styles.btn("ghost")} onClick={() => setShowEditLeadModal(false)}>✕</button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              {[["name", "Nome completo", "1 / -1"], ["email", "E-mail", ""], ["phone", "Telefone", ""], ["interest", "Interesse / Objetivo", "1 / -1"], ["tags", "Tags (separadas por vírgula)", "1 / -1"]].map(([k, label, span]) => (
+                <div key={k} style={span ? { gridColumn: span } : {}}>
+                  <label style={styles.label}>{label}</label>
+                  <input style={styles.input} value={editLeadForm[k] || ""} onChange={e => setEditLeadForm(p => ({ ...p, [k]: e.target.value }))} />
+                </div>
+              ))}
+              <div>
+                <label style={styles.label}>Canal de Aquisição</label>
+                <select style={styles.input} value={editLeadForm.source || "Instagram"} onChange={e => setEditLeadForm(p => ({ ...p, source: e.target.value }))}>
+                  {LEAD_SOURCES.map(s => <option key={s}>{s}</option>)}
+                </select>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
+              <button style={styles.btn("outline")} onClick={() => setShowEditLeadModal(false)}>Cancelar</button>
+              <button style={styles.btn()} onClick={updateLead}>Salvar</button>
             </div>
           </div>
         </div>
