@@ -1067,6 +1067,7 @@ function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyP
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", stage: "Ativo", goal: "", tags: "", notes: "" });
+  const [inviteStatus, setInviteStatus] = useState(null); // null | "loading" | "ok" | "error"
 
   const filtered = mentees.filter(m => {
     const matchStage = m.stage === filter;
@@ -1074,8 +1075,8 @@ function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyP
     return matchStage && matchSearch;
   });
 
-  const addMentee = () => {
-    if (!form.name) return;
+  const addMentee = async () => {
+    if (!form.name || !form.email) return;
     const newM = {
       id: Date.now(), ...form,
       joinDate: new Date().toISOString().split("T")[0],
@@ -1086,8 +1087,26 @@ function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyP
       milestones: [false, false, false, false, false, false],
     };
     setMentees(prev => [...prev, newM]);
-    setShowModal(false);
-    setForm({ name: "", email: "", phone: "", stage: "Ativo", goal: "", tags: "", notes: "" });
+    setInviteStatus("loading");
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-mentee`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+          "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ email: newM.email, mentee_id: String(newM.id), name: newM.name }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error);
+      setInviteStatus("ok");
+      setTimeout(() => { setShowModal(false); setInviteStatus(null); setForm({ name: "", email: "", phone: "", stage: "Ativo", goal: "", tags: "", notes: "" }); }, 2000);
+    } catch (err) {
+      console.error("[invite-mentee]", err);
+      setInviteStatus("error");
+    }
   };
 
   const deleteMentee = (id) => setMentees(prev => prev.filter(m => m.id !== id));
@@ -1201,9 +1220,21 @@ function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyP
                 <textarea style={styles.textarea} value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))} />
               </div>
             </div>
-            <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
-              <button style={styles.btn("outline")} onClick={() => setShowModal(false)}>Cancelar</button>
-              <button style={styles.btn()} onClick={addMentee}>Salvar Mentorado</button>
+            {inviteStatus === "ok" && (
+              <div style={{ marginTop: 16, padding: "10px 14px", borderRadius: 6, background: `${COLORS.teal}18`, border: `1px solid ${COLORS.teal}`, color: COLORS.teal, fontSize: 13 }}>
+                ✓ Mentorado salvo. Convite enviado para <strong>{form.email}</strong>.
+              </div>
+            )}
+            {inviteStatus === "error" && (
+              <div style={{ marginTop: 16, padding: "10px 14px", borderRadius: 6, background: `${COLORS.red}18`, border: `1px solid ${COLORS.red}`, color: COLORS.red, fontSize: 13 }}>
+                Mentorado salvo, mas o convite não pôde ser enviado. Verifique se o e-mail já está cadastrado.
+              </div>
+            )}
+            <div style={{ display: "flex", gap: 10, marginTop: 16, justifyContent: "flex-end" }}>
+              <button style={styles.btn("outline")} onClick={() => { setShowModal(false); setInviteStatus(null); }}>Cancelar</button>
+              <button style={styles.btn()} onClick={addMentee} disabled={inviteStatus === "loading"}>
+                {inviteStatus === "loading" ? "Enviando convite..." : "Salvar e Convidar"}
+              </button>
             </div>
           </div>
         </div>
