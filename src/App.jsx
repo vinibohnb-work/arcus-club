@@ -1089,7 +1089,7 @@ function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyP
     setMentees(prev => [...prev, newM]);
     setInviteStatus("loading");
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.refreshSession();
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-mentee`, {
         method: "POST",
         headers: {
@@ -1113,7 +1113,7 @@ function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyP
     if (!window.confirm(`Excluir permanentemente "${mentee.name}"? Esta ação não pode ser desfeita.`)) return;
     setMentees(prev => prev.filter(m => m.id !== mentee.id));
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.refreshSession();
       await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-mentee`, {
         method: "POST",
         headers: {
