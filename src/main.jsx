@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage.jsx'
 import LandingPage from './LandingPage.jsx'
 import LinksPage from './pages/LinksPage.jsx'
 import PropostaPage from './pages/PropostaPage.jsx'
+import SetPasswordPage from './pages/SetPasswordPage.jsx'
 import { AuthProvider } from './contexts/AuthContext.jsx'
 import { AdminRoute, MenteeRoute } from './components/ProtectedRoute.jsx'
 
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
   { path: '/links', element: <LinksPage /> },
   { path: '/proposta', element: <PropostaPage /> },
   { path: '/login', element: <LoginPage /> },
+  { path: '/definir-senha', element: <SetPasswordPage /> },
   { path: '/admin', element: <AdminRoute><App /></AdminRoute> },
   { path: '/mentorado/:id', element: <MenteeRoute><MenteePage /></MenteeRoute> },
 ])
