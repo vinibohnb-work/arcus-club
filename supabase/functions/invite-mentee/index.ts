@@ -68,18 +68,42 @@ Deno.serve(async (req) => {
       data: { mentee_id: String(mentee_id), name },
     })
 
+    let authUserId: string
+
     if (inviteError) {
-      console.error('[invite-mentee] inviteUserByEmail error:', inviteError.message)
-      return new Response(JSON.stringify({ error: inviteError.message }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+      if (inviteError.message.includes('already been registered')) {
+        // Usuário já existe — busca o ID existente
+        const { data: { users }, error: listError } = await adminClient.auth.admin.listUsers()
+        if (listError) {
+          console.error('[invite-mentee] listUsers error:', listError.message)
+          return new Response(JSON.stringify({ error: listError.message }), {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          })
+        }
+        const existing = users.find(u => u.email === email)
+        if (!existing) {
+          return new Response(JSON.stringify({ error: 'Usuário não encontrado' }), {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          })
+        }
+        authUserId = existing.id
+      } else {
+        console.error('[invite-mentee] inviteUserByEmail error:', inviteError.message)
+        return new Response(JSON.stringify({ error: inviteError.message }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
+      }
+    } else {
+      authUserId = data.user.id
     }
 
     // Criar perfil linkando o auth user ao mentorado
     const { error: profileError } = await adminClient
       .from('profiles')
-      .insert({ id: data.user.id, role: 'mentee', mentee_id: String(mentee_id) })
+      .upsert({ id: authUserId, role: 'mentee', mentee_id: String(mentee_id) })
 
     if (profileError) {
       console.error('[invite-mentee] profile insert error:', profileError.message)
