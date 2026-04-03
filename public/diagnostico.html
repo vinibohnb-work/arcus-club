@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnóstico Empresarial — Arcus Club</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080808;
+      --surface:      #111111;
+      --card:         #161616;
+      --border:       #2A2A2A;
+      --border-light: #1C1C1C;
+      --accent:       #C9A84C;
+      --accent-light: #E2C37A;
+      --accent-dim:   rgba(201,168,76,0.10);
+      --text:         #F2EDE4;
+      --text-muted:   #8A8070;
+      --text-dim:     #4A4440;
+      --red:          #E05252;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 24px 48px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    header img { height: 36px; }
+    header .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+    header .divider {
+      width: 1px;
+      height: 28px;
+      background: var(--border);
+    }
+    header .subtitle {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ── Container ── */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 56px 24px 96px;
+    }
+
+    /* ── Page title ── */
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .page-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      max-width: 520px;
+    }
+
+    /* ── Divider ── */
+    .gold-line {
+      width: 48px;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    /* ── Field group ── */
+    .field-group { margin-bottom: 32px; }
+    .field-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .field-label .req { color: var(--accent); font-size: 13px; }
+
+    /* ── Text inputs ── */
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    textarea:focus {
+      border-color: var(--accent);
+    }
+    input::placeholder, textarea::placeholder { color: var(--text-dim); }
+    textarea { resize: vertical; min-height: 110px; }
+
+    /* ── Two-col grid ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 560px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* ── Radio & Checkbox options ── */
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .option:hover { border-color: var(--accent); background: var(--accent-dim); }
+    .option.selected { border-color: var(--accent); background: var(--accent-dim); }
+
+    .option input[type="radio"],
+    .option input[type="checkbox"] { display: none; }
+
+    .custom-radio {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s;
+    }
+    .option.selected .custom-radio { border-color: var(--accent); }
+    .option.selected .custom-radio::after {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .custom-checkbox {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+      font-size: 11px;
+    }
+    .option.selected .custom-checkbox {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #000;
+    }
+
+    .option-label { font-size: 14px; color: var(--text); }
+
+    /* ── Submit ── */
+    .submit-row { margin-top: 48px; }
+    .btn-submit {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 40px;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-submit:hover { background: var(--accent-light); }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Error ── */
+    .error-msg {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--red);
+      display: none;
+    }
+
+    /* ── Success screen ── */
+    #success-screen {
+      display: none;
+      text-align: center;
+      padding: 80px 24px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 28px;
+    }
+    #success-screen h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    #success-screen p {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="/arcus_logo.png" alt="Arcus Club" />
+    <div class="divider"></div>
+    <div class="subtitle">Diagnóstico Empresarial</div>
+  </header>
+
+  <div class="container">
+
+    <!-- Formulário -->
+    <div id="form-wrapper">
+      <div class="gold-line"></div>
+      <h1 class="page-title">Diagnóstico<br>Empresarial</h1>
+      <p class="page-desc">Preencha as informações abaixo para que possamos entender o momento da sua empresa e identificar as melhores oportunidades de crescimento.</p>
+
+      <form id="diag-form" novalidate>
+
+        <!-- Dados Pessoais -->
+        <div class="section-label">Dados de Contato</div>
+
+        <div class="grid-2">
+          <div class="field-group">
+            <div class="field-label">Nome Completo <span class="req">*</span></div>
+            <input type="text" name="nome_completo" placeholder="Seu nome" required />
+          </div>
+          <div class="field-group">
+            <div class="field-label">Nome da Empresa <span class="req">*</span></div>
+            <input type="text" name="nome_empresa" placeholder="Nome da empresa" required />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field-group">
+            <div class="field-label">E-mail</div>
+            <input type="email" name="email" placeholder="seu@email.com" />
+          </div>
+          <div class="field-group">
+            <div class="field-label">WhatsApp <span class="req">*</span></div>
+            <input type="tel" name="whatsapp" placeholder="(51) 99999-9999" required />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field-group">
+            <div class="field-label">Cargo <span class="req">*</span></div>
+            <input type="text" name="cargo" placeholder="CEO, Diretor, Sócio..." required />
+          </div>
+          <div class="field-group">
+            <div class="field-label">Quantidade de Colaboradores <span class="req">*</span></div>
+            <input type="text" name="qtd_colaboradores" placeholder="Ex: 12" required />
+          </div>
+        </div>
+
+        <!-- Perfil da Empresa -->
+        <div class="section-label" style="margin-top: 16px;">Perfil da Empresa</div>
+
+        <div class="field-group">
+          <div class="field-label">Estágio da Empresa <span class="req">*</span></div>
+          <div class="options" data-name="estagio_empresa" data-type="radio">
+            <label class="option"><input type="radio" name="estagio_empresa" value="Estruturação (sem faturamento recorrente)" /><span class="custom-radio"></span><span class="option-label">Estruturação (sem faturamento recorrente)</span></label>
+            <label class="option"><input type="radio" name="estagio_empresa" value="Validação" /><span class="custom-radio"></span><span class="option-label">Validação</span></label>
+            <label class="option"><input type="radio" name="estagio_empresa" value="Tração (com clientes pagantes)" /><span class="custom-radio"></span><span class="option-label">Tração (com clientes pagantes)</span></label>
+            <label class="option"><input type="radio" name="estagio_empresa" value="Escala" /><span class="custom-radio"></span><span class="option-label">Escala</span></label>
+            <label class="option"><input type="radio" name="estagio_empresa" value="Estagnação" /><span class="custom-radio"></span><span class="option-label">Estagnação</span></label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Faturamento Médio Mensal <span class="req">*</span></div>
+          <div class="options" data-name="faturamento_mensal" data-type="radio">
+            <label class="option"><input type="radio" name="faturamento_mensal" value="Até R$10.000" /><span class="custom-radio"></span><span class="option-label">Até R$10.000</span></label>
+            <label class="option"><input type="radio" name="faturamento_mensal" value="Entre R$10.000 e R$50.000" /><span class="custom-radio"></span><span class="option-label">Entre R$10.000 e R$50.000</span></label>
+            <label class="option"><input type="radio" name="faturamento_mensal" value="Entre R$50.000 e R$200.000" /><span class="custom-radio"></span><span class="option-label">Entre R$50.000 e R$200.000</span></label>
+            <label class="option"><input type="radio" name="faturamento_mensal" value="Entre R$200.000 e R$500.000" /><span class="custom-radio"></span><span class="option-label">Entre R$200.000 e R$500.000</span></label>
+            <label class="option"><input type="radio" name="faturamento_mensal" value="Mais de R$500.000" /><span class="custom-radio"></span><span class="option-label">Mais de R$500.000</span></label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Tempo de Existência da Empresa <span class="req">*</span></div>
+          <div class="options" data-name="tempo_existencia" data-type="radio">
+            <label class="option"><input type="radio" name="tempo_existencia" value="Menos de 1 ano" /><span class="custom-radio"></span><span class="option-label">Menos de 1 ano</span></label>
+            <label class="option"><input type="radio" name="tempo_existencia" value="1 a 3 anos" /><span class="custom-radio"></span><span class="option-label">1 a 3 anos</span></label>
+            <label class="option"><input type="radio" name="tempo_existencia" value="3 a 5 anos" /><span class="custom-radio"></span><span class="option-label">3 a 5 anos</span></label>
+            <label class="option"><input type="radio" name="tempo_existencia" value="5 a 10 anos" /><span class="custom-radio"></span><span class="option-label">5 a 10 anos</span></label>
+            <label class="option"><input type="radio" name="tempo_existencia" value="Mais de 10 anos" /><span class="custom-radio"></span><span class="option-label">Mais de 10 anos</span></label>
+          </div>
+        </div>
+
+        <!-- Contexto Interno -->
+        <div class="section-label" style="margin-top: 16px;">Contexto Interno</div>
+
+        <div class="field-group">
+          <div class="field-label">Você acredita que sua equipe está bem alinhada com os objetivos da empresa? <span class="req">*</span></div>
+          <div class="options" data-name="equipe_alinhada" data-type="radio">
+            <label class="option"><input type="radio" name="equipe_alinhada" value="Sim" /><span class="custom-radio"></span><span class="option-label">Sim</span></label>
+            <label class="option"><input type="radio" name="equipe_alinhada" value="Não" /><span class="custom-radio"></span><span class="option-label">Não</span></label>
+            <label class="option"><input type="radio" name="equipe_alinhada" value="Parcialmente" /><span class="custom-radio"></span><span class="option-label">Parcialmente</span></label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Qual dessas áreas você sente que mais precisa de atenção agora? <span class="req">*</span></div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px; margin-top: -4px;">Selecione quantas quiser</div>
+          <div class="options" data-name="areas_atencao" data-type="checkbox">
+            <label class="option"><input type="checkbox" name="areas_atencao" value="Liderança e Gestão de Pessoas" /><span class="custom-checkbox">✓</span><span class="option-label">Liderança e Gestão de Pessoas</span></label>
+            <label class="option"><input type="checkbox" name="areas_atencao" value="Processos e Operações" /><span class="custom-checkbox">✓</span><span class="option-label">Processos e Operações</span></label>
+            <label class="option"><input type="checkbox" name="areas_atencao" value="Comunicação Interna" /><span class="custom-checkbox">✓</span><span class="option-label">Comunicação Interna</span></label>
+            <label class="option"><input type="checkbox" name="areas_atencao" value="Entregas e Retrabalho" /><span class="custom-checkbox">✓</span><span class="option-label">Entregas e Retrabalho</span></label>
+            <label class="option"><input type="checkbox" name="areas_atencao" value="Cultura Organizacional" /><span class="custom-checkbox">✓</span><span class="option-label">Cultura Organizacional</span></label>
+            <label class="option"><input type="checkbox" name="areas_atencao" value="Planejamento Estratégico" /><span class="custom-checkbox">✓</span><span class="option-label">Planejamento Estratégico</span></label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Como você vê a sua empresa hoje?</div>
+          <textarea name="visao_empresa" placeholder="Descreva brevemente o momento atual da sua empresa, os principais desafios e o que você espera alcançar..."></textarea>
+        </div>
+
+        <div class="submit-row">
+          <button type="submit" class="btn-submit" id="btn-submit">Enviar Diagnóstico</button>
+          <div class="error-msg" id="error-msg">Preencha todos os campos obrigatórios antes de enviar.</div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Tela de sucesso -->
+    <div id="success-screen">
+      <div class="success-icon">✓</div>
+      <h2>Diagnóstico recebido</h2>
+      <p>Obrigado por preencher. Nossa equipe vai analisar as informações e entrar em contato em breve.</p>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+    const supabase = createClient(
+      'https://ewvobahadfdngrwkfyxh.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3dm9iYWhhZGZkbmdyd2tmeXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQwMTMsImV4cCI6MjA4ODgzMDAxM30.7Spe5-e1BAM98sXRQtwWNKWLtbEc5sA6rVTrtFa_bAU'
+    )
+
+    // Visual feedback: highlight selected options
+    document.querySelectorAll('.options').forEach(group => {
+      const type = group.dataset.type
+      group.querySelectorAll('.option').forEach(opt => {
+        const input = opt.querySelector('input')
+        input.addEventListener('change', () => {
+          if (type === 'radio') {
+            group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'))
+          }
+          opt.classList.toggle('selected', input.checked)
+        })
+      })
+    })
+
+    // Submit
+    document.getElementById('diag-form').addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const form = e.target
+      const btn = document.getElementById('btn-submit')
+      const errMsg = document.getElementById('error-msg')
+      errMsg.style.display = 'none'
+
+      const get = (name) => form.querySelector(`[name="${name}"]`)?.value?.trim() || ''
+      const getRadio = (name) => form.querySelector(`[name="${name}"]:checked`)?.value || ''
+      const getCheckboxes = (name) => [...form.querySelectorAll(`[name="${name}"]:checked`)].map(el => el.value)
+
+      const payload = {
+        nome_completo:    get('nome_completo'),
+        nome_empresa:     get('nome_empresa'),
+        email:            get('email'),
+        whatsapp:         get('whatsapp'),
+        cargo:            get('cargo'),
+        qtd_colaboradores: get('qtd_colaboradores'),
+        estagio_empresa:  getRadio('estagio_empresa'),
+        faturamento_mensal: getRadio('faturamento_mensal'),
+        tempo_existencia: getRadio('tempo_existencia'),
+        equipe_alinhada:  getRadio('equipe_alinhada'),
+        areas_atencao:    getCheckboxes('areas_atencao'),
+        visao_empresa:    get('visao_empresa'),
+      }
+
+      const required = ['nome_completo','nome_empresa','whatsapp','cargo','qtd_colaboradores','estagio_empresa','faturamento_mensal','tempo_existencia','equipe_alinhada']
+      const missing = required.some(k => !payload[k]) || payload.areas_atencao.length === 0
+
+      if (missing) {
+        errMsg.style.display = 'block'
+        return
+      }
+
+      btn.disabled = true
+      btn.textContent = 'Enviando...'
+
+      const { error } = await supabase.from('diagnostico').insert(payload)
+
+      if (error) {
+        console.error(error)
+        errMsg.textContent = 'Erro ao enviar. Tente novamente.'
+        errMsg.style.display = 'block'
+        btn.disabled = false
+        btn.textContent = 'Enviar Diagnóstico'
+        return
+      }
+
+      document.getElementById('form-wrapper').style.display = 'none'
+      document.getElementById('success-screen').style.display = 'block'
+    })
+  </script>
+
+</body>
+</html>
