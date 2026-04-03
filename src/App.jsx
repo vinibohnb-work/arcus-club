@@ -1109,7 +1109,24 @@ function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyP
     }
   };
 
-  const deleteMentee = (id) => setMentees(prev => prev.filter(m => m.id !== id));
+  const deleteMentee = async (mentee) => {
+    if (!window.confirm(`Excluir permanentemente "${mentee.name}"? Esta ação não pode ser desfeita.`)) return;
+    setMentees(prev => prev.filter(m => m.id !== mentee.id));
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-mentee`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+          "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ mentee_id: String(mentee.id) }),
+      });
+    } catch (err) {
+      console.error("[delete-mentee]", err);
+    }
+  };
   const stageColor = (s) => STAGE_COLORS[s] || COLORS.textMuted;
 
   const active = mentees.filter(m => m.stage === "Ativo").length;
@@ -1176,8 +1193,12 @@ function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyP
                 {!isInactive
                   ? <button style={{ ...styles.btn("ghost"), padding: "4px 10px", color: COLORS.red, fontSize: 12 }}
                       onClick={() => setMentees(prev => prev.map(x => x.id === m.id ? { ...x, stage: "Inativo" } : x))}>Desativar</button>
-                  : <button style={{ ...styles.btn("ghost"), padding: "4px 10px", color: COLORS.teal, fontSize: 12 }}
-                      onClick={() => setMentees(prev => prev.map(x => x.id === m.id ? { ...x, stage: "Ativo" } : x))}>Reativar</button>
+                  : <>
+                      <button style={{ ...styles.btn("ghost"), padding: "4px 10px", color: COLORS.teal, fontSize: 12 }}
+                        onClick={() => setMentees(prev => prev.map(x => x.id === m.id ? { ...x, stage: "Ativo" } : x))}>Reativar</button>
+                      <button style={{ ...styles.btn("ghost"), padding: "4px 10px", color: COLORS.red, fontSize: 12 }}
+                        onClick={() => deleteMentee(m)}>Excluir</button>
+                    </>
                 }
               </div>
             </div>
