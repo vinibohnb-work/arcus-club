@@ -69,6 +69,7 @@ Deno.serve(async (req) => {
     })
 
     if (inviteError) {
+      console.error('[invite-mentee] inviteUserByEmail error:', inviteError.message)
       return new Response(JSON.stringify({ error: inviteError.message }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -81,6 +82,7 @@ Deno.serve(async (req) => {
       .insert({ id: data.user.id, role: 'mentee', mentee_id: String(mentee_id) })
 
     if (profileError) {
+      console.error('[invite-mentee] profile insert error:', profileError.message)
       return new Response(JSON.stringify({ error: profileError.message }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
