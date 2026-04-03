@@ -1149,10 +1149,10 @@ function MenteesSection({ mentees, setMentees, setView, setSelectedMentee, copyP
                 <button style={{ ...styles.btn("outline"), padding: "4px 10px", fontSize: 12 }}
                   onClick={() => { setSelectedMentee(m); setView("mentee-detail"); }}>Ver Perfil</button>
                 <button
-                  style={{ ...styles.btn("ghost"), padding: "4px 10px", fontSize: 11, color: copiedId === m.id ? COLORS.teal : COLORS.accent, border: `1px solid ${copiedId === m.id ? COLORS.teal : COLORS.accent}44`, borderRadius: 2 }}
-                  onClick={() => copyPortalLink(m)}
-                  title={`Copiar link do portal: /mentorado/${m.id}`}>
-                  {copiedId === m.id ? "✓ Copiado!" : "🔗 Link do Portal"}
+                  style={{ ...styles.btn("ghost"), padding: "4px 10px", fontSize: 11, color: COLORS.accent, border: `1px solid ${COLORS.accent}44`, borderRadius: 2 }}
+                  onClick={() => window.open(`${window.location.origin}/mentorado/${m.id}`, "_blank")}
+                  title={`Abrir portal: /mentorado/${m.id}`}>
+                  🔗 Portal
                 </button>
                 {!isInactive
                   ? <button style={{ ...styles.btn("ghost"), padding: "4px 10px", color: COLORS.red, fontSize: 12 }}
