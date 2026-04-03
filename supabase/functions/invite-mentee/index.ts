@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
 
     // Convidar usuário — Supabase envia o e-mail de convite automaticamente
     const { data, error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(email, {
-      redirectTo: 'https://arcusclub.com.br',
+      redirectTo: 'https://arcusclub.com.br/login',
       data: { mentee_id: String(mentee_id), name },
     })
 
