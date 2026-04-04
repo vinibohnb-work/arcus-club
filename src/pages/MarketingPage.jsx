@@ -1,4 +1,5 @@
 import { useState } from "react";
+import StudioTab from "./StudioTab";
 
 // ── tokens idênticos ao restante do app ─────────────────────────────────────
 const COLORS = {
@@ -656,6 +657,7 @@ export default function MarketingPage() {
     { id: "desempenho",        label: "Desempenho" },
     { id: "base-conhecimento", label: "Base de Conhecimento" },
     { id: "referencias",       label: "Referências" },
+    { id: "studio",            label: "Studio" },
   ];
 
   return (
@@ -677,6 +679,7 @@ export default function MarketingPage() {
       {tab === "desempenho"        && <TabDesempenho       published={published} metrics={metrics} setMetrics={setMetrics} />}
       {tab === "base-conhecimento" && <TabBaseConhecimento kb={kb} setKb={setKb} />}
       {tab === "referencias"       && <TabReferencias      refs={refs} setRefs={setRefs} />}
+      {tab === "studio"            && <StudioTab />}
     </div>
   );
 }
