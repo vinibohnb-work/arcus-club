@@ -479,6 +479,160 @@ function TabBaseConhecimento({ kb, setKb }) {
   );
 }
 
+// ── sub-componente: aba Referências ─────────────────────────────────────────
+const REF_TYPES  = ["Livro", "Artigo", "Citação", "Conceito", "Dado/Estatística"];
+const REF_COLORS = {
+  "Livro":           COLORS.accent,
+  "Artigo":          COLORS.teal,
+  "Citação":         COLORS.violet,
+  "Conceito":        "#F97316",
+  "Dado/Estatística":"#3B82F6",
+};
+
+function TabReferencias({ refs, setRefs }) {
+  const BLANK = { type: "Livro", title: "", author: "", source: "", body: "" };
+  const [form,   setForm]   = useState(BLANK);
+  const [filter, setFilter] = useState("Todos");
+  const [search, setSearch] = useState("");
+
+  const addRef = () => {
+    if (!form.title.trim() && !form.body.trim()) return;
+    const entry = { id: Date.now(), ...form, createdAt: new Date().toLocaleDateString("pt-BR") };
+    const updated = [entry, ...refs];
+    setRefs(updated);
+    saveLS("arcus-refs", updated);
+    setForm(BLANK);
+  };
+
+  const deleteRef = (id) => {
+    const updated = refs.filter(r => r.id !== id);
+    setRefs(updated);
+    saveLS("arcus-refs", updated);
+  };
+
+  const filtered = refs.filter(r =>
+    (filter === "Todos" || r.type === filter) &&
+    (!search.trim() || [r.title, r.author, r.source, r.body].join(" ").toLowerCase().includes(search.toLowerCase()))
+  );
+
+  return (
+    <>
+      {/* Formulário */}
+      <div style={{ ...s.card({ marginBottom: 28 }), borderTop: `2px solid ${COLORS.accent}` }}>
+        <div style={s.sectionTitle}>— Nova Referência</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1fr", gap: 12, marginBottom: 12 }}>
+          <div>
+            <label style={s.label}>Tipo</label>
+            <select value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
+              style={{ ...s.input, cursor: "pointer" }}>
+              {REF_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={s.label}>Título / Frase</label>
+            <input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+              placeholder='Ex: "Quem não comunica, não lidera" ou Livro: O Gerente Minuto'
+              style={s.input} />
+          </div>
+          <div>
+            <label style={s.label}>Autor</label>
+            <input value={form.author} onChange={e => setForm(f => ({ ...f, author: e.target.value }))}
+              placeholder="Ex: Peter Drucker"
+              style={s.input} />
+          </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 12, marginBottom: 14 }}>
+          <div>
+            <label style={s.label}>Fonte / Publicação</label>
+            <input value={form.source} onChange={e => setForm(f => ({ ...f, source: e.target.value }))}
+              placeholder="Ex: HBR, 2019 · Cap. 3"
+              style={s.input} />
+          </div>
+          <div>
+            <label style={s.label}>Anotações / Contexto de uso</label>
+            <input value={form.body} onChange={e => setForm(f => ({ ...f, body: e.target.value }))}
+              placeholder="Como essa referência pode ser usada em posts — pilar, gancho, argumento..."
+              style={s.input} />
+          </div>
+        </div>
+        <button style={s.btn()} onClick={addRef}>Adicionar</button>
+      </div>
+
+      {/* Filtros + busca */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20, alignItems: "center" }}>
+        <button style={s.pill(filter === "Todos")} onClick={() => setFilter("Todos")}>Todos</button>
+        {REF_TYPES.map(t => (
+          <button key={t} style={s.pill(filter === t, REF_COLORS[t])} onClick={() => setFilter(t)}>{t}</button>
+        ))}
+        <input
+          value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Buscar..."
+          style={{ ...s.input, width: 180, padding: "5px 12px", fontSize: 13, marginLeft: "auto" }}
+        />
+      </div>
+
+      <div style={{ fontSize: 12, color: COLORS.textMuted, fontFamily: FONT_UI, marginBottom: 16 }}>
+        {filtered.length} {filtered.length === 1 ? "referência" : "referências"}
+      </div>
+
+      {/* Lista */}
+      {filtered.length === 0 && (
+        <div style={s.card({ textAlign: "center", padding: 40 })}>
+          <div style={{ fontSize: 13, color: COLORS.textMuted, fontFamily: FONT_UI }}>
+            {refs.length === 0
+              ? "Comece adicionando livros, artigos, citações ou conceitos que inspiram seus posts."
+              : "Nenhuma referência encontrada."}
+          </div>
+        </div>
+      )}
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {filtered.map(ref => {
+          const color = REF_COLORS[ref.type] || COLORS.accent;
+          const isCitacao = ref.type === "Citação";
+          return (
+            <div key={ref.id} style={s.card({ borderLeft: `2px solid ${color}` })}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: isCitacao ? 12 : 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                  <span style={s.badge(color)}>{ref.type}</span>
+                  {ref.author && (
+                    <span style={{ fontSize: 12, color: COLORS.textMuted, fontFamily: FONT_UI }}>
+                      {ref.author}{ref.source ? ` · ${ref.source}` : ""}
+                    </span>
+                  )}
+                  {!ref.author && ref.source && (
+                    <span style={{ fontSize: 12, color: COLORS.textMuted, fontFamily: FONT_UI }}>{ref.source}</span>
+                  )}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+                  <span style={{ fontSize: 11, color: COLORS.textDim, fontFamily: FONT_UI }}>{ref.createdAt}</span>
+                  <button onClick={() => deleteRef(ref.id)}
+                    style={{ background: "none", border: "none", cursor: "pointer", color: COLORS.textDim, fontSize: 14, padding: "0 2px" }}>✕</button>
+                </div>
+              </div>
+
+              {/* Citações em destaque */}
+              {isCitacao && ref.title ? (
+                <div style={{ fontFamily: FONT_BODY, fontSize: 18, fontStyle: "italic", color: COLORS.text, lineHeight: 1.55, borderLeft: `3px solid ${color}`, paddingLeft: 16, marginBottom: ref.body ? 12 : 0 }}>
+                  "{ref.title}"
+                </div>
+              ) : ref.title ? (
+                <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.text, fontFamily: FONT_UI, marginBottom: ref.body ? 8 : 0 }}>{ref.title}</div>
+              ) : null}
+
+              {ref.body && (
+                <div style={{ fontSize: 13, color: COLORS.textMuted, lineHeight: 1.65, fontFamily: FONT_UI, borderTop: ref.title ? `1px solid ${COLORS.border}` : "none", paddingTop: ref.title ? 10 : 0, marginTop: ref.title ? 2 : 0 }}>
+                  {ref.body}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
 // ── componente principal ─────────────────────────────────────────────────────
 export default function MarketingPage() {
   const [tab, setTab] = useState("calendario");
@@ -486,6 +640,7 @@ export default function MarketingPage() {
   const [published, setPublished] = useState(() => new Set(loadLS("arcus-published", [])));
   const [metrics,   setMetrics]   = useState(() => loadLS("arcus-metrics", {}));
   const [kb,        setKb]        = useState(() => loadLS("arcus-kb", []));
+  const [refs,      setRefs]      = useState(() => loadLS("arcus-refs", []));
 
   const togglePublished = (id) => {
     setPublished(prev => {
@@ -497,9 +652,10 @@ export default function MarketingPage() {
   };
 
   const TABS = [
-    { id: "calendario",       label: "Calendário" },
-    { id: "desempenho",       label: "Desempenho" },
-    { id: "base-conhecimento",label: "Base de Conhecimento" },
+    { id: "calendario",        label: "Calendário" },
+    { id: "desempenho",        label: "Desempenho" },
+    { id: "base-conhecimento", label: "Base de Conhecimento" },
+    { id: "referencias",       label: "Referências" },
   ];
 
   return (
@@ -507,19 +663,20 @@ export default function MarketingPage() {
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
         <div style={s.pageTitle}>Marketing</div>
-        <div style={s.pageSubtitle}>Calendário editorial · Métricas de desempenho · Base de conhecimento</div>
+        <div style={s.pageSubtitle}>Calendário editorial · Métricas · Base de conhecimento · Referências</div>
       </div>
 
       {/* Tabs internas */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 32, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 16 }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 32, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 16 }}>
         {TABS.map(t => (
           <button key={t.id} style={s.pill(tab === t.id)} onClick={() => setTab(t.id)}>{t.label}</button>
         ))}
       </div>
 
-      {tab === "calendario"        && <TabCalendario        published={published} togglePublished={togglePublished} />}
-      {tab === "desempenho"        && <TabDesempenho        published={published} metrics={metrics} setMetrics={setMetrics} />}
-      {tab === "base-conhecimento" && <TabBaseConhecimento  kb={kb} setKb={setKb} />}
+      {tab === "calendario"        && <TabCalendario       published={published} togglePublished={togglePublished} />}
+      {tab === "desempenho"        && <TabDesempenho       published={published} metrics={metrics} setMetrics={setMetrics} />}
+      {tab === "base-conhecimento" && <TabBaseConhecimento kb={kb} setKb={setKb} />}
+      {tab === "referencias"       && <TabReferencias      refs={refs} setRefs={setRefs} />}
     </div>
   );
 }
