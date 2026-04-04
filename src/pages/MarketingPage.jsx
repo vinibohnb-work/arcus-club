@@ -1,5 +1,6 @@
 import { useState } from "react";
 import StudioTab from "./StudioTab";
+import { openPostInNewTab } from "./generatePost";
 
 // ── tokens idênticos ao restante do app ─────────────────────────────────────
 const COLORS = {
@@ -131,7 +132,7 @@ function ProgressBar({ value, color = COLORS.accent }) {
 }
 
 // ── sub-componente: aba Calendário ───────────────────────────────────────────
-function TabCalendario({ published, togglePublished }) {
+function TabCalendario({ published, togglePublished, generated, onGenerate }) {
   const [phase, setPhase]   = useState(1);
   const [filter, setFilter] = useState("Todos");
 
@@ -139,6 +140,7 @@ function TabCalendario({ published, togglePublished }) {
   const visible    = phasePosts.filter(p => filter === "Todos" || p.format === filter);
   const weeks      = [...new Set(visible.map(p => p.week))];
   const pubTotal   = ALL_POSTS.filter(p => published.has(p.id)).length;
+  const genTotal   = ALL_POSTS.filter(p => generated.has(p.id)).length;
 
   return (
     <>
@@ -173,7 +175,7 @@ function TabCalendario({ published, togglePublished }) {
         <span style={{ fontSize: 11, color: COLORS.textDim, fontFamily: FONT_UI, letterSpacing: "0.14em", textTransform: "uppercase", marginRight: 4 }}>Formato</span>
         {FORMATS.map(fmt => <button key={fmt} style={s.pill(filter === fmt)} onClick={() => setFilter(fmt)}>{fmt}</button>)}
         <span style={{ marginLeft: "auto", fontSize: 12, color: COLORS.textMuted, fontFamily: FONT_UI }}>
-          {visible.length} posts · {pubTotal} publicados no total
+          {visible.length} posts · {pubTotal} publicados · {genTotal} gerados
         </span>
       </div>
 
@@ -186,21 +188,46 @@ function TabCalendario({ published, togglePublished }) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(100%,272px),1fr))", gap: 12 }}>
               {wkPosts.map(post => {
                 const isPub = published.has(post.id);
+                const isGen = generated.has(post.id);
                 const color = FORMAT_COLOR[post.format] || COLORS.accent;
                 return (
-                  <div key={post.id} onClick={() => togglePublished(post.id)}
-                    style={s.card({ cursor: "pointer", borderLeft: `2px solid ${isPub ? COLORS.accent : color}`, opacity: isPub ? 0.65 : 1, transition: "all 0.15s", padding: "14px 18px" })}>
+                  <div key={post.id}
+                    style={s.card({ cursor: "pointer", borderLeft: `2px solid ${isPub ? COLORS.accent : color}`, transition: "all 0.15s", padding: "14px 18px" })}
+                    onClick={() => onGenerate(post)}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                       <span style={{ fontSize: 11, color: COLORS.textDim, fontFamily: FONT_UI }}>{post.date}</span>
                       <span style={s.badge(color)}>{post.format}</span>
                     </div>
                     <div style={{ fontSize: 10, fontWeight: 600, color: COLORS.textMuted, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6 }}>{post.pilar}</div>
                     <div style={{ fontFamily: FONT_BODY, fontSize: 15, fontStyle: "italic", color: COLORS.text, lineHeight: 1.5, marginBottom: 12 }}>"{post.hook}"</div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, borderTop: `1px solid ${COLORS.border}`, paddingTop: 10 }}>
-                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: isPub ? COLORS.accent : COLORS.textDim, transition: "background 0.15s" }} />
-                      <span style={{ fontSize: 11, fontFamily: FONT_UI, color: isPub ? COLORS.accent : COLORS.textMuted, letterSpacing: "0.06em" }}>
-                        {isPub ? "Publicado" : "Pendente"}
-                      </span>
+
+                    {/* Status bar: gerado + publicado */}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: `1px solid ${COLORS.border}`, paddingTop: 10 }}>
+                      {/* Indicador de geração */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: isGen ? COLORS.violet : COLORS.textDim, transition: "background 0.15s" }} />
+                        <span style={{ fontSize: 11, fontFamily: FONT_UI, color: isGen ? COLORS.violet : COLORS.textMuted, letterSpacing: "0.06em" }}>
+                          {isGen ? "Gerado" : "Gerar post"}
+                        </span>
+                      </div>
+
+                      {/* Botão de publicação (não propaga o clique para o card) */}
+                      <button
+                        onClick={e => { e.stopPropagation(); togglePublished(post.id); }}
+                        style={{
+                          background: isPub ? `${COLORS.accent}18` : "transparent",
+                          border: `1px solid ${isPub ? COLORS.accent+"55" : COLORS.border}`,
+                          borderRadius: 2,
+                          padding: "3px 10px",
+                          fontSize: 11,
+                          fontFamily: FONT_UI,
+                          letterSpacing: "0.06em",
+                          color: isPub ? COLORS.accent : COLORS.textMuted,
+                          cursor: "pointer",
+                          transition: "all 0.15s",
+                        }}>
+                        {isPub ? "Publicado" : "Publicar"}
+                      </button>
                     </div>
                   </div>
                 );
@@ -638,16 +665,28 @@ function TabReferencias({ refs, setRefs }) {
 export default function MarketingPage() {
   const [tab, setTab] = useState("calendario");
 
-  const [published, setPublished] = useState(() => new Set(loadLS("arcus-published", [])));
-  const [metrics,   setMetrics]   = useState(() => loadLS("arcus-metrics", {}));
-  const [kb,        setKb]        = useState(() => loadLS("arcus-kb", []));
-  const [refs,      setRefs]      = useState(() => loadLS("arcus-refs", []));
+  const [published,  setPublished]  = useState(() => new Set(loadLS("arcus-published", [])));
+  const [generated,  setGenerated]  = useState(() => new Set(loadLS("arcus-generated", [])));
+  const [metrics,    setMetrics]    = useState(() => loadLS("arcus-metrics", {}));
+  const [kb,         setKb]         = useState(() => loadLS("arcus-kb", []));
+  const [refs,       setRefs]       = useState(() => loadLS("arcus-refs", []));
 
   const togglePublished = (id) => {
     setPublished(prev => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
       saveLS("arcus-published", [...next]);
+      return next;
+    });
+  };
+
+  const onGenerate = (post) => {
+    openPostInNewTab(post);
+    setGenerated(prev => {
+      if (prev.has(post.id)) return prev;
+      const next = new Set(prev);
+      next.add(post.id);
+      saveLS("arcus-generated", [...next]);
       return next;
     });
   };
@@ -675,7 +714,7 @@ export default function MarketingPage() {
         ))}
       </div>
 
-      {tab === "calendario"        && <TabCalendario       published={published} togglePublished={togglePublished} />}
+      {tab === "calendario"        && <TabCalendario       published={published} togglePublished={togglePublished} generated={generated} onGenerate={onGenerate} />}
       {tab === "desempenho"        && <TabDesempenho       published={published} metrics={metrics} setMetrics={setMetrics} />}
       {tab === "base-conhecimento" && <TabBaseConhecimento kb={kb} setKb={setKb} />}
       {tab === "referencias"       && <TabReferencias      refs={refs} setRefs={setRefs} />}
