@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import MarketingPage from "./pages/MarketingPage";
 import { useAuth } from "./contexts/AuthContext";
 import {
   supabase,
@@ -2169,6 +2170,7 @@ export default function App() {
     { id: "crm", label: "Prospecção", icon: "◉" },
     { id: "calendar", label: "Calendário", icon: "◻" },
     { id: "goals", label: "Metas", icon: "◎" },
+    { id: "marketing", label: "Marketing", icon: "◬" },
   ];
 
   const renderView = () => {
@@ -2177,6 +2179,7 @@ export default function App() {
     if (view === "crm") return <CRM leads={leads} setLeads={setLeads} setMentees={setMentees} />;
     if (view === "calendar") return <Calendar events={events} setEvents={setEvents} />;
     if (view === "goals") return <Goals goals={goals} setGoals={setGoals} />;
+    if (view === "marketing") return <MarketingPage />;
     return <Dashboard mentees={mentees} leads={leads} events={events} />;
   };
 
