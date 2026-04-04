@@ -1,6 +1,6 @@
 import { useState } from "react";
 import StudioTab from "./StudioTab";
-import { openPostInNewTab } from "./generatePost";
+import { openPostInNewTab, generatePrompt } from "./generatePost";
 
 // ── tokens idênticos ao restante do app ─────────────────────────────────────
 const COLORS = {
@@ -132,15 +132,36 @@ function ProgressBar({ value, color = COLORS.accent }) {
 }
 
 // ── sub-componente: aba Calendário ───────────────────────────────────────────
-function TabCalendario({ published, togglePublished, generated, onGenerate }) {
-  const [phase, setPhase]   = useState(1);
-  const [filter, setFilter] = useState("Todos");
+function TabCalendario({ published, togglePublished, generated, onGenerate, postContent, setPostContent }) {
+  const [phase,        setPhase]        = useState(1);
+  const [filter,       setFilter]       = useState("Todos");
+  const [expanded,     setExpanded]     = useState(null);
+  const [localContent, setLocalContent] = useState({});
+  const [copied,       setCopied]       = useState(null);
 
   const phasePosts = ALL_POSTS.filter(p => p.phase === phase);
   const visible    = phasePosts.filter(p => filter === "Todos" || p.format === filter);
   const weeks      = [...new Set(visible.map(p => p.week))];
   const pubTotal   = ALL_POSTS.filter(p => published.has(p.id)).length;
   const genTotal   = ALL_POSTS.filter(p => generated.has(p.id)).length;
+
+  const handleCopyPrompt = (post) => {
+    const prompt = generatePrompt(post);
+    navigator.clipboard.writeText(prompt).then(() => {
+      setCopied(post.id);
+      setTimeout(() => setCopied(null), 2500);
+    });
+  };
+
+  const handleGenerate = (post) => {
+    const raw = localContent[post.id] ?? postContent[post.id] ?? "";
+    if (raw.trim()) {
+      const updated = { ...postContent, [post.id]: raw };
+      setPostContent(updated);
+      saveLS("arcus-post-content", updated);
+    }
+    onGenerate(post, raw.trim() || null);
+  };
 
   return (
     <>
@@ -185,50 +206,85 @@ function TabCalendario({ published, togglePublished, generated, onGenerate }) {
         return (
           <div key={wk} style={{ marginBottom: 28 }}>
             <div style={s.sectionTitle}>— {wk}</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(100%,272px),1fr))", gap: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(100%,300px),1fr))", gap: 12 }}>
               {wkPosts.map(post => {
-                const isPub = published.has(post.id);
-                const isGen = generated.has(post.id);
-                const color = FORMAT_COLOR[post.format] || COLORS.accent;
+                const isPub    = published.has(post.id);
+                const isGen    = generated.has(post.id);
+                const isExp    = expanded === post.id;
+                const color    = FORMAT_COLOR[post.format] || COLORS.accent;
+                const saved    = postContent[post.id] || "";
+                const current  = localContent[post.id] ?? saved;
+                const hasContent = current.trim().length > 0;
+
                 return (
-                  <div key={post.id}
-                    style={s.card({ cursor: "pointer", borderLeft: `2px solid ${isPub ? COLORS.accent : color}`, transition: "all 0.15s", padding: "14px 18px" })}
-                    onClick={() => onGenerate(post)}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                      <span style={{ fontSize: 11, color: COLORS.textDim, fontFamily: FONT_UI }}>{post.date}</span>
-                      <span style={s.badge(color)}>{post.format}</span>
-                    </div>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: COLORS.textMuted, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6 }}>{post.pilar}</div>
-                    <div style={{ fontFamily: FONT_BODY, fontSize: 15, fontStyle: "italic", color: COLORS.text, lineHeight: 1.5, marginBottom: 12 }}>"{post.hook}"</div>
+                  <div key={post.id} style={s.card({ borderLeft: `2px solid ${isPub ? COLORS.accent : color}`, transition: "all 0.15s", padding: "14px 18px" })}>
 
-                    {/* Status bar: gerado + publicado */}
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: `1px solid ${COLORS.border}`, paddingTop: 10 }}>
-                      {/* Indicador de geração */}
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: isGen ? COLORS.violet : COLORS.textDim, transition: "background 0.15s" }} />
-                        <span style={{ fontSize: 11, fontFamily: FONT_UI, color: isGen ? COLORS.violet : COLORS.textMuted, letterSpacing: "0.06em" }}>
-                          {isGen ? "Gerado" : "Gerar post"}
-                        </span>
+                    {/* Área clicável para expandir */}
+                    <div onClick={() => setExpanded(isExp ? null : post.id)} style={{ cursor: "pointer" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                        <span style={{ fontSize: 11, color: COLORS.textDim, fontFamily: FONT_UI }}>{post.date}</span>
+                        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                          <span style={s.badge(color)}>{post.format}</span>
+                          <button
+                            onClick={e => { e.stopPropagation(); togglePublished(post.id); }}
+                            style={{ background: isPub ? `${COLORS.accent}18` : "transparent", border: `1px solid ${isPub ? COLORS.accent+"55" : COLORS.border}`, borderRadius: 2, padding: "2px 8px", fontSize: 10, fontFamily: FONT_UI, letterSpacing: "0.06em", color: isPub ? COLORS.accent : COLORS.textMuted, cursor: "pointer", transition: "all 0.15s" }}>
+                            {isPub ? "✓ Pub" : "Publicar"}
+                          </button>
+                        </div>
                       </div>
-
-                      {/* Botão de publicação (não propaga o clique para o card) */}
-                      <button
-                        onClick={e => { e.stopPropagation(); togglePublished(post.id); }}
-                        style={{
-                          background: isPub ? `${COLORS.accent}18` : "transparent",
-                          border: `1px solid ${isPub ? COLORS.accent+"55" : COLORS.border}`,
-                          borderRadius: 2,
-                          padding: "3px 10px",
-                          fontSize: 11,
-                          fontFamily: FONT_UI,
-                          letterSpacing: "0.06em",
-                          color: isPub ? COLORS.accent : COLORS.textMuted,
-                          cursor: "pointer",
-                          transition: "all 0.15s",
-                        }}>
-                        {isPub ? "Publicado" : "Publicar"}
-                      </button>
+                      <div style={{ fontSize: 10, fontWeight: 600, color: COLORS.textMuted, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6 }}>{post.pilar}</div>
+                      <div style={{ fontFamily: FONT_BODY, fontSize: 14, fontStyle: "italic", color: COLORS.text, lineHeight: 1.5, marginBottom: 12 }}>"{post.hook}"</div>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: `1px solid ${COLORS.border}`, paddingTop: 8 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                          <div style={{ width: 6, height: 6, borderRadius: "50%", background: isGen ? COLORS.violet : COLORS.textDim }} />
+                          <span style={{ fontSize: 10, fontFamily: FONT_UI, color: isGen ? COLORS.violet : COLORS.textMuted }}>
+                            {isGen ? "Gerado" : "Não gerado"}
+                          </span>
+                          {hasContent && !isGen && (
+                            <span style={{ fontSize: 10, fontFamily: FONT_UI, color: COLORS.teal, marginLeft: 4 }}>· conteúdo pronto</span>
+                          )}
+                        </div>
+                        <span style={{ fontSize: 11, color: COLORS.textDim }}>{isExp ? "▲" : "▼"}</span>
+                      </div>
                     </div>
+
+                    {/* Painel expandido */}
+                    {isExp && (
+                      <div onClick={e => e.stopPropagation()} style={{ borderTop: `1px solid ${COLORS.border}`, marginTop: 14, paddingTop: 14 }}>
+                        {/* Copiar prompt */}
+                        <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 12 }}>
+                          <button
+                            style={{ ...s.btn("outline"), padding: "6px 14px", fontSize: 12 }}
+                            onClick={() => handleCopyPrompt(post)}>
+                            {copied === post.id ? "✓ Copiado!" : "Copiar Prompt"}
+                          </button>
+                          <span style={{ fontSize: 11, color: COLORS.textDim, fontFamily: FONT_UI, lineHeight: 1.4 }}>
+                            Cole no Claude → copie o JSON → cole abaixo
+                          </span>
+                        </div>
+
+                        {/* Textarea para colar o JSON */}
+                        <textarea
+                          value={current}
+                          onChange={e => setLocalContent(lc => ({ ...lc, [post.id]: e.target.value }))}
+                          placeholder={'Cole aqui o JSON retornado pelo Claude:\n\n{\n  "slides": [...]\n}'}
+                          rows={5}
+                          style={{ ...s.input, fontFamily: "'DM Mono', monospace", fontSize: 11, resize: "vertical", lineHeight: 1.55, marginBottom: 12 }}
+                        />
+
+                        {/* Botão gerar */}
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <button style={s.btn()} onClick={() => handleGenerate(post)}>
+                            {isGen ? "Re-gerar Post HTML" : "Gerar Post HTML"}
+                          </button>
+                          {!hasContent && (
+                            <span style={{ fontSize: 11, color: COLORS.textDim, fontFamily: FONT_UI }}>
+                              sem conteúdo — gera o template base
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -665,11 +721,12 @@ function TabReferencias({ refs, setRefs }) {
 export default function MarketingPage() {
   const [tab, setTab] = useState("calendario");
 
-  const [published,  setPublished]  = useState(() => new Set(loadLS("arcus-published", [])));
-  const [generated,  setGenerated]  = useState(() => new Set(loadLS("arcus-generated", [])));
-  const [metrics,    setMetrics]    = useState(() => loadLS("arcus-metrics", {}));
-  const [kb,         setKb]         = useState(() => loadLS("arcus-kb", []));
-  const [refs,       setRefs]       = useState(() => loadLS("arcus-refs", []));
+  const [published,   setPublished]   = useState(() => new Set(loadLS("arcus-published", [])));
+  const [generated,   setGenerated]   = useState(() => new Set(loadLS("arcus-generated", [])));
+  const [metrics,     setMetrics]     = useState(() => loadLS("arcus-metrics", {}));
+  const [kb,          setKb]          = useState(() => loadLS("arcus-kb", []));
+  const [refs,        setRefs]        = useState(() => loadLS("arcus-refs", []));
+  const [postContent, setPostContent] = useState(() => loadLS("arcus-post-content", {}));
 
   const togglePublished = (id) => {
     setPublished(prev => {
@@ -680,8 +737,8 @@ export default function MarketingPage() {
     });
   };
 
-  const onGenerate = (post) => {
-    openPostInNewTab(post);
+  const onGenerate = (post, rawContent = null) => {
+    openPostInNewTab(post, rawContent);
     setGenerated(prev => {
       if (prev.has(post.id)) return prev;
       const next = new Set(prev);
@@ -714,7 +771,7 @@ export default function MarketingPage() {
         ))}
       </div>
 
-      {tab === "calendario"        && <TabCalendario       published={published} togglePublished={togglePublished} generated={generated} onGenerate={onGenerate} />}
+      {tab === "calendario"        && <TabCalendario       published={published} togglePublished={togglePublished} generated={generated} onGenerate={onGenerate} postContent={postContent} setPostContent={setPostContent} />}
       {tab === "desempenho"        && <TabDesempenho       published={published} metrics={metrics} setMetrics={setMetrics} />}
       {tab === "base-conhecimento" && <TabBaseConhecimento kb={kb} setKb={setKb} />}
       {tab === "referencias"       && <TabReferencias      refs={refs} setRefs={setRefs} />}
