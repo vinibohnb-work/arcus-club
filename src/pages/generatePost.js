@@ -171,68 +171,6 @@ Formato: ${post.format}
 Pilar, Hook e Handle: conforme seção INPUTS no topo deste prompt.
 `;
 
-  const fmt = FMT_MAP[post.format] || FMT_MAP["Estático"];
-
-  const gfonts = `https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap`;
-
-  const base =
-`Gere um arquivo HTML completo e autocontido para visualização de um post de Instagram.
-O HTML deve funcionar diretamente no navegador sem dependências externas, exceto Google Fonts.
-
-━━━ SISTEMA DE DESIGN ━━━
-Google Fonts (importar obrigatoriamente):
-${gfonts}
-
-Cores exatas a usar:
-  bg-page:      #080808   (fundo da página)
-  bg-card:      #141414   (fundo dos cards/seções internas)
-  border:       #2A2A2A   (bordas padrão)
-  text-main:    ${b.corTexto}   (texto principal)
-  text-muted:   #A09890   (texto secundário)
-  text-dim:     #5A5550   (texto fraco, labels)
-  gold:         ${b.corPrimaria}   (dourado — destaques, assinatura, CTAs)
-  violet:       ${b.corDestaque}   (violeta — acentos secundários)
-  fmt-bg:       ${fmt.bg}
-  fmt-border:   ${fmt.border}
-  fmt-light:    ${fmt.light}
-
-Tipografia:
-  display → '${b.fonteDisplay}', Georgia, serif   → títulos, citações — SEMPRE em itálico
-  body    → '${b.fonteCorpo}', Outfit, sans-serif → texto corrido
-  mono    → 'DM Mono', monospace                  → labels, badges, números (uppercase, letter-spacing ≥ .1em)
-
-Estética: premium, austero, minimal. Fundo escuro. Texto respira no espaço. Sem emojis nos posts.
-
-━━━ ESTRUTURA BASE OBRIGATÓRIA ━━━
-1. <header> sticky, height 56px, background rgba(8,8,8,.94), backdrop-filter blur(12px), border-bottom 1px solid #2A2A2A
-   • Esquerda: badge "${fmt.label}" (bg ${fmt.bg}, cor ${fmt.light}, borda ${fmt.border}, DM Mono 10px uppercase padding 3px 10px)
-               + texto "${post.pilar.toUpperCase()}" (DM Mono 12px #5A5550)
-               + texto "${post.date} · ${post.week}" (DM Mono 12px #5A5550)
-   • Direita:  "${b.assinatura}" (${b.fonteDisplay} italic 16px cor ${b.corPrimaria})
-
-2. <section> hero, padding 60px 40px 48px, border-bottom 1px solid #2A2A2A
-   • "${post.pilar}" em DM Mono 10px uppercase cor ${b.corPrimaria}88 letter-spacing .22em mb 20px
-   • Hook "${post.hook}" em ${b.fonteDisplay} italic font-size clamp(32px,5vw,58px) font-weight 300 lh 1.1 max-width 800px
-   • Linha: height 1px, width 80px, background linear-gradient(90deg, ${b.corPrimaria}, transparent), mt 24px
-
-3. <footer> padding 32px 40px 48px, border-top 1px solid #2A2A2A
-   • Seção "Caption para Publicação" (DM Mono 10px uppercase label cor ${b.corPrimaria}99 mb 14px):
-     texto da caption gerada em ${b.fonteCorpo} 15px lh 1.85 white-space:pre-wrap, mb 28px, pb 28px, border-bottom
-   • Grid 2 colunas (2fr 1fr): [CTA padrão "${b.ctaPadrao}" + hashtags] | [4 swatches 24×24px das cores + nome da fonte]
-
-━━━ IDENTIDADE DA MARCA ━━━
-Assinatura: ${b.assinatura}
-Tom de voz: ${b.tomDeVoz}
-CTA padrão: ${b.ctaPadrao}
-Hashtags: ${b.hashtags}
-
-━━━ DADOS DO POST ━━━
-Formato: ${post.format}
-Pilar: ${post.pilar}
-Hook (frase de abertura): "${post.hook}"
-Data: ${post.date} · ${post.week}
-`;
-
   let specific = "";
 
   // ── CARROSSEL ──────────────────────────────────────────────────────────────
