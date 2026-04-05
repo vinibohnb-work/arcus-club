@@ -259,15 +259,15 @@ function TabCalendario({ published, togglePublished, generated, onGenerate, post
                             {copied === post.id ? "✓ Copiado!" : "Copiar Prompt"}
                           </button>
                           <span style={{ fontSize: 11, color: COLORS.textDim, fontFamily: FONT_UI, lineHeight: 1.4 }}>
-                            Cole no Claude → copie o JSON → cole abaixo
+                            Cole no Claude → copie o HTML gerado → cole abaixo
                           </span>
                         </div>
 
-                        {/* Textarea para colar o JSON */}
+                        {/* Textarea para colar o HTML */}
                         <textarea
                           value={current}
                           onChange={e => setLocalContent(lc => ({ ...lc, [post.id]: e.target.value }))}
-                          placeholder={'Cole aqui o JSON retornado pelo Claude:\n\n{\n  "slides": [...]\n}'}
+                          placeholder={"Cole aqui o HTML retornado pelo Claude:\n\n<!DOCTYPE html>\n<html lang=\"pt-BR\">\n..."}
                           rows={5}
                           style={{ ...s.input, fontFamily: "'DM Mono', monospace", fontSize: 11, resize: "vertical", lineHeight: 1.55, marginBottom: 12 }}
                         />
