@@ -30,6 +30,7 @@ export const BRAND_DEFAULTS = {
   fonteDisplay:  "Cormorant Garamond",
   fonteCorpo:    "Outfit",
   assinatura:    "Arcus Club",
+  handle:        "@arcusclub",
   ctaPadrao:     "Quer estruturar sua empresa? Comenta ARCUS ou acessa o link na bio.",
   hashtags:      "#liderança #gestão #empreendedorismo #arcusclub #cultura",
   tomDeVoz:      "Direto, sem rodeios. Usa afirmações provocativas. Evita jargão acadêmico. Tom de autoridade, nunca arrogância.",
@@ -101,10 +102,11 @@ export default function StudioTab() {
       {/* Tipografia + Assinatura */}
       <div style={s.card({ marginBottom: 16 })}>
         <div style={s.sectionTitle}>— Tipografia</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16 }}>
           <Field label="Fonte de Destaque"  k="fonteDisplay"  placeholder="Cormorant Garamond" />
           <Field label="Fonte de Corpo"     k="fonteCorpo"    placeholder="Outfit" />
           <Field label="Assinatura / Marca" k="assinatura"    placeholder="Arcus Club" />
+          <Field label="Handle Instagram"   k="handle"        placeholder="@arcusclub" />
         </div>
       </div>
 

@@ -66,10 +66,111 @@ export function openPostInNewTab(post, rawContent = null) {
   setTimeout(() => URL.revokeObjectURL(url), 60000);
 }
 
-// ── gerador de prompt (HTML direto) ─────────────────────────────────────────
+// ── gerador de prompt (HTML direto — formato provado) ───────────────────────
 export function generatePrompt(post) {
-  const b   = readBrand();
-  const n   = Math.max(2, Math.min(15, parseInt(b.carrosselSlides) || 7));
+  const b      = readBrand();
+  const n      = Math.max(2, Math.min(15, parseInt(b.carrosselSlides) || 7));
+  const handle = b.handle || "@arcusclub";
+  const slug   = post.hook
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 60);
+
+  const fmtSlides = { Carrossel: n, "Estático": 1, Reels: 3, Bastidor: 1, "Arcus Club": 1 };
+  const fmtDesc   = {
+    Carrossel:    "carrossel de Instagram",
+    "Estático":   "post estático de Instagram",
+    Reels:        "storyboard de Reels para Instagram",
+    Bastidor:     "post de bastidor para Instagram",
+    "Arcus Club": "post premium do Arcus Club para Instagram",
+  };
+  const totalSlides = fmtSlides[post.format] || 1;
+  const NN          = String(totalSlides).padStart(2, "0");
+
+  const GRAIN = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`;
+
+  const base =
+`━━━ INPUTS — PREENCHA ANTES DE ENVIAR ━━━
+Pilar:  ${post.pilar}
+Hook:   ${post.hook}
+Handle: ${handle}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Gere um arquivo HTML completo e autocontido que renderiza visualmente um ${fmtDesc[post.format] || "post de Instagram"}.
+O HTML deve funcionar diretamente no navegador sem dependências externas, exceto Google Fonts.
+Não inclua header, footer, painéis explicativos, swatches ou qualquer elemento de documentação.
+O arquivo deve renderizar APENAS os slides do post, como seriam vistos no Instagram.
+
+━━━ SISTEMA DE DESIGN ━━━
+Google Fonts (importar obrigatoriamente):
+https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Jost:wght@400;500;600&display=swap
+
+Cores exatas:
+  bg:           #080808
+  text-main:    #F2EDE4
+  text-muted:   #8A8070
+  gold-start:   #C9A84C
+  gold-end:     #E2C37A
+  border:       #2A2A2A
+
+Tipografia:
+  display → 'Playfair Display', Georgia, serif   → headlines, frases de impacto — SEMPRE bold italic
+  body    → 'Jost', sans-serif                   → texto corrido, labels, CTAs
+
+Gradiente dourado (para palavras-chave em destaque):
+  background: linear-gradient(135deg, #C9A84C, #E2C37A)
+  -webkit-background-clip: text
+  -webkit-text-fill-color: transparent
+  background-clip: text
+  display: inline-block
+
+Estética: dark luxury. Grain texture. Glow radial dourado. Minimal. Sem emojis.
+
+━━━ ELEMENTOS VISUAIS DE FUNDO (presentes em TODOS os slides) ━━━
+Aplicar dentro de cada slide via position:absolute, pointer-events:none, z-index baixo:
+
+  1. Grain texture (z-index 5, opacity 0.18, mix-blend-mode overlay):
+     background-image: ${GRAIN}
+     background-repeat: repeat; background-size: 200px 200px
+
+  2. Glow radial inferior-esquerdo (z-index 2, opacity 1):
+     background: radial-gradient(ellipse 60% 70% at 0% 100%, #C9A84C45 0%, transparent 70%)
+     position: absolute; bottom:0; left:0; right:0; height: 320px
+
+  3. Glow de fundo sutil (z-index 2):
+     background:
+       radial-gradient(ellipse 60% 50% at 20% 40%, #C9A84C0D 0%, transparent 65%),
+       radial-gradient(ellipse 40% 40% at 75% 50%, #C9A84C06 0%, transparent 60%)
+     position: absolute; inset: 0
+
+  4. Shape geométrico (z-index 2, direita do slide):
+     width/height: 260px; border-radius: 50%
+     border: 1px solid #C9A84C14
+     position: absolute; right: 40px; top: 50%; transform: translateY(-50%)
+     ::after pseudo-element: inset 24px; mesmo border
+
+━━━ LAYOUT DOS SLIDES ━━━
+Cada slide: width 1080px, height 1350px (formato 4:5 do Instagram), background #080808, position relative, overflow hidden, flex-shrink 0.
+Os slides são exibidos centralizados na página, empilhados verticalmente, gap 24px, sobre fundo #333.
+Body: display flex, flex-direction column, align-items center, padding 40px 0 64px, gap 24px.
+Não há nav, header, footer nem qualquer outro elemento além dos slides.
+
+━━━ ELEMENTOS FIXOS EM CADA SLIDE ━━━
+Handle (position absolute, bottom 56px, right 64px, z-index 20):
+  font-family Playfair Display, bold italic, font-size 22px, color #F2EDE4, opacity 0.5
+  Texto: conforme Handle nos INPUTS.
+
+Contador (position absolute, top 56px, left 64px, z-index 20):
+  font-family Jost, font-size 13px, font-weight 500, letter-spacing 0.1em, color #8A8070, opacity 0.7
+  Texto: "01/${NN}", "02/${NN}" etc.
+
+━━━ DADOS DO POST ━━━
+Formato: ${post.format}
+Pilar, Hook e Handle: conforme seção INPUTS no topo deste prompt.
+`;
+
   const fmt = FMT_MAP[post.format] || FMT_MAP["Estático"];
 
   const gfonts = `https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap`;
@@ -136,43 +237,52 @@ Data: ${post.date} · ${post.week}
 
   // ── CARROSSEL ──────────────────────────────────────────────────────────────
   if (post.format === "Carrossel") {
-    const LABELS = ["ABERTURA","CONTEXTO","DIAGNÓSTICO","RAIZ","SOLUÇÃO","AÇÃO","CTA","EXTRA 1","EXTRA 2","EXTRA 3","EXTRA 4","EXTRA 5","CTA FINAL"];
-    const slideList = Array.from({length: n}, (_, i) => {
-      const label = LABELS[Math.min(i, LABELS.length-1)];
-      if (i === 0) return `  Slide 1 ABERTURA: título = o hook. Subtítulo de apoio (1 linha, intensifica sem explicar).`;
-      if (i === n-1) return `  Slide ${n} CTA: texto CTA adaptado ao post + assinatura "${b.assinatura}" em ${b.fonteDisplay} italic ${b.corPrimaria}.`;
-      return `  Slide ${i+1} ${label}: título impactivo ≤8 palavras + corpo 2-3 linhas (gere conteúdo real, sem placeholders).`;
+    const MID_LABELS = ["CONTEXTO","DIAGNÓSTICO","RAIZ","SOLUÇÃO","AÇÃO","EXTRA 1","EXTRA 2","EXTRA 3","EXTRA 4","EXTRA 5","EXTRA 6"];
+    const middleSlides = Array.from({length: n - 2}, (_, i) => {
+      const lbl = MID_LABELS[Math.min(i, MID_LABELS.length - 1)];
+      return `  Slide ${i+2} ${lbl.padEnd(12)}: label "${lbl}". Título impactivo ≤7 palavras com span.gold na palavra central. Corpo 2–3 linhas reais.`;
     }).join("\n");
 
     specific =
 `
-━━━ SEÇÃO PRINCIPAL — CARROSSEL ${n} SLIDES ━━━
-Após o hero, <main> padding 40px:
-  Label "Estrutura dos Slides · ${n} slides" em DM Mono 11px #5A5550 uppercase mb 20px
+━━━ CONTEÚDO DOS ${n} SLIDES (TUDO REAL, SEM PLACEHOLDERS) ━━━
+Use o Pilar e o Hook dos INPUTS para gerar conteúdo real e coerente em todos os slides.
+Não deixe nenhum campo em branco nem use texto de exemplo.
 
-Row de cards (overflow-x:auto, display:flex, gap:12px, pb:16px):
-Cada card: width 270px, min-height 270px, border-radius 6px, padding 22px, display:flex flex-direction:column gap:12px flex-shrink:0
+  Slide 1  ABERTURA:    .headline = o Hook dos INPUTS com span.gold na palavra mais forte.
+                        .body-text = 1–2 linhas que intensificam sem explicar, com span.highlight.
+${middleSlides}
+  Slide ${n}  CTA:      label "PRÓXIMO PASSO". Título com span.gold. CTA contextualizado ao post.
+                        .body-text: "${b.ctaPadrao}" com span.highlight nas palavras-chave.
 
-  • Slide 1: bg linear-gradient(145deg,${fmt.bg},#080808), borda 2px solid ${fmt.border}
-    - Topo: label "ABERTURA" DM Mono 9px cor ${fmt.light} uppercase | contador "01/${String(n).padStart(2,"0")}" DM Mono 9px #5A5550
-    - Corpo: "${post.hook}" em ${b.fonteDisplay} italic 18px lh 1.5 flex:1 alinhado ao centro vertical
-    - Subtítulo de apoio logo abaixo: Outfit 13px cor #A09890 (GERE: 1 linha que intensifica o hook)
+━━━ ESTRUTURA DE CADA SLIDE ━━━
+.content (position relative, z-index 10, padding 72px 80px, height 100%, display flex, flex-direction column, justify-content center):
 
-  • Slides 2 a ${n-1}: bg #141414, borda 1px solid #2A2A2A
-    - Topo: label (${b.fonteDisplay} style) DM Mono 9px #5A5550 uppercase | contador
-    - Título do slide: ${b.fonteDisplay} italic 15px cor ${b.corTexto} lh 1.3 (GERE título impactivo)
-    - Corpo: Outfit 13px cor #A09890 lh 1.6 (GERE 2-3 linhas de conteúdo real sem placeholders)
+SLIDE 1 — ABERTURA:
+  .headline: Playfair Display 700 italic, font-size 86px, line-height 1.05, letter-spacing -0.02em,
+             color #F2EDE4, max-width 780px
+  A palavra ou expressão mais forte do hook usa span.gold (gradiente dourado)
+  .divider (mt 48px mb 48px): width 100%, height 1px,
+             background linear-gradient(90deg, transparent, #C9A84C66, transparent)
+  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 640px
+  Frase de apoio usa span.highlight (color #F2EDE4)
 
-  • Último slide (CTA): bg #141414, borda 2px solid ${b.corPrimaria}44
-    - Corpo CTA: Outfit 13px cor #A09890 lh 1.6 (GERE CTA contextualizado ao argumento do post)
-    - Assinatura: ${b.fonteDisplay} italic cor ${b.corPrimaria} font-size 15px mt auto
+SLIDES 2 A ${n-1} — CONTEÚDO:
+  Topo: label da etapa (Jost 600, font-size 11px, letter-spacing 0.18em, uppercase, color #C9A84C,
+        opacity 0.6, mb 32px)
+  .headline: Playfair Display 700 italic, font-size 72px, line-height 1.1, color #F2EDE4, max-width 780px
+  Palavra central do título usa span.gold
+  .divider: igual ao slide 1 (mt 40px mb 40px)
+  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 620px
+  Palavras-chave no body-text usam span.highlight (color #F2EDE4, font-weight 400)
 
-Após a row: bloco de identidade (bg #141414, borda-esq 2px ${fmt.border}) com 3 colunas: Fundo / Tipografia / Acento
-
-CONTEÚDO A GERAR (${n} slides, TUDO REAL, sem "[escrever aqui]"):
-${slideList}
-
-Gere também a caption completa (inclui hashtags) para o footer.
+SLIDE ${n} — CTA:
+  Topo: label "PRÓXIMO PASSO" (mesma estética dos labels)
+  .headline: Playfair Display 700 italic, font-size 72px, line-height 1.1, color #F2EDE4, max-width 780px
+  Expressão de destaque usa span.gold
+  .divider: igual
+  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 620px
+  CTA contextualizado com span.highlight nas palavras-chave
 `;
   }
 
@@ -180,37 +290,25 @@ Gere também a caption completa (inclui hashtags) para o footer.
   else if (post.format === "Reels") {
     specific =
 `
-━━━ SEÇÃO PRINCIPAL — REELS (${b.reelsDuracao}) ━━━
-<main> padding 40px, display:flex gap:40px align-items:flex-start flex-wrap:wrap
+━━━ CONTEÚDO DOS 3 FRAMES (STORYBOARD DE REELS — ${b.reelsDuracao}) ━━━
+Use o Pilar e o Hook dos INPUTS para gerar conteúdo real nos 3 frames.
 
-Coluna esquerda — mockup de celular:
-  width 220px height 390px border-radius 24px border 2px solid ${fmt.border}
-  background ${b.corSecundaria} overflow:hidden position:relative
-  Overlay de gradiente: linear-gradient(180deg, rgba(8,8,8,.44) 0%, transparent 40%, rgba(8,8,8,.88) 100%)
-  Notch no topo: div 40px×4px border-radius 2px bg #2A2A2A centrado
-  Conteúdo centralizado (z-index 1):
-    - Pilar em DM Mono 9px uppercase cor ${b.corPrimaria} letter-spacing .15em mb 12px
-    - Hook visual (gere versão visual ≤8 palavras) em ${b.fonteDisplay} italic 16px lh 1.4 text-center
-  Assinatura no fundo: "${b.assinatura}" ${b.fonteDisplay} italic cor ${b.corPrimaria} 13px
+  Frame 1  HOOK VISUAL:       label "HOOK VISUAL", indicador "[0s – 2s]"
+    .headline 86px: frase de impacto visual ≤8 palavras. span.gold na palavra-chave.
+    .body-text: nota de direção visual / produção.
 
-Coluna direita — roteiro (flex:1 min-width:280px):
-  Label "Roteiro" DM Mono 10px #5A5550 uppercase mb 20px
-  3 blocos empilhados (mb 20px cada), cada bloco: display:flex gap:16px
-    Linha vertical: width 3px border-radius 2px min-height 60px flex-shrink:0
-    Conteúdo:
-      - Label em DM Mono 9px uppercase + tempo entre colchetes DM Mono 10px #5A5550
-      - Texto do roteiro em Outfit 13px #A09890 lh 1.65 (GERE conteúdo real)
+  Frame 2  DESENVOLVIMENTO:   label "DESENVOLVIMENTO", indicador "[2s – central]"
+    .headline 72px: argumento central ≤8 palavras. span.gold.
+    .body-text: 2–3 frases do argumento (use ' / ' para indicar cortes). span.highlight.
 
-  Bloco 1 "HOOK VISUAL" [0s–2s] linha cor ${fmt.light}:
-    GERE: frase de impacto para tela, ≤8 palavras, sem ponto final, sem contexto
-  Bloco 2 "DESENVOLVIMENTO" [2s – porção central] linha cor ${b.corPrimaria}:
-    GERE: argumento central 2-3 frases (use ' / ' para indicar cortes de cena)
-  Bloco 3 "CONCLUSÃO / CTA" [porção final] linha cor ${b.corDestaque}:
-    GERE: virada + CTA mencionando ${b.assinatura} 1-2 frases
+  Frame 3  CONCLUSÃO / CTA:   label "CONCLUSÃO / CTA", indicador "[porção final]"
+    .headline 72px: virada ou pergunta final. span.gold.
+    .body-text: "${b.ctaPadrao}" com span.highlight.
 
-  Box "CTA Final" (bg #141414, borda #2A2A2A, mt 8px): "${b.ctaPadrao}"
-
-Gere também a caption completa para o footer.
+━━━ ESTRUTURA VISUAL (idêntica ao carrossel) ━━━
+Mesma estrutura .content (padding 72px 80px, flex, justify-content center).
+Mesmos elementos de fundo (grain, glows, shape geométrico).
+Handle + contador ("01/03", "02/03", "03/03") em cada frame.
 `;
   }
 
@@ -218,31 +316,22 @@ Gere também a caption completa para o footer.
   else if (post.format === "Estático") {
     specific =
 `
-━━━ SEÇÃO PRINCIPAL — ESTÁTICO 1080×1080px ━━━
-<main> padding 40px, display:flex gap:32px align-items:flex-start flex-wrap:wrap
+━━━ CONTEÚDO DO SLIDE ÚNICO (POST ESTÁTICO) ━━━
+1 slide único, 1080×1350px. Contador "01/01".
 
-Mockup quadrado (width 420px height 420px flex-shrink:0):
-  background ${b.corSecundaria}
-  border 1px solid ${fmt.border}
-  border-radius 8px
-  overflow:hidden position:relative
-  Barra de destaque topo (height 3px): linear-gradient(90deg, ${b.corPrimaria}, ${b.corDestaque}, transparent)
-  Conteúdo centralizado (padding 40px, text-align center):
-    - Pilar: DM Mono 9px uppercase cor ${b.corPrimaria}77 letter-spacing .2em mb 28px
-    - Frase principal: ${b.fonteDisplay} italic font-size clamp(18px,3vw,26px) lh 1.45 cor ${b.corTexto}
-      GERE: versão visual do hook, ≤12 palavras, autossuficiente, impactiva
-    - Texto de apoio (opcional, pode omitir se não agregar):
-      Outfit 13px cor #A09890 text-center mt 16px
-      GERE: 1 linha de apoio ou não inclua
-  Assinatura canto inferior direito: "${b.assinatura}" ${b.fonteDisplay} italic cor ${b.corPrimaria} 13px
+.content (position relative, z-index 10, padding 72px 80px, height 100%, display flex, flex-direction column, justify-content center):
 
-Coluna de especificações (flex:1 min-width:240px):
-  Label "Especificações" DM Mono 10px #5A5550 uppercase mb 16px
-  Tabela de linhas (border-bottom 1px #2A2A2A padding 10px 0) com:
-    Dimensão / Fundo / Cor principal / Fonte / Pilar / Tom
-  (preencha com os valores reais da identidade)
+  Topo: pilar label (Jost 600, 11px, letter-spacing 0.18em, uppercase, color #C9A84C, opacity 0.6, mb 32px)
 
-Gere também a caption completa para o footer.
+  .headline: Playfair Display 700 italic, font-size 86px, line-height 1.05, letter-spacing -0.02em,
+             color #F2EDE4, max-width 780px
+  GERE: versão visual e autossuficiente do hook, ≤12 palavras. span.gold na palavra mais forte.
+
+  .divider (mt 48px mb 48px): width 100%, height 1px,
+             background linear-gradient(90deg, transparent, #C9A84C66, transparent)
+
+  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 640px
+  GERE: 1–2 linhas de apoio que completam sem explicar. span.highlight nas palavras-chave.
 `;
   }
 
@@ -250,33 +339,26 @@ Gere também a caption completa para o footer.
   else if (post.format === "Bastidor") {
     specific =
 `
-━━━ SEÇÃO PRINCIPAL — BASTIDOR ━━━
-<main> padding 40px, display:grid grid-template-columns:1fr 1fr gap:24px align-items:start
+━━━ CONTEÚDO DO SLIDE ÚNICO (BASTIDOR) ━━━
+1 slide único, 1080×1350px. Contador "01/01".
+Post humanizado — mesmo sistema visual, conteúdo mais pessoal e direto.
 
-Coluna 1 — placeholder de imagem/vídeo (aspect-ratio:1):
-  background #141414
-  border 1px dashed ${fmt.border}
-  border-radius 6px
-  Conteúdo centralizado (padding 32px, text-align center):
-    - Ícone ◉ 48×48px circular border dashed ${fmt.border} cor ${fmt.light} font-size 20px
-    - Label "Imagem ou Vídeo" DM Mono 11px #5A5550 uppercase letter-spacing .12em mt 12px
-    - Sugestão de cena: Outfit 13px #5A5550 lh 1.6 mt 8px
-      GERE: descrição da cena ideal para este post (ambiente, ação, composição)
+.content (position relative, z-index 10, padding 72px 80px, height 100%, display flex, flex-direction column, justify-content center):
 
-Coluna 2 — briefing:
-  Label "Briefing do Post" DM Mono 10px #5A5550 uppercase mb 16px
-  4 campos empilhados (mb 16px cada):
-    Label do campo DM Mono 11px #5A5550 uppercase letter-spacing .1em mb 6px
-    Valor em bloco (padding 10px 14px, bg #141414, borda #2A2A2A, borda-esq 2px ${fmt.border})
+  Topo: label "BASTIDOR" (Jost 600, 11px, uppercase, color #C9A84C, opacity 0.6, mb 32px)
 
-  Campo "Contexto": GERE descrição do que acontece nessa cena
-  Campo "Ângulo": GERE o ponto humano — o que essa cena comunica sobre processo/valores
-  Campo "Caption": "${post.hook}" (em itálico)
-  Campo "Tom": "Casual, direto, real. Sem texto excessivo na imagem."
+  Área de imagem placeholder (aspect-ratio 1, border 1px dashed #C9A84C22, border-radius 8px,
+    display flex align-items center justify-content center, mb 48px, background #C9A84C06):
+    Ícone ◉ cor #C9A84C33 font-size 48px + texto "foto ou vídeo aqui" Jost 13px #8A8070 mt 12px
 
-  Box CTA (bg #141414, borda #2A2A2A): "${b.ctaPadrao}"
+  .headline: Playfair Display 700 italic, font-size 56px, line-height 1.1, color #F2EDE4, max-width 780px
+  GERE: caption do bastidor em primeira pessoa, tom direto e humano. span.gold na expressão central.
 
-Gere também a caption completa (primeira pessoa, tom pessoal) para o footer.
+  .divider (mt 40px mb 40px): igual
+
+  .body-text: Jost 400, font-size 22px, line-height 1.75, color #8A8070, max-width 620px
+  GERE: contexto da cena + ângulo narrativo humano. span.highlight nas palavras-chave.
+  Terminar com CTA suave: "${b.ctaPadrao}"
 `;
   }
 
@@ -284,45 +366,72 @@ Gere também a caption completa (primeira pessoa, tom pessoal) para o footer.
   else {
     specific =
 `
-━━━ SEÇÃO PRINCIPAL — ARCUS CLUB ━━━
-<main> padding 40px, display:grid grid-template-columns:3fr 2fr gap:24px align-items:start
+━━━ CONTEÚDO DO SLIDE ÚNICO (ARCUS CLUB) ━━━
+1 slide único, 1080×1350px. Contador "01/01".
+Post de posicionamento premium. Tom: autoridade + pertencimento. Não vende — convida.
 
-Coluna 1 — mockup premium:
-  background linear-gradient(145deg, ${b.corSecundaria}, #100808)
-  border 1px solid ${fmt.border}
-  border-radius 8px
-  padding 40px
-  overflow:hidden position:relative
-  Ornamento: div 200×200px radial-gradient ${b.corPrimaria}0C, posicionado top:-40px right:-40px
+.content (position relative, z-index 10, padding 72px 80px, height 100%, display flex, flex-direction column, justify-content center):
 
-  Conteúdo:
-    - Eyebrow "ARCUS CLUB · ${post.pilar.toUpperCase()}" DM Mono 9px cor ${b.corPrimaria}77 letter-spacing .22em uppercase mb 20px
-    - Headline: ${b.fonteDisplay} italic 22px lh 1.45 cor ${b.corTexto} mb 32px
-      GERE: headline sobre transformação ou pertencimento, 8-12 palavras, não sobre features
-    - Linha separadora: 1px linear-gradient(90deg, ${b.corPrimaria}44, transparent) mb 24px
-    - Corpo: Outfit 14px cor #A09890 lh 1.65 mb 24px
-      GERE: 2-3 frases sobre o valor de pertencer ao programa, sem linguagem de vendas
-    - Botão CTA: padding 10px 24px bg ${b.corPrimaria} cor #0A0800 border-radius 2px DM Mono 12px font-weight 600 uppercase letter-spacing .1em
-      GERE: texto do botão contextualizado (não use "Saiba Mais" genérico)
-    - Assinatura canto inferior direito: "${b.assinatura}" ${b.fonteDisplay} italic cor ${b.corPrimaria} 14px
+  Topo: label "ARCUS CLUB · ${post.pilar.toUpperCase()}"
+        (Jost 600, 11px, letter-spacing 0.18em, uppercase, color #C9A84C, opacity 0.6, mb 32px)
 
-Coluna 2 — brief (5 campos):
-  Label DM Mono 10px #5A5550 uppercase mb 16px
-  Campos: Tipo / Tom / Objetivo / Visual / Métrica (DM Mono label + Outfit valor)
+  .headline: Playfair Display 700 italic, font-size 82px, line-height 1.05, letter-spacing -0.02em,
+             color #F2EDE4, max-width 780px
+  GERE: headline sobre transformação ou pertencimento, 8–12 palavras. span.gold na expressão central.
 
-Gere também a caption completa para o footer.
+  .divider (mt 48px mb 48px): width 100%, height 1px,
+             background linear-gradient(90deg, transparent, #C9A84C66, transparent)
+
+  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 640px
+  GERE: 2–3 frases sobre o valor de pertencer ao programa, sem linguagem de vendas.
+  Terminar com CTA elegante contextualizado. span.highlight nas palavras-chave.
+
+  Linha adicional (mt 40px): Playfair Display italic 20px cor #C9A84C opacity 0.7 — "${b.assinatura}"
 `;
   }
 
-  const output =
+  // ── Export pipeline ─────────────────────────────────────────────────────────
+  const fileList = Array.from({length: totalSlides}, (_, i) =>
+    `card_${String(i+1).padStart(2,"0")}.jpg`
+  ).join("  ·  ");
+  const fmtSlug = post.format.toLowerCase().replace(/[^a-z0-9]+/g, "_");
+
+  const exportSection =
 `
 ━━━ OUTPUT ━━━
 Retorne APENAS o HTML completo começando com <!DOCTYPE html>.
 Sem markdown. Sem \`\`\`html. Sem texto antes ou depois do HTML.
 O arquivo deve ser autocontido e funcionar diretamente no navegador.
+
+━━━ EXPORTAÇÃO EM JPEG ━━━
+Após gerar e salvar o HTML, execute o seguinte pipeline sem pausar para confirmar.
+
+PASSO 1 — Instalar as fontes localmente via npm:
+  npm install @fontsource/playfair-display @fontsource/jost
+
+PASSO 2 — Criar uma cópia do HTML com fontes embutidas em base64 (sem depender do Google Fonts),
+  usando Python para ler os arquivos .woff2 de:
+    node_modules/@fontsource/playfair-display/files/playfair-display-latin-700-italic.woff2
+    node_modules/@fontsource/jost/files/jost-latin-400-normal.woff2
+    node_modules/@fontsource/jost/files/jost-latin-500-normal.woff2
+    node_modules/@fontsource/jost/files/jost-latin-600-normal.woff2
+  Remover o <link> do Google Fonts e injetar os @font-face com src data:font/woff2;base64,…
+  antes do </style>.
+
+PASSO 3 — Usar Playwright (Python, sync API) para capturar cada .slide:
+  - Contexto com viewport 1280×1400 e device_scale_factor=2
+  - goto() com wait_until="networkidle" + wait_for_timeout(3000)
+  - slide.screenshot() com type="jpeg", quality=95, scale="device"
+  - Resultado: ${totalSlides} arquivo${totalSlides > 1 ? "s" : ""} ${fileList} em 2160×2700px
+
+PASSO 4 — Empacotar os ${totalSlides} JPEG${totalSlides > 1 ? "s" : ""} num único arquivo ZIP e disponibilizar para download.
+
+Nomes de saída (usar slug do Hook dos INPUTS, em minúsculas com hífens):
+  HTML base:   ${fmtSlug}_${slug}.html
+  ZIP final:   ${fmtSlug}_${slug}_slides.zip
 `;
 
-  return base + specific + output;
+  return base + specific + exportSection;
 }
 
 // ── metadados por formato ────────────────────────────────────────────────────
