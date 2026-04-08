@@ -70,7 +70,7 @@ export function openPostInNewTab(post, rawContent = null) {
 export function generatePrompt(post) {
   const b      = readBrand();
   const n      = Math.max(2, Math.min(15, parseInt(b.carrosselSlides) || 7));
-  const handle = b.handle || "@arcusclub";
+  const handle = b.handle || "@oviniciusbohn";
   const slug   = post.hook
     .toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -175,10 +175,10 @@ Pilar, Hook e Handle: conforme seção INPUTS no topo deste prompt.
 
   // ── CARROSSEL ──────────────────────────────────────────────────────────────
   if (post.format === "Carrossel") {
-    const MID_LABELS = ["CONTEXTO","DIAGNÓSTICO","RAIZ","SOLUÇÃO","AÇÃO","EXTRA 1","EXTRA 2","EXTRA 3","EXTRA 4","EXTRA 5","EXTRA 6"];
+    const MID_LABELS = ["Contexto","Diagnóstico","Raiz","Solução","Ação","Extra 1","Extra 2","Extra 3","Extra 4","Extra 5","Extra 6"];
     const middleSlides = Array.from({length: n - 2}, (_, i) => {
       const lbl = MID_LABELS[Math.min(i, MID_LABELS.length - 1)];
-      return `  Slide ${i+2} ${lbl.padEnd(12)}: label "${lbl}". Título impactivo ≤7 palavras com span.gold na palavra central. Corpo 2–3 linhas reais.`;
+      return `Slide ${i+2} ${lbl.toUpperCase().padEnd(12)}: label "${lbl}". Título impactivo ≤7 palavras com span.gold na palavra central. Corpo 2–3 linhas reais.`;
     }).join("\n");
 
     specific =
@@ -187,40 +187,48 @@ Pilar, Hook e Handle: conforme seção INPUTS no topo deste prompt.
 Use o Pilar e o Hook dos INPUTS para gerar conteúdo real e coerente em todos os slides.
 Não deixe nenhum campo em branco nem use texto de exemplo.
 
-  Slide 1  ABERTURA:    .headline = o Hook dos INPUTS com span.gold na palavra mais forte.
-                        .body-text = 1–2 linhas que intensificam sem explicar, com span.highlight.
+Slide 1 ABERTURA: headline = o Hook dos INPUTS com span.gold na expressão mais forte.
+  body-text = 1–2 linhas que intensificam sem explicar, com span.highlight.
 ${middleSlides}
-  Slide ${n}  CTA:      label "PRÓXIMO PASSO". Título com span.gold. CTA contextualizado ao post.
-                        .body-text: "${b.ctaPadrao}" com span.highlight nas palavras-chave.
+Slide ${n} CTA: label "Próximo Passo". Título com span.gold. CTA contextualizado ao post.
+  body-text: "${b.ctaPadrao}" com span.highlight nas palavras-chave.
 
 ━━━ ESTRUTURA DE CADA SLIDE ━━━
-.content (position relative, z-index 10, padding 72px 80px, height 100%, display flex, flex-direction column, justify-content center):
+.content (position relative, z-index 10, padding 130px 80px, height 100%, display flex, flex-direction column, justify-content center):
 
-SLIDE 1 — ABERTURA:
-  .headline: Playfair Display 700 italic, font-size 86px, line-height 1.05, letter-spacing -0.02em,
-             color #F2EDE4, max-width 780px
-  A palavra ou expressão mais forte do hook usa span.gold (gradiente dourado)
-  .divider (mt 48px mb 48px): width 100%, height 1px,
+SLIDE 1 — ABERTURA (classe adicional .slide-capa):
+  Elemento especial: .photo (position absolute, inset 0, z-index 3, pointer-events none,
+    background-size cover, background-position center 20%, opacity 0.13)
+  Vignette sobre a foto: .vignette (position absolute, inset 0, z-index 4, pointer-events none,
+    background: radial-gradient(ellipse 80% 90% at 50% 50%, transparent 30%, #080808 80%),
+                linear-gradient(to bottom, #080808 0%, transparent 25%, transparent 75%, #080808 100%))
+
+  .headline: Playfair Display bold italic, font-size 103px, line-height 1.04,
+             letter-spacing -0.02em, color #F2EDE4, max-width 900px
+  A palavra ou expressão mais forte usa span.gold (gradiente dourado)
+  .divider (mt 52px mb 52px): width 100%, height 1px,
              background linear-gradient(90deg, transparent, #C9A84C66, transparent)
-  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 640px
+  .body-text: Jost 400, font-size 38px, line-height 1.6, color #8A8070, max-width 900px
   Frase de apoio usa span.highlight (color #F2EDE4)
 
 SLIDES 2 A ${n-1} — CONTEÚDO:
-  Topo: label da etapa (Jost 600, font-size 11px, letter-spacing 0.18em, uppercase, color #C9A84C,
-        opacity 0.6, mb 32px)
-  .headline: Playfair Display 700 italic, font-size 72px, line-height 1.1, color #F2EDE4, max-width 780px
+  Topo: label da etapa (Jost 600, font-size 13px, letter-spacing 0.22em, uppercase,
+        color #C9A84C, opacity 0.7, mb 44px)
+  .headline: Playfair Display bold italic, font-size 86px, line-height 1.07,
+             color #F2EDE4, max-width 900px
   Palavra central do título usa span.gold
-  .divider: igual ao slide 1 (mt 40px mb 40px)
-  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 620px
+  .divider-sm: igual ao divider, margin 48px 0
+  .body-text: Jost 400, font-size 38px, line-height 1.6, color #8A8070, max-width 900px
   Palavras-chave no body-text usam span.highlight (color #F2EDE4, font-weight 400)
 
 SLIDE ${n} — CTA:
-  Topo: label "PRÓXIMO PASSO" (mesma estética dos labels)
-  .headline: Playfair Display 700 italic, font-size 72px, line-height 1.1, color #F2EDE4, max-width 780px
+  Topo: label "Próximo Passo" (mesma estética dos labels dos slides 2–${n-1})
+  .headline: Playfair Display bold italic, font-size 86px, line-height 1.07,
+             color #F2EDE4, max-width 900px
   Expressão de destaque usa span.gold
-  .divider: igual
-  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 620px
-  CTA contextualizado com span.highlight nas palavras-chave
+  .divider-sm: igual
+  .body-text: Jost 400, font-size 38px, line-height 1.6, color #8A8070, max-width 900px
+  CTA de ação contextualizado ao post, com span.highlight nas palavras-chave
 `;
   }
 
@@ -231,21 +239,22 @@ SLIDE ${n} — CTA:
 ━━━ CONTEÚDO DOS 3 FRAMES (STORYBOARD DE REELS — ${b.reelsDuracao}) ━━━
 Use o Pilar e o Hook dos INPUTS para gerar conteúdo real nos 3 frames.
 
-  Frame 1  HOOK VISUAL:       label "HOOK VISUAL", indicador "[0s – 2s]"
-    .headline 86px: frase de impacto visual ≤8 palavras. span.gold na palavra-chave.
-    .body-text: nota de direção visual / produção.
+Frame 1  HOOK VISUAL:       label "Hook Visual", indicador "[0s – 2s]"
+  .headline 103px: frase de impacto visual ≤8 palavras. span.gold na expressão mais forte.
+  .body-text 38px: nota de direção visual / produção. span.highlight nas palavras-chave.
 
-  Frame 2  DESENVOLVIMENTO:   label "DESENVOLVIMENTO", indicador "[2s – central]"
-    .headline 72px: argumento central ≤8 palavras. span.gold.
-    .body-text: 2–3 frases do argumento (use ' / ' para indicar cortes). span.highlight.
+Frame 2  DESENVOLVIMENTO:   label "Desenvolvimento", indicador "[2s – central]"
+  .headline 86px: argumento central ≤8 palavras. span.gold.
+  .body-text 38px: 2–3 frases do argumento (use ' / ' para indicar cortes). span.highlight.
 
-  Frame 3  CONCLUSÃO / CTA:   label "CONCLUSÃO / CTA", indicador "[porção final]"
-    .headline 72px: virada ou pergunta final. span.gold.
-    .body-text: "${b.ctaPadrao}" com span.highlight.
+Frame 3  CONCLUSÃO / CTA:   label "Conclusão / CTA", indicador "[porção final]"
+  .headline 86px: virada ou pergunta final. span.gold.
+  .body-text 38px: "${b.ctaPadrao}" com span.highlight.
 
 ━━━ ESTRUTURA VISUAL (idêntica ao carrossel) ━━━
-Mesma estrutura .content (padding 72px 80px, flex, justify-content center).
-Mesmos elementos de fundo (grain, glows, shape geométrico).
+.content (padding 130px 80px, flex, justify-content center).
+Frame 1 usa classe adicional .slide-capa com .photo (opacity 0.13) e .vignette.
+Mesmos elementos de fundo (grain, glows, shape geométrico) em todos os frames.
 Handle + contador ("01/03", "02/03", "03/03") em cada frame.
 `;
   }
@@ -257,18 +266,18 @@ Handle + contador ("01/03", "02/03", "03/03") em cada frame.
 ━━━ CONTEÚDO DO SLIDE ÚNICO (POST ESTÁTICO) ━━━
 1 slide único, 1080×1350px. Contador "01/01".
 
-.content (position relative, z-index 10, padding 72px 80px, height 100%, display flex, flex-direction column, justify-content center):
+.content (position relative, z-index 10, padding 130px 80px, height 100%, display flex, flex-direction column, justify-content center):
 
-  Topo: pilar label (Jost 600, 11px, letter-spacing 0.18em, uppercase, color #C9A84C, opacity 0.6, mb 32px)
+  Topo: pilar label (Jost 600, 13px, letter-spacing 0.22em, uppercase, color #C9A84C, opacity 0.7, mb 44px)
 
-  .headline: Playfair Display 700 italic, font-size 86px, line-height 1.05, letter-spacing -0.02em,
-             color #F2EDE4, max-width 780px
-  GERE: versão visual e autossuficiente do hook, ≤12 palavras. span.gold na palavra mais forte.
+  .headline: Playfair Display bold italic, font-size 103px, line-height 1.04, letter-spacing -0.02em,
+             color #F2EDE4, max-width 900px
+  GERE: versão visual e autossuficiente do hook, ≤12 palavras. span.gold na expressão mais forte.
 
-  .divider (mt 48px mb 48px): width 100%, height 1px,
+  .divider (mt 52px mb 52px): width 100%, height 1px,
              background linear-gradient(90deg, transparent, #C9A84C66, transparent)
 
-  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 640px
+  .body-text: Jost 400, font-size 38px, line-height 1.6, color #8A8070, max-width 900px
   GERE: 1–2 linhas de apoio que completam sem explicar. span.highlight nas palavras-chave.
 `;
   }
@@ -281,20 +290,21 @@ Handle + contador ("01/03", "02/03", "03/03") em cada frame.
 1 slide único, 1080×1350px. Contador "01/01".
 Post humanizado — mesmo sistema visual, conteúdo mais pessoal e direto.
 
-.content (position relative, z-index 10, padding 72px 80px, height 100%, display flex, flex-direction column, justify-content center):
+.content (position relative, z-index 10, padding 130px 80px, height 100%, display flex, flex-direction column, justify-content center):
 
-  Topo: label "BASTIDOR" (Jost 600, 11px, uppercase, color #C9A84C, opacity 0.6, mb 32px)
+  Topo: label "Bastidor" (Jost 600, 13px, letter-spacing 0.22em, uppercase, color #C9A84C, opacity 0.7, mb 44px)
 
   Área de imagem placeholder (aspect-ratio 1, border 1px dashed #C9A84C22, border-radius 8px,
     display flex align-items center justify-content center, mb 48px, background #C9A84C06):
     Ícone ◉ cor #C9A84C33 font-size 48px + texto "foto ou vídeo aqui" Jost 13px #8A8070 mt 12px
 
-  .headline: Playfair Display 700 italic, font-size 56px, line-height 1.1, color #F2EDE4, max-width 780px
+  .headline: Playfair Display bold italic, font-size 72px, line-height 1.07, color #F2EDE4, max-width 900px
   GERE: caption do bastidor em primeira pessoa, tom direto e humano. span.gold na expressão central.
 
-  .divider (mt 40px mb 40px): igual
+  .divider-sm (mt 48px mb 48px): width 100%, height 1px,
+    background linear-gradient(90deg, transparent, #C9A84C66, transparent)
 
-  .body-text: Jost 400, font-size 22px, line-height 1.75, color #8A8070, max-width 620px
+  .body-text: Jost 400, font-size 38px, line-height 1.6, color #8A8070, max-width 900px
   GERE: contexto da cena + ângulo narrativo humano. span.highlight nas palavras-chave.
   Terminar com CTA suave: "${b.ctaPadrao}"
 `;
@@ -308,23 +318,23 @@ Post humanizado — mesmo sistema visual, conteúdo mais pessoal e direto.
 1 slide único, 1080×1350px. Contador "01/01".
 Post de posicionamento premium. Tom: autoridade + pertencimento. Não vende — convida.
 
-.content (position relative, z-index 10, padding 72px 80px, height 100%, display flex, flex-direction column, justify-content center):
+.content (position relative, z-index 10, padding 130px 80px, height 100%, display flex, flex-direction column, justify-content center):
 
-  Topo: label "ARCUS CLUB · ${post.pilar.toUpperCase()}"
-        (Jost 600, 11px, letter-spacing 0.18em, uppercase, color #C9A84C, opacity 0.6, mb 32px)
+  Topo: label "Arcus Club · ${post.pilar}"
+        (Jost 600, 13px, letter-spacing 0.22em, uppercase, color #C9A84C, opacity 0.7, mb 44px)
 
-  .headline: Playfair Display 700 italic, font-size 82px, line-height 1.05, letter-spacing -0.02em,
-             color #F2EDE4, max-width 780px
+  .headline: Playfair Display bold italic, font-size 103px, line-height 1.04, letter-spacing -0.02em,
+             color #F2EDE4, max-width 900px
   GERE: headline sobre transformação ou pertencimento, 8–12 palavras. span.gold na expressão central.
 
-  .divider (mt 48px mb 48px): width 100%, height 1px,
+  .divider (mt 52px mb 52px): width 100%, height 1px,
              background linear-gradient(90deg, transparent, #C9A84C66, transparent)
 
-  .body-text: Jost 400, font-size 24px, line-height 1.75, color #8A8070, max-width 640px
+  .body-text: Jost 400, font-size 38px, line-height 1.6, color #8A8070, max-width 900px
   GERE: 2–3 frases sobre o valor de pertencer ao programa, sem linguagem de vendas.
   Terminar com CTA elegante contextualizado. span.highlight nas palavras-chave.
 
-  Linha adicional (mt 40px): Playfair Display italic 20px cor #C9A84C opacity 0.7 — "${b.assinatura}"
+  Linha adicional (mt 40px): Playfair Display bold italic 24px cor #C9A84C opacity 0.7 — "${b.assinatura}"
 `;
   }
 

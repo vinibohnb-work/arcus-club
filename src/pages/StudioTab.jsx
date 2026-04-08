@@ -30,7 +30,7 @@ export const BRAND_DEFAULTS = {
   fonteDisplay:  "Cormorant Garamond",
   fonteCorpo:    "Outfit",
   assinatura:    "Arcus Club",
-  handle:        "@arcusclub",
+  handle:        "@oviniciusbohn",
   ctaPadrao:     "Quer estruturar sua empresa? Comenta ARCUS ou acessa o link na bio.",
   hashtags:      "#liderança #gestão #empreendedorismo #arcusclub #cultura",
   tomDeVoz:      "Direto, sem rodeios. Usa afirmações provocativas. Evita jargão acadêmico. Tom de autoridade, nunca arrogância.",
