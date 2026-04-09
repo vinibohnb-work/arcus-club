@@ -458,33 +458,6 @@ export default function PropostaPage() {
         </div>
       </div>
 
-      {/* ── Botão de impressão (não aparece no PDF) ── */}
-      <button
-        className="no-print"
-        onClick={() => window.print()}
-        style={{
-          position: 'fixed',
-          bottom: 32,
-          right: 32,
-          padding: '13px 28px',
-          background: COLORS.accent,
-          border: 'none',
-          borderRadius: 2,
-          color: '#0A0800',
-          fontSize: 13,
-          fontWeight: 600,
-          fontFamily: FONT_UI,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          cursor: 'pointer',
-          boxShadow: `0 4px 24px ${COLORS.accent}44`,
-          transition: 'all 0.2s',
-        }}
-        onMouseEnter={e => { e.target.style.background = COLORS.accentLight }}
-        onMouseLeave={e => { e.target.style.background = COLORS.accent }}
-      >
-        Salvar como PDF
-      </button>
     </div>
   )
 }
