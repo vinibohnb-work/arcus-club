@@ -118,18 +118,6 @@ export default function PropostaPage() {
             `,
           }} />
 
-          {/* ── Foto dos mentores (decorativa, baixa opacidade) ── */}
-          <img src="/vini-e-victor.jpeg" alt="" style={{
-            position: 'absolute', bottom: 0, right: 0,
-            width: 360, height: 260,
-            objectFit: 'cover', objectPosition: 'center top',
-            pointerEvents: 'none', zIndex: 0,
-            opacity: 0.16,
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 28%, black 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 20%, black 85%, transparent 100%)',
-            maskImage: 'linear-gradient(to right, transparent 0%, black 28%, black 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 20%, black 85%, transparent 100%)',
-            WebkitMaskComposite: 'source-in',
-            maskComposite: 'intersect',
-          }} />
 
           {/* ── Linha topo ── */}
           <div style={{
@@ -225,12 +213,32 @@ export default function PropostaPage() {
                 </div>
               ))}
 
+              {/* Card vazio para balancear o grid (7 itens = 4+3, última linha tem espaço) */}
+              {DELIVERABLES.length % 2 !== 0 && (
+                <div style={{
+                  background: 'transparent',
+                  border: `1px dashed ${COLORS.border}44`,
+                  borderRadius: 4,
+                  padding: '16px 18px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: 22, color: COLORS.accent, marginBottom: 6, opacity: 0.5 }}>◈</div>
+                    <div style={{ fontSize: 10, color: COLORS.textDim, textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+                      E muito mais
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* ── Rodapé ── */}
             <div style={{
               marginTop: 28,
               paddingTop: 20,
+              borderTop: `1px solid ${COLORS.border}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -240,6 +248,12 @@ export default function PropostaPage() {
               </div>
             </div>
           </div>
+
+          {/* ── Linha base ── */}
+          <div style={{
+            height: 2,
+            background: `linear-gradient(90deg, transparent 0%, ${COLORS.accent}55 30%, ${COLORS.accent}88 50%, ${COLORS.accent}55 70%, transparent 100%)`,
+          }} />
         </div>
 
         {/* ══════════════ SEGUNDA FOLHA — PLATAFORMA ══════════════ */}
