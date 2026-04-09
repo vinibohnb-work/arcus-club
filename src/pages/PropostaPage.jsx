@@ -329,7 +329,7 @@ export default function PropostaPage() {
               <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
 
                 {/* ── Painel esquerdo ── */}
-                <div style={{ width: 220, flexShrink: 0, padding: '28px 24px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0, borderRight: `1px solid ${COLORS.border}` }}>
+                <div style={{ width: 270, flexShrink: 0, padding: '28px 24px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0, borderRight: `1px solid ${COLORS.border}` }}>
 
                   {/* Rótulo */}
                   <div style={{ fontSize: 7.5, color: COLORS.accent, textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: 8, alignSelf: 'flex-start' }}>Central do Mentorado</div>
