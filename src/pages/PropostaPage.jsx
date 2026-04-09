@@ -121,12 +121,12 @@ export default function PropostaPage() {
           {/* ── Foto dos mentores (decorativa, baixa opacidade) ── */}
           <img src="/vini-e-victor.jpeg" alt="" style={{
             position: 'absolute', bottom: 0, right: 0,
-            width: 340, height: 480,
+            width: 340, height: 540,
             objectFit: 'cover', objectPosition: 'center top',
             pointerEvents: 'none', zIndex: 0,
-            opacity: 0.15,
-            WebkitMaskImage: 'linear-gradient(135deg, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 42%, black 62%)',
-            maskImage: 'linear-gradient(135deg, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 42%, black 62%)',
+            opacity: 0.16,
+            WebkitMaskImage: 'linear-gradient(to top right, transparent 10%, rgba(0,0,0,0.5) 45%, black 70%)',
+            maskImage: 'linear-gradient(to top right, transparent 10%, rgba(0,0,0,0.5) 45%, black 70%)',
           }} />
 
           {/* ── Linha topo ── */}
@@ -223,25 +223,6 @@ export default function PropostaPage() {
                 </div>
               ))}
 
-              {/* Card vazio para balancear o grid (7 itens = 4+3, última linha tem espaço) */}
-              {DELIVERABLES.length % 2 !== 0 && (
-                <div style={{
-                  background: 'transparent',
-                  border: `1px dashed ${COLORS.border}44`,
-                  borderRadius: 4,
-                  padding: '16px 18px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 22, color: COLORS.accent, marginBottom: 6, opacity: 0.5 }}>◈</div>
-                    <div style={{ fontSize: 10, color: COLORS.textDim, textTransform: 'uppercase', letterSpacing: '0.14em' }}>
-                      E muito mais
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* ── Rodapé ── */}
