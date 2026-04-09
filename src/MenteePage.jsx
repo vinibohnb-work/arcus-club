@@ -21,9 +21,8 @@ const OR = 178;                   // orbit radius  (center → balloon anchor)
 
 const MENU = [
   { id: "milestones",  label: "Minha Jornada",      icon: "🎯", angle: -70 },
-  { id: "home",        label: "Plano Base",          icon: "📋", angle: -35 },
-  { id: "custom",      label: "Plano Personalizado", icon: "✍️", angle:   0 },
-  { id: "prospecting", label: "Prospecção",          icon: "🏫", angle:  35 },
+  { id: "custom",      label: "Plano Personalizado", icon: "✍️", angle: -23 },
+  { id: "prospecting", label: "Prospecção",          icon: "🏫", angle:  23 },
   { id: "resources",   label: "Recursos",            icon: "📚", angle:  70 },
 ];
 
@@ -918,7 +917,6 @@ export default function MenteePage() {
   const renderContent = () => {
     switch (activeTab) {
       case "milestones":  return <MilestonesContent mentee={mentee} milestones={milestones} doneCount={doneCount} pct={pct} isAdmin={isAdmin} payments={mentee.payments} onToggleMilestone={(i) => { const next = milestones.map((v,idx) => idx===i ? !v : v); saveMilestones(next); }} />;
-      case "home":        return <PlanBaseContent mentee={mentee} isAdmin={isAdmin} basePlan={basePlan} onSaveBasePlan={saveBasePlan} />;
       case "custom":      return <CustomPlanContent mentee={mentee} isAdmin={isAdmin} onSaveCustomPlan={saveCustomPlan} />;
       case "prospecting": return <ProspectingContent menteeId={id} prospects={prospects} setProspects={setProspects} />;
       case "resources":   return <ResourcesContent menteeId={id} files={files} isAdmin={isAdmin} onRefresh={loadFiles} />;
