@@ -125,8 +125,10 @@ export default function PropostaPage() {
             objectFit: 'cover', objectPosition: 'center top',
             pointerEvents: 'none', zIndex: 0,
             opacity: 0.16,
-            WebkitMaskImage: 'linear-gradient(to top right, transparent 10%, rgba(0,0,0,0.5) 45%, black 70%)',
-            maskImage: 'linear-gradient(to top right, transparent 10%, rgba(0,0,0,0.5) 45%, black 70%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 28%, black 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 20%, black 85%, transparent 100%)',
+            maskImage: 'linear-gradient(to right, transparent 0%, black 28%, black 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 20%, black 85%, transparent 100%)',
+            WebkitMaskComposite: 'source-in',
+            maskComposite: 'intersect',
           }} />
 
           {/* ── Linha topo ── */}
