@@ -118,6 +118,17 @@ export default function PropostaPage() {
             `,
           }} />
 
+          {/* ── Foto dos mentores (decorativa, baixa opacidade) ── */}
+          <img src="/vini-e-victor.jpeg" alt="" style={{
+            position: 'absolute', bottom: 0, right: 0,
+            width: 340, height: 480,
+            objectFit: 'cover', objectPosition: 'center top',
+            pointerEvents: 'none', zIndex: 0,
+            opacity: 0.15,
+            WebkitMaskImage: 'linear-gradient(135deg, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 42%, black 62%)',
+            maskImage: 'linear-gradient(135deg, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 42%, black 62%)',
+          }} />
+
           {/* ── Linha topo ── */}
           <div style={{
             height: 3,
