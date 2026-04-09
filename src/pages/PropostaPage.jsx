@@ -121,7 +121,7 @@ export default function PropostaPage() {
           {/* ── Foto dos mentores (decorativa, baixa opacidade) ── */}
           <img src="/vini-e-victor.jpeg" alt="" style={{
             position: 'absolute', bottom: 0, right: 0,
-            width: 340, height: 540,
+            width: 360, height: 310,
             objectFit: 'cover', objectPosition: 'center top',
             pointerEvents: 'none', zIndex: 0,
             opacity: 0.16,
