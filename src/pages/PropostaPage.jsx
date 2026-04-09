@@ -229,7 +229,6 @@ export default function PropostaPage() {
             <div style={{
               marginTop: 28,
               paddingTop: 20,
-              borderTop: `1px solid ${COLORS.border}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
