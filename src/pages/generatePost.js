@@ -78,7 +78,7 @@ export function generatePrompt(post) {
     .replace(/^-|-$/g, "")
     .slice(0, 60);
 
-  const fmtSlides = { Carrossel: n, "Estático": 1, Reels: 3, Bastidor: 1, "Arcus Club": 1 };
+  const fmtSlides = { Carrossel: n, "Estático": 1, Reels: 5, Bastidor: 1, "Arcus Club": 1 };
   const fmtDesc   = {
     Carrossel:    "carrossel de Instagram",
     "Estático":   "post estático de Instagram",
@@ -236,26 +236,71 @@ SLIDE ${n} — CTA:
   else if (post.format === "Reels") {
     specific =
 `
-━━━ CONTEÚDO DOS 3 FRAMES (STORYBOARD DE REELS — ${b.reelsDuracao}) ━━━
-Use o Pilar e o Hook dos INPUTS para gerar conteúdo real nos 3 frames.
+━━━ OBJETIVO ━━━
+Gere um roteiro completo de Reels para viralização — ${b.reelsDuracao} — e renderize-o como
+5 frames HTML que representam os momentos-chave do vídeo.
+Use o Pilar e o Hook dos INPUTS. Tudo deve ser conteúdo real, sem placeholder.
 
-Frame 1  HOOK VISUAL:       label "Hook Visual", indicador "[0s – 2s]"
-  .headline 103px: frase de impacto visual ≤8 palavras. span.gold na expressão mais forte.
-  .body-text 38px: nota de direção visual / produção. span.highlight nas palavras-chave.
+━━━ PRINCÍPIOS DE VIRALIZAÇÃO ━━━
+• Hook: os primeiros 2s determinam se a pessoa para ou rola. Deve gerar curiosidade, discordância
+  ou reconhecimento imediato ("isso sou eu").
+• Ritmo: frases curtas, máximo 10 palavras por linha falada. Uma ideia por cena.
+• Virada: o Reel precisa de um momento de "não sabia disso" ou "nunca pensei assim".
+• CTA: pedir algo concreto (salvar, comentar UMA palavra, marcar alguém). Nunca dois pedidos.
 
-Frame 2  DESENVOLVIMENTO:   label "Desenvolvimento", indicador "[2s – central]"
-  .headline 86px: argumento central ≤8 palavras. span.gold.
-  .body-text 38px: 2–3 frases do argumento (use ' / ' para indicar cortes). span.highlight.
+━━━ ROTEIRO — 5 FRAMES ━━━
 
-Frame 3  CONCLUSÃO / CTA:   label "Conclusão / CTA", indicador "[porção final]"
-  .headline 86px: virada ou pergunta final. span.gold.
-  .body-text 38px: "${b.ctaPadrao}" com span.highlight.
+FRAME 1 — HOOK [0s – 3s]  (label "Hook", contador "01/05")
+  Objetivo: parar o scroll em até 2 segundos.
+  Fala na câmera OU texto na tela (escolha o mais impactante para o tema):
+    GERE: afirmação provocativa, pergunta que gera discordância, ou dado surpreendente.
+    ≤10 palavras. Sem introdução. Sem "olá". Começa no meio da ideia.
+  Texto na tela (overlay): versão condensada ≤6 palavras. span.gold na expressão-chave.
+  Direção visual: câmera close no rosto OU texto animado sobre fundo escuro.
 
-━━━ ESTRUTURA VISUAL (idêntica ao carrossel) ━━━
-.content (padding 130px 80px, flex, justify-content center).
+FRAME 2 — CONTEXTO [3s – 8s]  (label "Contexto", contador "02/05")
+  Objetivo: o problema que a audiência reconhece em si mesma.
+  Fala: 2–3 frases curtas que descrevem a situação com especificidade.
+    GERE: cena real, comportamento concreto. Sem generalização.
+  Texto na tela: frase de 1 linha. span.gold no dado ou comportamento central.
+  Direção visual: B-roll de ambiente de trabalho OU câmera falando diretamente.
+
+FRAME 3 — VIRADA [8s – 22s]  (label "Virada", contador "03/05")
+  Objetivo: o insight que muda a perspectiva — o motivo de salvar o vídeo.
+  Fala: 3–4 frases. A primeira deve ser a mais impactante (estrutura "o que ninguém te conta é…").
+    GERE: contraste entre o que as pessoas fazem e o que funciona de verdade.
+  Texto na tela: 1–2 linhas com a ideia central. span.gold na virada. span.highlight no contraste.
+  Direção visual: câmera + corte seco para texto OU lista aparecendo na tela.
+
+FRAME 4 — SOLUÇÃO [22s – 38s]  (label "Solução", contador "04/05")
+  Objetivo: o passo concreto que a pessoa pode aplicar hoje.
+  Fala: estrutura "Faça isso: [ação específica]. O resultado é [resultado tangível]."
+    GERE: instrução precisa, sem teoria. Algo que cabe em 1 frase de ação.
+  Texto na tela: a instrução em destaque. span.gold na ação. span.highlight no resultado.
+  Direção visual: tela de celular, quadro branco, ou câmera falando direto.
+
+FRAME 5 — CTA [38s – fim]  (label "CTA", contador "05/05")
+  Objetivo: converter atenção em ação — salvo, comentário ou seguidor.
+  Fala: 1 pedido único e específico. Justificar POR QUÊ vale a pena fazer aquilo.
+    GERE: CTA contextualizado ao conteúdo do Reel (não genérico).
+    Exemplo de estrutura: "Se isso fez sentido, salva — você vai querer rever quando [situação real]."
+  Texto na tela: o CTA em uma linha. span.gold na palavra de ação.
+  Direção visual: câmera, olho no olho, sem cortes.
+
+━━━ ESTRUTURA DE CADA FRAME (HTML) ━━━
+Cada frame: 1080×1350px, mesmos elementos visuais de fundo (grain, glows, shape geométrico).
 Frame 1 usa classe adicional .slide-capa com .photo (opacity 0.13) e .vignette.
-Mesmos elementos de fundo (grain, glows, shape geométrico) em todos os frames.
-Handle + contador ("01/03", "02/03", "03/03") em cada frame.
+.content (padding 130px 80px, display flex, flex-direction column, justify-content center, z-index 10):
+
+  Label da etapa: Jost 600, 13px, letter-spacing 0.22em, uppercase, color #C9A84C, opacity 0.7, mb 16px
+  Indicador de tempo: Jost 400, 13px, color #8A8070, opacity 0.6, mb 44px
+  .headline (texto na tela): Playfair Display bold italic, font-size 86px, line-height 1.07,
+    color #F2EDE4, max-width 900px — span.gold na expressão-chave
+  .divider-sm (mt 48px mb 48px): width 100%, height 1px,
+    background linear-gradient(90deg, transparent, #C9A84C66, transparent)
+  .body-text (fala + direção visual): Jost 400, font-size 32px, line-height 1.65, color #8A8070,
+    max-width 900px — span.highlight nas palavras-chave (color #F2EDE4)
+  Handle + contador em cada frame (posição absoluta, conforme especificação geral).
 `;
   }
 
