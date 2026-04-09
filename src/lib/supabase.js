@@ -120,3 +120,37 @@ export const fromGoalsObj = (goalsObj) => {
   })
   return rows
 }
+
+export const toProspect = (row) => ({
+  id:              row.id,
+  menteeId:        row.mentee_id,
+  schoolName:      row.school_name      || '',
+  schoolType:      row.school_type      || 'particular',
+  city:            row.city             || '',
+  state:           row.state            || '',
+  contactName:     row.contact_name     || '',
+  contactRole:     row.contact_role     || '',
+  phone:           row.phone            || '',
+  email:           row.email            || '',
+  status:          row.status           || 'identificado',
+  notes:           row.notes            || '',
+  nextAction:      row.next_action      || '',
+  nextActionDate:  row.next_action_date || '',
+  createdAt:       row.created_at       || '',
+})
+
+export const toProspectDb = (p) => ({
+  mentee_id:        p.menteeId,
+  school_name:      p.schoolName,
+  school_type:      p.schoolType,
+  city:             p.city,
+  state:            p.state,
+  contact_name:     p.contactName,
+  contact_role:     p.contactRole,
+  phone:            p.phone,
+  email:            p.email,
+  status:           p.status,
+  notes:            p.notes,
+  next_action:      p.nextAction,
+  next_action_date: p.nextActionDate,
+})
