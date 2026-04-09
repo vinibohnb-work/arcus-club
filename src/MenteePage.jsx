@@ -914,6 +914,10 @@ export default function MenteePage() {
     await supabase.from('mentees').update({ custom_plan: text }).eq('id', id);
   };
 
+  const visibleMenu = MENU.filter(item =>
+    item.id !== "prospecting" || id === "1775518758013"
+  );
+
   const renderContent = () => {
     switch (activeTab) {
       case "milestones":  return <MilestonesContent mentee={mentee} milestones={milestones} doneCount={doneCount} pct={pct} isAdmin={isAdmin} payments={mentee.payments} onToggleMilestone={(i) => { const next = milestones.map((v,idx) => idx===i ? !v : v); saveMilestones(next); }} />;
@@ -1125,7 +1129,7 @@ export default function MenteePage() {
               />
 
               {/* ── Dots on the arc at each balloon anchor ── */}
-              {MENU.map(item => {
+              {visibleMenu.map(item => {
                 const p = bPos(item.angle);
                 const isActive = activeTab === item.id;
                 return (
@@ -1140,7 +1144,7 @@ export default function MenteePage() {
               })}
 
               {/* ── Connector lines: photo edge → balloon anchor ── */}
-              {MENU.map(item => {
+              {visibleMenu.map(item => {
                 const b = bPos(item.angle);
                 const e = ePos(item.angle);
                 const isActive  = activeTab === item.id;
@@ -1218,7 +1222,7 @@ export default function MenteePage() {
             </div>
 
             {/* ── Balloons ── */}
-            {MENU.map((item, idx) => {
+            {visibleMenu.map((item, idx) => {
               const b        = bPos(item.angle);
               const isActive = activeTab === item.id;
               return (
