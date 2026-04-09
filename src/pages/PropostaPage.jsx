@@ -237,21 +237,8 @@ export default function PropostaPage() {
               <div style={{ fontSize: 11, color: COLORS.textDim, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                 arcusclub.com.br
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 20, height: 1, background: `linear-gradient(90deg, transparent, ${COLORS.accent}66)` }} />
-                <div style={{ fontSize: 10, color: COLORS.accent, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
-                  Confidencial
-                </div>
-                <div style={{ width: 20, height: 1, background: `linear-gradient(90deg, ${COLORS.accent}66, transparent)` }} />
-              </div>
             </div>
           </div>
-
-          {/* ── Linha base ── */}
-          <div style={{
-            height: 2,
-            background: `linear-gradient(90deg, transparent 0%, ${COLORS.accent}55 30%, ${COLORS.accent}88 50%, ${COLORS.accent}55 70%, transparent 100%)`,
-          }} />
         </div>
 
         {/* ══════════════ SEGUNDA FOLHA — PLATAFORMA ══════════════ */}
@@ -463,11 +450,6 @@ export default function PropostaPage() {
             {/* ── Rodapé ── */}
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: `1px solid ${COLORS.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ fontSize: 11, color: COLORS.textDim, letterSpacing: '0.1em', textTransform: 'uppercase' }}>arcusclub.com.br</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 20, height: 1, background: `linear-gradient(90deg, transparent, ${COLORS.accent}66)` }} />
-                <div style={{ fontSize: 10, color: COLORS.accent, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Confidencial</div>
-                <div style={{ width: 20, height: 1, background: `linear-gradient(90deg, ${COLORS.accent}66, transparent)` }} />
-              </div>
             </div>
           </div>
 
