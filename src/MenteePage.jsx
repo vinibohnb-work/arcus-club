@@ -1204,6 +1204,21 @@ export default function MenteePage() {
     if (error) console.error('[MenteePage] save error:', error.message, payload);
   };
 
+  const handlePhotoRemove = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setPhotoUploading(true);
+    try {
+      const ext = mentee.photoUrl?.split('?')[0].split('.').pop();
+      await supabase.storage.from('mentee-files').remove([`avatars/${id}.${ext}`]);
+      setMentee(m => ({ ...m, photoUrl: '' }));
+      setPhotoErr(false);
+      await dbUpdate({ photo_url: '' });
+    } finally {
+      setPhotoUploading(false);
+    }
+  };
+
   const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -1551,12 +1566,23 @@ export default function MenteePage() {
                 transition:"opacity 0.2s",
               }}>
                 {photoUploading ? (
-                  <div style={{ fontSize:11, color:"#fff", fontFamily:FONT_UI }}>Enviando…</div>
+                  <div style={{ fontSize:11, color:"#fff", fontFamily:FONT_UI }}>Aguarde…</div>
                 ) : (
                   <>
-                    <div style={{ fontSize:22 }}>📷</div>
+                    <div style={{ fontSize:20 }}>📷</div>
                     <div style={{ fontSize:10, color:"#ffffffCC", fontFamily:FONT_UI,
-                      letterSpacing:"0.08em", textTransform:"uppercase" }}>Alterar foto</div>
+                      letterSpacing:"0.08em", textTransform:"uppercase" }}>
+                      {photoUrl && !photoErr ? "Alterar" : "Adicionar foto"}
+                    </div>
+                    {photoUrl && !photoErr && (
+                      <button
+                        onClick={handlePhotoRemove}
+                        style={{ marginTop:4, fontSize:10, color:"#ffaaaa",
+                          fontFamily:FONT_UI, background:"none", border:"none",
+                          cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
+                        Remover
+                      </button>
+                    )}
                   </>
                 )}
               </div>
