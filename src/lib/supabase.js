@@ -25,6 +25,10 @@ export const toMentee = (row) => ({
   photoUrl: row.photo_url || '',
   lastContact: row.last_contact || '',
   payments: row.payments || [],
+  actionPlan: row.action_plan || { goals: [] },
+  tasks: row.tasks || [],
+  resources: row.resources || [],
+  referenceLinks: row.reference_links || [],
 })
 
 export const toMenteeDb = (m) => ({
@@ -45,6 +49,10 @@ export const toMenteeDb = (m) => ({
   photo_url: m.photoUrl,
   last_contact: m.lastContact,
   payments: m.payments || [],
+  action_plan: m.actionPlan,
+  tasks: m.tasks,
+  resources: m.resources,
+  reference_links: m.referenceLinks,
 })
 
 export const toLead = (row) => ({

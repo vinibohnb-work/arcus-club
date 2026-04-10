@@ -20,10 +20,11 @@ const PR = 80;                    // photo radius  → 160px diameter
 const OR = 178;                   // orbit radius  (center → balloon anchor)
 
 const MENU = [
-  { id: "milestones",  label: "Minha Jornada",      icon: "🎯", angle: -70 },
-  { id: "custom",      label: "Plano Personalizado", icon: "✍️", angle: -23 },
-  { id: "prospecting", label: "Prospecção",          icon: "🏫", angle:  23 },
-  { id: "resources",   label: "Recursos",            icon: "📚", angle:  70 },
+  { id: "milestones",  label: "Minha Jornada",  icon: "🎯", angle: -70 },
+  { id: "plan",        label: "Plano",           icon: "📌", angle: -35 },
+  { id: "tasks",       label: "Afazeres",        icon: "✅", angle:   0 },
+  { id: "resources",   label: "Recursos",        icon: "🔗", angle:  35 },
+  { id: "references",  label: "Referências",     icon: "📚", angle:  70 },
 ];
 
 const toRad  = d => (d * Math.PI) / 180;
@@ -222,245 +223,529 @@ function MilestonesContent({ mentee, milestones, doneCount, pct, isAdmin, onTogg
   );
 }
 
-function PlanBaseContent({ mentee, isAdmin, basePlan, onSaveBasePlan }) {
-  const items = basePlan || DEFAULT_PLAN;
-  const [editingIdx, setEditingIdx] = useState(null);
-  const [editText, setEditText] = useState('');
-  const [newText, setNewText] = useState('');
-  const [adding, setAdding] = useState(false);
+// ─── uid helper ──────────────────────────────────────────────────────────────
+const uid = () => Math.random().toString(36).slice(2, 10);
 
-  const commit = (newItems) => onSaveBasePlan(newItems);
+// ─── Goal colors palette ──────────────────────────────────────────────────────
+const GOAL_COLORS = ["#C9A84C", "#3DBFB0", "#7B6FD4", "#E09A3D", "#E05252", "#60a5fa"];
 
-  const startEdit = (i) => { setEditingIdx(i); setEditText(items[i]); };
-  const saveEdit = () => {
-    if (!editText.trim()) return;
-    const next = items.map((it,i) => i === editingIdx ? editText.trim() : it);
-    commit(next);
-    setEditingIdx(null);
+// ─── Action Plan ─────────────────────────────────────────────────────────────
+function ActionPlanContent({ mentee, actionPlan, isAdmin, onSave }) {
+  const goals = actionPlan?.goals || [];
+  const [editingGoalId, setEditingGoalId]       = useState(null);
+  const [editGoalTitle, setEditGoalTitle]       = useState("");
+  const [editingItemKey, setEditingItemKey]     = useState(null);
+  const [editItemText, setEditItemText]         = useState("");
+  const [addingGoal, setAddingGoal]             = useState(false);
+  const [newGoalTitle, setNewGoalTitle]         = useState("");
+  const [addingItemGoalId, setAddingItemGoalId] = useState(null);
+  const [newItemText, setNewItemText]           = useState("");
+
+  const save = (newGoals) => onSave({ ...actionPlan, goals: newGoals });
+
+  const addGoal = () => {
+    if (!newGoalTitle.trim()) return;
+    save([...goals, { id: uid(), title: newGoalTitle.trim(), color: GOAL_COLORS[goals.length % GOAL_COLORS.length], items: [] }]);
+    setNewGoalTitle(""); setAddingGoal(false);
   };
-  const remove = (i) => commit(items.filter((_,idx) => idx !== i));
-  const addItem = () => {
-    if (!newText.trim()) return;
-    commit([...items, newText.trim()]);
-    setNewText('');
-    setAdding(false);
+  const removeGoal    = (gid)         => save(goals.filter(g => g.id !== gid));
+  const startEditGoal = (g)           => { setEditingGoalId(g.id); setEditGoalTitle(g.title); };
+  const saveGoalTitle = (gid)         => {
+    if (!editGoalTitle.trim()) return;
+    save(goals.map(g => g.id === gid ? { ...g, title: editGoalTitle.trim() } : g));
+    setEditingGoalId(null);
+  };
+  const addItem = (gid) => {
+    if (!newItemText.trim()) return;
+    save(goals.map(g => g.id === gid ? { ...g, items: [...(g.items || []), { id: uid(), text: newItemText.trim() }] } : g));
+    setNewItemText(""); setAddingItemGoalId(null);
+  };
+  const removeItem    = (gid, iid)    => save(goals.map(g => g.id === gid ? { ...g, items: g.items.filter(i => i.id !== iid) } : g));
+  const startEditItem = (gid, item)   => { setEditingItemKey(`${gid}:${item.id}`); setEditItemText(item.text); };
+  const saveItemText  = (gid, iid)    => {
+    if (!editItemText.trim()) return;
+    save(goals.map(g => g.id === gid ? { ...g, items: g.items.map(i => i.id === iid ? { ...i, text: editItemText.trim() } : i) } : g));
+    setEditingItemKey(null);
   };
 
-  const inputStyle = {
-    width:"100%", background:COLORS.surface, border:`1px solid ${COLORS.accent}55`,
-    borderRadius:4, padding:"6px 10px", color:COLORS.text, fontFamily:FONT_UI,
-    fontSize:14, outline:"none",
-  };
+  const inp = { background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 4, padding: "6px 10px", color: COLORS.text, fontFamily: FONT_UI, fontSize: 13, outline: "none" };
+  const btn = (extra = {}) => ({ padding: "3px 8px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 11, cursor: "pointer", ...extra });
+
+  if (goals.length === 0 && !addingGoal) return (
+    <div>
+      <Card>
+        <div style={{ textAlign: "center", padding: "52px 0", color: COLORS.textMuted }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}>📌</div>
+          <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, color: COLORS.text }}>
+            {isAdmin ? "Plano ainda não definido" : "Plano em elaboração"}
+          </div>
+          <div style={{ fontSize: 13 }}>
+            {isAdmin ? "Clique em \"+ Nova meta\" para começar." : "Seu mentor está preparando o plano. Em breve estará disponível aqui."}
+          </div>
+        </div>
+      </Card>
+      {isAdmin && (
+        <button onClick={() => setAddingGoal(true)}
+          style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 12, padding: "10px 16px", background: "transparent", border: `1px dashed ${COLORS.border}`, borderRadius: 6, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 13, cursor: "pointer", width: "100%", transition: "all 0.2s" }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.color = COLORS.accent; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}>
+          <span style={{ fontSize: 16 }}>+</span> Nova meta
+        </button>
+      )}
+    </div>
+  );
 
   return (
-    <Card>
-      <SectionTitle>— Plano Base · Mentoria Contínua</SectionTitle>
-      <div style={{ fontSize:15, color:COLORS.textMuted, marginBottom:24, lineHeight:1.7 }}>
-        Este é o núcleo da sua jornada. Nossa mentoria é aberta e contínua — você evolui no seu ritmo, sem prazo de término.
-      </div>
-      {items.map((item, i) => (
-        <div key={i} style={{ display:"flex", gap:14, alignItems:"flex-start", padding:"14px 0", borderBottom:`1px solid ${COLORS.border}` }}>
-          <div style={{ width:28, height:28, borderRadius:"50%", background:`${mentee.color}22`,
-            display:"flex", alignItems:"center", justifyContent:"center",
-            fontSize:13, flexShrink:0, color:mentee.color, fontWeight:700 }}>{i + 1}</div>
-          {editingIdx === i ? (
-            <div style={{ flex:1, display:"flex", gap:8, alignItems:"center" }}>
-              <input value={editText} onChange={e => setEditText(e.target.value)}
-                onKeyDown={e => { if(e.key==='Enter') saveEdit(); if(e.key==='Escape') setEditingIdx(null); }}
-                style={inputStyle} autoFocus />
-              <button onClick={saveEdit} style={{ padding:"4px 12px", background:`${COLORS.accent}22`, border:`1px solid ${COLORS.accent}55`, borderRadius:4, color:COLORS.accent, fontFamily:FONT_UI, fontSize:12, cursor:"pointer" }}>✓</button>
-              <button onClick={() => setEditingIdx(null)} style={{ padding:"4px 10px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:12, cursor:"pointer" }}>✕</button>
-            </div>
-          ) : (
-            <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"space-between", gap:8 }}>
-              <div style={{ fontSize:15, lineHeight:1.6 }}>{item}</div>
+    <div>
+      {goals.map(g => {
+        const color = g.color || COLORS.accent;
+        return (
+          <Card key={g.id} extra={{ marginBottom: 14, borderLeft: `3px solid ${color}` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: (g.items || []).length > 0 || addingItemGoalId === g.id || isAdmin ? 14 : 0 }}>
+              {editingGoalId === g.id ? (
+                <input value={editGoalTitle} onChange={e => setEditGoalTitle(e.target.value)}
+                  onKeyDown={e => { if (e.key === "Enter") saveGoalTitle(g.id); if (e.key === "Escape") setEditingGoalId(null); }}
+                  style={{ ...inp, flex: 1, fontSize: 15, fontWeight: 600, border: `1px solid ${color}55` }} autoFocus />
+              ) : (
+                <div style={{ flex: 1, fontSize: 16, fontWeight: 700, color }}>{g.title}</div>
+              )}
               {isAdmin && (
-                <div style={{ display:"flex", gap:6, flexShrink:0 }}>
-                  <button onClick={() => startEdit(i)} style={{ padding:"3px 8px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontSize:11, cursor:"pointer", fontFamily:FONT_UI }}>✎</button>
-                  <button onClick={() => remove(i)} style={{ padding:"3px 8px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.red, fontSize:11, cursor:"pointer", fontFamily:FONT_UI }}>✕</button>
+                <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+                  {editingGoalId === g.id ? (
+                    <>
+                      <button onClick={() => saveGoalTitle(g.id)} style={{ ...btn(), background: `${color}22`, border: `1px solid ${color}55`, color }}>✓</button>
+                      <button onClick={() => setEditingGoalId(null)} style={btn()}>✕</button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={() => startEditGoal(g)} style={btn()}>✎</button>
+                      <button onClick={() => removeGoal(g.id)} style={btn({ color: COLORS.red })}>✕</button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
-          )}
-        </div>
-      ))}
+            {(g.items || []).map((item, idx) => {
+              const itemKey = `${g.id}:${item.id}`;
+              return (
+                <div key={item.id} style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "10px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+                  <div style={{ width: 22, height: 22, borderRadius: "50%", background: `${color}22`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color, fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{idx + 1}</div>
+                  {editingItemKey === itemKey ? (
+                    <div style={{ flex: 1, display: "flex", gap: 8, alignItems: "center" }}>
+                      <input value={editItemText} onChange={e => setEditItemText(e.target.value)}
+                        onKeyDown={e => { if (e.key === "Enter") saveItemText(g.id, item.id); if (e.key === "Escape") setEditingItemKey(null); }}
+                        style={{ ...inp, flex: 1 }} autoFocus />
+                      <button onClick={() => saveItemText(g.id, item.id)} style={{ ...btn(), background: `${color}22`, border: `1px solid ${color}55`, color }}>✓</button>
+                      <button onClick={() => setEditingItemKey(null)} style={btn()}>✕</button>
+                    </div>
+                  ) : (
+                    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                      <div style={{ fontSize: 14, lineHeight: 1.6, color: COLORS.text }}>{item.text}</div>
+                      {isAdmin && (
+                        <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+                          <button onClick={() => startEditItem(g.id, item)} style={btn()}>✎</button>
+                          <button onClick={() => removeItem(g.id, item.id)} style={btn({ color: COLORS.red })}>✕</button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            {isAdmin && (
+              addingItemGoalId === g.id ? (
+                <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 10 }}>
+                  <input value={newItemText} onChange={e => setNewItemText(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter") addItem(g.id); if (e.key === "Escape") { setAddingItemGoalId(null); setNewItemText(""); } }}
+                    placeholder="Novo item…" style={{ ...inp, flex: 1 }} autoFocus />
+                  <button onClick={() => addItem(g.id)} style={{ padding: "6px 14px", background: `${color}22`, border: `1px solid ${color}55`, borderRadius: 4, color, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>Adicionar</button>
+                  <button onClick={() => { setAddingItemGoalId(null); setNewItemText(""); }} style={{ padding: "6px 10px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>✕</button>
+                </div>
+              ) : (
+                <button onClick={() => setAddingItemGoalId(g.id)}
+                  style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 10, padding: "6px 12px", background: "transparent", border: `1px dashed ${color}44`, borderRadius: 4, color: COLORS.textDim, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer", transition: "all 0.2s" }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = color; e.currentTarget.style.color = color; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = `${color}44`; e.currentTarget.style.color = COLORS.textDim; }}>
+                  <span>+</span> Novo item
+                </button>
+              )
+            )}
+          </Card>
+        );
+      })}
       {isAdmin && (
-        <div style={{ marginTop:16 }}>
-          {adding ? (
-            <div style={{ display:"flex", gap:8, alignItems:"center" }}>
-              <input value={newText} onChange={e => setNewText(e.target.value)}
-                onKeyDown={e => { if(e.key==='Enter') addItem(); if(e.key==='Escape') { setAdding(false); setNewText(''); } }}
-                placeholder="Novo item do plano…"
-                style={{ ...inputStyle, flex:1 }} autoFocus />
-              <button onClick={addItem} style={{ padding:"6px 14px", background:`${COLORS.accent}22`, border:`1px solid ${COLORS.accent}55`, borderRadius:4, color:COLORS.accent, fontFamily:FONT_UI, fontSize:13, cursor:"pointer" }}>Adicionar</button>
-              <button onClick={() => { setAdding(false); setNewText(''); }} style={{ padding:"6px 10px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:13, cursor:"pointer" }}>✕</button>
-            </div>
-          ) : (
-            <button onClick={() => setAdding(true)} style={{ display:"flex", alignItems:"center", gap:8, padding:"10px 16px", background:"transparent", border:`1px dashed ${COLORS.border}`, borderRadius:6, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:13, cursor:"pointer", width:"100%", transition:"all 0.2s" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.color = COLORS.accent; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}
-            >
-              <span style={{ fontSize:16 }}>+</span> Adicionar item
-            </button>
-          )}
-        </div>
+        addingGoal ? (
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <input value={newGoalTitle} onChange={e => setNewGoalTitle(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter") addGoal(); if (e.key === "Escape") { setAddingGoal(false); setNewGoalTitle(""); } }}
+              placeholder="Título da nova meta…" style={{ ...inp, flex: 1, fontSize: 14 }} autoFocus />
+            <button onClick={addGoal} style={{ padding: "8px 16px", background: `${COLORS.accent}22`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 13, cursor: "pointer" }}>Criar</button>
+            <button onClick={() => { setAddingGoal(false); setNewGoalTitle(""); }} style={{ padding: "8px 10px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 13, cursor: "pointer" }}>✕</button>
+          </div>
+        ) : (
+          <button onClick={() => setAddingGoal(true)}
+            style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", background: "transparent", border: `1px dashed ${COLORS.border}`, borderRadius: 6, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 13, cursor: "pointer", width: "100%", transition: "all 0.2s", marginTop: goals.length > 0 ? 4 : 0 }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.color = COLORS.accent; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}>
+            <span style={{ fontSize: 16 }}>+</span> Nova meta
+          </button>
+        )
       )}
-    </Card>
+    </div>
   );
 }
 
-function CustomPlanContent({ mentee, isAdmin, onSaveCustomPlan }) {
-  const [editing, setEditing] = useState(false);
-  const [text, setText] = useState(mentee.customPlan || '');
-  const [saving, setSaving] = useState(false);
+// ─── Tasks (Afazeres) ─────────────────────────────────────────────────────────
+function TasksContent({ mentee, planTasks, actionPlan, isAdmin, onSaveTasks }) {
+  const goals = actionPlan?.goals || [];
+  const today = new Date().toISOString().slice(0, 10);
+  const [filterGoalId, setFilterGoalId] = useState(null);
+  const [editingId, setEditingId]       = useState(null);
+  const [adding, setAdding]             = useState(false);
+  const BLANK = { id: uid(), title: "", goalId: "", dueDate: "", done: false };
+  const [form, setForm] = useState(BLANK);
+  const f = (field) => (e) => setForm(prev => ({ ...prev, [field]: e.target.value }));
 
-  // sync if mentee prop changes
-  useEffect(() => { if (!editing) setText(mentee.customPlan || ''); }, [mentee.customPlan, editing]);
-
-  const handleSave = async () => {
-    setSaving(true);
-    await onSaveCustomPlan(text);
-    setSaving(false);
-    setEditing(false);
+  const displayed = filterGoalId ? planTasks.filter(t => t.goalId === filterGoalId) : planTasks;
+  const sorted    = [...displayed].sort((a, b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    if (a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate);
+    return a.dueDate ? -1 : b.dueDate ? 1 : 0;
+  });
+  const toggle     = (tid) => onSaveTasks(planTasks.map(t => t.id === tid ? { ...t, done: !t.done } : t));
+  const openAdd    = ()    => { setForm({ ...BLANK, id: uid() }); setEditingId(null); setAdding(true); };
+  const openEdit   = (t)   => { setForm({ ...t }); setEditingId(t.id); setAdding(false); };
+  const handleSave = ()    => {
+    if (!form.title.trim()) return;
+    onSaveTasks(adding ? [...planTasks, { ...form }] : planTasks.map(t => t.id === editingId ? { ...form } : t));
+    setAdding(false); setEditingId(null);
+  };
+  const handleDelete = (id) => {
+    onSaveTasks(planTasks.filter(t => t.id !== id));
+    if (editingId === id) { setEditingId(null); setAdding(false); }
   };
 
-  return (
+  const goalLabel = (gid) => goals.find(g => g.id === gid)?.title || null;
+  const goalColor = (gid) => goals.find(g => g.id === gid)?.color || COLORS.textMuted;
+  const fmtDate   = (d)   => d ? d.split("-").reverse().join("/") : "";
+  const isOverdue = (t)   => t.dueDate && t.dueDate < today && !t.done;
+  const inp = { background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 4, padding: "7px 10px", color: COLORS.text, fontFamily: FONT_UI, fontSize: 13, outline: "none", width: "100%" };
+
+  if ((adding || editingId) && isAdmin) return (
     <Card>
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
-        <SectionTitle style={{ marginBottom:0 }}>— Seu Plano Personalizado</SectionTitle>
-        {isAdmin && !editing && (
-          <button onClick={() => setEditing(true)} style={{ padding:"5px 14px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:12, cursor:"pointer", transition:"all 0.2s" }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor=COLORS.accent; e.currentTarget.style.color=COLORS.accent; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor=COLORS.border; e.currentTarget.style.color=COLORS.textMuted; }}
-          >✎ Editar</button>
-        )}
-        {isAdmin && editing && (
-          <div style={{ display:"flex", gap:8 }}>
-            <button onClick={handleSave} disabled={saving} style={{ padding:"5px 14px", background:`${COLORS.accent}22`, border:`1px solid ${COLORS.accent}55`, borderRadius:4, color:COLORS.accent, fontFamily:FONT_UI, fontSize:12, cursor:"pointer" }}>
-              {saving ? "Salvando…" : "✓ Salvar"}
-            </button>
-            <button onClick={() => { setEditing(false); setText(mentee.customPlan || ''); }} style={{ padding:"5px 10px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:4, color:COLORS.textMuted, fontFamily:FONT_UI, fontSize:12, cursor:"pointer" }}>✕</button>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+        <SectionTitle style={{ marginBottom: 0 }}>{editingId && !adding ? "— Editar Tarefa" : "— Nova Tarefa"}</SectionTitle>
+        <div style={{ display: "flex", gap: 8 }}>
+          {editingId && !adding && <button onClick={() => handleDelete(editingId)} style={{ padding: "5px 12px", background: "transparent", border: `1px solid ${COLORS.red}44`, borderRadius: 4, color: COLORS.red, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>Excluir</button>}
+          <button onClick={handleSave} disabled={!form.title.trim()} style={{ padding: "5px 14px", background: `${COLORS.accent}22`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>✓ Salvar</button>
+          <button onClick={() => { setAdding(false); setEditingId(null); }} style={{ padding: "5px 10px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>✕</button>
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 16px" }}>
+        <div style={{ gridColumn: "1/-1" }}>
+          <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.1em" }}>Título *</div>
+          <input value={form.title} onChange={f("title")} placeholder="Ex: Ligar para o diretor" style={inp} autoFocus />
+        </div>
+        <div>
+          <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.1em" }}>Meta relacionada</div>
+          <select value={form.goalId} onChange={f("goalId")} style={inp}>
+            <option value="">Nenhuma</option>
+            {goals.map(g => <option key={g.id} value={g.id}>{g.title}</option>)}
+          </select>
+        </div>
+        <div>
+          <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.1em" }}>Prazo</div>
+          <input type="date" value={form.dueDate} onChange={f("dueDate")} style={inp} />
+        </div>
+      </div>
+    </Card>
+  );
+
+  const pending = planTasks.filter(t => !t.done).length;
+  const done    = planTasks.filter(t => t.done).length;
+  return (
+    <div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, marginBottom: 24 }}>
+        {[
+          { label: "Total",      value: planTasks.length, color: COLORS.accent },
+          { label: "Pendentes",  value: pending,          color: pending > 0 ? COLORS.teal : COLORS.textMuted },
+          { label: "Concluídas", value: done,             color: done > 0 ? COLORS.textMuted : COLORS.textDim },
+        ].map(({ label, value, color }) => (
+          <div key={label} style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 6, padding: "16px 20px" }}>
+            <div style={{ fontSize: 28, fontWeight: 900, color }}>{value}</div>
+            <div style={{ fontSize: 11, color: COLORS.textMuted, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 4 }}>{label}</div>
           </div>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
+        <button onClick={() => setFilterGoalId(null)} style={{ padding: "5px 12px", borderRadius: 100, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer", border: `1px solid ${!filterGoalId ? COLORS.accent : COLORS.border}`, background: !filterGoalId ? `${COLORS.accent}18` : "transparent", color: !filterGoalId ? COLORS.accent : COLORS.textMuted }}>Todas</button>
+        {goals.map(g => (
+          <button key={g.id} onClick={() => setFilterGoalId(filterGoalId === g.id ? null : g.id)}
+            style={{ padding: "5px 12px", borderRadius: 100, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer", border: `1px solid ${filterGoalId === g.id ? g.color : COLORS.border}55`, background: filterGoalId === g.id ? `${g.color}18` : "transparent", color: filterGoalId === g.id ? g.color : COLORS.textMuted }}>
+            {g.title.length > 22 ? g.title.slice(0, 22) + "…" : g.title}
+          </button>
+        ))}
+        {isAdmin && (
+          <button onClick={openAdd} style={{ marginLeft: "auto", padding: "7px 16px", background: `${COLORS.accent}18`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 12, fontWeight: 500, cursor: "pointer", whiteSpace: "nowrap" }}>+ Nova tarefa</button>
         )}
       </div>
-      {editing ? (
-        <textarea
-          value={text}
-          onChange={e => setText(e.target.value)}
-          rows={12}
-          style={{ width:"100%", background:COLORS.surface, border:`1px solid ${COLORS.accent}55`, borderRadius:6, padding:"16px", color:COLORS.text, fontFamily:FONT_UI, fontSize:14, lineHeight:1.8, outline:"none", resize:"vertical" }}
-          placeholder="Digite o plano personalizado do mentorado…"
-          autoFocus
-        />
-      ) : mentee.customPlan ? (
-        <div style={{ fontSize:15, color:COLORS.text, lineHeight:1.9, whiteSpace:"pre-wrap",
-          background:COLORS.surface, borderRadius:6, padding:"20px 24px",
-          border:`1px solid ${mentee.color}33` }}>
-          {mentee.customPlan}
-        </div>
-      ) : (
-        <div style={{ textAlign:"center", padding:"52px 0", color:COLORS.textMuted }}>
-          <div style={{ fontSize:44, marginBottom:14 }}>◎</div>
-          <div style={{ fontSize:18, fontWeight:700, marginBottom:8, color:COLORS.text }}>Plano em elaboração</div>
-          <div style={{ fontSize:14, lineHeight:1.7 }}>
-            {isAdmin ? "Clique em \"Editar\" para adicionar o plano personalizado." : "Seu mentor está preparando um plano exclusivo para você.\nEm breve estará disponível aqui!"}
+      {sorted.length === 0 ? (
+        <Card>
+          <div style={{ textAlign: "center", padding: "48px 0", color: COLORS.textMuted }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
+            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: COLORS.text }}>{planTasks.length === 0 ? "Nenhuma tarefa cadastrada" : "Sem tarefas para este filtro"}</div>
+            {planTasks.length === 0 && isAdmin && <div style={{ fontSize: 13 }}>Clique em "+ Nova tarefa" para começar.</div>}
           </div>
+        </Card>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {sorted.map(task => {
+            const overdue = isOverdue(task);
+            return (
+              <div key={task.id} style={{ background: COLORS.card, border: `1px solid ${overdue ? COLORS.red + "44" : COLORS.border}`, borderRadius: 6, padding: "14px 16px", display: "flex", gap: 14, alignItems: "flex-start", opacity: task.done ? 0.6 : 1, transition: "opacity 0.2s" }}>
+                <div onClick={() => toggle(task.id)} style={{ width: 20, height: 20, borderRadius: 4, border: `2px solid ${task.done ? COLORS.teal : COLORS.border}`, background: task.done ? COLORS.teal : "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, marginTop: 2, transition: "all 0.2s" }}>
+                  {task.done && <span style={{ fontSize: 11, color: "#fff", fontWeight: 700 }}>✓</span>}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 14, fontWeight: task.done ? 400 : 600, textDecoration: task.done ? "line-through" : "none", color: task.done ? COLORS.textMuted : COLORS.text, marginBottom: 4 }}>{task.title}</div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap", fontSize: 12 }}>
+                    {goalLabel(task.goalId) && <span style={{ color: goalColor(task.goalId), background: `${goalColor(task.goalId)}18`, padding: "2px 8px", borderRadius: 100, border: `1px solid ${goalColor(task.goalId)}33` }}>{goalLabel(task.goalId)}</span>}
+                    {task.dueDate && <span style={{ color: overdue ? COLORS.red : COLORS.textMuted }}>{overdue ? "⚠ " : ""}Prazo: {fmtDate(task.dueDate)}</span>}
+                  </div>
+                </div>
+                {isAdmin && (
+                  <button onClick={() => openEdit(task)} style={{ padding: "4px 10px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 11, cursor: "pointer", flexShrink: 0, transition: "all 0.2s" }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.color = COLORS.accent; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}>✎</button>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
-    </Card>
+    </div>
   );
 }
 
-function ResourcesContent({ menteeId, files, isAdmin, onRefresh }) {
-  const [uploading, setUploading] = useState(false);
-  const [deleting, setDeleting] = useState(null);
+// ─── Resources (link cards) ───────────────────────────────────────────────────
+function ResourcesContent({ menteeResources, isAdmin, onSave, onTabChange }) {
+  const BLANK = { label: "", icon: "🔗", description: "", tab: "", url: "" };
+  const [adding, setAdding]       = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm]           = useState(BLANK);
+  const f = (field) => (e) => setForm(prev => ({ ...prev, [field]: e.target.value }));
+
+  const handleSave = () => {
+    if (!form.label.trim()) return;
+    const entry = { ...form, id: form.id || uid() };
+    onSave(adding ? [...menteeResources, entry] : menteeResources.map(r => r.id === editingId ? entry : r));
+    setAdding(false); setEditingId(null);
+  };
+  const handleDelete = (id) => { onSave(menteeResources.filter(r => r.id !== id)); if (editingId === id) setEditingId(null); };
+  const handleClick  = (r)  => { if (r.tab) { onTabChange(r.tab); return; } if (r.url) window.open(r.url, "_blank", "noopener noreferrer"); };
+
+  const inp    = { background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 4, padding: "7px 10px", color: COLORS.text, fontFamily: FONT_UI, fontSize: 13, outline: "none", width: "100%" };
+  const fLabel = (txt) => <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.1em" }}>{txt}</div>;
+
+  if ((adding || editingId) && isAdmin) return (
+    <Card>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+        <SectionTitle style={{ marginBottom: 0 }}>{editingId && !adding ? "— Editar Recurso" : "— Novo Recurso"}</SectionTitle>
+        <div style={{ display: "flex", gap: 8 }}>
+          {editingId && !adding && <button onClick={() => handleDelete(editingId)} style={{ padding: "5px 12px", background: "transparent", border: `1px solid ${COLORS.red}44`, borderRadius: 4, color: COLORS.red, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>Excluir</button>}
+          <button onClick={handleSave} disabled={!form.label.trim()} style={{ padding: "5px 14px", background: `${COLORS.accent}22`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>✓ Salvar</button>
+          <button onClick={() => { setAdding(false); setEditingId(null); }} style={{ padding: "5px 10px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>✕</button>
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "80px 1fr", gap: "10px 16px" }}>
+        <div>{fLabel("Ícone")}<input value={form.icon} onChange={f("icon")} placeholder="🔗" style={{ ...inp, textAlign: "center", fontSize: 20 }} maxLength={2} /></div>
+        <div>{fLabel("Rótulo *")}<input value={form.label} onChange={f("label")} placeholder="Ex: Prospecção" style={inp} autoFocus /></div>
+        <div style={{ gridColumn: "1/-1" }}>{fLabel("Descrição")}<input value={form.description} onChange={f("description")} placeholder="Breve descrição" style={inp} /></div>
+        <div style={{ gridColumn: "1/-1" }}>{fLabel("Aba interna (id)")}<input value={form.tab} onChange={f("tab")} placeholder="Ex: prospecting  (deixe vazio se usar URL)" style={inp} /></div>
+        <div style={{ gridColumn: "1/-1" }}>{fLabel("URL externa")}<input value={form.url} onChange={f("url")} placeholder="https://…  (deixe vazio se usar aba interna)" style={inp} /></div>
+      </div>
+    </Card>
+  );
+
+  return (
+    <div>
+      {isAdmin && (
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+          <button onClick={() => { setForm({ ...BLANK }); setEditingId(null); setAdding(true); }}
+            style={{ padding: "7px 16px", background: `${COLORS.accent}18`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 12, fontWeight: 500, cursor: "pointer" }}>+ Novo recurso</button>
+        </div>
+      )}
+      {menteeResources.length === 0 ? (
+        <Card>
+          <div style={{ textAlign: "center", padding: "48px 0", color: COLORS.textMuted }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>🔗</div>
+            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8, color: COLORS.text }}>{isAdmin ? "Nenhum recurso cadastrado" : "Recursos em preparação"}</div>
+            <div style={{ fontSize: 13 }}>{isAdmin ? "Clique em \"+ Novo recurso\" para adicionar." : "Seu mentor irá disponibilizar os recursos em breve."}</div>
+          </div>
+        </Card>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))", gap: 12 }}>
+          {menteeResources.map(r => (
+            <div key={r.id}
+              style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: 8, padding: "20px", cursor: r.tab || r.url ? "pointer" : "default", transition: "all 0.2s", position: "relative" }}
+              onClick={() => handleClick(r)}
+              onMouseEnter={e => { if (r.tab || r.url) { e.currentTarget.style.borderColor = COLORS.accent; e.currentTarget.style.background = "#1C1C1C"; } }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.background = COLORS.card; }}>
+              {isAdmin && (
+                <button onClick={(e) => { e.stopPropagation(); setForm({ ...r }); setEditingId(r.id); setAdding(false); }}
+                  style={{ position: "absolute", top: 10, right: 10, padding: "3px 8px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 11, cursor: "pointer" }}>✎</button>
+              )}
+              <div style={{ fontSize: 32, marginBottom: 10 }}>{r.icon || "🔗"}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, marginBottom: r.description ? 6 : 0 }}>{r.label}</div>
+              {r.description && <div style={{ fontSize: 12, color: COLORS.textMuted, lineHeight: 1.5 }}>{r.description}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── References (files + links) ───────────────────────────────────────────────
+function ReferencesContent({ menteeId, files, isAdmin, onRefreshFiles, referenceLinks, onSaveLinks }) {
+  const [addingLink, setAddingLink]       = useState(false);
+  const [editingLinkId, setEditingLinkId] = useState(null);
+  const BLANK_LINK                        = { title: "", url: "", description: "" };
+  const [linkForm, setLinkForm]           = useState(BLANK_LINK);
+  const [uploading, setUploading]         = useState(false);
+  const [deleting, setDeleting]           = useState(null);
   const fileRef = useRef(null);
+  const lf = (field) => (e) => setLinkForm(prev => ({ ...prev, [field]: e.target.value }));
 
-  const fileIcon = (type) => {
-    if (!type) return '📄';
-    if (type.includes('pdf')) return '📄';
-    if (type.includes('image')) return '🖼️';
-    if (type.includes('video')) return '🎥';
-    if (type.includes('audio')) return '🎧';
-    if (type.includes('spreadsheet') || type.includes('excel') || type.includes('csv')) return '📊';
-    return '📎';
+  const handleSaveLink = () => {
+    if (!linkForm.title.trim() || !linkForm.url.trim()) return;
+    const entry = { ...linkForm, id: linkForm.id || uid() };
+    onSaveLinks(addingLink ? [...referenceLinks, entry] : referenceLinks.map(l => l.id === editingLinkId ? entry : l));
+    setAddingLink(false); setEditingLinkId(null);
   };
-  const formatSize = (bytes) => {
-    if (!bytes) return '';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  };
-
+  const handleDeleteLink = (id) => { onSaveLinks(referenceLinks.filter(l => l.id !== id)); if (editingLinkId === id) setEditingLinkId(null); };
   const handleUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files[0]; if (!file) return;
     setUploading(true);
     const path = `${menteeId}/${Date.now()}_${file.name}`;
-    const { error } = await supabase.storage.from('mentee-files').upload(path, file);
+    const { error } = await supabase.storage.from("mentee-files").upload(path, file);
     if (!error) {
-      await supabase.from('files').insert({ mentee_id: menteeId, name: file.name, storage_path: path, file_type: file.type, size: file.size });
-      await onRefresh();
+      await supabase.from("files").insert({ mentee_id: menteeId, name: file.name, storage_path: path, file_type: file.type, size: file.size });
+      await onRefreshFiles();
     }
-    setUploading(false);
-    e.target.value = '';
+    setUploading(false); e.target.value = "";
+  };
+  const handleDeleteFile = async (f) => {
+    setDeleting(f.id);
+    await supabase.storage.from("mentee-files").remove([f.storage_path]);
+    await supabase.from("files").delete().eq("id", f.id);
+    await onRefreshFiles(); setDeleting(null);
   };
 
-  const handleDelete = async (f) => {
-    setDeleting(f.id);
-    await supabase.storage.from('mentee-files').remove([f.storage_path]);
-    await supabase.from('files').delete().eq('id', f.id);
-    await onRefresh();
-    setDeleting(null);
-  };
+  const fileIcon = (t) => !t ? "📄" : t.includes("pdf") ? "📄" : t.includes("image") ? "🖼️" : t.includes("video") ? "🎥" : t.includes("spreadsheet") || t.includes("excel") || t.includes("csv") ? "📊" : "📎";
+  const fmtSize  = (b) => !b ? "" : b < 1048576 ? (b / 1024).toFixed(0) + " KB" : (b / 1048576).toFixed(1) + " MB";
+  const inp = { background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 4, padding: "7px 10px", color: COLORS.text, fontFamily: FONT_UI, fontSize: 13, outline: "none", width: "100%" };
 
   return (
-    <Card>
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
-        <SectionTitle style={{ marginBottom:0 }}>— Biblioteca de Recursos</SectionTitle>
-        {isAdmin && (
-          <>
-            <input ref={fileRef} type="file" style={{ display:"none" }} onChange={handleUpload} />
-            <button onClick={() => fileRef.current?.click()} disabled={uploading}
-              style={{ padding:"5px 14px", background:`${COLORS.accent}18`, border:`1px solid ${COLORS.accent}55`, borderRadius:4, color:COLORS.accent, fontFamily:FONT_UI, fontSize:12, cursor:"pointer", transition:"all 0.2s" }}>
-              {uploading ? "Enviando…" : "+ Enviar arquivo"}
-            </button>
-          </>
-        )}
-      </div>
-      {files.length === 0 ? (
-        <div style={{ textAlign:"center", padding:"40px 0", color:COLORS.textMuted }}>
-          <div style={{ fontSize:36, marginBottom:10 }}>📂</div>
-          <div style={{ fontSize:15, fontWeight:600, marginBottom:6 }}>Nenhum arquivo disponível ainda</div>
-          <div style={{ fontSize:13 }}>{isAdmin ? "Clique em \"+ Enviar arquivo\" para adicionar materiais." : "Seu mentor irá compartilhar materiais em breve."}</div>
+    <div>
+      {/* Links */}
+      <Card extra={{ marginBottom: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+          <SectionTitle style={{ marginBottom: 0 }}>— Links de Referência</SectionTitle>
+          {isAdmin && !addingLink && !editingLinkId && (
+            <button onClick={() => { setLinkForm(BLANK_LINK); setEditingLinkId(null); setAddingLink(true); }}
+              style={{ padding: "5px 14px", background: `${COLORS.accent}18`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>+ Link</button>
+          )}
         </div>
-      ) : (
-        files.map((f) => (
-          <div key={f.id} style={{ display:"flex", alignItems:"center", gap:16, padding:"14px 0", borderBottom:`1px solid ${COLORS.border}` }}>
-            <div style={{ fontSize:28, flexShrink:0 }}>{fileIcon(f.file_type)}</div>
-            <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ fontSize:15, fontWeight:600, marginBottom:4, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{f.name}</div>
-              <div style={{ fontSize:12, color:COLORS.textMuted }}>{formatSize(f.size)} · {f.created_at?.split('T')[0]}</div>
+        {(addingLink || editingLinkId) && isAdmin && (
+          <div style={{ background: COLORS.surface, borderRadius: 6, padding: "14px", marginBottom: 14, border: `1px solid ${COLORS.border}` }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 12px", marginBottom: 10 }}>
+              <div>
+                <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.1em" }}>Título *</div>
+                <input value={linkForm.title} onChange={lf("title")} placeholder="Ex: HubSpot" style={inp} autoFocus />
+              </div>
+              <div>
+                <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.1em" }}>URL *</div>
+                <input value={linkForm.url} onChange={lf("url")} placeholder="https://…" style={inp} />
+              </div>
+              <div style={{ gridColumn: "1/-1" }}>
+                <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.1em" }}>Descrição</div>
+                <input value={linkForm.description} onChange={lf("description")} placeholder="Breve descrição (opcional)" style={inp} />
+              </div>
             </div>
-            <div style={{ display:"flex", gap:8, flexShrink:0, alignItems:"center" }}>
-              <a href={f.url} target="_blank" rel="noopener noreferrer"
-                style={{ display:"inline-block", padding:"6px 16px", borderRadius:2, fontSize:12, fontWeight:500,
-                  background:`${COLORS.accent}18`, color:COLORS.accent, border:`1px solid ${COLORS.accent}44`,
-                  textDecoration:"none" }}>
-                Baixar
-              </a>
-              {isAdmin && (
-                <button onClick={() => handleDelete(f)} disabled={deleting === f.id}
-                  style={{ padding:"6px 10px", background:"transparent", border:`1px solid ${COLORS.border}`, borderRadius:2, color: deleting===f.id ? COLORS.textDim : COLORS.red, fontSize:12, cursor:"pointer", fontFamily:FONT_UI }}>
-                  {deleting === f.id ? "…" : "✕"}
-                </button>
-              )}
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={handleSaveLink} disabled={!linkForm.title.trim() || !linkForm.url.trim()} style={{ padding: "5px 14px", background: `${COLORS.accent}22`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>✓ Salvar</button>
+              {editingLinkId && !addingLink && <button onClick={() => handleDeleteLink(editingLinkId)} style={{ padding: "5px 12px", background: "transparent", border: `1px solid ${COLORS.red}44`, borderRadius: 4, color: COLORS.red, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>Excluir</button>}
+              <button onClick={() => { setAddingLink(false); setEditingLinkId(null); }} style={{ padding: "5px 10px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>✕</button>
             </div>
           </div>
-        ))
-      )}
-    </Card>
+        )}
+        {referenceLinks.length === 0 && !addingLink && !editingLinkId ? (
+          <div style={{ textAlign: "center", padding: "20px 0", color: COLORS.textMuted, fontSize: 13 }}>
+            {isAdmin ? "Nenhum link adicionado ainda." : "Nenhum link disponível ainda."}
+          </div>
+        ) : (
+          referenceLinks.map(link => (
+            <div key={link.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "10px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, fontWeight: 600, color: COLORS.accent, textDecoration: "none" }}>{link.title}</a>
+                {link.description && <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>{link.description}</div>}
+              </div>
+              {isAdmin && (
+                <button onClick={() => { setLinkForm({ ...link }); setEditingLinkId(link.id); setAddingLink(false); }}
+                  style={{ padding: "3px 8px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 4, color: COLORS.textMuted, fontFamily: FONT_UI, fontSize: 11, cursor: "pointer", flexShrink: 0 }}>✎</button>
+              )}
+            </div>
+          ))
+        )}
+      </Card>
+
+      {/* Files */}
+      <Card>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+          <SectionTitle style={{ marginBottom: 0 }}>— Materiais e Arquivos</SectionTitle>
+          {isAdmin && (
+            <>
+              <input ref={fileRef} type="file" style={{ display: "none" }} onChange={handleUpload} />
+              <button onClick={() => fileRef.current?.click()} disabled={uploading}
+                style={{ padding: "5px 14px", background: `${COLORS.accent}18`, border: `1px solid ${COLORS.accent}55`, borderRadius: 4, color: COLORS.accent, fontFamily: FONT_UI, fontSize: 12, cursor: "pointer" }}>
+                {uploading ? "Enviando…" : "+ Arquivo"}
+              </button>
+            </>
+          )}
+        </div>
+        {files.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "32px 0", color: COLORS.textMuted }}>
+            <div style={{ fontSize: 32, marginBottom: 10 }}>📂</div>
+            <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 6 }}>Nenhum arquivo disponível ainda</div>
+            <div style={{ fontSize: 13 }}>{isAdmin ? "Clique em \"+ Arquivo\" para enviar materiais." : "Seu mentor irá compartilhar materiais em breve."}</div>
+          </div>
+        ) : (
+          files.map((f) => (
+            <div key={f.id} style={{ display: "flex", alignItems: "center", gap: 16, padding: "14px 0", borderBottom: `1px solid ${COLORS.border}` }}>
+              <div style={{ fontSize: 28, flexShrink: 0 }}>{fileIcon(f.file_type)}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.name}</div>
+                <div style={{ fontSize: 12, color: COLORS.textMuted }}>{fmtSize(f.size)} · {f.created_at?.split("T")[0]}</div>
+              </div>
+              <div style={{ display: "flex", gap: 8, flexShrink: 0, alignItems: "center" }}>
+                <a href={f.url} target="_blank" rel="noopener noreferrer"
+                  style={{ display: "inline-block", padding: "6px 16px", borderRadius: 2, fontSize: 12, fontWeight: 500, background: `${COLORS.accent}18`, color: COLORS.accent, border: `1px solid ${COLORS.accent}44`, textDecoration: "none" }}>Baixar</a>
+                {isAdmin && (
+                  <button onClick={() => handleDeleteFile(f)} disabled={deleting === f.id}
+                    style={{ padding: "6px 10px", background: "transparent", border: `1px solid ${COLORS.border}`, borderRadius: 2, color: deleting === f.id ? COLORS.textDim : COLORS.red, fontSize: 12, cursor: "pointer", fontFamily: FONT_UI }}>
+                    {deleting === f.id ? "…" : "✕"}
+                  </button>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </Card>
+    </div>
   );
 }
+
 
 // ─── Prospecting CRM ─────────────────────────────────────────────────────────
 const PROSPECT_STATUSES = [
@@ -823,10 +1108,13 @@ export default function MenteePage() {
   const [notFound, setNotFound]       = useState(false);
   const [photoErr, setPhotoErr]       = useState(false);
   const [hoverId, setHoverId]         = useState(null);
-  const [files, setFiles]             = useState([]);
-  const [basePlan, setBasePlan]       = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [prospects, setProspects]     = useState([]);
+  const [files, setFiles]                   = useState([]);
+  const [sidebarOpen, setSidebarOpen]       = useState(false);
+  const [prospects, setProspects]           = useState([]);
+  const [actionPlan, setActionPlan]         = useState({ goals: [] });
+  const [planTasks, setPlanTasks]           = useState([]);
+  const [menteeResources, setMenteeResources] = useState([]);
+  const [referenceLinks, setReferenceLinks] = useState([]);
 
   const loadFiles = async () => {
     const { data } = await supabase.from('files').select('*').eq('mentee_id', id).order('created_at', { ascending: false });
@@ -868,7 +1156,10 @@ export default function MenteePage() {
       } else {
         const mapped = toMentee(data);
         setMentee(mapped);
-        setBasePlan(mapped.basePlan || null);
+        setActionPlan(mapped.actionPlan  || { goals: [] });
+        setPlanTasks(mapped.tasks        || []);
+        setMenteeResources(mapped.resources     || []);
+        setReferenceLinks(mapped.referenceLinks || []);
       }
     })();
   }, [id]);
@@ -904,26 +1195,31 @@ export default function MenteePage() {
     await supabase.from('mentees').update({ milestones: newMilestones }).eq('id', id);
   };
 
-  const saveBasePlan = async (newPlan) => {
-    setBasePlan(newPlan);
-    await supabase.from('mentees').update({ base_plan: newPlan }).eq('id', id);
+  const saveActionPlan = async (newPlan) => {
+    setActionPlan(newPlan);
+    await supabase.from('mentees').update({ action_plan: newPlan }).eq('id', id);
   };
-
-  const saveCustomPlan = async (text) => {
-    setMentee(m => ({ ...m, customPlan: text }));
-    await supabase.from('mentees').update({ custom_plan: text }).eq('id', id);
+  const savePlanTasks = async (newTasks) => {
+    setPlanTasks(newTasks);
+    await supabase.from('mentees').update({ tasks: newTasks }).eq('id', id);
   };
-
-  const visibleMenu = MENU.filter(item =>
-    item.id !== "prospecting" || id === "1775518758013"
-  );
+  const saveMenteeResources = async (newRes) => {
+    setMenteeResources(newRes);
+    await supabase.from('mentees').update({ resources: newRes }).eq('id', id);
+  };
+  const saveReferenceLinks = async (newLinks) => {
+    setReferenceLinks(newLinks);
+    await supabase.from('mentees').update({ reference_links: newLinks }).eq('id', id);
+  };
 
   const renderContent = () => {
     switch (activeTab) {
       case "milestones":  return <MilestonesContent mentee={mentee} milestones={milestones} doneCount={doneCount} pct={pct} isAdmin={isAdmin} payments={mentee.payments} onToggleMilestone={(i) => { const next = milestones.map((v,idx) => idx===i ? !v : v); saveMilestones(next); }} />;
-      case "custom":      return <CustomPlanContent mentee={mentee} isAdmin={isAdmin} onSaveCustomPlan={saveCustomPlan} />;
+      case "plan":        return <ActionPlanContent mentee={mentee} actionPlan={actionPlan} isAdmin={isAdmin} onSave={saveActionPlan} />;
+      case "tasks":       return <TasksContent mentee={mentee} planTasks={planTasks} actionPlan={actionPlan} isAdmin={isAdmin} onSaveTasks={savePlanTasks} />;
+      case "resources":   return <ResourcesContent menteeResources={menteeResources} isAdmin={isAdmin} onSave={saveMenteeResources} onTabChange={setActiveTab} />;
+      case "references":  return <ReferencesContent menteeId={id} files={files} isAdmin={isAdmin} onRefreshFiles={loadFiles} referenceLinks={referenceLinks} onSaveLinks={saveReferenceLinks} />;
       case "prospecting": return <ProspectingContent menteeId={id} prospects={prospects} setProspects={setProspects} />;
-      case "resources":   return <ResourcesContent menteeId={id} files={files} isAdmin={isAdmin} onRefresh={loadFiles} />;
       default:            return null;
     }
   };
@@ -1129,7 +1425,7 @@ export default function MenteePage() {
               />
 
               {/* ── Dots on the arc at each balloon anchor ── */}
-              {visibleMenu.map(item => {
+              {MENU.map(item => {
                 const p = bPos(item.angle);
                 const isActive = activeTab === item.id;
                 return (
@@ -1144,7 +1440,7 @@ export default function MenteePage() {
               })}
 
               {/* ── Connector lines: photo edge → balloon anchor ── */}
-              {visibleMenu.map(item => {
+              {MENU.map(item => {
                 const b = bPos(item.angle);
                 const e = ePos(item.angle);
                 const isActive  = activeTab === item.id;
@@ -1222,7 +1518,7 @@ export default function MenteePage() {
             </div>
 
             {/* ── Balloons ── */}
-            {visibleMenu.map((item, idx) => {
+            {MENU.map((item, idx) => {
               const b        = bPos(item.angle);
               const isActive = activeTab === item.id;
               return (
