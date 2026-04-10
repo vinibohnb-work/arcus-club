@@ -1197,27 +1197,16 @@ export default function MenteePage() {
   const pct        = Math.round((doneCount / milestones.length) * 100);
   const photoUrl   = mentee.photoUrl || null;
 
-  const saveMilestones = async (newMilestones) => {
-    setMentee(m => ({ ...m, milestones: newMilestones }));
-    await supabase.from('mentees').update({ milestones: newMilestones }).eq('id', id);
+  const dbUpdate = async (payload) => {
+    const { error } = await supabase.from('mentees').update(payload).eq('id', id);
+    if (error) console.error('[MenteePage] save error:', error.message, payload);
   };
 
-  const saveActionPlan = async (newPlan) => {
-    setActionPlan(newPlan);
-    await supabase.from('mentees').update({ action_plan: newPlan }).eq('id', id);
-  };
-  const savePlanTasks = async (newTasks) => {
-    setPlanTasks(newTasks);
-    await supabase.from('mentees').update({ tasks: newTasks }).eq('id', id);
-  };
-  const saveMenteeResources = async (newRes) => {
-    setMenteeResources(newRes);
-    await supabase.from('mentees').update({ resources: newRes }).eq('id', id);
-  };
-  const saveReferenceLinks = async (newLinks) => {
-    setReferenceLinks(newLinks);
-    await supabase.from('mentees').update({ reference_links: newLinks }).eq('id', id);
-  };
+  const saveMilestones      = (v) => { setMentee(m => ({ ...m, milestones: v })); dbUpdate({ milestones: v }); };
+  const saveActionPlan      = (v) => { setActionPlan(v);        dbUpdate({ action_plan: v }); };
+  const savePlanTasks       = (v) => { setPlanTasks(v);         dbUpdate({ tasks: v }); };
+  const saveMenteeResources = (v) => { setMenteeResources(v);   dbUpdate({ resources: v }); };
+  const saveReferenceLinks  = (v) => { setReferenceLinks(v);    dbUpdate({ reference_links: v }); };
 
   const renderContent = () => {
     switch (activeTab) {
