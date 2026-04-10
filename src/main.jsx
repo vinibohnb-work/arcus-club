@@ -1,5 +1,25 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+
+// Force SW update: when a new SW is waiting, activate it immediately and reload
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.ready.then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing
+      newWorker?.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // New SW installed — tell it to skip waiting then reload
+          newWorker.postMessage({ type: 'SKIP_WAITING' })
+        }
+      })
+    })
+  })
+  // When a new SW takes control, reload to get the fresh bundle
+  let refreshing = false
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) { refreshing = true; window.location.reload() }
+  })
+}
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'

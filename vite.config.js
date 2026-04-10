@@ -36,6 +36,7 @@ export default defineConfig({
       workbox: {
         skipWaiting: true,
         clientsClaim: true,
+        cleanupOutdatedCaches: true,
         // Não pré-cacheia JS/HTML — eles mudam a cada deploy e cachear
         // causa novas abas servirem bundle antigo com rotas desatualizadas.
         // Só assets estáticos que raramente mudam ficam no precache.
