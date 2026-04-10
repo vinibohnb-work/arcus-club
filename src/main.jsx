@@ -1,23 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-// Force SW update: when a new SW is waiting, activate it immediately and reload
+// Registra SW mínimo (public/sw.js) que limpa caches antigos e não faz cache
+// nenhum — garante que toda nova aba sempre carregue o bundle mais recente.
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.ready.then(reg => {
-    reg.addEventListener('updatefound', () => {
-      const newWorker = reg.installing
-      newWorker?.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          // New SW installed — tell it to skip waiting then reload
-          newWorker.postMessage({ type: 'SKIP_WAITING' })
-        }
-      })
-    })
-  })
-  // When a new SW takes control, reload to get the fresh bundle
-  let refreshing = false
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (!refreshing) { refreshing = true; window.location.reload() }
+  navigator.serviceWorker.register('/sw.js').catch(() => {})
+  navigator.serviceWorker.addEventListener('message', event => {
+    if (event.data?.type === 'SW_UPDATED') {
+      window.location.reload()
+    }
   })
 }
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
