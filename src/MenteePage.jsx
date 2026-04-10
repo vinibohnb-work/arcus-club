@@ -1114,6 +1114,8 @@ export default function MenteePage() {
   const [activeTab, setActiveTab]     = useState("milestones");
   const [notFound, setNotFound]       = useState(false);
   const [photoErr, setPhotoErr]       = useState(false);
+  const [photoHover, setPhotoHover]   = useState(false);
+  const [photoUploading, setPhotoUploading] = useState(false);
   const [hoverId, setHoverId]         = useState(null);
   const [files, setFiles]                   = useState([]);
   const [sidebarOpen, setSidebarOpen]       = useState(false);
@@ -1200,6 +1202,29 @@ export default function MenteePage() {
   const dbUpdate = async (payload) => {
     const { error } = await supabase.from('mentees').update(payload).eq('id', id);
     if (error) console.error('[MenteePage] save error:', error.message, payload);
+  };
+
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhotoUploading(true);
+    try {
+      const ext  = file.name.split('.').pop();
+      const path = `avatars/${id}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from('mentee-files')
+        .upload(path, file, { upsert: true, contentType: file.type });
+      if (upErr) { console.error('[photo upload]', upErr.message); return; }
+      const { data: { publicUrl } } = supabase.storage
+        .from('mentee-files')
+        .getPublicUrl(path);
+      const urlWithBust = `${publicUrl}?t=${Date.now()}`;
+      setMentee(m => ({ ...m, photoUrl: urlWithBust }));
+      setPhotoErr(false);
+      await dbUpdate({ photo_url: publicUrl });
+    } finally {
+      setPhotoUploading(false);
+    }
   };
 
   const saveMilestones      = (v) => { setMentee(m => ({ ...m, milestones: v })); dbUpdate({ milestones: v }); };
@@ -1484,19 +1509,25 @@ export default function MenteePage() {
             </svg>
 
             {/* ── Person photo ── */}
-            <div style={{
-              position:"absolute",
-              left: PC.x - PR,
-              top:  PC.y - PR,
-              width:  PR * 2,
-              height: PR * 2,
-              borderRadius:"50%",
-              overflow:"hidden",
-              border:`2px solid ${mentee.color}55`,
-              background:`${mentee.color}22`,
-              boxShadow:`0 0 32px ${mentee.color}33, 0 8px 32px rgba(0,0,0,0.5)`,
-              zIndex:10,
-            }}>
+            <label
+              htmlFor="photo-upload"
+              onMouseEnter={() => setPhotoHover(true)}
+              onMouseLeave={() => setPhotoHover(false)}
+              style={{
+                position:"absolute",
+                left: PC.x - PR,
+                top:  PC.y - PR,
+                width:  PR * 2,
+                height: PR * 2,
+                borderRadius:"50%",
+                overflow:"hidden",
+                border:`2px solid ${photoHover ? mentee.color : mentee.color+"55"}`,
+                background:`${mentee.color}22`,
+                boxShadow:`0 0 32px ${mentee.color}33, 0 8px 32px rgba(0,0,0,0.5)`,
+                zIndex:10,
+                cursor:"pointer",
+                transition:"border-color 0.2s",
+              }}>
               {photoUrl && !photoErr ? (
                 <img
                   src={photoUrl}
@@ -1511,7 +1542,32 @@ export default function MenteePage() {
                   {mentee.avatar}
                 </div>
               )}
-            </div>
+              {/* Overlay ao hover ou durante upload */}
+              <div style={{
+                position:"absolute", inset:0, borderRadius:"50%",
+                background: "rgba(0,0,0,0.55)",
+                display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
+                gap:4, opacity: photoHover || photoUploading ? 1 : 0,
+                transition:"opacity 0.2s",
+              }}>
+                {photoUploading ? (
+                  <div style={{ fontSize:11, color:"#fff", fontFamily:FONT_UI }}>Enviando…</div>
+                ) : (
+                  <>
+                    <div style={{ fontSize:22 }}>📷</div>
+                    <div style={{ fontSize:10, color:"#ffffffCC", fontFamily:FONT_UI,
+                      letterSpacing:"0.08em", textTransform:"uppercase" }}>Alterar foto</div>
+                  </>
+                )}
+              </div>
+            </label>
+            <input
+              id="photo-upload"
+              type="file"
+              accept="image/*"
+              style={{ display:"none" }}
+              onChange={handlePhotoUpload}
+            />
 
             {/* ── Balloons ── */}
             {MENU.map((item, idx) => {
