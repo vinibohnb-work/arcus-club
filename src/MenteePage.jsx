@@ -544,10 +544,7 @@ function ResourcesContent({ menteeResources, isAdmin, onSave, onTabChange, navig
   const handleDelete = (id) => { onSave(menteeResources.filter(r => r.id !== id)); if (editingId === id) setEditingId(null); };
   const handleClick  = (r)  => {
     if (r.tab) { onTabChange(r.tab); return; }
-    if (r.url) {
-      if (r.url.startsWith("/")) { navigate(r.url); return; }
-      window.open(r.url, "_blank", "noopener noreferrer");
-    }
+    if (r.url) window.open(r.url, "_blank", "noopener noreferrer");
   };
 
   const inp    = { background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 4, padding: "7px 10px", color: COLORS.text, fontFamily: FONT_UI, fontSize: 13, outline: "none", width: "100%" };
