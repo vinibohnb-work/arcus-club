@@ -36,8 +36,18 @@ export default defineConfig({
       workbox: {
         skipWaiting: true,
         clientsClaim: true,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // Não pré-cacheia JS/HTML — eles mudam a cada deploy e cachear
+        // causa novas abas servirem bundle antigo com rotas desatualizadas.
+        // Só assets estáticos que raramente mudam ficam no precache.
+        globPatterns: ['**/*.{css,ico,png,svg,woff2}'],
         runtimeCaching: [
+          // JS do app: sempre busca na rede primeiro, cache só como fallback
+          {
+            urlPattern: /\/assets\/.*\.js$/,
+            handler: 'NetworkFirst',
+            options: { cacheName: 'app-js-cache', networkTimeoutSeconds: 5 },
+          },
+          // Google Fonts
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',
