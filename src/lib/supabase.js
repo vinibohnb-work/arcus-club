@@ -145,6 +145,8 @@ export const toProspect = (row) => ({
   nextAction:      row.next_action      || '',
   nextActionDate:  row.next_action_date || '',
   createdAt:       row.created_at       || '',
+  interactions:    row.interactions     || [],
+  nextSteps:       row.next_steps       || [],
 })
 
 export const toProspectDb = (p) => ({
@@ -161,4 +163,6 @@ export const toProspectDb = (p) => ({
   notes:            p.notes,
   next_action:      p.nextAction,
   next_action_date: p.nextActionDate,
+  interactions:     p.interactions || [],
+  next_steps:       p.nextSteps    || [],
 })
