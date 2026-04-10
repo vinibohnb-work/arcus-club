@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import MenteePage from './MenteePage.jsx'
+import ProspeccaoPage from './pages/ProspeccaoPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import LandingPage from './LandingPage.jsx'
 import LinksPage from './pages/LinksPage.jsx'
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
   { path: '/definir-senha', element: <SetPasswordPage /> },
   { path: '/admin', element: <AdminRoute><App /></AdminRoute> },
   { path: '/mentorado/:id', element: <MenteeRoute><MenteePage /></MenteeRoute> },
+  { path: '/mentorado/:id/prospeccao', element: <MenteeRoute><ProspeccaoPage /></MenteeRoute> },
 ])
 
 createRoot(document.getElementById('root')).render(
