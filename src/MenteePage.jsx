@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { supabase, toMentee, toProspect, toProspectDb } from "./lib/supabase";
 import { useAuth } from "./contexts/AuthContext";
 
@@ -528,7 +528,7 @@ function TasksContent({ mentee, planTasks, actionPlan, isAdmin, onSaveTasks }) {
 }
 
 // ─── Resources (link cards) ───────────────────────────────────────────────────
-function ResourcesContent({ menteeResources, isAdmin, onSave, onTabChange }) {
+function ResourcesContent({ menteeResources, isAdmin, onSave, onTabChange, navigate }) {
   const BLANK = { label: "", icon: "🔗", description: "", tab: "", url: "" };
   const [adding, setAdding]       = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -542,7 +542,13 @@ function ResourcesContent({ menteeResources, isAdmin, onSave, onTabChange }) {
     setAdding(false); setEditingId(null);
   };
   const handleDelete = (id) => { onSave(menteeResources.filter(r => r.id !== id)); if (editingId === id) setEditingId(null); };
-  const handleClick  = (r)  => { if (r.tab) { onTabChange(r.tab); return; } if (r.url) window.open(r.url, "_blank", "noopener noreferrer"); };
+  const handleClick  = (r)  => {
+    if (r.tab) { onTabChange(r.tab); return; }
+    if (r.url) {
+      if (r.url.startsWith("/")) { navigate(r.url); return; }
+      window.open(r.url, "_blank", "noopener noreferrer");
+    }
+  };
 
   const inp    = { background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 4, padding: "7px 10px", color: COLORS.text, fontFamily: FONT_UI, fontSize: 13, outline: "none", width: "100%" };
   const fLabel = (txt) => <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.1em" }}>{txt}</div>;
@@ -1103,6 +1109,7 @@ function ProspectingContent({ menteeId, prospects, setProspects }) {
 export default function MenteePage() {
   const { signOut, isAdmin }          = useAuth();
   const { id }                        = useParams();
+  const navigate                      = useNavigate();
   const [mentee, setMentee]           = useState(null);
   const [activeTab, setActiveTab]     = useState("milestones");
   const [notFound, setNotFound]       = useState(false);
@@ -1217,7 +1224,7 @@ export default function MenteePage() {
       case "milestones":  return <MilestonesContent mentee={mentee} milestones={milestones} doneCount={doneCount} pct={pct} isAdmin={isAdmin} payments={mentee.payments} onToggleMilestone={(i) => { const next = milestones.map((v,idx) => idx===i ? !v : v); saveMilestones(next); }} />;
       case "plan":        return <ActionPlanContent mentee={mentee} actionPlan={actionPlan} isAdmin={isAdmin} onSave={saveActionPlan} />;
       case "tasks":       return <TasksContent mentee={mentee} planTasks={planTasks} actionPlan={actionPlan} isAdmin={isAdmin} onSaveTasks={savePlanTasks} />;
-      case "resources":   return <ResourcesContent menteeResources={menteeResources} isAdmin={isAdmin} onSave={saveMenteeResources} onTabChange={setActiveTab} />;
+      case "resources":   return <ResourcesContent menteeResources={menteeResources} isAdmin={isAdmin} onSave={saveMenteeResources} onTabChange={setActiveTab} navigate={navigate} />;
       case "references":  return <ReferencesContent menteeId={id} files={files} isAdmin={isAdmin} onRefreshFiles={loadFiles} referenceLinks={referenceLinks} onSaveLinks={saveReferenceLinks} />;
       case "prospecting": return <ProspectingContent menteeId={id} prospects={prospects} setProspects={setProspects} />;
       default:            return null;
