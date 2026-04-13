@@ -128,6 +128,15 @@ Gradiente dourado (para palavras-chave em destaque):
 
 Estética: dark luxury. Grain texture. Glow radial dourado. Minimal. Sem emojis.
 
+━━━ TOM E VOZ — REGRAS OBRIGATÓRIAS ━━━
+Tom: conversa 1:1 com um empreendedor. Direto, sem rodeios, sem jargão acadêmico.
+Proibido usar:
+  • Fórmula "X não é Y. É Z" ou variações ("não é sobre X, é sobre Y", "não está X, está Y")
+  • Fórmula "Você não tem X. Tem Y" / "Você não está X, está Y"
+  • Travessões (—) em qualquer posição
+  • Palavras: "jornada", "ecossistema", "impacto", "sinergias", "estratégico" (como adjetivo vago)
+Prefira: observações concretas, situações que o leitor reconhece, afirmações diretas sem inversão forçada.
+
 ━━━ ELEMENTOS VISUAIS DE FUNDO (presentes em TODOS os slides) ━━━
 Aplicar dentro de cada slide via position:absolute, pointer-events:none, z-index baixo:
 
