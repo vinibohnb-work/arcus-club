@@ -137,6 +137,22 @@ Proibido usar:
   • Palavras: "jornada", "ecossistema", "impacto", "sinergias", "estratégico" (como adjetivo vago)
 Prefira: observações concretas, situações que o leitor reconhece, afirmações diretas sem inversão forçada.
 
+━━━ DIRETRIZES POR PILAR ━━━
+Processos: sempre conectar à consequência financeira real — aumento de margem, redução de custo,
+  aumento de lucro ou ganho de capacidade sem aumento de headcount. Evitar conteúdo de processo
+  genérico ("tenha processos!"). O argumento deve tangibilizar o valor em termos de negócio.
+
+Tecnologia e IA: SEMPRE conectar tecnologia à estratégia de negócio e ao resultado mensurável.
+  Proibido: "IA é o futuro", "automatize tudo", conteúdo genérico de tendência.
+  Obrigatório: qual problema de negócio a tecnologia resolve, qual resultado ela produz,
+  por que a sequência (processo → simplificação → automação) importa antes da ferramenta.
+
+Estratégia: focar em decisões de negócio com impacto em margem, modelo de receita ou escala.
+  Conectar sempre ao concreto: um número, uma situação real, uma decisão que o leitor pode tomar.
+
+Liderança e Cultura (25% do calendário): conteúdo humanizado, situações reconhecíveis,
+  sem teoria de gestão. Tom mais próximo, primeira ou segunda pessoa.
+
 ━━━ ELEMENTOS VISUAIS DE FUNDO (presentes em TODOS os slides) ━━━
 Aplicar dentro de cada slide via position:absolute, pointer-events:none, z-index baixo:
 
