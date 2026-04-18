@@ -24,74 +24,43 @@ const FORMAT_COLOR = {
 };
 const FORMATS = ["Todos", "Carrossel", "Estático", "Reels", "Bastidor", "Arcus Club"];
 
-const PHASE_META = {
-  1: { name: "Fundação de Identidade",  period: "6 Abr – 3 Mai",  total: 12 },
-  2: { name: "Aprofundamento e Prova",  period: "4 Mai – 31 Mai", total: 16 },
-  3: { name: "Conversão Suave",         period: "1 Jun – 4 Jul",  total: 20 },
-};
-
+// ── Plano ativo: 1 Carrossel + 1 Reels por semana, 11 semanas ───────────────
+// 75% Processos / Estratégia / Tecnologia e IA  |  25% Liderança / Cultura
 const ALL_POSTS = [
-  { id:"p1",  phase:1, week:"S01", date:"06/04", format:"Carrossel",   pilar:"Liderança",                   hook:"O líder que resolve tudo é o mesmo que impede o crescimento" },
-  { id:"p2",  phase:1, week:"S01", date:"08/04", format:"Estático",    pilar:"Cultura Organizacional",      hook:"Cultura não é o que está no mural — é o que você tolera quando ninguém está olhando" },
-  { id:"p3",  phase:1, week:"S01", date:"10/04", format:"Reels",       pilar:"Processos e Sistemas",        hook:"Seu processo não trava o time — ele revela quem não deveria estar ali" },
-  // S02 — reordenado: Estático primeiro (já publicado), Reels segundo
-  { id:"p4",  phase:1, week:"S02", date:"13/04", format:"Estático",    pilar:"Processos",        hook:"O gargalo que você trata como problema de pessoa quase sempre é problema de processo" },
-  { id:"p5",  phase:1, week:"S02", date:"15/04", format:"Reels",       pilar:"Tecnologia e IA",  hook:"A empresa que usa IA para executar o processo errado fica mais eficiente no caminho errado" },
-  { id:"p6",  phase:1, week:"S02", date:"17/04", format:"Carrossel",   pilar:"Estratégia",       hook:"Crescer o faturamento sem crescer a margem é trabalhar mais para ganhar o mesmo" },
-  // S03
-  { id:"p7",  phase:1, week:"S03", date:"20/04", format:"Carrossel",   pilar:"Processos",        hook:"Quanto custa para a sua empresa não ter o processo documentado: um cálculo que a maioria ignora" },
-  { id:"p8",  phase:1, week:"S03", date:"22/04", format:"Estático",    pilar:"Tecnologia e IA",  hook:"Automatizar uma tarefa manual é ganho tático. Redesenhar o processo antes de automatizar é ganho estratégico" },
-  { id:"p9",  phase:1, week:"S03", date:"24/04", format:"Reels",       pilar:"Cultura",          hook:"Toda empresa tem duas culturas: a declarada e a praticada" },
-  // S04
-  { id:"p10", phase:1, week:"S04", date:"27/04", format:"Carrossel",   pilar:"Tecnologia e IA",  hook:"Como usar IA para aumentar a capacidade do time sem aumentar o headcount" },
-  { id:"p11", phase:1, week:"S04", date:"29/04", format:"Estático",    pilar:"Processos",        hook:"O custo que aparece na planilha raramente é o maior. O custo invisível fica nos retrabalhos que ninguém contabiliza" },
-  { id:"p12", phase:1, week:"S04", date:"01/05", format:"Reels",       pilar:"Liderança",        hook:"Time que entrega o mínimo quase sempre tem alguém em cima que aceita o mínimo" },
-  // S05
-  { id:"p13", phase:2, week:"S05", date:"04/05", format:"Carrossel",   pilar:"Estratégia",       hook:"3 alavancas para aumentar a margem sem aumentar o faturamento" },
-  { id:"p14", phase:2, week:"S05", date:"06/05", format:"Estático",    pilar:"Processos",        hook:"Sair de férias e voltar para o mesmo caos é um sinal claro de que o processo ainda depende de você" },
-  { id:"p15", phase:2, week:"S05", date:"08/05", format:"Reels",       pilar:"Tecnologia e IA",  hook:"Antes de implementar qualquer ferramenta de IA, a pergunta certa: o processo que ela vai executar funciona bem sem ela?" },
-  { id:"p16", phase:2, week:"S05", date:"09/05", format:"Bastidor",    pilar:"Arcus Club",       hook:"Bastidor de encontro ou insight do programa" },
-  // S06
-  { id:"p17", phase:2, week:"S06", date:"11/05", format:"Carrossel",   pilar:"Processos",        hook:"Como encontrar os processos que estão consumindo margem sem aparecer no DRE" },
-  { id:"p18", phase:2, week:"S06", date:"13/05", format:"Estático",    pilar:"Liderança",        hook:"A demissão que você adiou 6 meses custou mais do que a que fez em 6 dias" },
-  { id:"p19", phase:2, week:"S06", date:"15/05", format:"Reels",       pilar:"Tecnologia e IA",  hook:"3 casos onde IA reduziu custo operacional real: o que funcionou e por que funcionou em cada um" },
-  { id:"p20", phase:2, week:"S06", date:"16/05", format:"Bastidor",    pilar:"Prova Social",     hook:"Resultado de membro ou insight de reunião interna do Arcus Club" },
-  // S07
-  { id:"p21", phase:2, week:"S07", date:"18/05", format:"Carrossel",   pilar:"Estratégia",       hook:"Como construir um modelo de negócios onde a margem cresce junto com o volume" },
-  { id:"p22", phase:2, week:"S07", date:"20/05", format:"Estático",    pilar:"Tecnologia e IA",  hook:"Ferramenta de IA sem processo definido cria velocidade para o lugar errado" },
-  { id:"p23", phase:2, week:"S07", date:"22/05", format:"Reels",       pilar:"Liderança",        hook:"Quando o líder precisa controlar tudo, em algum ponto a confiança foi quebrada. Vale investigar onde" },
-  { id:"p24", phase:2, week:"S07", date:"23/05", format:"Bastidor",    pilar:"Evento / Encontro",hook:"Foto ou registro de evento, encontro ou visita relevante" },
-  // S08
-  { id:"p25", phase:2, week:"S08", date:"25/05", format:"Carrossel",   pilar:"Processos",        hook:"Os processos que mais consomem margem raramente são os mais visíveis. Como identificar os que realmente importam" },
-  { id:"p26", phase:2, week:"S08", date:"27/05", format:"Estático",    pilar:"Cultura",          hook:"Empresa sem processo depende de quem tem mais energia no dia. Quando essa pessoa sai, tudo trava" },
-  { id:"p27", phase:2, week:"S08", date:"29/05", format:"Reels",       pilar:"Tecnologia e IA",  hook:"Antes de automatizar, a sequência que a maioria pula: mapear, medir, simplificar. Só então automatizar" },
-  { id:"p28", phase:2, week:"S08", date:"30/05", format:"Bastidor",    pilar:"Bastidor Pessoal", hook:"Insight de leitura, conversa ou decisão relevante da semana" },
-  // S09
-  { id:"p29", phase:3, week:"S09", date:"01/06", format:"Carrossel",   pilar:"Estratégia",       hook:"3 sinais de que sua empresa cresceu além da estrutura que a sustenta" },
-  { id:"p30", phase:3, week:"S09", date:"03/06", format:"Estático",    pilar:"Cultura",          hook:"Conhecimento que fica na cabeça das pessoas sai da empresa quando elas saem" },
-  { id:"p31", phase:3, week:"S09", date:"05/06", format:"Reels",       pilar:"Tecnologia e IA",  hook:"A pergunta que toda empresa deveria responder antes de implementar IA: qual resultado de negócio isso afeta?" },
-  { id:"p32", phase:3, week:"S09", date:"06/06", format:"Arcus Club",  pilar:"CTA Suave",        hook:"O que acontece dentro do programa e para quem ele foi feito" },
-  // S10
-  { id:"p33", phase:3, week:"S10", date:"08/06", format:"Carrossel",   pilar:"Processos",        hook:"Como aumentar a capacidade operacional sem contratar: o que priorizar quando o time já está no limite" },
-  { id:"p34", phase:3, week:"S10", date:"10/06", format:"Estático",    pilar:"Liderança",        hook:"Líder que treina o time para depender dele resolveu o problema de curto prazo e criou o de longo" },
-  { id:"p35", phase:3, week:"S10", date:"12/06", format:"Reels",       pilar:"Estratégia",       hook:"Planejamento que fica na gaveta cumpriu a função de tranquilizar quem o fez. Mas não mudou nada" },
-  { id:"p36", phase:3, week:"S10", date:"13/06", format:"Arcus Club",  pilar:"Bastidor do Programa", hook:"Bastidor de encontro com CTA: se você se identificou, vem conversar" },
-  // S11
-  { id:"p37", phase:3, week:"S11", date:"15/06", format:"Carrossel",   pilar:"Tecnologia e IA",  hook:"Como mapear quais processos da sua empresa têm maior potencial de automação com IA" },
-  { id:"p38", phase:3, week:"S11", date:"17/06", format:"Estático",    pilar:"Estratégia",       hook:"Crescimento sem revisão do modelo de negócios vira aumento de faturamento com compressão de margem" },
-  { id:"p39", phase:3, week:"S11", date:"19/06", format:"Reels",       pilar:"Cultura",          hook:"Quando o clima do dia depende do humor de quem lidera, o time aprende a esperar antes de agir" },
-  { id:"p40", phase:3, week:"S11", date:"20/06", format:"Arcus Club",  pilar:"Prova Social",     hook:"Resultado de membro com CTA suave sobre o programa" },
-  // S12
-  { id:"p41", phase:3, week:"S12", date:"22/06", format:"Carrossel",   pilar:"Processos",        hook:"Checklist que o time ignora quase sempre tem um problema antes da disciplina: o design está errado" },
-  { id:"p42", phase:3, week:"S12", date:"24/06", format:"Estático",    pilar:"Tecnologia e IA",  hook:"Antes de automatizar, documente. Antes de documentar, meça. A sequência importa mais do que a ferramenta" },
-  { id:"p43", phase:3, week:"S12", date:"26/06", format:"Reels",       pilar:"Liderança",        hook:"Time que só se move quando o dono está presente aprendeu que esperar é mais seguro do que errar" },
-  { id:"p44", phase:3, week:"S12", date:"27/06", format:"Arcus Club",  pilar:"CTA Direto",       hook:"O que é o programa, para quem é e como entrar" },
-  // S13
-  { id:"p45", phase:3, week:"S13", date:"29/06", format:"Carrossel",   pilar:"Estratégia",       hook:"Como construir uma empresa que funciona sem você: o roteiro dos 90 dias" },
-  { id:"p46", phase:3, week:"S13", date:"01/07", format:"Estático",    pilar:"Processos",        hook:"Proteger o próprio tempo começa com um sistema. Sem ele, qualquer urgência dos outros vira prioridade sua" },
-  { id:"p47", phase:3, week:"S13", date:"03/07", format:"Reels",       pilar:"Tecnologia e IA",  hook:"O maior erro ao implementar IA no negócio: automatizar antes de simplificar o que vai ser automatizado" },
-  { id:"p48", phase:3, week:"S13", date:"04/07", format:"Arcus Club",  pilar:"Post de Encerramento", hook:"Post de encerramento: o que é o Arcus Club, para quem é, como participar" },
+  // ── Publicados (S01–S02) ──────────────────────────────────────────────────
+  { id:"p1",  week:"PUB", date:"06/04", format:"Carrossel", pilar:"Liderança",        hook:"O líder que resolve tudo é o mesmo que impede o crescimento" },
+  { id:"p2",  week:"PUB", date:"08/04", format:"Estático",  pilar:"Cultura",          hook:"Cultura não é o que está no mural — é o que você tolera quando ninguém está olhando" },
+  { id:"p3",  week:"PUB", date:"10/04", format:"Reels",     pilar:"Processos",        hook:"Seu processo não trava o time — ele revela quem não deveria estar ali" },
+  { id:"p4",  week:"PUB", date:"13/04", format:"Estático",  pilar:"Processos",        hook:"O gargalo que você trata como problema de pessoa quase sempre é problema de processo" },
+  { id:"p5",  week:"PUB", date:"15/04", format:"Reels",     pilar:"Tecnologia e IA",  hook:"A empresa que usa IA para executar o processo errado fica mais eficiente no caminho errado" },
+  { id:"p6",  week:"PUB", date:"17/04", format:"Carrossel", pilar:"Estratégia",       hook:"Crescer o faturamento sem crescer a margem é trabalhar mais para ganhar o mesmo" },
+  // ── Plano ativo — W01 a W11 ───────────────────────────────────────────────
+  { id:"w01c", week:"W01", date:"20/04", format:"Carrossel", pilar:"Processos",       hook:"Quanto custa para a sua empresa não ter o processo documentado: um cálculo que a maioria ignora" },
+  { id:"w01r", week:"W01", date:"24/04", format:"Reels",     pilar:"Tecnologia e IA", hook:"IA implementada sem estratégia de negócio clara é custo com aparência de inovação" },
+  { id:"w02c", week:"W02", date:"27/04", format:"Carrossel", pilar:"Estratégia",      hook:"3 alavancas para aumentar a margem sem aumentar o faturamento" },
+  { id:"w02r", week:"W02", date:"01/05", format:"Reels",     pilar:"Liderança",       hook:"Feedback dado tarde cobra juros. Quanto mais você espera, mais caro fica para todo mundo" },
+  { id:"w03c", week:"W03", date:"04/05", format:"Carrossel", pilar:"Tecnologia e IA", hook:"Como usar IA para aumentar a capacidade do time sem aumentar o headcount" },
+  { id:"w03r", week:"W03", date:"08/05", format:"Reels",     pilar:"Processos",       hook:"O custo que aparece na planilha raramente é o maior. O custo invisível fica nos retrabalhos que ninguém contabiliza" },
+  { id:"w04c", week:"W04", date:"11/05", format:"Carrossel", pilar:"Processos",       hook:"Como encontrar os processos que estão consumindo margem sem aparecer no DRE" },
+  { id:"w04r", week:"W04", date:"15/05", format:"Reels",     pilar:"Tecnologia e IA", hook:"Antes de implementar qualquer ferramenta de IA, a pergunta certa: o processo que ela vai executar funciona bem sem ela?" },
+  { id:"w05c", week:"W05", date:"18/05", format:"Carrossel", pilar:"Estratégia",      hook:"Como construir um modelo de negócios onde a margem cresce junto com o volume" },
+  { id:"w05r", week:"W05", date:"22/05", format:"Reels",     pilar:"Cultura",         hook:"Toda empresa tem duas culturas: a declarada e a praticada" },
+  { id:"w06c", week:"W06", date:"25/05", format:"Carrossel", pilar:"Processos",       hook:"Os processos que mais consomem margem raramente são os mais visíveis. Como identificar os que realmente importam" },
+  { id:"w06r", week:"W06", date:"29/05", format:"Reels",     pilar:"Tecnologia e IA", hook:"Antes de automatizar, a sequência que a maioria pula: mapear, medir, simplificar. Só então automatizar" },
+  { id:"w07c", week:"W07", date:"01/06", format:"Carrossel", pilar:"Tecnologia e IA", hook:"Como mapear quais processos da sua empresa têm maior potencial de automação com IA" },
+  { id:"w07r", week:"W07", date:"05/06", format:"Reels",     pilar:"Estratégia",      hook:"3 sinais de que sua empresa cresceu além da estrutura que a sustenta" },
+  { id:"w08c", week:"W08", date:"08/06", format:"Carrossel", pilar:"Processos",       hook:"Como aumentar a capacidade operacional sem contratar: o que priorizar quando o time já está no limite" },
+  { id:"w08r", week:"W08", date:"12/06", format:"Reels",     pilar:"Liderança",       hook:"Time que só se move quando o dono está presente aprendeu que esperar é mais seguro do que errar" },
+  { id:"w09c", week:"W09", date:"15/06", format:"Carrossel", pilar:"Tecnologia e IA", hook:"3 casos onde IA reduziu custo operacional real: o que funcionou e por que funcionou em cada um" },
+  { id:"w09r", week:"W09", date:"19/06", format:"Reels",     pilar:"Processos",       hook:"Checklist que o time ignora quase sempre tem um problema antes da disciplina: o design está errado" },
+  { id:"w10c", week:"W10", date:"22/06", format:"Carrossel", pilar:"Estratégia",      hook:"Crescimento sem revisão do modelo de negócios vira aumento de faturamento com compressão de margem" },
+  { id:"w10r", week:"W10", date:"26/06", format:"Reels",     pilar:"Liderança",       hook:"O dia que você perceber que está resolvendo as mesmas questões de dois anos atrás é um bom dia para repensar como delega" },
+  { id:"w11c", week:"W11", date:"29/06", format:"Carrossel", pilar:"Estratégia",      hook:"Como construir uma empresa que funciona sem você: o roteiro dos 90 dias" },
+  { id:"w11r", week:"W11", date:"03/07", format:"Reels",     pilar:"Cultura",         hook:"Quando o clima do dia depende do humor de quem lidera, o time aprende a esperar antes de agir" },
 ];
+
+const PLAN_POSTS  = ALL_POSTS.filter(p => p.week.startsWith("W")); // 22 posts ativos
+const PLAN_TOTAL  = PLAN_POSTS.length;
 
 const KB_TYPES  = ["Insight", "Referência", "Hook", "Briefing"];
 const KB_COLORS = { Insight: COLORS.teal, Referência: COLORS.violet, Hook: COLORS.accent, Briefing: "#F97316" };
@@ -145,17 +114,17 @@ function ProgressBar({ value, color = COLORS.accent }) {
 
 // ── sub-componente: aba Calendário ───────────────────────────────────────────
 function TabCalendario({ published, togglePublished, generated, onGenerate, postContent, setPostContent }) {
-  const [phase,        setPhase]        = useState(1);
   const [filter,       setFilter]       = useState("Todos");
+  const [showPub,      setShowPub]      = useState(false);
   const [expanded,     setExpanded]     = useState(null);
   const [localContent, setLocalContent] = useState({});
   const [copied,       setCopied]       = useState(null);
 
-  const phasePosts = ALL_POSTS.filter(p => p.phase === phase);
-  const visible    = phasePosts.filter(p => filter === "Todos" || p.format === filter);
+  const planDone   = PLAN_POSTS.filter(p => published.has(p.id)).length;
+  const planPct    = Math.round((planDone / PLAN_TOTAL) * 100);
+  const visible    = (showPub ? ALL_POSTS : PLAN_POSTS)
+                       .filter(p => filter === "Todos" || p.format === filter);
   const weeks      = [...new Set(visible.map(p => p.week))];
-  const pubTotal   = ALL_POSTS.filter(p => published.has(p.id)).length;
-  const genTotal   = ALL_POSTS.filter(p => generated.has(p.id)).length;
 
   const handleCopyPrompt = (post) => {
     const prompt = generatePrompt(post);
@@ -177,30 +146,30 @@ function TabCalendario({ published, togglePublished, generated, onGenerate, post
 
   return (
     <>
-      {/* Seletor de fase */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16, marginBottom: 28 }}>
-        {[1,2,3].map(ph => {
-          const meta  = PHASE_META[ph];
-          const posts = ALL_POSTS.filter(p => p.phase === ph);
-          const done  = posts.filter(p => published.has(p.id)).length;
-          const pct   = Math.round((done / meta.total) * 100);
-          const active = phase === ph;
-          return (
-            <div key={ph} onClick={() => setPhase(ph)}
-              style={s.card({ cursor: "pointer", borderTop: `2px solid ${active ? COLORS.accent : COLORS.border}`, opacity: active ? 1 : 0.6, transition: "all 0.15s" })}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 600, fontFamily: FONT_UI, color: COLORS.textDim, textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 4 }}>Fase {ph}</div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.text }}>{meta.name}</div>
-                  <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>{meta.period}</div>
-                </div>
-                <div style={{ fontSize: 24, fontWeight: 800, fontFamily: FONT_DISPLAY, color: active ? COLORS.accent : COLORS.textMuted }}>{pct}%</div>
-              </div>
-              <ProgressBar value={pct} color={active ? COLORS.accent : COLORS.textMuted} />
-              <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 6 }}>{done}/{meta.total} publicados</div>
-            </div>
-          );
-        })}
+      {/* Progresso do plano */}
+      <div style={s.card({ marginBottom: 28, borderTop: `2px solid ${COLORS.accent}` })}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 600, fontFamily: FONT_UI, color: COLORS.textDim, textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 4 }}>Plano Ativo</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.text }}>11 semanas · 1 Carrossel + 1 Reels por semana</div>
+            <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>20 Abr – 3 Jul · 75% Processos/Estratégia/IA · 25% Liderança/Cultura</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: 32, fontWeight: 800, fontFamily: FONT_DISPLAY, color: COLORS.accent, lineHeight: 1 }}>{planPct}%</div>
+            <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 4 }}>{planDone}/{PLAN_TOTAL} publicados</div>
+          </div>
+        </div>
+        <ProgressBar value={planPct} color={COLORS.accent} />
+        <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
+          <button onClick={() => setShowPub(false)}
+            style={{ fontSize: 11, fontFamily: FONT_UI, padding: "4px 12px", borderRadius: 4, border: `1px solid ${!showPub ? COLORS.accent : COLORS.border}`, background: !showPub ? COLORS.accent + "22" : "transparent", color: !showPub ? COLORS.accent : COLORS.textMuted, cursor: "pointer" }}>
+            Plano ativo
+          </button>
+          <button onClick={() => setShowPub(true)}
+            style={{ fontSize: 11, fontFamily: FONT_UI, padding: "4px 12px", borderRadius: 4, border: `1px solid ${showPub ? COLORS.accent : COLORS.border}`, background: showPub ? COLORS.accent + "22" : "transparent", color: showPub ? COLORS.accent : COLORS.textMuted, cursor: "pointer" }}>
+            + histórico publicado
+          </button>
+        </div>
       </div>
 
       {/* Filtro de formato */}
@@ -208,7 +177,7 @@ function TabCalendario({ published, togglePublished, generated, onGenerate, post
         <span style={{ fontSize: 11, color: COLORS.textDim, fontFamily: FONT_UI, letterSpacing: "0.14em", textTransform: "uppercase", marginRight: 4 }}>Formato</span>
         {FORMATS.map(fmt => <button key={fmt} style={s.pill(filter === fmt)} onClick={() => setFilter(fmt)}>{fmt}</button>)}
         <span style={{ marginLeft: "auto", fontSize: 12, color: COLORS.textMuted, fontFamily: FONT_UI }}>
-          {visible.length} posts · {pubTotal} publicados · {genTotal} gerados
+          {visible.length} posts · {visible.filter(p => published.has(p.id)).length} publicados · {visible.filter(p => generated.has(p.id)).length} gerados
         </span>
       </div>
 
