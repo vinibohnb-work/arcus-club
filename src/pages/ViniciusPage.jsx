@@ -399,6 +399,7 @@ export default function ViniciusPage() {
   const [crmModal, setCrmModal] = useState(null) // 'lead' | 'int' | 'step'
   const [crmForm, setCrmForm] = useState({})
   const [crmSaving, setCrmSaving] = useState(false)
+  const [crmError, setCrmError] = useState(null)
 
   useEffect(() => { fetchAll(); fetchCrmLeads() }, [])
 
@@ -493,6 +494,7 @@ export default function ViniciusPage() {
   async function crmSaveLead(e) {
     e.preventDefault()
     setCrmSaving(true)
+    setCrmError(null)
     const { data, error } = await supabase.from('vini_leads').insert({
       name:   crmForm.leadName,
       phone:  crmForm.leadPhone  || '',
@@ -500,10 +502,16 @@ export default function ViniciusPage() {
       stage:  crmForm.leadStage  || 'mapeado',
       notes:  crmForm.leadNotes  || '',
     }).select().single()
-    if (!error && data) setCrmLeads(prev => [...prev, data])
+    if (error) {
+      setCrmError(error.message)
+      setCrmSaving(false)
+      return
+    }
+    if (data) setCrmLeads(prev => [...prev, data])
     setCrmSaving(false)
     setCrmModal(null)
     setCrmForm({})
+    setCrmError(null)
   }
 
   async function crmDeleteLead(id) {
@@ -1106,11 +1114,11 @@ export default function ViniciusPage() {
 
       {/* ── CRM: Add lead modal ── */}
       {crmModal === 'lead' && (
-        <div className="vini-modal-overlay" onClick={() => setCrmModal(null)} style={{ zIndex: 10000 }}>
+        <div className="vini-modal-overlay" onClick={() => { setCrmModal(null); setCrmError(null) }} style={{ zIndex: 10000 }}>
           <div className="vini-modal" onClick={e => e.stopPropagation()}>
             <div className="vini-modal-header">
               <div className="vini-modal-title">Novo lead</div>
-              <button className="vini-modal-close" onClick={() => setCrmModal(null)}>×</button>
+              <button className="vini-modal-close" onClick={() => { setCrmModal(null); setCrmError(null) }}>×</button>
             </div>
             <form onSubmit={crmSaveLead} className="vini-modal-form">
               <label>Nome *<input type="text" required {...crmF('leadName')} placeholder="Ex: João Silva" /></label>
@@ -1123,12 +1131,13 @@ export default function ViniciusPage() {
               </label>
               <label>Etapa do pipeline
                 <select {...crmF('leadStage')}>
-                  {PIPELINE_STAGES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
+                  {PIPELINE_STAGES.filter(s => s.key !== 'recusa').map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
                 </select>
               </label>
               <label>Notas<textarea {...crmF('leadNotes')} placeholder="Contexto inicial…" /></label>
+              {crmError && <div className="vini-error">{crmError}</div>}
               <div className="vini-modal-actions">
-                <button type="button" onClick={() => setCrmModal(null)}>Cancelar</button>
+                <button type="button" onClick={() => { setCrmModal(null); setCrmError(null) }}>Cancelar</button>
                 <button type="submit" disabled={crmSaving}>{crmSaving ? 'Salvando…' : 'Salvar lead'}</button>
               </div>
             </form>
