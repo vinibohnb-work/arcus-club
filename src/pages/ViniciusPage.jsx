@@ -10,39 +10,21 @@ const TAB_HTML = {
       <div>
         <div class="tab-eyebrow">Dashboard</div>
         <div class="tab-title">Visão <em>geral</em></div>
-        <div class="tab-sub">Ofertas, metas e métricas numa visão única.</div>
       </div>
-      <div style="flex-shrink:0;max-width:260px;text-align:right;padding-bottom:0.2rem;">
-        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:500;color:rgba(245,242,236,0.9);line-height:1.5;">Organizo os processos que <em style="color:#D4B06A;font-style:italic;">liberam o dono</em> e fazem a margem crescer.</div>
+      <div style="flex-shrink:0;max-width:280px;text-align:right;padding-bottom:0.2rem;">
+        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:500;color:rgba(245,242,236,0.9);line-height:1.5;">Eu faço você lucrar mais com <em style="color:#D4B06A;font-style:italic;">sua estrutura atual.</em></div>
       </div>
     </div>
+    <div class="tab-body"></div>`,
+
+  metas: `
+    <div class="tab-header" data-glyph="M">
+      <div class="tab-eyebrow">Estratégia · Metas</div>
+      <div class="tab-title">Metas e <em>métricas</em></div>
+      <div class="tab-sub">Primeiros 90 dias e os indicadores que sinalizam que o FLG está funcionando.</div>
+    </div>
     <div class="tab-body">
-      <h3 style="margin-top:0;">Suas duas ofertas</h3>
-      <div class="offer-cards">
-        <div class="offer-card epc">
-          <div class="offer-card-header">
-            <div class="offer-card-badge">Estrutura para Crescer</div>
-            <div class="offer-card-name">Diagnóstico + Implementação de IA</div>
-            <div class="offer-card-sub">Micro e pequeno empresário solo</div>
-          </div>
-          <div class="offer-card-row"><div class="offer-card-key">Entrada</div><div class="offer-card-val">Diagnóstico R$800–1.5k</div></div>
-          <div class="offer-card-row"><div class="offer-card-key">Projeto</div><div class="offer-card-val">R$5–12k</div></div>
-          <div class="offer-card-row"><div class="offer-card-key">Recorrência</div><div class="offer-card-val">R$800–1.5k/mês</div></div>
-          <div class="offer-card-row"><div class="offer-card-key">LTV estimado</div><div class="offer-card-val">R$15–25k</div></div>
-        </div>
-        <div class="offer-card arcus">
-          <div class="offer-card-header">
-            <div class="offer-card-badge">Arcus Club</div>
-            <div class="offer-card-name">Consultoria de Implantação</div>
-            <div class="offer-card-sub">PME com equipe — 5 a 40 funcionários</div>
-          </div>
-          <div class="offer-card-row"><div class="offer-card-key">Consultoria</div><div class="offer-card-val">R$36k / 6 meses</div></div>
-          <div class="offer-card-row"><div class="offer-card-key">Advisory</div><div class="offer-card-val">R$36k/ano</div></div>
-          <div class="offer-card-row"><div class="offer-card-key">1º cliente</div><div class="offer-card-val">~R$22k (piloto)</div></div>
-          <div class="offer-card-row"><div class="offer-card-key">LTV estimado</div><div class="offer-card-val">~R$78k</div></div>
-        </div>
-      </div>
-      <h3>Metas — primeiros 90 dias</h3>
+      <h3 style="margin-top:0;">Metas — primeiros 90 dias</h3>
       <table class="meta-table" style="margin-bottom:2rem;">
         <tr class="meta-row"><td class="meta-td">Contatos mapeados na rede quente</td><td class="meta-td">50</td></tr>
         <tr class="meta-row"><td class="meta-td">Novas conexões no LinkedIn (ICP qualificado)</td><td class="meta-td">120+</td></tr>
@@ -442,6 +424,11 @@ export default function ViniciusPage() {
           <div className={`nav-item${activeTab === 'estrategia' ? ' active' : ''}`} onClick={() => showTab('estrategia')}>
             <div className="nav-dot" /><span className="nav-label">Estratégia</span>
           </div>
+          <div style={{ padding: '0 0 0.25rem 0' }}>
+            <div className={`nav-sub-item${activeTab === 'metas' ? ' active' : ''}`} onClick={() => showTab('metas')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Metas</span>
+            </div>
+          </div>
 
           <div className={`nav-item${activeTab === 'comercial' ? ' active' : ''}`} onClick={() => showTab('comercial')}>
             <div className="nav-dot" /><span className="nav-label">Comercial</span>
@@ -454,6 +441,12 @@ export default function ViniciusPage() {
 
           <div className={`nav-item${activeTab === 'marketing' ? ' active' : ''}`} onClick={() => showTab('marketing')}>
             <div className="nav-dot" /><span className="nav-label">Marketing</span>
+          </div>
+
+          <div className="nav-divider" />
+
+          <div className={`nav-item${activeTab === 'financeiro' ? ' active' : ''}`} onClick={() => showTab('financeiro')}>
+            <div className="nav-dot" /><span className="nav-label">Financeiro</span>
           </div>
 
           <div className="nav-divider" />
@@ -480,12 +473,6 @@ export default function ViniciusPage() {
                 <div className="nav-sub-dot" style={{ background: 'var(--teal)', opacity: 0.7 }} /><span className="nav-sub-label">Clientes Ativos</span>
               </div>
             </div>
-          </div>
-
-          <div className="nav-divider" />
-
-          <div className={`nav-item${activeTab === 'financeiro' ? ' active' : ''}`} onClick={() => showTab('financeiro')}>
-            <div className="nav-dot" /><span className="nav-label">Financeiro</span>
           </div>
 
         </div>
