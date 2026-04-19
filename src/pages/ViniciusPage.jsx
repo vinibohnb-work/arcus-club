@@ -496,11 +496,12 @@ export default function ViniciusPage() {
     setCrmSaving(true)
     setCrmError(null)
     const { data, error } = await supabase.from('vini_leads').insert({
-      name:   crmForm.leadName,
-      phone:  crmForm.leadPhone  || '',
-      source: crmForm.leadSource || '',
-      stage:  crmForm.leadStage  || 'mapeado',
-      notes:  crmForm.leadNotes  || '',
+      name:    crmForm.leadName,
+      company: crmForm.leadCompany || '',
+      phone:   crmForm.leadPhone   || '',
+      source:  crmForm.leadSource  || '',
+      stage:   crmForm.leadStage   || 'mapeado',
+      notes:   crmForm.leadNotes   || '',
     }).select().single()
     if (error) {
       setCrmError(error.message)
@@ -580,6 +581,7 @@ export default function ViniciusPage() {
   const filteredCrmLeads = crmLeads.filter(l =>
     !crmSearch ||
     l.name.toLowerCase().includes(crmSearch.toLowerCase()) ||
+    (l.company || '').toLowerCase().includes(crmSearch.toLowerCase()) ||
     (l.source || '').toLowerCase().includes(crmSearch.toLowerCase())
   )
 
@@ -719,6 +721,7 @@ export default function ViniciusPage() {
                             onClick={() => { setCrmSelectedId(lead.id); setCrmDetailTab('historico') }}
                           >
                             <div className="crm-card-name">{lead.name}</div>
+                            {lead.company && <div className="crm-card-company">{lead.company}</div>}
                             {lead.source && <div className="crm-card-source">{lead.source}</div>}
                             {recusaFromLabel && (
                               <div className="crm-recusa-from">← {recusaFromLabel}</div>
@@ -986,6 +989,7 @@ export default function ViniciusPage() {
               <div className="vini-modal-header">
                 <div>
                   <div className="vini-modal-title">{lead.name}</div>
+                  {lead.company && <div style={{ fontSize: 13, color: 'var(--ink)', fontWeight: 500, marginTop: 1 }}>{lead.company}</div>}
                   {lead.source && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{lead.source}</div>}
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -1122,6 +1126,7 @@ export default function ViniciusPage() {
             </div>
             <form onSubmit={crmSaveLead} className="vini-modal-form">
               <label>Nome *<input type="text" required {...crmF('leadName')} placeholder="Ex: João Silva" /></label>
+              <label>Empresa<input type="text" {...crmF('leadCompany')} placeholder="Ex: Clínica Saúde Total" /></label>
               <label>Telefone<input type="text" {...crmF('leadPhone')} placeholder="+55 51 9…" /></label>
               <label>Origem
                 <select {...crmF('leadSource')}>

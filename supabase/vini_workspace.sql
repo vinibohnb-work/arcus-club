@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS public.vini_leads (
                              'mapeado','abordagem1','abordagem2','abordagem3',
                              'reuniao_agendada','reuniao_realizada','proposta','recusa'
                            )),
+  company      text        DEFAULT '',
   recusa_from  text        DEFAULT NULL,
   product      text        DEFAULT NULL
                            CHECK (product IN ('epc','arcus') OR product IS NULL),
@@ -98,6 +99,14 @@ BEGIN
     WHERE table_name = 'vini_leads' AND column_name = 'recusa_from'
   ) THEN
     ALTER TABLE public.vini_leads ADD COLUMN recusa_from text DEFAULT NULL;
+  END IF;
+
+  -- Adiciona coluna company se não existir
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'vini_leads' AND column_name = 'company'
+  ) THEN
+    ALTER TABLE public.vini_leads ADD COLUMN company text DEFAULT '';
   END IF;
 
   -- Atualiza o CHECK constraint de stage
