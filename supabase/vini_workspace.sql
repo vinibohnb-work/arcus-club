@@ -54,8 +54,10 @@ CREATE POLICY "Admin full access on vini_contracts"
 
 -- ──────────────────────────────────────────────────────────────
 -- CRM: pipeline de leads pessoal do Vinícius
--- stages: mapeado | abordagem | resposta | diagnostico | proposta | fechado
+-- stages: mapeado | abordagem1 | abordagem2 | abordagem3 |
+--         reuniao_agendada | reuniao_realizada | proposta | recusa
 -- product: epc | arcus | NULL
+-- recusa_from: stage de onde o lead foi movido para recusa
 -- ──────────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS public.vini_leads (
@@ -64,7 +66,11 @@ CREATE TABLE IF NOT EXISTS public.vini_leads (
   phone        text        DEFAULT '',
   source       text        DEFAULT '',
   stage        text        DEFAULT 'mapeado'
-                           CHECK (stage IN ('mapeado','abordagem','resposta','diagnostico','proposta','fechado')),
+                           CHECK (stage IN (
+                             'mapeado','abordagem1','abordagem2','abordagem3',
+                             'reuniao_agendada','reuniao_realizada','proposta','recusa'
+                           )),
+  recusa_from  text        DEFAULT NULL,
   product      text        DEFAULT NULL
                            CHECK (product IN ('epc','arcus') OR product IS NULL),
   notes        text        DEFAULT '',
@@ -81,3 +87,25 @@ CREATE POLICY "Admin full access on vini_leads"
   USING (
     (SELECT role FROM public.profiles WHERE id = auth.uid()) = 'admin'
   );
+
+-- ── Migration: se a tabela já existia com o schema antigo ───────────────────
+-- Execute apenas se necessário (ignorar erros "already exists" / "does not exist")
+DO $$
+BEGIN
+  -- Adiciona coluna recusa_from se não existir
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'vini_leads' AND column_name = 'recusa_from'
+  ) THEN
+    ALTER TABLE public.vini_leads ADD COLUMN recusa_from text DEFAULT NULL;
+  END IF;
+
+  -- Atualiza o CHECK constraint de stage
+  ALTER TABLE public.vini_leads DROP CONSTRAINT IF EXISTS vini_leads_stage_check;
+  ALTER TABLE public.vini_leads
+    ADD CONSTRAINT vini_leads_stage_check
+    CHECK (stage IN (
+      'mapeado','abordagem1','abordagem2','abordagem3',
+      'reuniao_agendada','reuniao_realizada','proposta','recusa'
+    ));
+END $$;

@@ -663,6 +663,14 @@
   letter-spacing: 0.05em;
 }
 .vini-page .crm-col-add:hover { background: white; color: var(--ink); }
+.vini-page .crm-col.recusa .crm-col-header { background: #3a1a1a; }
+.vini-page .crm-col.recusa { background: #FDF5F5; border-color: rgba(180,40,40,0.15); }
+.vini-page .crm-card.recusa { background: #FDF1F1; border-color: rgba(180,40,40,0.2); }
+.vini-page .crm-card.recusa:hover { border-color: rgba(180,40,40,0.5); }
+.vini-page .crm-recusa-from {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.08em;
+  color: #A03030; margin-bottom: 5px; display: flex; align-items: center; gap: 4px;
+}
 
 /* ── CRM DETAIL MODAL ────────────────────────────────────────────────────── */
 .vini-page .crm-stage-row {
@@ -675,8 +683,16 @@
   border: 0.5px solid var(--border-strong); background: white;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
 }
-.vini-page .crm-stage-pill:hover  { border-color: var(--gold); color: var(--gold); }
-.vini-page .crm-stage-pill.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.vini-page .crm-stage-pill:hover           { border-color: var(--gold); color: var(--gold); }
+.vini-page .crm-stage-pill.active          { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.vini-page .crm-stage-pill.recusa:hover    { border-color: #C03030; color: #C03030; }
+.vini-page .crm-stage-pill.recusa.active   { background: #8B2020; color: white; border-color: #8B2020; }
+.vini-page .crm-recusa-banner {
+  padding: 0.55rem 1.25rem; background: #FDF1F1;
+  border-bottom: 0.5px solid rgba(180,40,40,0.15);
+  font-size: 12px; color: #6B3030;
+}
+.vini-page .crm-recusa-banner strong { color: #8B2020; }
 
 .vini-page .crm-product-row {
   display: flex; align-items: center; gap: 0.75rem;

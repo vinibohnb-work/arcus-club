@@ -340,12 +340,14 @@ const PRODUCT_LABELS = {
 // ─── CRM constants ────────────────────────────────────────────────────────────
 
 const PIPELINE_STAGES = [
-  { key: 'mapeado',     label: 'Lead mapeado' },
-  { key: 'abordagem',   label: 'Abordagem feita' },
-  { key: 'resposta',    label: 'Resposta recebida' },
-  { key: 'diagnostico', label: 'Diagnóstico realizado' },
-  { key: 'proposta',    label: 'Proposta enviada' },
-  { key: 'fechado',     label: 'Fechado' },
+  { key: 'mapeado',           label: 'Mapeado' },
+  { key: 'abordagem1',        label: 'Abordagem 1' },
+  { key: 'abordagem2',        label: 'Abordagem 2' },
+  { key: 'abordagem3',        label: 'Abordagem 3' },
+  { key: 'reuniao_agendada',  label: 'Reunião Agendada' },
+  { key: 'reuniao_realizada', label: 'Reunião Realizada' },
+  { key: 'proposta',          label: 'Proposta Enviada' },
+  { key: 'recusa',            label: 'Recusa' },
 ]
 
 const CRM_PRODUCTS  = [
@@ -687,8 +689,9 @@ export default function ViniciusPage() {
             <div className="crm-board">
               {PIPELINE_STAGES.map(stage => {
                 const stageLeads = filteredCrmLeads.filter(l => l.stage === stage.key)
+                const isRecusa = stage.key === 'recusa'
                 return (
-                  <div key={stage.key} className="crm-col">
+                  <div key={stage.key} className={`crm-col${isRecusa ? ' recusa' : ''}`}>
                     <div className="crm-col-header">
                       <span className="crm-col-name">{stage.label}</span>
                       <span className="crm-col-count">{stageLeads.length}</span>
@@ -698,14 +701,20 @@ export default function ViniciusPage() {
                         const pending = (lead.next_steps || []).filter(s => !s.done)
                         const next = pending.sort((a, b) => new Date(a.date) - new Date(b.date))[0]
                         const overdue = next && next.date && new Date(next.date) < new Date()
+                        const recusaFromLabel = isRecusa && lead.recusa_from
+                          ? PIPELINE_STAGES.find(s => s.key === lead.recusa_from)?.label
+                          : null
                         return (
                           <div
                             key={lead.id}
-                            className={`crm-card${overdue ? ' overdue' : ''}`}
+                            className={`crm-card${isRecusa ? ' recusa' : overdue ? ' overdue' : ''}`}
                             onClick={() => { setCrmSelectedId(lead.id); setCrmDetailTab('historico') }}
                           >
                             <div className="crm-card-name">{lead.name}</div>
                             {lead.source && <div className="crm-card-source">{lead.source}</div>}
+                            {recusaFromLabel && (
+                              <div className="crm-recusa-from">← {recusaFromLabel}</div>
+                            )}
                             <div className="crm-card-foot">
                               {lead.product
                                 ? <span className="crm-product-tag" data-product={lead.product}>
@@ -713,7 +722,7 @@ export default function ViniciusPage() {
                                   </span>
                                 : <span />
                               }
-                              {next && (
+                              {!isRecusa && next && (
                                 <span className={`crm-card-date${overdue ? ' overdue' : ''}`}>
                                   {fmtDate(next.date)}
                                 </span>
@@ -723,10 +732,12 @@ export default function ViniciusPage() {
                         )
                       })}
                     </div>
-                    <button
-                      className="crm-col-add"
-                      onClick={() => { setCrmForm({ leadStage: stage.key }); setCrmModal('lead') }}
-                    >+ lead</button>
+                    {!isRecusa && (
+                      <button
+                        className="crm-col-add"
+                        onClick={() => { setCrmForm({ leadStage: stage.key }); setCrmModal('lead') }}
+                      >+ lead</button>
+                    )}
                   </div>
                 )
               })}
@@ -983,11 +994,24 @@ export default function ViniciusPage() {
                 {PIPELINE_STAGES.map(s => (
                   <button
                     key={s.key}
-                    className={`crm-stage-pill${lead.stage === s.key ? ' active' : ''}`}
-                    onClick={() => crmUpdateLead(lead.id, { stage: s.key })}
+                    className={`crm-stage-pill${lead.stage === s.key ? ' active' : ''}${s.key === 'recusa' ? ' recusa' : ''}`}
+                    onClick={() => {
+                      if (s.key === 'recusa') {
+                        crmUpdateLead(lead.id, { stage: 'recusa', recusa_from: lead.stage })
+                      } else {
+                        crmUpdateLead(lead.id, { stage: s.key, recusa_from: null })
+                      }
+                    }}
                   >{s.label}</button>
                 ))}
               </div>
+
+              {/* Recusa origin badge */}
+              {lead.stage === 'recusa' && lead.recusa_from && (
+                <div className="crm-recusa-banner">
+                  Recusou na etapa: <strong>{PIPELINE_STAGES.find(s => s.key === lead.recusa_from)?.label || lead.recusa_from}</strong>
+                </div>
+              )}
 
               {/* Product tag */}
               <div className="crm-product-row">
