@@ -265,66 +265,6 @@ const TAB_HTML = {
       </div>
     </div>`,
 
-  'op-epc': `
-    <div class="tab-header" data-glyph="E" style="border-top:3px solid #3D3D8F;">
-      <div>
-        <div class="tab-eyebrow">Operação · Estrutura para Crescer</div>
-        <div class="tab-title">Como você <em>entrega</em></div>
-        <div class="tab-sub">Do diagnóstico pago à implementação modular — o que acontece depois que o cliente fecha.</div>
-      </div>
-      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
-    </div>
-    <div class="tab-body">
-      <h3 style="margin-top:0;">Modelo de entrega</h3>
-      <div class="flow-steps" style="margin-bottom:1.5rem;">
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">01</div><div class="flow-content"><div class="flow-title">Diagnóstico pago (R$800–1.5k)</div><div class="flow-desc">Sessão de 90–120 min + relatório com mapeamento de gargalos, módulos recomendados e investimento. O cliente decide o que fechar.</div></div></div>
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">02</div><div class="flow-content"><div class="flow-title">Contrato e briefing dos módulos</div><div class="flow-desc">Definição do escopo final, acesso às ferramentas do cliente e prazo de entrega por módulo.</div></div></div>
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">03</div><div class="flow-content"><div class="flow-title">Implementação dos módulos</div><div class="flow-desc">Você configura, testa e entrega funcionando. Cada módulo tem prazo próprio — de 3 a 10 dias dependendo da complexidade.</div></div></div>
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">04</div><div class="flow-content"><div class="flow-title">Handoff e treinamento</div><div class="flow-desc">Sessão de entrega com o cliente: como usar, como acompanhar, o que esperar. O cliente precisa saber operar o que foi implantado.</div></div></div>
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">05</div><div class="flow-content"><div class="flow-title">Manutenção mensal (opcional)</div><div class="flow-desc">R$800–1.5k/mês para monitoramento, iterações e novos módulos conforme o negócio cresce.</div></div></div>
-      </div>
-      <h3>Capacidade operacional</h3>
-      <div class="quad-grid">
-        <div class="q-cell dark"><div class="q-label">Clientes simultâneos</div><span class="q-highlight">Capacidade maior</span><p class="q-text">A natureza modular permite mais projetos paralelos. Um projeto de 2–3 módulos ocupa significativamente menos tempo que uma consultoria de 6 meses.</p></div>
-        <div class="q-cell"><div class="q-label">Prazo por módulo</div><p class="q-text">3 a 10 dias por módulo, dependendo da complexidade. Um projeto completo de 3 módulos leva em média 3–4 semanas.</p></div>
-        <div class="q-cell"><div class="q-label">Primeiro cliente</div><p class="q-text">Diagnóstico a preço de custo ou gratuito no primeiro cliente-piloto. Objetivo: gerar o case documentado com antes e depois.</p></div>
-        <div class="q-cell dark"><div class="q-label">Gatilho para contratar</div><span class="q-highlight">3+ projetos simultâneos</span><p class="q-text">Quando a demanda de EPC começar a competir com a Arcus Club pelo seu tempo, é o sinal para trazer um colaborador técnico.</p></div>
-      </div>
-    </div>`,
-
-  'op-arcus': `
-    <div class="tab-header" data-glyph="A" style="border-top:3px solid #1A6B5A;">
-      <div>
-        <div class="tab-eyebrow">Operação · Arcus Club</div>
-        <div class="tab-title">Consultoria <em>mês a mês</em></div>
-        <div class="tab-sub">Onboarding, modelo de entrega e capacidade operacional da consultoria de 6 meses.</div>
-      </div>
-      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
-    </div>
-    <div class="tab-body">
-      <h3 style="margin-top:0;">Onboarding pós-fechamento</h3>
-      <div class="flow-steps" style="margin-bottom:1.5rem;">
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">01</div><div class="flow-content"><div class="flow-title">Contrato e pagamento</div><div class="flow-desc">Contrato assinado e entrada confirmada antes de qualquer início de trabalho.</div></div></div>
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">02</div><div class="flow-content"><div class="flow-title">Briefing de empresa</div><div class="flow-desc">Formulário estruturado preenchido pelo cliente — faturamento, equipe, processos existentes, maiores dores percebidas.</div></div></div>
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">03</div><div class="flow-content"><div class="flow-title">Reunião de kick-off</div><div class="flow-desc">Apresentação da metodologia, alinhamento de expectativas, definição de canais de comunicação e cadência de reuniões.</div></div></div>
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">04</div><div class="flow-content"><div class="flow-title">Workspace compartilhado</div><div class="flow-desc">Espaço onde o cliente acompanha o andamento, entregáveis e marcos do projeto em tempo real.</div></div></div>
-        <div class="flow-step"><div class="flow-num" style="font-size:0.85rem;">05</div><div class="flow-content"><div class="flow-title">Início do diagnóstico</div><div class="flow-desc">Semana 1 — primeiras reuniões de imersão. Mapear gargalos reais antes de propor qualquer solução.</div></div></div>
-      </div>
-      <h3>Entrega mês a mês</h3>
-      <div class="timeline" style="margin-bottom:1.5rem;">
-        <div class="tl-item"><div class="tl-month"><div class="tl-month-label">Mês</div><div class="tl-month-num">01</div></div><div class="tl-content"><div class="tl-phase">Diagnóstico profundo</div><p class="tl-desc">Reuniões de imersão 2× por semana. Mapeamento completo de gargalos nos três pilares.</p><div class="tl-deliverable-label">Entregável</div><div class="tl-deliverable">Relatório de Diagnóstico + Plano de Implantação priorizado</div></div></div>
-        <div class="tl-item"><div class="tl-month"><div class="tl-month-label">Meses</div><div class="tl-month-num">02</div><div class="tl-month-range">e 03</div></div><div class="tl-content"><div class="tl-phase">Implantação inicial</div><p class="tl-desc">Sessões quinzenais. Primeiros processos documentados, testados e em funcionamento.</p><div class="tl-deliverable-label">Entregável</div><div class="tl-deliverable">Processos documentados + Relatório de progresso</div></div></div>
-        <div class="tl-item"><div class="tl-month"><div class="tl-month-label">Meses</div><div class="tl-month-num">04</div><div class="tl-month-range">e 05</div></div><div class="tl-content"><div class="tl-phase">Consolidação</div><p class="tl-desc">Aprofundamento nos pilares restantes. Desenvolvimento da equipe para autonomia gradual do dono.</p><div class="tl-deliverable-label">Entregável</div><div class="tl-deliverable">Processos validados + Métricas de resultado parcial</div></div></div>
-        <div class="tl-item"><div class="tl-month"><div class="tl-month-label">Mês</div><div class="tl-month-num">06</div></div><div class="tl-content"><div class="tl-phase">Fechamento e oferta de Advisory</div><p class="tl-desc">Documentação completa, mensuração final da margem, case formatado e proposta de Advisory.</p><div class="tl-deliverable-label">Entregável</div><div class="tl-deliverable">Case documentado + Relatório de margem + Proposta de Advisory</div></div></div>
-      </div>
-      <h3>Capacidade operacional</h3>
-      <div class="quad-grid">
-        <div class="q-cell dark"><div class="q-label">Clientes simultâneos</div><span class="q-highlight">Até 4</span><p class="q-text">Limite conservador para manter qualidade de entrega e margem operacional adequada.</p></div>
-        <div class="q-cell"><div class="q-label">Primeiro cliente</div><p class="q-text">~R$22k (piloto com desconto). Não é falta de confiança no valor — é construir o case que derruba a resistência dos próximos.</p></div>
-        <div class="q-cell"><div class="q-label">Receita por ciclo</div><p class="q-text">4 clientes × R$36k = R$144k por ciclo de 6 meses. Mais R$12k/mês em Advisory quando os primeiros clientes concluem.</p></div>
-        <div class="q-cell dark"><div class="q-label">Gatilho para contratar</div><span class="q-highlight">2 ciclos consecutivos</span><p class="q-text">Com 3–4 clientes simultâneos + receita recorrente acima de R$30k/mês. Contratar antes cria custo antes de ter tração confirmada.</p></div>
-      </div>
-    </div>`,
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -382,7 +322,6 @@ function fmtDate(d) {
 
 export default function ViniciusPage() {
   const [activeTab, setActiveTab] = useState('dashboard')
-  const [operacaoOpen, setOperacaoOpen] = useState(true)
   const [epcClients, setEpcClients] = useState([])
   const [arcusClients, setArcusClients] = useState([])
   const [contracts, setContracts] = useState([])
@@ -416,9 +355,6 @@ export default function ViniciusPage() {
 
   function showTab(tab) {
     setActiveTab(tab)
-    if (['op-epc', 'op-epc-clientes', 'op-arcus', 'op-arcus-clientes'].includes(tab)) {
-      setOperacaoOpen(true)
-    }
   }
 
   function openModal(type) {
@@ -470,8 +406,6 @@ export default function ViniciusPage() {
   const totalRecurring = contracts
     .filter(c => c.product === 'epc-manutencao' || c.product === 'arcus-advisory')
     .reduce((s, c) => s + (Number(c.next_payment_amount) || 0), 0)
-
-  const isOperacaoActive = ['op-epc', 'op-epc-clientes', 'op-arcus', 'op-arcus-clientes'].includes(activeTab)
 
   function f(field) {
     return { value: form[field] || '', onChange: e => setForm({ ...form, [field]: e.target.value }) }
@@ -612,6 +546,8 @@ export default function ViniciusPage() {
             </div>
           </div>
 
+          <div className="nav-divider" />
+
           <div className={`nav-item${activeTab === 'comercial' ? ' active' : ''}`} onClick={() => showTab('comercial')}>
             <div className="nav-dot" /><span className="nav-label">Comercial</span>
           </div>
@@ -619,7 +555,12 @@ export default function ViniciusPage() {
             <div className={`nav-sub-item${activeTab === 'crm' ? ' active' : ''}`} onClick={() => showTab('crm')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">CRM</span>
             </div>
+            <div className={`nav-sub-item${activeTab === 'clientes' ? ' active' : ''}`} onClick={() => showTab('clientes')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Clientes Ativos</span>
+            </div>
           </div>
+
+          <div className="nav-divider" />
 
           <div className={`nav-item${activeTab === 'marketing' ? ' active' : ''}`} onClick={() => showTab('marketing')}>
             <div className="nav-dot" /><span className="nav-label">Marketing</span>
@@ -629,32 +570,6 @@ export default function ViniciusPage() {
 
           <div className={`nav-item${activeTab === 'financeiro' ? ' active' : ''}`} onClick={() => showTab('financeiro')}>
             <div className="nav-dot" /><span className="nav-label">Financeiro</span>
-          </div>
-
-          <div className="nav-divider" />
-
-          <div className={`nav-group${operacaoOpen ? ' open' : ''}`}>
-            <div className={`nav-group-header${isOperacaoActive ? ' active' : ''}`} onClick={() => setOperacaoOpen(o => !o)}>
-              <div className="nav-group-dot" />
-              <span className="nav-group-label-text">Operação</span>
-              <span className="nav-chevron">›</span>
-            </div>
-            <div className="nav-sub">
-              <div className="nav-sub-section-label">Estrutura para Crescer</div>
-              <div className={`nav-sub-item${activeTab === 'op-epc' ? ' active' : ''}`} onClick={() => showTab('op-epc')}>
-                <div className="nav-sub-dot" style={{ background: 'var(--indigo)', opacity: 0.6 }} /><span className="nav-sub-label">Entrega</span>
-              </div>
-              <div className={`nav-sub-item${activeTab === 'op-epc-clientes' ? ' active' : ''}`} onClick={() => showTab('op-epc-clientes')}>
-                <div className="nav-sub-dot" style={{ background: 'var(--indigo)', opacity: 0.6 }} /><span className="nav-sub-label">Clientes Ativos</span>
-              </div>
-              <div className="nav-sub-section-label" style={{ marginTop: '0.25rem' }}>Arcus Club</div>
-              <div className={`nav-sub-item${activeTab === 'op-arcus' ? ' active' : ''}`} onClick={() => showTab('op-arcus')}>
-                <div className="nav-sub-dot" style={{ background: 'var(--teal)', opacity: 0.7 }} /><span className="nav-sub-label">Entrega</span>
-              </div>
-              <div className={`nav-sub-item${activeTab === 'op-arcus-clientes' ? ' active' : ''}`} onClick={() => showTab('op-arcus-clientes')}>
-                <div className="nav-sub-dot" style={{ background: 'var(--teal)', opacity: 0.7 }} /><span className="nav-sub-label">Clientes Ativos</span>
-              </div>
-            </div>
           </div>
 
         </div>
@@ -756,30 +671,30 @@ export default function ViniciusPage() {
           </div>
         </div>
 
-        {/* ── EPC CLIENTES (dynamic) ── */}
-        <div className={`tab-content${activeTab === 'op-epc-clientes' ? ' active' : ''}`}>
-          <div className="tab-header" data-glyph="E" style={{ borderTop: '3px solid var(--indigo)' }}>
+        {/* ── CLIENTES ATIVOS (dynamic) ── */}
+        <div className={`tab-content${activeTab === 'clientes' ? ' active' : ''}`}>
+          <div className="tab-header">
             <div>
-              <div className="tab-eyebrow">Operação · Estrutura para Crescer</div>
+              <div className="tab-eyebrow">Comercial · Clientes</div>
               <div className="tab-title">Clientes <em>ativos</em></div>
-              <div className="tab-sub">Visão rápida de cada projeto em andamento — fase, próxima ação e recorrência.</div>
+              <div className="tab-sub">Todos os projetos em andamento — EPC e Arcus Club.</div>
             </div>
             <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
           </div>
           <div className="tab-body">
+
             <div className="vini-section-bar">
-              <h3 style={{ margin: 0 }}>Projetos ativos</h3>
+              <h3 style={{ margin: 0 }}>Estrutura para Crescer</h3>
               <button className="vini-btn" onClick={() => openModal('epc')}>+ Novo cliente</button>
             </div>
             {epcClients.length === 0
-              ? <div className="vini-empty">Nenhum cliente ativo ainda. Os primeiros aparecerão aqui após o fechamento.</div>
+              ? <div className="vini-empty" style={{ marginBottom: '2rem' }}>Nenhum cliente EPC ativo ainda.</div>
               : (
-                <div className="vini-table-wrap">
+                <div className="vini-table-wrap" style={{ marginBottom: '2.5rem' }}>
                   <table className="vini-table">
                     <thead>
                       <tr>
                         <th>Cliente</th>
-                        <th>Módulos</th>
                         <th>Fase</th>
                         <th>Próxima ação</th>
                         <th style={{ textAlign: 'right' }}>Recorrência</th>
@@ -789,7 +704,6 @@ export default function ViniciusPage() {
                       {epcClients.map(c => (
                         <tr key={c.id}>
                           <td className="name">{c.name}</td>
-                          <td>{(c.modules || []).join(', ') || '—'}</td>
                           <td>{c.phase || '—'}</td>
                           <td>{c.next_action || '—'}</td>
                           <td className="mono" style={{ textAlign: 'right' }}>
@@ -802,22 +716,12 @@ export default function ViniciusPage() {
                 </div>
               )
             }
-          </div>
-        </div>
 
-        {/* ── ARCUS CLIENTES (dynamic — mentees) ── */}
-        <div className={`tab-content${activeTab === 'op-arcus-clientes' ? ' active' : ''}`}>
-          <div className="tab-header" data-glyph="A" style={{ borderTop: '3px solid var(--teal)' }}>
-            <div>
-              <div className="tab-eyebrow">Operação · Arcus Club</div>
-              <div className="tab-title">Clientes <em>ativos</em></div>
-              <div className="tab-sub">Visão rápida de cada consultoria em andamento — mês do ciclo, próxima reunião e status do Advisory.</div>
+            <div className="vini-section-bar">
+              <h3 style={{ margin: 0 }}>Arcus Club</h3>
             </div>
-            <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
-          </div>
-          <div className="tab-body">
             {arcusClients.length === 0
-              ? <div className="vini-empty">Nenhum cliente ativo ainda.</div>
+              ? <div className="vini-empty">Nenhum cliente Arcus ativo ainda.</div>
               : (
                 <div className="vini-table-wrap">
                   <table className="vini-table">
@@ -825,7 +729,6 @@ export default function ViniciusPage() {
                       <tr>
                         <th>Cliente</th>
                         <th>Mês do ciclo</th>
-                        <th>Fase</th>
                         <th>Último contato</th>
                         <th style={{ textAlign: 'right' }}>Advisory</th>
                       </tr>
@@ -837,7 +740,6 @@ export default function ViniciusPage() {
                           <tr key={m.id}>
                             <td className="name">{m.name}</td>
                             <td className="mono">{cycleMonth(m.join_date)} / 6</td>
-                            <td>{m.stage || '—'}</td>
                             <td>{fmtDate(m.last_contact)}</td>
                             <td style={{ textAlign: 'right' }}>
                               {hasAdvisory
@@ -853,6 +755,7 @@ export default function ViniciusPage() {
                 </div>
               )
             }
+
           </div>
         </div>
 
