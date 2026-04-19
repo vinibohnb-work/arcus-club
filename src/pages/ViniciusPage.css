@@ -107,12 +107,8 @@
 /* ── TAB HEADER ──────────────────────────────────────────────────────────── */
 .vini-page .tab-header {
   background: var(--ink); padding: 2.5rem 3rem 2rem;
-  position: relative; overflow: hidden;
-}
-.vini-page .tab-header::after {
-  content: attr(data-glyph); position: absolute; right: 1rem; top: -1.5rem;
-  font-family: 'Playfair Display', serif; font-size: 11rem; font-weight: 700;
-  color: rgba(255,255,255,0.04); line-height: 1; pointer-events: none;
+  position: relative;
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem;
 }
 .vini-page .tab-eyebrow {
   font-family: 'DM Mono', monospace; font-size: 10px;
@@ -501,3 +497,20 @@
   border-radius: 6px; padding: 0.6rem 0.9rem;
   font-size: 12px; color: #A03030;
 }
+
+/* ── TAB HEADER PHRASE ───────────────────────────────────────────────────── */
+.vini-page .tab-header-phrase {
+  flex-shrink: 0;
+  max-width: 220px;
+  text-align: right;
+  align-self: flex-end;
+  padding-bottom: 0.15rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: rgba(245,242,236,0.9);
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+.vini-page .tab-header-phrase em { color: #D4B06A; font-style: italic; }

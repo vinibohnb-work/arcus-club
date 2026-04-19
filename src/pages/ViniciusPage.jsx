@@ -6,7 +6,7 @@ import './ViniciusPage.css'
 
 const TAB_HTML = {
   dashboard: `
-    <div class="tab-header" data-glyph="D" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+    <div class="tab-header" data-glyph="D">
       <div>
         <div class="tab-eyebrow">Dashboard</div>
         <div class="tab-title">Visão <em>geral</em></div>
@@ -16,7 +16,7 @@ const TAB_HTML = {
     <div class="tab-body"></div>`,
 
   metas: `
-    <div class="tab-header" data-glyph="M" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+    <div class="tab-header" data-glyph="M">
       <div>
         <div class="tab-eyebrow">Estratégia · Metas</div>
         <div class="tab-title">Metas e <em>métricas</em></div>
@@ -53,7 +53,7 @@ const TAB_HTML = {
     </div>`,
 
   estrategia: `
-    <div class="tab-header" data-glyph="E" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+    <div class="tab-header" data-glyph="E">
       <div>
         <div class="tab-eyebrow">Estratégia</div>
         <div class="tab-title">Quem você é e <em>o que você vende</em></div>
@@ -121,7 +121,7 @@ const TAB_HTML = {
     </div>`,
 
   comercial: `
-    <div class="tab-header" data-glyph="C" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+    <div class="tab-header" data-glyph="C">
       <div>
         <div class="tab-eyebrow">Comercial</div>
         <div class="tab-title">Como você <em>converte</em></div>
@@ -167,7 +167,7 @@ const TAB_HTML = {
     </div>`,
 
   crm: `
-    <div class="tab-header" data-glyph="C" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+    <div class="tab-header" data-glyph="C">
       <div>
         <div class="tab-eyebrow">Comercial · CRM</div>
         <div class="tab-title">Gestão de <em>leads e pipeline</em></div>
@@ -187,7 +187,7 @@ const TAB_HTML = {
     </div>`,
 
   marketing: `
-    <div class="tab-header" data-glyph="M" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+    <div class="tab-header" data-glyph="M">
       <div>
         <div class="tab-eyebrow">Marketing</div>
         <div class="tab-title">Autoridade e <em>audiência</em></div>
@@ -244,7 +244,7 @@ const TAB_HTML = {
     </div>`,
 
   'op-epc': `
-    <div class="tab-header" data-glyph="E" style="border-top:3px solid #3D3D8F;display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+    <div class="tab-header" data-glyph="E" style="border-top:3px solid #3D3D8F;">
       <div>
         <div class="tab-eyebrow">Operação · Estrutura para Crescer</div>
         <div class="tab-title">Como você <em>entrega</em></div>
@@ -271,7 +271,7 @@ const TAB_HTML = {
     </div>`,
 
   'op-arcus': `
-    <div class="tab-header" data-glyph="A" style="border-top:3px solid #1A6B5A;display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+    <div class="tab-header" data-glyph="A" style="border-top:3px solid #1A6B5A;">
       <div>
         <div class="tab-eyebrow">Operação · Arcus Club</div>
         <div class="tab-title">Consultoria <em>mês a mês</em></div>
@@ -512,7 +512,7 @@ export default function ViniciusPage() {
 
         {/* ── EPC CLIENTES (dynamic) ── */}
         <div className={`tab-content${activeTab === 'op-epc-clientes' ? ' active' : ''}`}>
-          <div className="tab-header" data-glyph="E" style={{ borderTop: '3px solid var(--indigo)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
+          <div className="tab-header" data-glyph="E" style={{ borderTop: '3px solid var(--indigo)' }}>
             <div>
               <div className="tab-eyebrow">Operação · Estrutura para Crescer</div>
               <div className="tab-title">Clientes <em>ativos</em></div>
@@ -561,7 +561,7 @@ export default function ViniciusPage() {
 
         {/* ── ARCUS CLIENTES (dynamic — mentees) ── */}
         <div className={`tab-content${activeTab === 'op-arcus-clientes' ? ' active' : ''}`}>
-          <div className="tab-header" data-glyph="A" style={{ borderTop: '3px solid var(--teal)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
+          <div className="tab-header" data-glyph="A" style={{ borderTop: '3px solid var(--teal)' }}>
             <div>
               <div className="tab-eyebrow">Operação · Arcus Club</div>
               <div className="tab-title">Clientes <em>ativos</em></div>
@@ -612,7 +612,7 @@ export default function ViniciusPage() {
 
         {/* ── FINANCEIRO (dynamic) ── */}
         <div className={`tab-content${activeTab === 'financeiro' ? ' active' : ''}`}>
-          <div className="tab-header" data-glyph="F" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
+          <div className="tab-header" data-glyph="F">
             <div>
               <div className="tab-eyebrow">Financeiro</div>
               <div className="tab-title">Receita e <em>recorrência</em></div>
