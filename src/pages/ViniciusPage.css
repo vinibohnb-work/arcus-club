@@ -500,46 +500,47 @@
 
 /* ── METAS GRID ─────────────────────────────────────────────────────────── */
 .vini-page .metas-grid {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.75rem;
 }
 .vini-page .metas-col {
-  background: white; border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden;
+  background: white; border: 0.5px solid var(--border); border-radius: 12px;
+  overflow: hidden; display: flex; flex-direction: column;
 }
 .vini-page .metas-period-header {
-  background: var(--ink); padding: 1.35rem 1.5rem;
+  background: var(--ink); padding: 2rem 2rem 1.75rem;
   border-top: 3px solid var(--gold-pale);
 }
 .vini-page .metas-period-header.indigo { border-top-color: var(--indigo); }
 .vini-page .metas-period-header.teal   { border-top-color: var(--teal); }
 .vini-page .metas-period-header.gold   { border-top-color: var(--gold); }
 .vini-page .metas-period-eyebrow {
-  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: rgba(245,242,236,0.4); margin-bottom: 0.3rem;
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(245,242,236,0.4); margin-bottom: 0.4rem;
 }
 .vini-page .metas-period-num {
-  font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700;
+  font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 700;
   color: var(--paper); line-height: 1;
 }
 .vini-page .metas-period-unit {
-  font-size: 12px; color: rgba(245,242,236,0.45); margin-top: 2px;
+  font-size: 13px; color: rgba(245,242,236,0.45); margin-top: 4px;
 }
 .vini-page .metas-goal {
-  display: flex; gap: 0.75rem; padding: 0.9rem 1.25rem;
-  border-bottom: 0.5px solid var(--border); align-items: flex-start;
+  display: flex; gap: 1rem; padding: 1.35rem 2rem;
+  border-bottom: 0.5px solid var(--border); align-items: flex-start; flex: 1;
 }
 .vini-page .metas-goal:last-child { border-bottom: none; }
 .vini-page .metas-goal-num {
   font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold);
-  flex-shrink: 0; padding-top: 2px;
+  flex-shrink: 0; padding-top: 3px;
 }
 .vini-page .metas-goal-title {
-  font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.4; margin-bottom: 2px;
+  font-size: 14.5px; font-weight: 500; color: var(--ink); line-height: 1.4; margin-bottom: 5px;
 }
 .vini-page .metas-goal-val {
-  font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);
+  font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--muted);
 }
 .vini-page .metas-total {
-  padding: 0.9rem 1.25rem; background: var(--cream);
+  padding: 1.35rem 2rem; background: var(--cream);
   border-top: 0.5px solid var(--border);
   display: flex; justify-content: space-between; align-items: baseline;
 }
@@ -548,7 +549,7 @@
   text-transform: uppercase; color: var(--muted);
 }
 .vini-page .metas-total-val {
-  font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700;
+  font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 700;
 }
 .vini-page .metas-col.indigo .metas-total-val { color: var(--indigo); }
 .vini-page .metas-col.teal  .metas-total-val { color: var(--teal); }

@@ -24,7 +24,7 @@ const TAB_HTML = {
       </div>
       <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
-    <div class="tab-body">
+    <div class="tab-body" style="max-width:none;">
       <div class="metas-grid">
 
         <!-- 30 dias -->
