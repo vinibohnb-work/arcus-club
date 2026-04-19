@@ -498,6 +498,62 @@
   font-size: 12px; color: #A03030;
 }
 
+/* ── METAS GRID ─────────────────────────────────────────────────────────── */
+.vini-page .metas-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem;
+}
+.vini-page .metas-col {
+  background: white; border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden;
+}
+.vini-page .metas-period-header {
+  background: var(--ink); padding: 1.35rem 1.5rem;
+  border-top: 3px solid var(--gold-pale);
+}
+.vini-page .metas-period-header.indigo { border-top-color: var(--indigo); }
+.vini-page .metas-period-header.teal   { border-top-color: var(--teal); }
+.vini-page .metas-period-header.gold   { border-top-color: var(--gold); }
+.vini-page .metas-period-eyebrow {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(245,242,236,0.4); margin-bottom: 0.3rem;
+}
+.vini-page .metas-period-num {
+  font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700;
+  color: var(--paper); line-height: 1;
+}
+.vini-page .metas-period-unit {
+  font-size: 12px; color: rgba(245,242,236,0.45); margin-top: 2px;
+}
+.vini-page .metas-goal {
+  display: flex; gap: 0.75rem; padding: 0.9rem 1.25rem;
+  border-bottom: 0.5px solid var(--border); align-items: flex-start;
+}
+.vini-page .metas-goal:last-child { border-bottom: none; }
+.vini-page .metas-goal-num {
+  font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold);
+  flex-shrink: 0; padding-top: 2px;
+}
+.vini-page .metas-goal-title {
+  font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.4; margin-bottom: 2px;
+}
+.vini-page .metas-goal-val {
+  font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);
+}
+.vini-page .metas-total {
+  padding: 0.9rem 1.25rem; background: var(--cream);
+  border-top: 0.5px solid var(--border);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.vini-page .metas-total-label {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+}
+.vini-page .metas-total-val {
+  font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700;
+}
+.vini-page .metas-col.indigo .metas-total-val { color: var(--indigo); }
+.vini-page .metas-col.teal  .metas-total-val { color: var(--teal); }
+.vini-page .metas-col.gold  .metas-total-val { color: var(--gold); }
+
 /* ── ESTRATEGIA TWO-COLUMN LAYOUT ───────────────────────────────────────── */
 .vini-page .strat-cols {
   display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;

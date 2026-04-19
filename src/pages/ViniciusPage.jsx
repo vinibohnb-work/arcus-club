@@ -19,36 +19,89 @@ const TAB_HTML = {
     <div class="tab-header" data-glyph="M">
       <div>
         <div class="tab-eyebrow">Estratégia · Metas</div>
-        <div class="tab-title">Metas e <em>métricas</em></div>
-        <div class="tab-sub">Primeiros 90 dias e os indicadores que sinalizam que o FLG está funcionando.</div>
+        <div class="tab-title">Metas de <em>vendas</em></div>
+        <div class="tab-sub">30, 90 e 180 dias — foco em fechamento.</div>
       </div>
       <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body">
-      <h3 style="margin-top:0;">Metas — primeiros 90 dias</h3>
-      <table class="meta-table" style="margin-bottom:2rem;">
-        <tr class="meta-row"><td class="meta-td">Contatos mapeados na rede quente</td><td class="meta-td">50</td></tr>
-        <tr class="meta-row"><td class="meta-td">Novas conexões no LinkedIn (ICP qualificado)</td><td class="meta-td">120+</td></tr>
-        <tr class="meta-row"><td class="meta-td">Parceiros de indicação ativados</td><td class="meta-td">5–10</td></tr>
-        <tr class="meta-row"><td class="meta-td">Diagnósticos realizados (Estrutura para Crescer)</td><td class="meta-td">5–8</td></tr>
-        <tr class="meta-row"><td class="meta-td">Reuniões de diagnóstico Arcus Club</td><td class="meta-td">8–10</td></tr>
-        <tr class="meta-row"><td class="meta-td">Clientes fechados — Estrutura para Crescer</td><td class="meta-td">3–5</td></tr>
-        <tr class="meta-row"><td class="meta-td">Clientes fechados — Arcus Club (piloto)</td><td class="meta-td">1–2</td></tr>
-        <tr class="meta-row"><td class="meta-td gold">Receita estimada no período</td><td class="meta-td gold">R$40–75k</td></tr>
-      </table>
-      <h3>Métricas de FLG</h3>
-      <div class="metrics-grid" style="margin-bottom:2rem;">
-        <div class="metric-card"><div class="metric-title">Conexões qualificadas por semana</div><div class="metric-desc">% das novas conexões que são ICP de qualquer uma das duas ofertas. Qualidade acima de volume.</div></div>
-        <div class="metric-card"><div class="metric-title">Conversas iniciadas por inbound</div><div class="metric-desc">Leads que te procuraram depois de ver conteúdo. Sinal mais forte de que o FLG está funcionando.</div></div>
-        <div class="metric-card"><div class="metric-title">Taxa inbound vs. outbound</div><div class="metric-desc">Inbound converte 3–5× mais rápido. Quando crescer, o custo de aquisição cai sem reduzir o ticket.</div></div>
-        <div class="metric-card"><div class="metric-title">Clientes EPC migrando para Arcus</div><div class="metric-desc">O indicador de que a escada entre os dois produtos está funcionando. Cada migração valida o modelo.</div></div>
-      </div>
-      <h3>Métricas de resultado por oferta</h3>
-      <div class="metrics-grid">
-        <div class="metric-card indigo"><div class="metric-title">EPC — Processos implantados e rodando</div><div class="metric-desc">Módulos entregues funcionando 30 dias depois do handoff. Indicador de qualidade de entrega.</div></div>
-        <div class="metric-card indigo"><div class="metric-title">EPC — Tempo do dono liberado</div><div class="metric-desc">Horas/semana que o cliente para de fazer manualmente. O resultado mais tangível para o case.</div></div>
-        <div class="metric-card teal"><div class="metric-title">Arcus — Crescimento de margem</div><div class="metric-desc">Resultado financeiro mensurável da organização interna. Conecta seu trabalho diretamente ao lucro.</div></div>
-        <div class="metric-card teal"><div class="metric-title">Arcus — NPS ao final do ciclo</div><div class="metric-desc">Acima de 8 = potencial de indicação e case público. Abaixo = entender o que não funcionou.</div></div>
+      <div class="metas-grid">
+
+        <!-- 30 dias -->
+        <div class="metas-col indigo">
+          <div class="metas-period-header indigo">
+            <div class="metas-period-eyebrow">Primeiros</div>
+            <div class="metas-period-num">30</div>
+            <div class="metas-period-unit">dias</div>
+          </div>
+          <div class="metas-goal">
+            <div class="metas-goal-num">01</div>
+            <div><div class="metas-goal-title">2 contratos EPC fechados</div><div class="metas-goal-val">R$48k em caixa</div></div>
+          </div>
+          <div class="metas-goal">
+            <div class="metas-goal-num">02</div>
+            <div><div class="metas-goal-title">1 diagnóstico Arcus Club realizado</div><div class="metas-goal-val">proposta enviada</div></div>
+          </div>
+          <div class="metas-goal">
+            <div class="metas-goal-num">03</div>
+            <div><div class="metas-goal-title">Pipeline com 10 leads qualificados ativos</div><div class="metas-goal-val">rede quente + LinkedIn</div></div>
+          </div>
+          <div class="metas-total">
+            <div class="metas-total-label">Receita gerada</div>
+            <div class="metas-total-val">R$48k</div>
+          </div>
+        </div>
+
+        <!-- 90 dias -->
+        <div class="metas-col teal">
+          <div class="metas-period-header teal">
+            <div class="metas-period-eyebrow">Primeiros</div>
+            <div class="metas-period-num">90</div>
+            <div class="metas-period-unit">dias</div>
+          </div>
+          <div class="metas-goal">
+            <div class="metas-goal-num">01</div>
+            <div><div class="metas-goal-title">6 contratos EPC fechados</div><div class="metas-goal-val">R$144k acumulados</div></div>
+          </div>
+          <div class="metas-goal">
+            <div class="metas-goal-num">02</div>
+            <div><div class="metas-goal-title">2 contratos Arcus Club fechados</div><div class="metas-goal-val">R$70k · 1 piloto + 1 full</div></div>
+          </div>
+          <div class="metas-goal">
+            <div class="metas-goal-num">03</div>
+            <div><div class="metas-goal-title">3 Advisory iniciados</div><div class="metas-goal-val">R$9k / mês recorrente</div></div>
+          </div>
+          <div class="metas-total">
+            <div class="metas-total-label">Receita gerada</div>
+            <div class="metas-total-val">R$214k</div>
+          </div>
+        </div>
+
+        <!-- 180 dias -->
+        <div class="metas-col gold">
+          <div class="metas-period-header gold">
+            <div class="metas-period-eyebrow">Primeiros</div>
+            <div class="metas-period-num">180</div>
+            <div class="metas-period-unit">dias</div>
+          </div>
+          <div class="metas-goal">
+            <div class="metas-goal-num">01</div>
+            <div><div class="metas-goal-title">12 contratos EPC + 4 Arcus fechados</div><div class="metas-goal-val">R$288k + R$166k = R$454k</div></div>
+          </div>
+          <div class="metas-goal">
+            <div class="metas-goal-num">02</div>
+            <div><div class="metas-goal-title">6 Advisory ativos</div><div class="metas-goal-val">R$18k / mês recorrente</div></div>
+          </div>
+          <div class="metas-goal">
+            <div class="metas-goal-num">03</div>
+            <div><div class="metas-goal-title">Base do clube de mentoria estruturada</div><div class="metas-goal-val">Advisory como porta de entrada</div></div>
+          </div>
+          <div class="metas-total">
+            <div class="metas-total-label">Receita gerada</div>
+            <div class="metas-total-val">R$500k+</div>
+          </div>
+        </div>
+
       </div>
     </div>`,
 
