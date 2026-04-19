@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import ViniMarketing from './ViniMarketing'
 import './ViniciusPage.css'
 
 // ─── Static tab HTML content ─────────────────────────────────────────────────
@@ -565,6 +566,11 @@ export default function ViniciusPage() {
           <div className={`nav-item${activeTab === 'marketing' ? ' active' : ''}`} onClick={() => showTab('marketing')}>
             <div className="nav-dot" /><span className="nav-label">Marketing</span>
           </div>
+          <div style={{ padding: '0 0 0.25rem 0' }}>
+            <div className={`nav-sub-item${activeTab === 'calendario' ? ' active' : ''}`} onClick={() => showTab('calendario')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Plano de Marketing</span>
+            </div>
+          </div>
 
           <div className="nav-divider" />
 
@@ -756,6 +762,13 @@ export default function ViniciusPage() {
               )
             }
 
+          </div>
+        </div>
+
+        {/* ── PLANO DE MARKETING (dynamic) ── */}
+        <div className={`tab-content${activeTab === 'calendario' ? ' active' : ''}`}>
+          <div className="tab-body" style={{ maxWidth: 'none', paddingTop: '2rem' }}>
+            <ViniMarketing />
           </div>
         </div>
 
