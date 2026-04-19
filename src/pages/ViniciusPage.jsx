@@ -71,47 +71,41 @@ const TAB_HTML = {
         <div class="rule-content"><div class="rule-label">A escada entre as ofertas</div><div class="rule-text">O cliente de Estrutura para Crescer que cresce vira candidato natural para a Arcus Club. Você entra cedo na trajetória dele com um investimento acessível — e quando ele tiver equipe e escala, a venda da Arcus já está quase feita.</div></div>
       </div>
       <div class="strat-cols">
-        <div>
-          <div class="offer-header">
-            <span class="offer-badge epc">Estrutura para Crescer</span>
-            <div><div class="offer-title">Diagnóstico + Implementação de Processos</div><div class="offer-tagline">Pacote fechado · R$24k · para quem opera no improviso</div></div>
-          </div>
+
+        <!-- Etapa 1: Diagnóstico Inicial — ambos os produtos -->
+        <div class="strat-full">
+          <div class="strat-stage">Etapa 1 · Diagnóstico Inicial — válido para ambas as ofertas</div>
           <div class="product-card">
-            <div class="product-sidebar"><div><div class="product-type">Parte do comercial</div><div class="product-name">Diagnóstico Inicial</div><div class="product-duration">Conversa estruturada · gratuito</div></div><div class="product-price"><div class="price-main">Grátis</div><div class="price-detail">sem compromisso</div></div></div>
-            <div class="product-body"><p class="product-desc">Conversa estruturada para entender as dores, oportunidades de atuação e o contexto do negócio. Não é consultoria — é o ponto de partida para avaliar se e como você pode ajudar.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de dores</span><span class="pillar-tag">Oportunidades de atuação</span><span class="pillar-tag">Fit comercial</span></div></div>
+            <div class="product-sidebar"><div><div class="product-type">Parte do comercial</div><div class="product-name">Diagnóstico Inicial</div><div class="product-duration">Conversa estruturada</div></div><div class="product-price"><div class="price-main">Grátis</div><div class="price-detail">sem compromisso</div></div></div>
+            <div class="product-body"><p class="product-desc">Conversa estruturada para entender as dores, oportunidades de atuação e o contexto do negócio. Define qual das duas ofertas faz sentido — ou se nenhuma se aplica.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de dores</span><span class="pillar-tag">Oportunidades de atuação</span><span class="pillar-tag">Fit comercial</span></div></div>
           </div>
+        </div>
+
+        <!-- Etapa 2: produto-específico, duas colunas de igual largura -->
+        <div>
+          <div class="strat-stage">Etapa 2 · Estrutura para Crescer</div>
           <div class="product-card featured-indigo">
             <div class="product-sidebar"><div><div class="product-type">Pacote fechado</div><div class="product-name">Diagnóstico Aprofundado + Implementação</div><div class="product-duration">Escopo definido na proposta</div></div><div class="product-price"><div class="price-main">R$24k</div><div class="price-detail">valor fixo · sem surpresas</div></div></div>
-            <div class="product-body"><p class="product-desc">Diagnóstico profundo dos gargalos operacionais seguido da implementação dos processos e ferramentas prioritários. A lógica modular organiza a entrega internamente — o cliente compra um pacote único com escopo e valor fechados.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico aprofundado</span><span class="pillar-tag">Processos implantados</span><span class="pillar-tag">Ferramentas configuradas</span><span class="pillar-tag">Resultado documentado</span></div></div>
-          </div>
-          <table class="modules-table">
-            <tr><th class="mod-th" colspan="3" style="font-size:9px;opacity:0.6;font-style:italic;letter-spacing:0.05em;text-transform:none;">Módulos operacionais incluídos no pacote (composição definida no diagnóstico)</th></tr>
-            <tr><th class="mod-th">Módulo</th><th class="mod-th">O que entrega</th></tr>
-            <tr class="mod-tr"><td class="mod-td">Estratégia e estrutura</td><td class="mod-td">Plano estratégico documentado, metas e prioridades para os próximos 90 dias</td></tr>
-            <tr class="mod-tr"><td class="mod-td">Agente de SDR</td><td class="mod-td">Prospecção automatizada — qualificação e primeiro contato sem o dono</td></tr>
-            <tr class="mod-tr"><td class="mod-td">Automação de conteúdo</td><td class="mod-td">Geração e agendamento de posts com a voz do cliente</td></tr>
-            <tr class="mod-tr"><td class="mod-td">Atendimento automatizado</td><td class="mod-td">Primeiro filtro de leads e clientes via agente conversacional</td></tr>
-            <tr class="mod-tr"><td class="mod-td">Processo crítico</td><td class="mod-td">Um processo mapeado, documentado e automatizado onde possível</td></tr>
-          </table>
-          <div class="product-card">
-            <div class="product-sidebar"><div><div class="product-type">Recorrência · opcional</div><div class="product-name">Advisory Contínuo</div><div class="product-duration">Mensal · renovação semestral</div></div><div class="product-price"><div class="price-main">A definir</div><div class="price-detail">base para o clube de mentoria</div></div></div>
-            <div class="product-body"><p class="product-desc">Acompanhamento estratégico contínuo após a implementação. Futuramente, o Advisory vira o portal de entrada para o clube de mentoria — onde clientes com perfis complementares crescem juntos.</p><div class="product-pillars"><span class="pillar-tag">Acompanhamento mensal</span><span class="pillar-tag">Iterações nos processos</span><span class="pillar-tag">Base para o clube de mentoria</span></div></div>
+            <div class="product-body"><p class="product-desc">Diagnóstico profundo dos gargalos operacionais seguido da implementação dos processos e ferramentas prioritários. O cliente compra um pacote único com escopo e valor fechados.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico aprofundado</span><span class="pillar-tag">Processos implantados</span><span class="pillar-tag">Ferramentas configuradas</span><span class="pillar-tag">Resultado documentado</span></div></div>
           </div>
         </div>
         <div>
-          <div class="offer-header">
-            <span class="offer-badge arcus">Arcus Club</span>
-            <div><div class="offer-title">Consultoria de Implantação</div><div class="offer-tagline">Para PMEs com equipe que estão crescendo mas travando</div></div>
-          </div>
+          <div class="strat-stage">Etapa 2 · Arcus Club</div>
           <div class="product-card featured-teal">
             <div class="product-sidebar"><div><div class="product-type">Produto core</div><div class="product-name">Consultoria de Implantação</div><div class="product-duration">6 meses de engajamento</div></div><div class="product-price"><div class="price-main">R$36k</div><div class="price-detail">R$6.000 / mês</div><div class="price-badge" style="background:rgba(184,147,58,0.2);color:#D4B06A;">1º cliente: ~R$22k</div></div></div>
-            <div class="product-body"><p class="product-desc">Diagnóstico dos principais gargalos seguido de implantação direta nos três pilares. Você entra, estrutura e sai com o resultado documentado — margem crescente e equipe com mais autonomia.</p><div class="product-pillars"><span class="pillar-tag">Cultura</span><span class="pillar-tag">Liderança</span><span class="pillar-tag">Processos</span><span class="pillar-tag">Diagnóstico de gargalos</span><span class="pillar-tag">Margem mensurável</span></div><div class="product-pitch"><p>"Ajudo donos de empresa a aumentar a margem organizando cultura, liderança e processos."</p></div></div>
-          </div>
-          <div class="product-card">
-            <div class="product-sidebar"><div><div class="product-type">Recorrência</div><div class="product-name">Advisory Estratégico</div><div class="product-duration">12 meses · Renovação semestral</div></div><div class="product-price"><div class="price-main">R$36k</div><div class="price-detail">R$3.000 / mês · anual</div></div></div>
-            <div class="product-body"><p class="product-desc">Produto autônomo com entregável claro: reunião estratégica mensal, acesso direto e revisão trimestral de indicadores. Upsell natural ao final da consultoria.</p><div class="product-pillars"><span class="pillar-tag">Reunião mensal</span><span class="pillar-tag">Acesso direto</span><span class="pillar-tag">Revisão trimestral</span><span class="pillar-tag">Proteção do resultado</span></div><div class="product-pitch"><p>"Você investiu R$36k para transformar a operação. Por metade disso por ano, a gente garante que o resultado não regride."</p></div></div>
+            <div class="product-body"><p class="product-desc">Diagnóstico dos principais gargalos seguido de implantação direta nos três pilares. Você entra, estrutura e sai com o resultado documentado — margem crescente e equipe com mais autonomia.</p><div class="product-pillars"><span class="pillar-tag">Cultura</span><span class="pillar-tag">Liderança</span><span class="pillar-tag">Processos</span><span class="pillar-tag">Margem mensurável</span></div></div>
           </div>
         </div>
+
+        <!-- Etapa 3: Advisory — ambos os produtos -->
+        <div class="strat-full">
+          <div class="strat-stage">Etapa 3 · Advisory Estratégico — válido para ambas as ofertas</div>
+          <div class="product-card">
+            <div class="product-sidebar"><div><div class="product-type">Recorrência · opcional</div><div class="product-name">Advisory Estratégico</div><div class="product-duration">Mensal · renovação semestral</div></div><div class="product-price"><div class="price-main">A definir</div><div class="price-detail">base para o clube de mentoria</div></div></div>
+            <div class="product-body"><p class="product-desc">Acompanhamento estratégico contínuo após a implementação ou consultoria. O Advisory é o portal de entrada para um clube de mentoria — onde clientes com perfis complementares crescem juntos.</p><div class="product-pillars"><span class="pillar-tag">Acompanhamento mensal</span><span class="pillar-tag">Acesso direto</span><span class="pillar-tag">Iterações nos processos</span><span class="pillar-tag">Base para o clube de mentoria</span></div></div>
+          </div>
+        </div>
+
       </div>
     </div>`,
 

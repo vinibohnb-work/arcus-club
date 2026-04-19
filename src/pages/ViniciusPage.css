@@ -500,19 +500,27 @@
 
 /* ── ESTRATEGIA TWO-COLUMN LAYOUT ───────────────────────────────────────── */
 .vini-page .strat-cols {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;
 }
-.vini-page .strat-cols .product-card { grid-template-columns: 1fr; }
-.vini-page .strat-cols .product-sidebar {
+/* Full-width rows span both columns */
+.vini-page .strat-cols .strat-full { grid-column: 1 / -1; }
+/* Stage label */
+.vini-page .strat-stage {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 0.55rem;
+}
+/* Cards inside narrow columns: sidebar stacks on top */
+.vini-page .strat-cols > div:not(.strat-full) .product-card { grid-template-columns: 1fr; }
+.vini-page .strat-cols > div:not(.strat-full) .product-sidebar {
   border-right: none; border-bottom: 0.5px solid var(--border);
   flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 1rem;
 }
-.vini-page .strat-cols .product-card.featured-teal .product-sidebar,
-.vini-page .strat-cols .product-card.featured-indigo .product-sidebar {
+.vini-page .strat-cols > div:not(.strat-full) .product-card.featured-teal .product-sidebar,
+.vini-page .strat-cols > div:not(.strat-full) .product-card.featured-indigo .product-sidebar {
   border-bottom-color: rgba(255,255,255,0.1);
 }
-.vini-page .strat-cols .modules-table { font-size: 12px; }
-.vini-page .strat-cols .mod-td { padding: 0.6rem 0.9rem; }
+/* Full-width cards keep the normal side-by-side sidebar layout */
+.vini-page .strat-cols .strat-full .product-card { grid-template-columns: 200px 1fr; }
 
 /* ── TAB HEADER PHRASE ───────────────────────────────────────────────────── */
 .vini-page .tab-header-phrase {
