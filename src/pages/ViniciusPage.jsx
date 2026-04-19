@@ -61,51 +61,56 @@ const TAB_HTML = {
       </div>
       <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
-    <div class="tab-body">
-      <h3 style="margin-top:0;">As duas ofertas lado a lado</h3>
-      <div class="compare">
+    <div class="tab-body" style="max-width:none;">
+      <div class="compare" style="margin-bottom:1rem;">
         <div class="compare-card epc"><div class="compare-header"><div class="compare-name">Estrutura para Crescer</div><div class="compare-sub">Micro e pequeno empresário</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">Solo, 0–5 funcionários</div></div><div class="compare-row"><div class="compare-key">Entrada</div><div class="compare-val">Diagnóstico R$800–1.5k</div></div><div class="compare-row"><div class="compare-key">Projeto</div><div class="compare-val">R$5–12k</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">R$800–1.5k/mês</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">R$15–25k</div></div></div>
         <div class="compare-card arcus"><div class="compare-header"><div class="compare-name">Arcus Club</div><div class="compare-sub">PME com equipe</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">5–40 funcionários</div></div><div class="compare-row"><div class="compare-key">Consultoria</div><div class="compare-val">R$36k / 6 meses</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">Advisory R$36k/ano</div></div><div class="compare-row"><div class="compare-key">1º cliente</div><div class="compare-val">~R$22k (piloto)</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">~R$78k</div></div></div>
       </div>
-      <div class="rule-gold">
+      <div class="rule-gold" style="margin-bottom:2rem;">
         <div class="rule-icon">↑</div>
         <div class="rule-content"><div class="rule-label">A escada entre as ofertas</div><div class="rule-text">O cliente de Estrutura para Crescer que cresce vira candidato natural para a Arcus Club. Você entra cedo na trajetória dele com um investimento acessível — e quando ele tiver equipe e escala, a venda da Arcus já está quase feita.</div></div>
       </div>
-      <div class="offer-header">
-        <span class="offer-badge epc">Estrutura para Crescer</span>
-        <div><div class="offer-title">Diagnóstico + Implementação Modular de IA</div><div class="offer-tagline">Para micro e pequenos empresários que operam no improviso</div></div>
-      </div>
-      <div class="product-card">
-        <div class="product-sidebar"><div><div class="product-type">Entrada obrigatória</div><div class="product-name">Diagnóstico Estratégico</div><div class="product-duration">Sessão única + relatório</div></div><div class="product-price"><div class="price-main">R$800–1.5k</div><div class="price-detail">abatido na implementação</div></div></div>
-        <div class="product-body"><p class="product-desc">Você mapeia a operação, identifica os principais gargalos e entrega um plano priorizado com os módulos recomendados e o investimento necessário.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de operação</span><span class="pillar-tag">Identificação de gargalos</span><span class="pillar-tag">Plano priorizado</span><span class="pillar-tag">Módulos recomendados</span></div><div class="product-pitch"><p>Quem paga pelo diagnóstico já sinalizou intenção real. Se fechar a implementação, o valor é abatido.</p></div></div>
-      </div>
-      <div class="product-card featured-indigo">
-        <div class="product-sidebar"><div><div class="product-type">Implementação</div><div class="product-name">Módulos de IA e Processos</div><div class="product-duration">2–4 módulos por projeto</div></div><div class="product-price"><div class="price-main">R$5–12k</div><div class="price-detail">por projeto · depende dos módulos</div></div></div>
-        <div class="product-body"><p class="product-desc">O diagnóstico define quais módulos o cliente precisa. Você implementa, entrega funcionando. Cada módulo é pré-formatado para replicação rápida.</p><div class="product-pillars"><span class="pillar-tag">Agente SDR</span><span class="pillar-tag">Automação de conteúdo</span><span class="pillar-tag">Atendimento automatizado</span><span class="pillar-tag">Processo crítico</span><span class="pillar-tag">Estratégia documentada</span></div><div class="product-pitch"><p>"Você não precisa contratar ninguém para isso funcionar. A gente instala, configura e deixa rodando."</p></div></div>
-      </div>
-      <table class="modules-table">
-        <tr><th class="mod-th">Módulo</th><th class="mod-th">O que entrega</th><th class="mod-th">Ticket</th></tr>
-        <tr class="mod-tr"><td class="mod-td">Estratégia e estrutura</td><td class="mod-td">Plano estratégico documentado, metas e prioridades para os próximos 90 dias</td><td class="mod-td">R$2–3.5k</td></tr>
-        <tr class="mod-tr"><td class="mod-td">Agente de SDR</td><td class="mod-td">Prospecção automatizada — qualificação e primeiro contato sem o dono</td><td class="mod-td">R$2.5–4k</td></tr>
-        <tr class="mod-tr"><td class="mod-td">Automação de conteúdo</td><td class="mod-td">Geração e agendamento de posts com a voz do cliente</td><td class="mod-td">R$1.5–2.5k</td></tr>
-        <tr class="mod-tr"><td class="mod-td">Atendimento automatizado</td><td class="mod-td">Primeiro filtro de leads e clientes via agente conversacional</td><td class="mod-td">R$2–3.5k</td></tr>
-        <tr class="mod-tr"><td class="mod-td">Processo crítico</td><td class="mod-td">Um processo mapeado, documentado e automatizado onde possível</td><td class="mod-td">R$1.5–3k</td></tr>
-      </table>
-      <div class="product-card" style="margin-bottom:2rem;">
-        <div class="product-sidebar"><div><div class="product-type">Recorrência leve</div><div class="product-name">Manutenção e Evolução</div><div class="product-duration">Mensal · opcional</div></div><div class="product-price"><div class="price-main">R$800–1.5k</div><div class="price-detail">por mês</div></div></div>
-        <div class="product-body"><p class="product-desc">Garantia de que os agentes estão performando, iteração do que não está funcionando e adição de módulos conforme o cliente cresce.</p><div class="product-pillars"><span class="pillar-tag">Monitoramento dos agentes</span><span class="pillar-tag">Iterações mensais</span><span class="pillar-tag">Novos módulos a pedido</span></div></div>
-      </div>
-      <div class="offer-header">
-        <span class="offer-badge arcus">Arcus Club</span>
-        <div><div class="offer-title">Consultoria de Implantação</div><div class="offer-tagline">Para PMEs com equipe que estão crescendo mas travando</div></div>
-      </div>
-      <div class="product-card featured-teal">
-        <div class="product-sidebar"><div><div class="product-type">Produto core</div><div class="product-name">Consultoria de Implantação</div><div class="product-duration">6 meses de engajamento</div></div><div class="product-price"><div class="price-main">R$36k</div><div class="price-detail">R$6.000 / mês</div><div class="price-badge" style="background:rgba(184,147,58,0.2);color:#D4B06A;">1º cliente: ~R$22k</div></div></div>
-        <div class="product-body"><p class="product-desc">Diagnóstico dos principais gargalos seguido de implantação direta nos três pilares. Você entra, estrutura e sai com o resultado documentado — margem crescente e equipe com mais autonomia.</p><div class="product-pillars"><span class="pillar-tag">Cultura</span><span class="pillar-tag">Liderança</span><span class="pillar-tag">Processos</span><span class="pillar-tag">Diagnóstico de gargalos</span><span class="pillar-tag">Margem mensurável</span></div><div class="product-pitch"><p>"Ajudo donos de empresa a aumentar a margem organizando cultura, liderança e processos."</p></div></div>
-      </div>
-      <div class="product-card" style="margin-bottom:2rem;">
-        <div class="product-sidebar"><div><div class="product-type">Recorrência</div><div class="product-name">Advisory Estratégico</div><div class="product-duration">12 meses · Renovação semestral</div></div><div class="product-price"><div class="price-main">R$36k</div><div class="price-detail">R$3.000 / mês · anual</div></div></div>
-        <div class="product-body"><p class="product-desc">Produto autônomo com entregável claro: reunião estratégica mensal, acesso direto e revisão trimestral de indicadores. Upsell natural ao final da consultoria.</p><div class="product-pillars"><span class="pillar-tag">Reunião mensal</span><span class="pillar-tag">Acesso direto</span><span class="pillar-tag">Revisão trimestral</span><span class="pillar-tag">Proteção do resultado</span></div><div class="product-pitch"><p>"Você investiu R$36k para transformar a operação. Por metade disso por ano, a gente garante que o resultado não regride."</p></div></div>
+      <div class="strat-cols">
+        <div>
+          <div class="offer-header">
+            <span class="offer-badge epc">Estrutura para Crescer</span>
+            <div><div class="offer-title">Diagnóstico + Implementação Modular</div><div class="offer-tagline">Para micro e pequenos empresários que operam no improviso</div></div>
+          </div>
+          <div class="product-card">
+            <div class="product-sidebar"><div><div class="product-type">Entrada obrigatória</div><div class="product-name">Diagnóstico Estratégico</div><div class="product-duration">Sessão única + relatório</div></div><div class="product-price"><div class="price-main">R$800–1.5k</div><div class="price-detail">abatido na implementação</div></div></div>
+            <div class="product-body"><p class="product-desc">Você mapeia a operação, identifica os principais gargalos e entrega um plano priorizado com os módulos recomendados e o investimento necessário.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de operação</span><span class="pillar-tag">Identificação de gargalos</span><span class="pillar-tag">Plano priorizado</span></div><div class="product-pitch"><p>Quem paga pelo diagnóstico já sinalizou intenção real. Se fechar a implementação, o valor é abatido.</p></div></div>
+          </div>
+          <div class="product-card featured-indigo">
+            <div class="product-sidebar"><div><div class="product-type">Implementação</div><div class="product-name">Módulos de IA e Processos</div><div class="product-duration">2–4 módulos por projeto</div></div><div class="product-price"><div class="price-main">R$5–12k</div><div class="price-detail">por projeto</div></div></div>
+            <div class="product-body"><p class="product-desc">O diagnóstico define quais módulos o cliente precisa. Você implementa, entrega funcionando. Cada módulo é pré-formatado para replicação rápida.</p><div class="product-pillars"><span class="pillar-tag">Agente SDR</span><span class="pillar-tag">Automação de conteúdo</span><span class="pillar-tag">Atendimento automatizado</span><span class="pillar-tag">Processo crítico</span></div></div>
+          </div>
+          <table class="modules-table">
+            <tr><th class="mod-th">Módulo</th><th class="mod-th">O que entrega</th><th class="mod-th">Ticket</th></tr>
+            <tr class="mod-tr"><td class="mod-td">Estratégia e estrutura</td><td class="mod-td">Plano estratégico documentado, metas e prioridades para os próximos 90 dias</td><td class="mod-td">R$2–3.5k</td></tr>
+            <tr class="mod-tr"><td class="mod-td">Agente de SDR</td><td class="mod-td">Prospecção automatizada — qualificação e primeiro contato sem o dono</td><td class="mod-td">R$2.5–4k</td></tr>
+            <tr class="mod-tr"><td class="mod-td">Automação de conteúdo</td><td class="mod-td">Geração e agendamento de posts com a voz do cliente</td><td class="mod-td">R$1.5–2.5k</td></tr>
+            <tr class="mod-tr"><td class="mod-td">Atendimento automatizado</td><td class="mod-td">Primeiro filtro de leads e clientes via agente conversacional</td><td class="mod-td">R$2–3.5k</td></tr>
+            <tr class="mod-tr"><td class="mod-td">Processo crítico</td><td class="mod-td">Um processo mapeado, documentado e automatizado onde possível</td><td class="mod-td">R$1.5–3k</td></tr>
+          </table>
+          <div class="product-card">
+            <div class="product-sidebar"><div><div class="product-type">Recorrência leve</div><div class="product-name">Manutenção e Evolução</div><div class="product-duration">Mensal · opcional</div></div><div class="product-price"><div class="price-main">R$800–1.5k</div><div class="price-detail">por mês</div></div></div>
+            <div class="product-body"><p class="product-desc">Garantia de que os agentes estão performando, iteração do que não está funcionando e adição de módulos conforme o cliente cresce.</p><div class="product-pillars"><span class="pillar-tag">Monitoramento dos agentes</span><span class="pillar-tag">Iterações mensais</span><span class="pillar-tag">Novos módulos a pedido</span></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="offer-header">
+            <span class="offer-badge arcus">Arcus Club</span>
+            <div><div class="offer-title">Consultoria de Implantação</div><div class="offer-tagline">Para PMEs com equipe que estão crescendo mas travando</div></div>
+          </div>
+          <div class="product-card featured-teal">
+            <div class="product-sidebar"><div><div class="product-type">Produto core</div><div class="product-name">Consultoria de Implantação</div><div class="product-duration">6 meses de engajamento</div></div><div class="product-price"><div class="price-main">R$36k</div><div class="price-detail">R$6.000 / mês</div><div class="price-badge" style="background:rgba(184,147,58,0.2);color:#D4B06A;">1º cliente: ~R$22k</div></div></div>
+            <div class="product-body"><p class="product-desc">Diagnóstico dos principais gargalos seguido de implantação direta nos três pilares. Você entra, estrutura e sai com o resultado documentado — margem crescente e equipe com mais autonomia.</p><div class="product-pillars"><span class="pillar-tag">Cultura</span><span class="pillar-tag">Liderança</span><span class="pillar-tag">Processos</span><span class="pillar-tag">Diagnóstico de gargalos</span><span class="pillar-tag">Margem mensurável</span></div><div class="product-pitch"><p>"Ajudo donos de empresa a aumentar a margem organizando cultura, liderança e processos."</p></div></div>
+          </div>
+          <div class="product-card">
+            <div class="product-sidebar"><div><div class="product-type">Recorrência</div><div class="product-name">Advisory Estratégico</div><div class="product-duration">12 meses · Renovação semestral</div></div><div class="product-price"><div class="price-main">R$36k</div><div class="price-detail">R$3.000 / mês · anual</div></div></div>
+            <div class="product-body"><p class="product-desc">Produto autônomo com entregável claro: reunião estratégica mensal, acesso direto e revisão trimestral de indicadores. Upsell natural ao final da consultoria.</p><div class="product-pillars"><span class="pillar-tag">Reunião mensal</span><span class="pillar-tag">Acesso direto</span><span class="pillar-tag">Revisão trimestral</span><span class="pillar-tag">Proteção do resultado</span></div><div class="product-pitch"><p>"Você investiu R$36k para transformar a operação. Por metade disso por ano, a gente garante que o resultado não regride."</p></div></div>
+          </div>
+        </div>
       </div>
     </div>`,
 
