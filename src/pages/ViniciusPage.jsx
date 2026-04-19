@@ -208,26 +208,6 @@ const TAB_HTML = {
       </div>
     </div>`,
 
-  crm: `
-    <div class="tab-header" data-glyph="C">
-      <div>
-        <div class="tab-eyebrow">Comercial · CRM</div>
-        <div class="tab-title">Gestão de <em>leads e pipeline</em></div>
-        <div class="tab-sub">Em migração — template próprio sendo integrado.</div>
-      </div>
-      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
-    </div>
-    <div class="tab-body">
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;text-align:center;gap:1rem;">
-        <div style="width:56px;height:56px;border-radius:50%;background:#EDE9DF;display:flex;align-items:center;justify-content:center;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B8933A" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#6B6659;">Em migração</div>
-        <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:500;color:#0E0E0E;">Template sendo integrado</div>
-        <div style="font-size:13px;color:#6B6659;max-width:340px;line-height:1.65;">O CRM completo será migrado para cá. Por ora, continue usando seu template existente.</div>
-      </div>
-    </div>`,
-
   marketing: `
     <div class="tab-header" data-glyph="M">
       <div>
@@ -357,6 +337,27 @@ const PRODUCT_LABELS = {
   'arcus-advisory': 'Advisory Arcus',
 }
 
+// ─── CRM constants ────────────────────────────────────────────────────────────
+
+const PIPELINE_STAGES = [
+  { key: 'mapeado',     label: 'Lead mapeado' },
+  { key: 'abordagem',   label: 'Abordagem feita' },
+  { key: 'resposta',    label: 'Resposta recebida' },
+  { key: 'diagnostico', label: 'Diagnóstico realizado' },
+  { key: 'proposta',    label: 'Proposta enviada' },
+  { key: 'fechado',     label: 'Fechado' },
+]
+
+const CRM_PRODUCTS  = [
+  { key: null,    label: '—' },
+  { key: 'epc',   label: 'EPC' },
+  { key: 'arcus', label: 'Arcus' },
+]
+
+const CRM_SOURCES    = ['LinkedIn', 'Rede quente', 'Indicação', 'Inbound', 'Evento', 'Outro']
+const CRM_INT_TYPES  = ['Ligação', 'Mensagem', 'Reunião', 'E-mail', 'Outro']
+const CRM_STEP_TYPES = ['Ligar', 'Enviar mensagem', 'Enviar proposta', 'Agendar reunião', 'Reunião de fechamento', 'Follow-up', 'Outro']
+
 function fmtBRL(n) {
   if (!n && n !== 0) return '—'
   return `R$ ${Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`
@@ -388,7 +389,16 @@ export default function ViniciusPage() {
   const [saving, setSaving] = useState(false)
   const [formError, setFormError] = useState(null)
 
-  useEffect(() => { fetchAll() }, [])
+  // CRM state
+  const [crmLeads, setCrmLeads] = useState([])
+  const [crmSearch, setCrmSearch] = useState('')
+  const [crmSelectedId, setCrmSelectedId] = useState(null)
+  const [crmDetailTab, setCrmDetailTab] = useState('historico')
+  const [crmModal, setCrmModal] = useState(null) // 'lead' | 'int' | 'step'
+  const [crmForm, setCrmForm] = useState({})
+  const [crmSaving, setCrmSaving] = useState(false)
+
+  useEffect(() => { fetchAll(); fetchCrmLeads() }, [])
 
   async function fetchAll() {
     const [epc, arcus, conts] = await Promise.all([
@@ -463,6 +473,105 @@ export default function ViniciusPage() {
   function f(field) {
     return { value: form[field] || '', onChange: e => setForm({ ...form, [field]: e.target.value }) }
   }
+
+  // ─── CRM helpers ────────────────────────────────────────────────────────────
+
+  async function fetchCrmLeads() {
+    const { data } = await supabase.from('vini_leads').select('*').order('created_at')
+    setCrmLeads(data || [])
+  }
+
+  async function crmUpdateLead(id, updates) {
+    const { error } = await supabase.from('vini_leads')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+    if (!error) setCrmLeads(prev => prev.map(l => l.id === id ? { ...l, ...updates } : l))
+  }
+
+  async function crmSaveLead(e) {
+    e.preventDefault()
+    setCrmSaving(true)
+    const { data, error } = await supabase.from('vini_leads').insert({
+      name:   crmForm.leadName,
+      phone:  crmForm.leadPhone  || '',
+      source: crmForm.leadSource || '',
+      stage:  crmForm.leadStage  || 'mapeado',
+      notes:  crmForm.leadNotes  || '',
+    }).select().single()
+    if (!error && data) setCrmLeads(prev => [...prev, data])
+    setCrmSaving(false)
+    setCrmModal(null)
+    setCrmForm({})
+  }
+
+  async function crmDeleteLead(id) {
+    if (!window.confirm('Excluir este lead?')) return
+    await supabase.from('vini_leads').delete().eq('id', id)
+    setCrmLeads(prev => prev.filter(l => l.id !== id))
+    setCrmSelectedId(null)
+  }
+
+  async function crmSaveInt(e) {
+    e.preventDefault()
+    setCrmSaving(true)
+    const lead = crmLeads.find(l => l.id === crmSelectedId)
+    const ints = [...(lead.interactions || []), {
+      id:   crypto.randomUUID(),
+      type: crmForm.intType,
+      date: crmForm.intDate,
+      note: crmForm.intNote || '',
+    }]
+    await crmUpdateLead(crmSelectedId, { interactions: ints })
+    setCrmSaving(false)
+    setCrmModal(null)
+    setCrmForm({})
+  }
+
+  async function crmDeleteInt(leadId, intId) {
+    const lead = crmLeads.find(l => l.id === leadId)
+    const ints = (lead.interactions || []).filter(i => i.id !== intId)
+    await crmUpdateLead(leadId, { interactions: ints })
+  }
+
+  async function crmSaveStep(e) {
+    e.preventDefault()
+    setCrmSaving(true)
+    const lead = crmLeads.find(l => l.id === crmSelectedId)
+    const steps = [...(lead.next_steps || []), {
+      id:    crypto.randomUUID(),
+      type:  crmForm.stepType,
+      title: crmForm.stepTitle || crmForm.stepType,
+      date:  crmForm.stepDate,
+      note:  crmForm.stepNote || '',
+      done:  false,
+    }]
+    await crmUpdateLead(crmSelectedId, { next_steps: steps })
+    setCrmSaving(false)
+    setCrmModal(null)
+    setCrmForm({})
+  }
+
+  async function crmToggleStep(leadId, stepId) {
+    const lead = crmLeads.find(l => l.id === leadId)
+    const steps = (lead.next_steps || []).map(s => s.id === stepId ? { ...s, done: !s.done } : s)
+    await crmUpdateLead(leadId, { next_steps: steps })
+  }
+
+  async function crmDeleteStep(leadId, stepId) {
+    const lead = crmLeads.find(l => l.id === leadId)
+    const steps = (lead.next_steps || []).filter(s => s.id !== stepId)
+    await crmUpdateLead(leadId, { next_steps: steps })
+  }
+
+  function crmF(field) {
+    return { value: crmForm[field] || '', onChange: e => setCrmForm({ ...crmForm, [field]: e.target.value }) }
+  }
+
+  const filteredCrmLeads = crmLeads.filter(l =>
+    !crmSearch ||
+    l.name.toLowerCase().includes(crmSearch.toLowerCase()) ||
+    (l.source || '').toLowerCase().includes(crmSearch.toLowerCase())
+  )
 
   return (
     <div className="vini-page">
@@ -551,6 +660,79 @@ export default function ViniciusPage() {
             dangerouslySetInnerHTML={{ __html: TAB_HTML[tab] }}
           />
         ))}
+
+        {/* ── CRM (dynamic) ── */}
+        <div className={`tab-content${activeTab === 'crm' ? ' active' : ''}`}>
+          <div className="tab-header">
+            <div>
+              <div className="tab-eyebrow">Comercial · CRM</div>
+              <div className="tab-title">Gestão de <em>leads e pipeline</em></div>
+              <div className="tab-sub">Pipeline de prospecção ativa — mova, qualifique e feche.</div>
+            </div>
+            <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
+          </div>
+          <div className="tab-body" style={{ maxWidth: 'none' }}>
+            <div className="crm-toolbar">
+              <input
+                className="crm-search"
+                placeholder="Buscar lead…"
+                value={crmSearch}
+                onChange={e => setCrmSearch(e.target.value)}
+              />
+              <button
+                className="vini-btn gold"
+                onClick={() => { setCrmForm({}); setCrmModal('lead') }}
+              >+ Novo lead</button>
+            </div>
+            <div className="crm-board">
+              {PIPELINE_STAGES.map(stage => {
+                const stageLeads = filteredCrmLeads.filter(l => l.stage === stage.key)
+                return (
+                  <div key={stage.key} className="crm-col">
+                    <div className="crm-col-header">
+                      <span className="crm-col-name">{stage.label}</span>
+                      <span className="crm-col-count">{stageLeads.length}</span>
+                    </div>
+                    <div className="crm-cards">
+                      {stageLeads.map(lead => {
+                        const pending = (lead.next_steps || []).filter(s => !s.done)
+                        const next = pending.sort((a, b) => new Date(a.date) - new Date(b.date))[0]
+                        const overdue = next && next.date && new Date(next.date) < new Date()
+                        return (
+                          <div
+                            key={lead.id}
+                            className={`crm-card${overdue ? ' overdue' : ''}`}
+                            onClick={() => { setCrmSelectedId(lead.id); setCrmDetailTab('historico') }}
+                          >
+                            <div className="crm-card-name">{lead.name}</div>
+                            {lead.source && <div className="crm-card-source">{lead.source}</div>}
+                            <div className="crm-card-foot">
+                              {lead.product
+                                ? <span className="crm-product-tag" data-product={lead.product}>
+                                    {lead.product === 'epc' ? 'EPC' : 'Arcus'}
+                                  </span>
+                                : <span />
+                              }
+                              {next && (
+                                <span className={`crm-card-date${overdue ? ' overdue' : ''}`}>
+                                  {fmtDate(next.date)}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                    <button
+                      className="crm-col-add"
+                      onClick={() => { setCrmForm({ leadStage: stage.key }); setCrmModal('lead') }}
+                    >+ lead</button>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
 
         {/* ── EPC CLIENTES (dynamic) ── */}
         <div className={`tab-content${activeTab === 'op-epc-clientes' ? ' active' : ''}`}>
@@ -767,6 +949,216 @@ export default function ViniciusPage() {
               <div className="vini-modal-actions">
                 <button type="button" onClick={() => setModal(null)}>Cancelar</button>
                 <button type="submit" disabled={saving}>{saving ? 'Salvando…' : 'Salvar cliente'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── CRM: Lead detail modal ── */}
+      {crmSelectedId && (() => {
+        const lead = crmLeads.find(l => l.id === crmSelectedId)
+        if (!lead) return null
+        const interactions = (lead.interactions || []).slice().sort((a, b) => new Date(b.date) - new Date(a.date))
+        const steps = (lead.next_steps || []).slice().sort((a, b) => new Date(a.date) - new Date(b.date))
+        return (
+          <div className="vini-modal-overlay" onClick={() => setCrmSelectedId(null)}>
+            <div className="vini-modal" key={crmSelectedId} onClick={e => e.stopPropagation()} style={{ maxWidth: 600 }}>
+              <div className="vini-modal-header">
+                <div>
+                  <div className="vini-modal-title">{lead.name}</div>
+                  {lead.source && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{lead.source}</div>}
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <button
+                    style={{ fontSize: 11, color: '#A03030', background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px' }}
+                    onClick={() => crmDeleteLead(lead.id)}
+                  >Excluir</button>
+                  <button className="vini-modal-close" onClick={() => setCrmSelectedId(null)}>×</button>
+                </div>
+              </div>
+
+              {/* Stage pills */}
+              <div className="crm-stage-row">
+                {PIPELINE_STAGES.map(s => (
+                  <button
+                    key={s.key}
+                    className={`crm-stage-pill${lead.stage === s.key ? ' active' : ''}`}
+                    onClick={() => crmUpdateLead(lead.id, { stage: s.key })}
+                  >{s.label}</button>
+                ))}
+              </div>
+
+              {/* Product tag */}
+              <div className="crm-product-row">
+                <span className="crm-product-row-label">Produto</span>
+                <div className="crm-product-row-pills">
+                  {CRM_PRODUCTS.map(p => (
+                    <button
+                      key={String(p.key)}
+                      className={`crm-product-pill${lead.product === p.key ? ' active' : ''}`}
+                      data-product={p.key}
+                      onClick={() => crmUpdateLead(lead.id, { product: p.key })}
+                    >{p.label}</button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Notes */}
+              <div className="crm-notes-row">
+                <textarea
+                  className="crm-notes"
+                  placeholder="Notas sobre o lead…"
+                  defaultValue={lead.notes || ''}
+                  onBlur={e => { if (e.target.value !== (lead.notes || '')) crmUpdateLead(lead.id, { notes: e.target.value }) }}
+                />
+              </div>
+
+              {/* Tabs */}
+              <div className="crm-dtabs">
+                <button className={`crm-dtab${crmDetailTab === 'historico' ? ' active' : ''}`} onClick={() => setCrmDetailTab('historico')}>
+                  Histórico ({interactions.length})
+                </button>
+                <button className={`crm-dtab${crmDetailTab === 'proximos' ? ' active' : ''}`} onClick={() => setCrmDetailTab('proximos')}>
+                  Próximos passos ({steps.filter(s => !s.done).length})
+                </button>
+              </div>
+
+              <div className="crm-dcontent">
+                {crmDetailTab === 'historico' && (
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0.75rem 1.25rem 0' }}>
+                      <button className="vini-btn" onClick={() => { setCrmForm({}); setCrmModal('int') }}>+ Interação</button>
+                    </div>
+                    {interactions.length === 0
+                      ? <div className="vini-empty" style={{ margin: '0.75rem 1.25rem' }}>Nenhuma interação registrada.</div>
+                      : interactions.map(int => (
+                        <div key={int.id} className="crm-int-item">
+                          <div className="crm-int-head">
+                            <span className="crm-int-type">{int.type}</span>
+                            <span className="crm-int-date">{fmtDate(int.date)}</span>
+                            <button className="crm-del-btn" onClick={() => crmDeleteInt(lead.id, int.id)}>×</button>
+                          </div>
+                          {int.note && <div className="crm-int-note">{int.note}</div>}
+                        </div>
+                      ))
+                    }
+                  </>
+                )}
+                {crmDetailTab === 'proximos' && (
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0.75rem 1.25rem 0' }}>
+                      <button className="vini-btn" onClick={() => { setCrmForm({}); setCrmModal('step') }}>+ Próximo passo</button>
+                    </div>
+                    {steps.length === 0
+                      ? <div className="vini-empty" style={{ margin: '0.75rem 1.25rem' }}>Nenhum próximo passo.</div>
+                      : steps.map(step => {
+                        const sOverdue = step.date && !step.done && new Date(step.date) < new Date()
+                        return (
+                          <div key={step.id} className={`crm-step-item${step.done ? ' done' : ''}${sOverdue ? ' overdue' : ''}`}>
+                            <button className="crm-step-check" onClick={() => crmToggleStep(lead.id, step.id)}>
+                              {step.done ? '✓' : '○'}
+                            </button>
+                            <div className="crm-step-body">
+                              <div className="crm-step-head">
+                                <span className="crm-step-type">{step.type}</span>
+                                <span className="crm-step-date">{fmtDate(step.date)}</span>
+                                <button className="crm-del-btn" onClick={() => crmDeleteStep(lead.id, step.id)}>×</button>
+                              </div>
+                              {step.title && <div className="crm-step-title">{step.title}</div>}
+                              {step.note  && <div className="crm-step-note">{step.note}</div>}
+                            </div>
+                          </div>
+                        )
+                      })
+                    }
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* ── CRM: Add lead modal ── */}
+      {crmModal === 'lead' && (
+        <div className="vini-modal-overlay" onClick={() => setCrmModal(null)} style={{ zIndex: 10000 }}>
+          <div className="vini-modal" onClick={e => e.stopPropagation()}>
+            <div className="vini-modal-header">
+              <div className="vini-modal-title">Novo lead</div>
+              <button className="vini-modal-close" onClick={() => setCrmModal(null)}>×</button>
+            </div>
+            <form onSubmit={crmSaveLead} className="vini-modal-form">
+              <label>Nome *<input type="text" required {...crmF('leadName')} placeholder="Ex: João Silva" /></label>
+              <label>Telefone<input type="text" {...crmF('leadPhone')} placeholder="+55 51 9…" /></label>
+              <label>Origem
+                <select {...crmF('leadSource')}>
+                  <option value="">Selecione…</option>
+                  {CRM_SOURCES.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </label>
+              <label>Etapa do pipeline
+                <select {...crmF('leadStage')}>
+                  {PIPELINE_STAGES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
+                </select>
+              </label>
+              <label>Notas<textarea {...crmF('leadNotes')} placeholder="Contexto inicial…" /></label>
+              <div className="vini-modal-actions">
+                <button type="button" onClick={() => setCrmModal(null)}>Cancelar</button>
+                <button type="submit" disabled={crmSaving}>{crmSaving ? 'Salvando…' : 'Salvar lead'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── CRM: Add interaction modal ── */}
+      {crmModal === 'int' && (
+        <div className="vini-modal-overlay" onClick={() => setCrmModal(null)} style={{ zIndex: 10000 }}>
+          <div className="vini-modal" onClick={e => e.stopPropagation()}>
+            <div className="vini-modal-header">
+              <div className="vini-modal-title">Registrar interação</div>
+              <button className="vini-modal-close" onClick={() => setCrmModal(null)}>×</button>
+            </div>
+            <form onSubmit={crmSaveInt} className="vini-modal-form">
+              <label>Tipo *
+                <select required {...crmF('intType')}>
+                  <option value="">Selecione…</option>
+                  {CRM_INT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </label>
+              <label>Data *<input type="date" required {...crmF('intDate')} /></label>
+              <label>Nota<textarea {...crmF('intNote')} placeholder="O que aconteceu?" /></label>
+              <div className="vini-modal-actions">
+                <button type="button" onClick={() => setCrmModal(null)}>Cancelar</button>
+                <button type="submit" disabled={crmSaving}>{crmSaving ? 'Salvando…' : 'Salvar'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── CRM: Add step modal ── */}
+      {crmModal === 'step' && (
+        <div className="vini-modal-overlay" onClick={() => setCrmModal(null)} style={{ zIndex: 10000 }}>
+          <div className="vini-modal" onClick={e => e.stopPropagation()}>
+            <div className="vini-modal-header">
+              <div className="vini-modal-title">Próximo passo</div>
+              <button className="vini-modal-close" onClick={() => setCrmModal(null)}>×</button>
+            </div>
+            <form onSubmit={crmSaveStep} className="vini-modal-form">
+              <label>Ação *
+                <select required {...crmF('stepType')}>
+                  <option value="">Selecione…</option>
+                  {CRM_STEP_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </label>
+              <label>Título<input type="text" {...crmF('stepTitle')} placeholder="Ex: Enviar proposta EPC" /></label>
+              <label>Data *<input type="date" required {...crmF('stepDate')} /></label>
+              <label>Nota<textarea {...crmF('stepNote')} placeholder="Contexto adicional…" /></label>
+              <div className="vini-modal-actions">
+                <button type="button" onClick={() => setCrmModal(null)}>Cancelar</button>
+                <button type="submit" disabled={crmSaving}>{crmSaving ? 'Salvando…' : 'Salvar'}</button>
               </div>
             </form>
           </div>

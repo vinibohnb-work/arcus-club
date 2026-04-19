@@ -51,3 +51,33 @@ CREATE POLICY "Admin full access on vini_contracts"
   USING (
     (SELECT role FROM public.profiles WHERE id = auth.uid()) = 'admin'
   );
+
+-- ──────────────────────────────────────────────────────────────
+-- CRM: pipeline de leads pessoal do Vinícius
+-- stages: mapeado | abordagem | resposta | diagnostico | proposta | fechado
+-- product: epc | arcus | NULL
+-- ──────────────────────────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS public.vini_leads (
+  id           uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
+  name         text        NOT NULL,
+  phone        text        DEFAULT '',
+  source       text        DEFAULT '',
+  stage        text        DEFAULT 'mapeado'
+                           CHECK (stage IN ('mapeado','abordagem','resposta','diagnostico','proposta','fechado')),
+  product      text        DEFAULT NULL
+                           CHECK (product IN ('epc','arcus') OR product IS NULL),
+  notes        text        DEFAULT '',
+  interactions jsonb       DEFAULT '[]',
+  next_steps   jsonb       DEFAULT '[]',
+  created_at   timestamptz DEFAULT now(),
+  updated_at   timestamptz DEFAULT now()
+);
+
+ALTER TABLE public.vini_leads ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Admin full access on vini_leads"
+  ON public.vini_leads FOR ALL
+  USING (
+    (SELECT role FROM public.profiles WHERE id = auth.uid()) = 'admin'
+  );
