@@ -501,7 +501,7 @@
 /* ── TAB HEADER PHRASE ───────────────────────────────────────────────────── */
 .vini-page .tab-header-phrase {
   flex-shrink: 0;
-  max-width: 220px;
+  max-width: 340px;
   text-align: right;
   align-self: flex-end;
   padding-bottom: 0.15rem;
