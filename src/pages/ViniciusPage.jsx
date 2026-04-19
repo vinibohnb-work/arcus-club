@@ -767,7 +767,15 @@ export default function ViniciusPage() {
 
         {/* ── PLANO DE MARKETING (dynamic) ── */}
         <div className={`tab-content${activeTab === 'calendario' ? ' active' : ''}`}>
-          <div className="tab-body" style={{ maxWidth: 'none', paddingTop: '2rem' }}>
+          <div className="tab-header">
+            <div>
+              <div className="tab-eyebrow">Marketing · Calendário</div>
+              <div className="tab-title">Plano de <em>conteúdo</em></div>
+              <div className="tab-sub">Calendário editorial · gere prompts e acompanhe a execução.</div>
+            </div>
+            <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
+          </div>
+          <div className="tab-body" style={{ maxWidth: 'none' }}>
             <ViniMarketing />
           </div>
         </div>
