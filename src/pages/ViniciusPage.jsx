@@ -11,17 +11,18 @@ const TAB_HTML = {
         <div class="tab-eyebrow">Dashboard</div>
         <div class="tab-title">Visão <em>geral</em></div>
       </div>
-      <div style="flex-shrink:0;max-width:280px;text-align:right;padding-bottom:0.2rem;">
-        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:500;color:rgba(245,242,236,0.9);line-height:1.5;">Eu faço você lucrar mais com <em style="color:#D4B06A;font-style:italic;">sua estrutura atual.</em></div>
-      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body"></div>`,
 
   metas: `
-    <div class="tab-header" data-glyph="M">
-      <div class="tab-eyebrow">Estratégia · Metas</div>
-      <div class="tab-title">Metas e <em>métricas</em></div>
-      <div class="tab-sub">Primeiros 90 dias e os indicadores que sinalizam que o FLG está funcionando.</div>
+    <div class="tab-header" data-glyph="M" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+      <div>
+        <div class="tab-eyebrow">Estratégia · Metas</div>
+        <div class="tab-title">Metas e <em>métricas</em></div>
+        <div class="tab-sub">Primeiros 90 dias e os indicadores que sinalizam que o FLG está funcionando.</div>
+      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body">
       <h3 style="margin-top:0;">Metas — primeiros 90 dias</h3>
@@ -52,10 +53,13 @@ const TAB_HTML = {
     </div>`,
 
   estrategia: `
-    <div class="tab-header" data-glyph="E">
-      <div class="tab-eyebrow">Estratégia</div>
-      <div class="tab-title">Quem você é e <em>o que você vende</em></div>
-      <div class="tab-sub">Seu posicionamento, as duas ofertas e como elas se conectam numa escada de valor.</div>
+    <div class="tab-header" data-glyph="E" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+      <div>
+        <div class="tab-eyebrow">Estratégia</div>
+        <div class="tab-title">Quem você é e <em>o que você vende</em></div>
+        <div class="tab-sub">Seu posicionamento, as duas ofertas e como elas se conectam numa escada de valor.</div>
+      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body">
       <div class="tese-block">
@@ -117,10 +121,13 @@ const TAB_HTML = {
     </div>`,
 
   comercial: `
-    <div class="tab-header" data-glyph="C">
-      <div class="tab-eyebrow">Comercial</div>
-      <div class="tab-title">Como você <em>converte</em></div>
-      <div class="tab-sub">Prospecção, processo de venda e pitches para cada oferta.</div>
+    <div class="tab-header" data-glyph="C" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+      <div>
+        <div class="tab-eyebrow">Comercial</div>
+        <div class="tab-title">Como você <em>converte</em></div>
+        <div class="tab-sub">Prospecção, processo de venda e pitches para cada oferta.</div>
+      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body">
       <h3 style="margin-top:0;">Prospecção — três fontes</h3>
@@ -160,10 +167,13 @@ const TAB_HTML = {
     </div>`,
 
   crm: `
-    <div class="tab-header" data-glyph="C">
-      <div class="tab-eyebrow">Comercial · CRM</div>
-      <div class="tab-title">Gestão de <em>leads e pipeline</em></div>
-      <div class="tab-sub">Em migração — template próprio sendo integrado.</div>
+    <div class="tab-header" data-glyph="C" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+      <div>
+        <div class="tab-eyebrow">Comercial · CRM</div>
+        <div class="tab-title">Gestão de <em>leads e pipeline</em></div>
+        <div class="tab-sub">Em migração — template próprio sendo integrado.</div>
+      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body">
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;text-align:center;gap:1rem;">
@@ -177,10 +187,13 @@ const TAB_HTML = {
     </div>`,
 
   marketing: `
-    <div class="tab-header" data-glyph="M">
-      <div class="tab-eyebrow">Marketing</div>
-      <div class="tab-title">Autoridade e <em>audiência</em></div>
-      <div class="tab-sub">Seus pilares de conteúdo, canais, quem você quer atrair e como o FLG converte audiência em clientes.</div>
+    <div class="tab-header" data-glyph="M" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+      <div>
+        <div class="tab-eyebrow">Marketing</div>
+        <div class="tab-title">Autoridade e <em>audiência</em></div>
+        <div class="tab-sub">Seus pilares de conteúdo, canais, quem você quer atrair e como o FLG converte audiência em clientes.</div>
+      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body">
       <div class="rule-gold">
@@ -231,10 +244,13 @@ const TAB_HTML = {
     </div>`,
 
   'op-epc': `
-    <div class="tab-header" data-glyph="E" style="border-top:3px solid #3D3D8F;">
-      <div class="tab-eyebrow">Operação · Estrutura para Crescer</div>
-      <div class="tab-title">Como você <em>entrega</em></div>
-      <div class="tab-sub">Do diagnóstico pago à implementação modular — o que acontece depois que o cliente fecha.</div>
+    <div class="tab-header" data-glyph="E" style="border-top:3px solid #3D3D8F;display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+      <div>
+        <div class="tab-eyebrow">Operação · Estrutura para Crescer</div>
+        <div class="tab-title">Como você <em>entrega</em></div>
+        <div class="tab-sub">Do diagnóstico pago à implementação modular — o que acontece depois que o cliente fecha.</div>
+      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body">
       <h3 style="margin-top:0;">Modelo de entrega</h3>
@@ -255,10 +271,13 @@ const TAB_HTML = {
     </div>`,
 
   'op-arcus': `
-    <div class="tab-header" data-glyph="A" style="border-top:3px solid #1A6B5A;">
-      <div class="tab-eyebrow">Operação · Arcus Club</div>
-      <div class="tab-title">Consultoria <em>mês a mês</em></div>
-      <div class="tab-sub">Onboarding, modelo de entrega e capacidade operacional da consultoria de 6 meses.</div>
+    <div class="tab-header" data-glyph="A" style="border-top:3px solid #1A6B5A;display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+      <div>
+        <div class="tab-eyebrow">Operação · Arcus Club</div>
+        <div class="tab-title">Consultoria <em>mês a mês</em></div>
+        <div class="tab-sub">Onboarding, modelo de entrega e capacidade operacional da consultoria de 6 meses.</div>
+      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body">
       <h3 style="margin-top:0;">Onboarding pós-fechamento</h3>
@@ -493,10 +512,13 @@ export default function ViniciusPage() {
 
         {/* ── EPC CLIENTES (dynamic) ── */}
         <div className={`tab-content${activeTab === 'op-epc-clientes' ? ' active' : ''}`}>
-          <div className="tab-header" data-glyph="E" style={{ borderTop: '3px solid var(--indigo)' }}>
-            <div className="tab-eyebrow">Operação · Estrutura para Crescer</div>
-            <div className="tab-title">Clientes <em>ativos</em></div>
-            <div className="tab-sub">Visão rápida de cada projeto em andamento — fase, próxima ação e recorrência.</div>
+          <div className="tab-header" data-glyph="E" style={{ borderTop: '3px solid var(--indigo)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
+            <div>
+              <div className="tab-eyebrow">Operação · Estrutura para Crescer</div>
+              <div className="tab-title">Clientes <em>ativos</em></div>
+              <div className="tab-sub">Visão rápida de cada projeto em andamento — fase, próxima ação e recorrência.</div>
+            </div>
+            <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
           </div>
           <div className="tab-body">
             <div className="vini-section-bar">
@@ -539,10 +561,13 @@ export default function ViniciusPage() {
 
         {/* ── ARCUS CLIENTES (dynamic — mentees) ── */}
         <div className={`tab-content${activeTab === 'op-arcus-clientes' ? ' active' : ''}`}>
-          <div className="tab-header" data-glyph="A" style={{ borderTop: '3px solid var(--teal)' }}>
-            <div className="tab-eyebrow">Operação · Arcus Club</div>
-            <div className="tab-title">Clientes <em>ativos</em></div>
-            <div className="tab-sub">Visão rápida de cada consultoria em andamento — mês do ciclo, próxima reunião e status do Advisory.</div>
+          <div className="tab-header" data-glyph="A" style={{ borderTop: '3px solid var(--teal)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
+            <div>
+              <div className="tab-eyebrow">Operação · Arcus Club</div>
+              <div className="tab-title">Clientes <em>ativos</em></div>
+              <div className="tab-sub">Visão rápida de cada consultoria em andamento — mês do ciclo, próxima reunião e status do Advisory.</div>
+            </div>
+            <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
           </div>
           <div className="tab-body">
             {arcusClients.length === 0
@@ -587,10 +612,13 @@ export default function ViniciusPage() {
 
         {/* ── FINANCEIRO (dynamic) ── */}
         <div className={`tab-content${activeTab === 'financeiro' ? ' active' : ''}`}>
-          <div className="tab-header" data-glyph="F">
-            <div className="tab-eyebrow">Financeiro</div>
-            <div className="tab-title">Receita e <em>recorrência</em></div>
-            <div className="tab-sub">O que entrou, o que está previsto e se você está no caminho da meta.</div>
+          <div className="tab-header" data-glyph="F" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
+            <div>
+              <div className="tab-eyebrow">Financeiro</div>
+              <div className="tab-title">Receita e <em>recorrência</em></div>
+              <div className="tab-sub">O que entrou, o que está previsto e se você está no caminho da meta.</div>
+            </div>
+            <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
           </div>
           <div className="tab-body">
 
