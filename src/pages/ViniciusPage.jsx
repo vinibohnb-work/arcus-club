@@ -6,16 +6,17 @@ import './ViniciusPage.css'
 
 const TAB_HTML = {
   dashboard: `
-    <div class="tab-header" data-glyph="D">
-      <div class="tab-eyebrow">Dashboard</div>
-      <div class="tab-title">Visão <em>geral</em></div>
-      <div class="tab-sub">Posicionamento, ofertas, metas e métricas numa visão única.</div>
+    <div class="tab-header" data-glyph="D" style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;">
+      <div>
+        <div class="tab-eyebrow">Dashboard</div>
+        <div class="tab-title">Visão <em>geral</em></div>
+        <div class="tab-sub">Ofertas, metas e métricas numa visão única.</div>
+      </div>
+      <div style="flex-shrink:0;max-width:260px;text-align:right;padding-bottom:0.2rem;">
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:500;color:rgba(245,242,236,0.9);line-height:1.5;">Organizo os processos que <em style="color:#D4B06A;font-style:italic;">liberam o dono</em> e fazem a margem crescer.</div>
+      </div>
     </div>
     <div class="tab-body">
-      <div class="dash-tese">
-        <div class="dash-tese-label">Frase de posicionamento</div>
-        <div class="dash-tese-text">Ajudo donos de empresa a <em>aumentar a margem</em> organizando cultura, liderança e processos.</div>
-      </div>
       <h3 style="margin-top:0;">Suas duas ofertas</h3>
       <div class="offer-cards">
         <div class="offer-card epc">
