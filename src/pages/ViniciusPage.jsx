@@ -56,22 +56,20 @@ const TAB_HTML = {
     <div class="tab-header" data-glyph="E">
       <div>
         <div class="tab-eyebrow">Estratégia</div>
-        <div class="tab-title">Quem você é e <em>o que você vende</em></div>
-        <div class="tab-sub">Seu posicionamento, as duas ofertas e como elas se conectam numa escada de valor.</div>
+        <div class="tab-title">As duas <em>ofertas</em></div>
+        <div class="tab-sub">Comparativo lado a lado e o detalhe de cada produto.</div>
       </div>
       <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body">
-      <div class="tese-block">
-        <div class="tese-label">Sua frase de posicionamento</div>
-        <div class="tese-text">Ajudo donos de empresa a <em>aumentar a margem</em> organizando cultura, liderança e processos.</div>
+      <h3 style="margin-top:0;">As duas ofertas lado a lado</h3>
+      <div class="compare">
+        <div class="compare-card epc"><div class="compare-header"><div class="compare-name">Estrutura para Crescer</div><div class="compare-sub">Micro e pequeno empresário</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">Solo, 0–5 funcionários</div></div><div class="compare-row"><div class="compare-key">Entrada</div><div class="compare-val">Diagnóstico R$800–1.5k</div></div><div class="compare-row"><div class="compare-key">Projeto</div><div class="compare-val">R$5–12k</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">R$800–1.5k/mês</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">R$15–25k</div></div></div>
+        <div class="compare-card arcus"><div class="compare-header"><div class="compare-name">Arcus Club</div><div class="compare-sub">PME com equipe</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">5–40 funcionários</div></div><div class="compare-row"><div class="compare-key">Consultoria</div><div class="compare-val">R$36k / 6 meses</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">Advisory R$36k/ano</div></div><div class="compare-row"><div class="compare-key">1º cliente</div><div class="compare-val">~R$22k (piloto)</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">~R$78k</div></div></div>
       </div>
-      <h3 style="margin-top:0;">Quem você é</h3>
-      <div class="quad-grid" style="margin-bottom:2rem;">
-        <div class="q-cell dark"><div class="q-label">Background</div><p class="q-text">Engenheiro Mecânico. MBA em Liderança, Inovação e Gestão 4.0. Cinco anos em consultoria e mentoria empresarial. Mais de 100 empresas impactadas.</p></div>
-        <div class="q-cell"><div class="q-label">O que você resolve</div><p class="q-text">Empresas que crescem mas travam internamente. O dono virou o gargalo. A equipe não entrega sem supervisão. A margem some sem que ninguém entenda por quê.</p></div>
-        <div class="q-cell"><div class="q-label">Como você resolve</div><p class="q-text">Diagnóstico real dos gargalos. Implantação de estratégia, processos e tecnologia. Resultado mensurável — não inspiração.</p></div>
-        <div class="q-cell dark"><div class="q-label">O que te diferencia</div><span class="q-highlight">Implantamos. Não inspiramos.</span><p class="q-text">O cliente sai com processos funcionando e margem crescendo — não com uma lista de boas intenções.</p></div>
+      <div class="rule-gold">
+        <div class="rule-icon">↑</div>
+        <div class="rule-content"><div class="rule-label">A escada entre as ofertas</div><div class="rule-text">O cliente de Estrutura para Crescer que cresce vira candidato natural para a Arcus Club. Você entra cedo na trajetória dele com um investimento acessível — e quando ele tiver equipe e escala, a venda da Arcus já está quase feita.</div></div>
       </div>
       <div class="offer-header">
         <span class="offer-badge epc">Estrutura para Crescer</span>
@@ -108,15 +106,6 @@ const TAB_HTML = {
       <div class="product-card" style="margin-bottom:2rem;">
         <div class="product-sidebar"><div><div class="product-type">Recorrência</div><div class="product-name">Advisory Estratégico</div><div class="product-duration">12 meses · Renovação semestral</div></div><div class="product-price"><div class="price-main">R$36k</div><div class="price-detail">R$3.000 / mês · anual</div></div></div>
         <div class="product-body"><p class="product-desc">Produto autônomo com entregável claro: reunião estratégica mensal, acesso direto e revisão trimestral de indicadores. Upsell natural ao final da consultoria.</p><div class="product-pillars"><span class="pillar-tag">Reunião mensal</span><span class="pillar-tag">Acesso direto</span><span class="pillar-tag">Revisão trimestral</span><span class="pillar-tag">Proteção do resultado</span></div><div class="product-pitch"><p>"Você investiu R$36k para transformar a operação. Por metade disso por ano, a gente garante que o resultado não regride."</p></div></div>
-      </div>
-      <h3>As duas ofertas lado a lado</h3>
-      <div class="compare">
-        <div class="compare-card epc"><div class="compare-header"><div class="compare-name">Estrutura para Crescer</div><div class="compare-sub">Micro e pequeno empresário</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">Solo, 0–5 funcionários</div></div><div class="compare-row"><div class="compare-key">Entrada</div><div class="compare-val">Diagnóstico R$800–1.5k</div></div><div class="compare-row"><div class="compare-key">Projeto</div><div class="compare-val">R$5–12k</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">R$800–1.5k/mês</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">R$15–25k</div></div></div>
-        <div class="compare-card arcus"><div class="compare-header"><div class="compare-name">Arcus Club</div><div class="compare-sub">PME com equipe</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">5–40 funcionários</div></div><div class="compare-row"><div class="compare-key">Consultoria</div><div class="compare-val">R$36k / 6 meses</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">Advisory R$36k/ano</div></div><div class="compare-row"><div class="compare-key">1º cliente</div><div class="compare-val">~R$22k (piloto)</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">~R$78k</div></div></div>
-      </div>
-      <div class="rule-gold">
-        <div class="rule-icon">↑</div>
-        <div class="rule-content"><div class="rule-label">A escada entre as ofertas</div><div class="rule-text">O cliente de Estrutura para Crescer que cresce vira candidato natural para a Arcus Club. Você entra cedo na trajetória dele com um investimento acessível — e quando ele tiver equipe e escala, a venda da Arcus já está quase feita.</div></div>
       </div>
     </div>`,
 
