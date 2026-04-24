@@ -209,6 +209,279 @@ const TAB_HTML = {
       </div>
     </div>`,
 
+  'ops-epc': `
+    <div class="tab-header" data-glyph="O">
+      <div>
+        <div class="tab-eyebrow">Estratégia · Operações</div>
+        <div class="tab-title">Estrutura para <em>Crescer</em></div>
+        <div class="tab-sub">Como o produto funciona, o que entrega e como você executa.</div>
+      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
+    </div>
+    <div class="tab-body" style="max-width:none;">
+
+      <div class="rule-gold">
+        <div class="rule-icon">◎</div>
+        <div class="rule-content"><div class="rule-label">O produto em uma frase</div><div class="rule-text">Você entra na operação do micro e pequeno empresário, mapeia os gargalos, estrutura os processos, define a estratégia e implementa IA onde faz sentido — em até 12 semanas, com escopo e valor fechados.</div></div>
+      </div>
+
+      <h3>ICP — Quem contrata</h3>
+      <div class="icp-grid">
+        <div class="icp-card indigo">
+          <div class="icp-label">Perfil principal</div>
+          <div class="icp-title">Micro e pequeno empresário solo</div>
+          <p class="icp-text">Dentista, médico, lojista, prestador de serviços. Fatura entre R$10k–R$100k/mês. Opera no improviso. Tudo passa por ele — e o negócio para quando ele para.</p>
+          <div class="icp-tags"><span class="icp-tag" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);">0–5 funcionários</span></div>
+        </div>
+        <div class="icp-card">
+          <div class="icp-label">Dor central</div>
+          <div class="icp-title">"O negócio não funciona sem mim"</div>
+          <p class="icp-text">Processos verbais, decisões sem critério, nenhuma automação. O crescimento trava porque a estrutura não acompanha o dono.</p>
+        </div>
+      </div>
+
+      <h3>Os três eixos do produto</h3>
+      <div class="pillar-cards">
+        <div class="pillar-card featured">
+          <div class="pillar-header"><div class="pillar-icon">P</div><div class="pillar-title">Processos</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Mapeia, documenta e padroniza os processos críticos da operação. O que hoje está na cabeça do dono vira manual executável pelo time.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Mapeamento dos processos críticos (atendimento, vendas, financeiro)</div>
+              <div class="pillar-ex">Documentação em formato de playbook operacional</div>
+              <div class="pillar-ex">Definição de indicadores por processo</div>
+            </div>
+          </div>
+        </div>
+        <div class="pillar-card featured">
+          <div class="pillar-header"><div class="pillar-icon">E</div><div class="pillar-title">Estratégia</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Define prioridades, estrutura a tomada de decisão e posiciona o negócio para crescer com margem — não só com faturamento.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Diagnóstico de posicionamento e proposta de valor</div>
+              <div class="pillar-ex">Mapa de prioridades estratégicas para 90 dias</div>
+              <div class="pillar-ex">Modelo de decisão para o dono sair do operacional</div>
+            </div>
+          </div>
+        </div>
+        <div class="pillar-card featured">
+          <div class="pillar-header"><div class="pillar-icon">IA</div><div class="pillar-title">IA &amp; Automação</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Implementa ferramentas de IA e automações nos processos onde o ganho é imediato: prospecção, atendimento, gestão e rotinas repetitivas.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Agente de prospecção ou atendimento com IA</div>
+              <div class="pillar-ex">Automações de rotina (follow-up, relatórios, triagem)</div>
+              <div class="pillar-ex">Stack de ferramentas configurado e documentado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Como a entrega funciona</h3>
+      <div class="staircase">
+        <div class="stair highlight">
+          <div class="stair-left"><div class="stair-stage">Semanas 1–2</div><div class="stair-name">Diagnóstico aprofundado</div></div>
+          <div class="stair-right">Imersão completa na operação: entrevistas, mapeamento dos processos existentes, análise de ferramentas e identificação dos gargalos que mais drenam margem. Entrega: relatório de diagnóstico com prioridades rankeadas e plano de implementação.</div>
+        </div>
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Semanas 3–8</div><div class="stair-name">Implementação</div></div>
+          <div class="stair-right">Execução das prioridades definidas no diagnóstico. Processos documentados, automações configuradas, decisões estratégicas tomadas. Sessões semanais de acompanhamento — você aparece, executa, ajusta e avança.</div>
+        </div>
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Semanas 9–12</div><div class="stair-name">Consolidação e handoff</div></div>
+          <div class="stair-right">Revisão do que foi implantado, ajustes finos, documentação final e handoff para o cliente operar sozinho. Entrega: playbook completo + stack de IA documentado e em funcionamento.</div>
+        </div>
+      </div>
+
+      <h3>Escopo e entregáveis</h3>
+      <div class="strat-cols">
+        <div>
+          <div class="strat-stage">Processos</div>
+          <div class="product-card"><div class="product-body"><div class="product-pillars">
+            <span class="pillar-tag">Mapa dos processos críticos</span>
+            <span class="pillar-tag">Playbook operacional</span>
+            <span class="pillar-tag">Indicadores por processo</span>
+            <span class="pillar-tag">Checklist de rotinas</span>
+            <span class="pillar-tag">Onboarding documentado</span>
+          </div></div></div>
+        </div>
+        <div>
+          <div class="strat-stage">Estratégia</div>
+          <div class="product-card"><div class="product-body"><div class="product-pillars">
+            <span class="pillar-tag">Diagnóstico de posicionamento</span>
+            <span class="pillar-tag">Mapa de prioridades 90 dias</span>
+            <span class="pillar-tag">Modelo de decisão</span>
+            <span class="pillar-tag">Proposta de valor clara</span>
+            <span class="pillar-tag">Critérios de precificação</span>
+          </div></div></div>
+        </div>
+        <div>
+          <div class="strat-stage">IA &amp; Automação</div>
+          <div class="product-card"><div class="product-body"><div class="product-pillars">
+            <span class="pillar-tag">Agente de IA configurado</span>
+            <span class="pillar-tag">Automações de rotina</span>
+            <span class="pillar-tag">Stack de ferramentas definido</span>
+            <span class="pillar-tag">Documentação de uso</span>
+            <span class="pillar-tag">Treinamento do cliente</span>
+          </div></div></div>
+        </div>
+      </div>
+
+      <div class="strat-full" style="margin-top:1.5rem;">
+        <div class="product-card featured-indigo">
+          <div class="product-sidebar"><div><div class="product-type">Pacote fechado</div><div class="product-name">Diagnóstico + Implementação</div><div class="product-duration">12 semanas · escopo fixo</div></div><div class="product-price"><div class="price-main">R$24k</div><div class="price-detail">valor fixo · sem surpresas</div></div></div>
+          <div class="product-body"><p class="product-desc">Pacote único com escopo e valor definidos em contrato. O cliente sabe exatamente o que vai receber — sem horas extras, sem escopo aberto. Advisory opcional na sequência.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico aprofundado</span><span class="pillar-tag">Implementação acompanhada</span><span class="pillar-tag">Playbook entregue</span><span class="pillar-tag">IA configurada</span><span class="pillar-tag">Advisory opcional</span></div></div>
+        </div>
+      </div>
+
+      <div class="discard-box" style="margin-top:1.5rem;">
+        <div class="discard-label">Quem não é ICP para este produto</div>
+        <ul class="discard-list">
+          <li>Empresas com mais de 5 funcionários — nesse caso, o produto correto é Arcus Club</li>
+          <li>Donos que não reconhecem o problema operacional — você diagnóstica, não converte crenças</li>
+          <li>Quem quer consultoria pontual sem compromisso de implementação</li>
+        </ul>
+      </div>
+
+    </div>`,
+
+  'ops-arcus': `
+    <div class="tab-header" data-glyph="O">
+      <div>
+        <div class="tab-eyebrow">Estratégia · Operações</div>
+        <div class="tab-title">Arcus <em>Club</em></div>
+        <div class="tab-sub">Como o produto funciona, o que entrega e como você executa.</div>
+      </div>
+      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
+    </div>
+    <div class="tab-body" style="max-width:none;">
+
+      <div class="rule-gold">
+        <div class="rule-icon">◎</div>
+        <div class="rule-content"><div class="rule-label">O produto em uma frase</div><div class="rule-text">Você entra na PME como consultor de implantação por 6 meses — diagnostica os gargalos de cultura, liderança e processos, implanta as soluções e sai com margem crescente documentada.</div></div>
+      </div>
+
+      <h3>ICP — Quem contrata</h3>
+      <div class="icp-grid">
+        <div class="icp-card dark">
+          <div class="icp-label">Perfil principal</div>
+          <div class="icp-title">PME com equipe em expansão travada</div>
+          <p class="icp-text">Faturamento R$500k–R$5M. Empresa com 5–40 funcionários. O dono virou o gargalo. A equipe cresce mas a produtividade não. A margem some e ninguém sabe por quê.</p>
+          <div class="icp-tags"><span class="icp-tag" style="background:#E6F3EF;border-color:#1A6B5A;color:#1A6B5A;">Arcus Club</span></div>
+        </div>
+        <div class="icp-card">
+          <div class="icp-label">Dor central</div>
+          <div class="icp-title">"A empresa cresce, mas a margem some"</div>
+          <p class="icp-text">Liderança fraca. Processos verbais. O dono continua resolvendo tudo. Retenção baixa. Contratações que não resolvem o problema.</p>
+        </div>
+      </div>
+
+      <h3>Os três pilares do produto</h3>
+      <div class="pillar-cards">
+        <div class="pillar-card featured">
+          <div class="pillar-header"><div class="pillar-icon">C</div><div class="pillar-title">Cultura</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Define e implanta os comportamentos, valores e ritmos que precisam existir para a empresa crescer sem o dono sendo o centro de tudo.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Diagnóstico de cultura atual vs. necessária</div>
+              <div class="pillar-ex">Definição de valores e comportamentos esperados</div>
+              <div class="pillar-ex">Rituais de equipe (reuniões, feedbacks, cadência)</div>
+            </div>
+          </div>
+        </div>
+        <div class="pillar-card featured">
+          <div class="pillar-header"><div class="pillar-icon">L</div><div class="pillar-title">Liderança</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Desenvolve os líderes intermediários e redefine o papel do dono. A empresa para de depender de uma pessoa para funcionar.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Mapeamento de perfis de liderança existentes</div>
+              <div class="pillar-ex">Plano de desenvolvimento individual por líder</div>
+              <div class="pillar-ex">Delegação estruturada com critérios de decisão</div>
+            </div>
+          </div>
+        </div>
+        <div class="pillar-card featured">
+          <div class="pillar-header"><div class="pillar-icon">P</div><div class="pillar-title">Processos</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Mapeia, redesenha e documenta os processos que mais impactam margem. Com equipe, a padronização é o que garante previsibilidade de resultado.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Mapeamento dos processos de maior impacto em margem</div>
+              <div class="pillar-ex">Documentação e playbooks por área</div>
+              <div class="pillar-ex">KPIs e dashboards de acompanhamento</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Como a entrega funciona — 6 meses</h3>
+      <div class="staircase">
+        <div class="stair highlight">
+          <div class="stair-left"><div class="stair-stage">Mês 1</div><div class="stair-name">Diagnóstico completo</div></div>
+          <div class="stair-right">Imersão na empresa: entrevistas com dono, líderes e equipe-chave, análise de processos e indicadores, mapeamento de cultura atual. Entrega: relatório de diagnóstico com plano de implantação dos 5 meses seguintes.</div>
+        </div>
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Meses 2–3</div><div class="stair-name">Implantação de Processos</div></div>
+          <div class="stair-right">Foco nos processos de maior impacto em margem. Documentação, padronização e treinamento da equipe. Acompanhamento semanal para garantir que o que foi desenhado funciona na prática.</div>
+        </div>
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Meses 3–4</div><div class="stair-name">Liderança e Cultura</div></div>
+          <div class="stair-right">Desenvolvimento dos líderes identificados no diagnóstico. Implantação dos rituais de cultura. O dono começa a se afastar das decisões operacionais com segurança — porque tem pessoas e processos fazendo isso.</div>
+        </div>
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Meses 5–6</div><div class="stair-name">Consolidação e entrega</div></div>
+          <div class="stair-right">Revisão de tudo que foi implantado, ajustes finos e KPIs validados. Documentação final e handoff. Apresentação dos resultados ao dono — margem antes e depois, autonomia da equipe, processos funcionando.</div>
+        </div>
+      </div>
+
+      <h3>Escopo e entregáveis</h3>
+      <div class="strat-cols">
+        <div>
+          <div class="strat-stage">Cultura</div>
+          <div class="product-card"><div class="product-body"><div class="product-pillars">
+            <span class="pillar-tag">Diagnóstico de cultura atual</span>
+            <span class="pillar-tag">Manual de valores e comportamentos</span>
+            <span class="pillar-tag">Rituais de equipe implantados</span>
+            <span class="pillar-tag">Onboarding cultural estruturado</span>
+          </div></div></div>
+        </div>
+        <div>
+          <div class="strat-stage">Liderança</div>
+          <div class="product-card"><div class="product-body"><div class="product-pillars">
+            <span class="pillar-tag">Mapa de lideranças atuais</span>
+            <span class="pillar-tag">Plano de desenvolvimento individual</span>
+            <span class="pillar-tag">Modelo de delegação</span>
+            <span class="pillar-tag">Critérios de decisão por nível</span>
+          </div></div></div>
+        </div>
+        <div>
+          <div class="strat-stage">Processos</div>
+          <div class="product-card"><div class="product-body"><div class="product-pillars">
+            <span class="pillar-tag">Processos críticos mapeados</span>
+            <span class="pillar-tag">Playbooks por área</span>
+            <span class="pillar-tag">KPIs e dashboard</span>
+            <span class="pillar-tag">Relatório de resultados final</span>
+          </div></div></div>
+        </div>
+      </div>
+
+      <div class="strat-full" style="margin-top:1.5rem;">
+        <div class="product-card featured-teal">
+          <div class="product-sidebar"><div><div class="product-type">Produto core</div><div class="product-name">Consultoria de Implantação</div><div class="product-duration">6 meses de engajamento</div></div><div class="product-price"><div class="price-main">R$48k</div><div class="price-detail">R$8.000 / mês</div><div class="price-badge" style="background:rgba(184,147,58,0.2);color:#D4B06A;">1º cliente: ~R$22k</div></div></div>
+          <div class="product-body"><p class="product-desc">Escopo definido no diagnóstico do mês 1. Você entra, estrutura e sai com resultado documentado. O cliente tem margem crescente e equipe com mais autonomia ao final de 6 meses.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico completo</span><span class="pillar-tag">Implantação nos 3 pilares</span><span class="pillar-tag">Acompanhamento semanal</span><span class="pillar-tag">Entregáveis documentados</span><span class="pillar-tag">Relatório de resultados</span></div></div>
+        </div>
+      </div>
+
+      <div class="discard-box" style="margin-top:1.5rem;">
+        <div class="discard-label">Quem não é ICP para este produto</div>
+        <ul class="discard-list">
+          <li>Empresas com menos de 5 funcionários — nesse caso, o produto correto é Estrutura para Crescer</li>
+          <li>Dono que não aceita desenvolver liderança interna — sem delegação, o produto não gera resultado</li>
+          <li>Faturamento abaixo de R$300k/ano — o ticket de R$48k não se sustenta na relação custo/benefício</li>
+        </ul>
+      </div>
+
+    </div>`,
+
   marketing: `
     <div class="tab-header" data-glyph="M">
       <div>
@@ -544,6 +817,12 @@ export default function ViniciusPage() {
           <div style={{ padding: '0 0 0.25rem 0' }}>
             <div className={`nav-sub-item${activeTab === 'metas' ? ' active' : ''}`} onClick={() => showTab('metas')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Metas</span>
+            </div>
+            <div className={`nav-sub-item${activeTab === 'ops-epc' ? ' active' : ''}`} onClick={() => showTab('ops-epc')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · EPC</span>
+            </div>
+            <div className={`nav-sub-item${activeTab === 'ops-arcus' ? ' active' : ''}`} onClick={() => showTab('ops-arcus')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · Arcus</span>
             </div>
           </div>
 
