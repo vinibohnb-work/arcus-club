@@ -163,6 +163,242 @@ const TAB_HTML = {
       </div>
     </div>`,
 
+  metodo: `
+    <div class="tab-header" data-glyph="V">
+      <div>
+        <div class="tab-eyebrow">Comercial · Método</div>
+        <div class="tab-title">Método de <em>venda</em></div>
+        <div class="tab-sub">As seis etapas, o RICOM integrado em cada momento e o sketch tático.</div>
+      </div>
+      <div class="tab-header-phrase">Você não vende serviço.<br><em>Você prescreve solução.</em></div>
+    </div>
+    <div class="tab-body" style="max-width:none;">
+
+      <div class="rule-gold">
+        <div class="rule-icon">◎</div>
+        <div class="rule-content"><div class="rule-label">O princípio central</div><div class="rule-text"><strong>Você é um médico, não um vendedor.</strong> Diagnóstico antes de prescrição. Cada etapa tem um objetivo único — e avançar sem completar esse objetivo é o erro mais comum no ciclo de venda consultiva. A venda acontece na conversa, nunca no post.</div></div>
+      </div>
+
+      <h3>As seis etapas</h3>
+      <div class="staircase">
+
+        <div class="stair highlight">
+          <div class="stair-left"><div class="stair-stage">Etapa 01</div><div class="stair-name">Abordagem</div></div>
+          <div class="stair-right">
+            <p><strong>Objetivo único: gerar uma resposta.</strong> Não venda o serviço — abra uma conversa. A abordagem nomeia a dor do ICP sem oferecer nada. Canal: LinkedIn, BNI, rede quente, inbound.</p>
+            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Vi que você está à frente de [empresa/segmento]. Tenho acompanhado empresários em situações parecidas. Tudo bem se te fizer uma pergunta?"</p>
+            <p style="margin-top:6px;font-size:13px;font-style:italic;color:var(--muted);">Via BNI/rede quente: "O [contato em comum] me falou do momento da sua empresa. Podemos trocar uma ideia rápida?"</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">RICOM → R: Relacionamento — construa antes de ofertar</p>
+          </div>
+        </div>
+
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Etapa 02</div><div class="stair-name">Conseguir o WhatsApp</div></div>
+          <div class="stair-right">
+            <p><strong>Objetivo único: migrar para canal direto.</strong> O WhatsApp encurta o ciclo — mensagem vista, resposta rápida, tom mais pessoal. Não explique o produto aqui. Guarde para a ligação.</p>
+            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Faz sentido a gente trocar uma mensagem rápida no WhatsApp? Fica mais fácil alinhar os próximos passos."</p>
+            <p style="margin-top:8px;font-size:13px;color:var(--muted);">No WhatsApp: confirme o interesse, aqueça o relacionamento e proponha a ligação de 20 min. Nada de apresentação de serviço ainda.</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">RICOM → R: Conecte a dor à sua solução antes de revelar o que você faz</p>
+          </div>
+        </div>
+
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Etapa 03</div><div class="stair-name">Ligação — entender dores</div></div>
+          <div class="stair-right">
+            <p><strong>Duração: 20–30 minutos.</strong> Pergunte mais do que fale. A ligação qualifica o lead, mapeia as dores reais e define qual produto se aplica (EPC ou Arcus). Ela alimenta o sketch se você decidir montar um.</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Perguntas-chave:</strong></p>
+            <ul style="margin:6px 0 0 16px;font-size:13px;color:var(--muted);line-height:1.85;">
+              <li>"Me conta como está a operação hoje — o que mais toma o seu tempo?"</li>
+              <li>"Qual é o maior gargalo que está travando o crescimento?"</li>
+              <li>"Se você resolver isso, o que muda concretamente no negócio?"</li>
+              <li>"Você já tentou resolver esse problema de alguma forma? O que aconteceu?"</li>
+            </ul>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Output esperado:</strong> produto definido (EPC ou Arcus), 2–3 dores principais identificadas, decisão de avançar para reunião — e insumo para o sketch.</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">RICOM → I: Identificação de dores + nível de urgência + quantificação</p>
+          </div>
+        </div>
+
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Etapa 04</div><div class="stair-name">Agendar a reunião</div></div>
+          <div class="stair-right">
+            <p><strong>Objetivo: garantir que todos os decisores estarão presentes.</strong> Uma reunião sem o cônjuge, sócio ou diretor financeiro quase sempre termina em "vou pensar". Não agende se o decisor principal não puder comparecer — remarque.</p>
+            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Para a gente aproveitar melhor a reunião — quem mais estará envolvido nessa decisão? Faz sentido trazer seu [sócio / esposa / diretor financeiro]? Prefiro fazer uma reunião que vale do que duas."</p>
+            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Confirme 24h antes. Use esse intervalo para montar o sketch se os critérios de ativação forem atendidos.</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">RICOM → O: Outros decisores identificados e garantidos na sala</p>
+          </div>
+        </div>
+
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Etapa 05</div><div class="stair-name">Reunião</div></div>
+          <div class="stair-right">
+            <p><strong>Duração: 60–90 minutos.</strong> Quatro movimentos em sequência:</p>
+            <ul style="margin:10px 0 0 16px;font-size:13px;color:var(--muted);line-height:1.9;">
+              <li><strong style="color:var(--ink);">1. Espelhar dores</strong> — Repita o que o cliente disse na ligação, com as palavras dele. "Você me disse que X. Quero entender isso melhor antes de qualquer coisa."</li>
+              <li><strong style="color:var(--ink);">2. Aprofundar e quantificar</strong> — Quanto custa por mês? Há quanto tempo? O que acontece se não resolver em 6 meses?</li>
+              <li><strong style="color:var(--ink);">3. Apresentar solução</strong> — Proposta personalizada. Se aplicável: apresente o sketch antes do preço. Não o serviço genérico — a solução para as dores dele.</li>
+              <li><strong style="color:var(--ink);">4. Antecipar objeções</strong> — "Qual é a sua maior dúvida sobre avançar?" Não espere a objeção aparecer no fechamento.</li>
+            </ul>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">RICOM → C + M + O — os três aplicados aqui</p>
+          </div>
+        </div>
+
+        <div class="stair highlight">
+          <div class="stair-left"><div class="stair-stage">Etapa 06</div><div class="stair-name">Conversão</div></div>
+          <div class="stair-right">
+            <p><strong>Peça o fechamento explicitamente.</strong> "Faz sentido para você começar em [data]?" Se houver hesitação, identifique a objeção real antes de qualquer concessão.</p>
+            <ul style="margin:10px 0 0 16px;font-size:13px;color:var(--muted);line-height:1.85;">
+              <li><strong style="color:var(--ink);">Objeção de preço →</strong> "O que faria o valor fazer sentido dado o resultado?" Nunca desconte antes de entender.</li>
+              <li><strong style="color:var(--ink);">Objeção de tempo →</strong> "O que mudaria se você resolvesse isso agora vs. daqui a 3 meses?"</li>
+              <li><strong style="color:var(--ink);">Objeção de dúvida →</strong> "Qual é a sua maior preocupação em avançar?" — e deixe responder sem interromper.</li>
+            </ul>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Defina próximos passos concretos com data: contrato, início, primeiro pagamento. Nada de "vou te mandar o material" sem prazo definido.</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">RICOM → M: ROI claro + custo de não agir agora</p>
+          </div>
+        </div>
+
+      </div>
+
+      <h3>RICOM — o framework integrado por etapa</h3>
+      <div class="pillar-cards">
+        <div class="pillar-card">
+          <div class="pillar-header"><div class="pillar-icon">R</div><div class="pillar-title">Relacionamento</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Construa confiança antes de ofertar. Conecte a dor do cliente à sua solução. Agregue valor durante toda a conversa.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Ativo nas etapas 1 e 2</div>
+              <div class="pillar-ex">Pesquise o lead antes de cada contato</div>
+              <div class="pillar-ex">Nunca mencione preço antes de entender o problema</div>
+            </div>
+          </div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-header"><div class="pillar-icon">I</div><div class="pillar-title">Identificação de Dores</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Descubra os problemas e seus impactos reais no negócio. Identifique o nível de urgência. Quantifique a dor sempre que possível.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Ativo na etapa 3 (ligação)</div>
+              <div class="pillar-ex">"Quanto isso custa por mês para você?"</div>
+              <div class="pillar-ex">"Há quanto tempo está assim?"</div>
+            </div>
+          </div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-header"><div class="pillar-icon">C</div><div class="pillar-title">Critérios de Decisão</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Entenda as experiências anteriores do cliente. Descubra suas prioridades. Tire a conversa da disputa por preço.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Ativo nas etapas 4 e 5</div>
+              <div class="pillar-ex">"Você já contratou algo parecido antes?"</div>
+              <div class="pillar-ex">"O que é mais importante: velocidade, custo ou resultado?"</div>
+            </div>
+          </div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-header"><div class="pillar-icon">O</div><div class="pillar-title">Objeções / Decisores</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Identifique quem realmente toma a decisão. Garanta todos os decisores na reunião. Antecipe as objeções — não espere elas aparecerem no fechamento.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Ativo nas etapas 4, 5 e 6</div>
+              <div class="pillar-ex">Nunca feche sem todos os decisores presentes</div>
+              <div class="pillar-ex">Antecipe a objeção na reunião — não no follow-up</div>
+            </div>
+          </div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-header"><div class="pillar-icon">M</div><div class="pillar-title">Métricas</div></div>
+          <div class="pillar-body">
+            <p class="pillar-desc">Calcule o ROI esperado com o seu serviço. Embase a análise em dados e projeções. Eleve a consciência sobre as perdas por não agir.</p>
+            <div class="pillar-examples">
+              <div class="pillar-ex">Ativo nas etapas 5 e 6</div>
+              <div class="pillar-ex">"Se isso custa R$X/mês, em 12 meses são R$Y perdidos."</div>
+              <div class="pillar-ex">"Meu serviço se paga em [N] meses com base no que me contou."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>O sketch tático — sua vantagem assimétrica</h3>
+      <div class="rule-gold" style="border-left-color:var(--teal);">
+        <div class="rule-icon" style="color:var(--teal);">✓</div>
+        <div class="rule-content">
+          <div class="rule-label" style="color:var(--teal);">Avaliação: use — com critério</div>
+          <div class="rule-text">O sketch é um rascunho de plataforma, fluxo de automação ou solução de gestão montado <strong>antes da reunião</strong>, com base nas dores identificadas na ligação. Não é a proposta formal — é a prova de que você já pensou no problema do cliente antes de ele te contratar. O investimento de tempo é baixo (30–60 min em cima de um template), e o impacto na conversão é alto: o cliente sai da reunião com a imagem mental do "depois". <strong>Use apenas quando as dores se encaixam em um template existente</strong> — nunca force.</div>
+        </div>
+      </div>
+
+      <div class="staircase" style="margin-top:1rem;">
+        <div class="stair highlight">
+          <div class="stair-left"><div class="stair-stage">Quando usar</div><div class="stair-name">Critérios de ativação</div></div>
+          <div class="stair-right">
+            <ul style="margin:0 0 0 16px;font-size:13px;color:var(--muted);line-height:1.9;">
+              <li>O lead mencionou processos verbais, tudo na cabeça do dono ou falta de automação</li>
+              <li>A ligação foi produtiva — ele abriu o jogo e as dores são claras e específicas</li>
+              <li>É ICP confirmado do Estrutura para Crescer (solo, 0–5 funcionários)</li>
+              <li>As dores se encaixam em um dos templates de sketch pré-existentes</li>
+              <li>Você tem pelo menos 24h até a reunião para montar e personalizar</li>
+            </ul>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Não use</strong> se as dores foram vagas na ligação, se o lead está apenas explorando opções, ou se você não tiver tempo para personalizar minimamente com o nome da empresa e o segmento.</p>
+          </div>
+        </div>
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Como montar</div><div class="stair-name">O que entra no sketch</div></div>
+          <div class="stair-right">
+            <p style="font-size:13px;color:var(--muted);">Parta de um dos templates abaixo e personalize com: nome da empresa, segmento, e as dores específicas que ele mencionou. O sketch pode ser:</p>
+            <ul style="margin:8px 0 0 16px;font-size:13px;color:var(--muted);line-height:1.85;">
+              <li>Um fluxo de automação (Make, n8n, Zapier) com os processos do cliente mapeados</li>
+              <li>Um dashboard de indicadores-chave para o negócio dele</li>
+              <li>Uma estrutura de Notion com os processos do segmento</li>
+              <li>Um diagrama de como seria a operação <em>após</em> o EPC</li>
+            </ul>
+            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Não precisa estar perfeito — precisa estar específico.</p>
+          </div>
+        </div>
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Como apresentar</div><div class="stair-name">O pitch do sketch</div></div>
+          <div class="stair-right">
+            <p style="font-size:13px;color:var(--muted);">Apresente depois de espelhar as dores e <strong>antes</strong> de mostrar o investimento. Enquadre assim:</p>
+            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Com base no que você me contou na nossa ligação, eu rascunhei como imaginei a solução para o seu caso. Isso não é a proposta final — é a minha leitura do problema. Me diz se faz sentido."</p>
+            <p style="margin-top:8px;font-size:13px;color:var(--muted);">A reação do cliente ao sketch calibra o escopo. Só depois você apresenta o investimento — e ele já está emocionalmente investido.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Templates de sketch (reutilizáveis)</h3>
+      <div class="icp-grid">
+        <div class="icp-card">
+          <div class="icp-label">Clínica / Consultório</div>
+          <div class="icp-title">Agendamento + follow-up automatizado</div>
+          <p class="icp-text">Lead entra → IA qualifica → agenda → lembrete automático → pós-consulta + NPS → reativação de paciente inativo. Processo de retorno estruturado.</p>
+        </div>
+        <div class="icp-card">
+          <div class="icp-label">Loja / Varejo</div>
+          <div class="icp-title">Atendimento + pós-venda + reativação</div>
+          <p class="icp-text">Atendimento padronizado → carrinho abandonado → pós-compra → reativação de cliente inativo → gestão de estoque com alerta automático.</p>
+        </div>
+        <div class="icp-card">
+          <div class="icp-label">Prestador de Serviços</div>
+          <div class="icp-title">Proposta → execução → cobrança</div>
+          <p class="icp-text">Briefing → orçamento com IA → aprovação → execução com checklist → entrega → cobrança automática → follow-up de indicação.</p>
+        </div>
+        <div class="icp-card">
+          <div class="icp-label">Construção / Reforma</div>
+          <div class="icp-title">Gestão de obra + comunicação com cliente</div>
+          <p class="icp-text">Briefing → orçamento → cronograma → atualização automática de etapa → aprovação → medição → pagamento. Cliente informado em tempo real.</p>
+        </div>
+      </div>
+
+      <div class="never-do" style="margin-top:1.5rem;">
+        <div class="never-label">O que nunca fazer no ciclo de venda</div>
+        <div class="never-item"><span class="never-x">✕</span><span>Mencionar preço antes de entender a dor — você vira commodity na hora.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Fazer reunião sem todos os decisores presentes — "vou mostrar para minha esposa" = venda perdida.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Apresentar as duas ofertas como menu — quem qualifica é você, não o cliente.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Oferecer desconto antes de entender a objeção real — reduz percepção de valor e margem.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Enviar sketch sem personalização mínima — genérico é pior do que nada.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Terminar reunião sem definir próximo passo com data — o lead some no silêncio.</span></div>
+      </div>
+
+    </div>`,
+
   comercial: `
     <div class="tab-header" data-glyph="C">
       <div>
@@ -832,6 +1068,9 @@ export default function ViniciusPage() {
             <div className="nav-dot" /><span className="nav-label">Comercial</span>
           </div>
           <div style={{ padding: '0 0 0.25rem 0' }}>
+            <div className={`nav-sub-item${activeTab === 'metodo' ? ' active' : ''}`} onClick={() => showTab('metodo')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Método de Venda</span>
+            </div>
             <div className={`nav-sub-item${activeTab === 'crm' ? ' active' : ''}`} onClick={() => showTab('crm')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">CRM</span>
             </div>
