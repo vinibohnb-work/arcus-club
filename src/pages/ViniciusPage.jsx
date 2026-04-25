@@ -540,7 +540,7 @@ const TAB_HTML = {
     <div class="tab-header" data-glyph="O">
       <div>
         <div class="tab-eyebrow">Estratégia · Operações</div>
-        <div class="tab-title">Estrutura para <em>Crescer</em></div>
+        <div class="tab-title">Margin <em>Machine</em></div>
         <div class="tab-sub">Como o produto funciona, o que entrega e como você executa.</div>
       </div>
       <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
