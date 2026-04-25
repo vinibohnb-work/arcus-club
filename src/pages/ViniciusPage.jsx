@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import ViniMarketing from './ViniMarketing'
+import ViniMetas from './ViniMetas'
 import './ViniciusPage.css'
 
 // ─── Static tab HTML content ─────────────────────────────────────────────────
@@ -1153,6 +1154,9 @@ export default function ViniciusPage() {
             <div className={`nav-sub-item${activeTab === 'metas' ? ' active' : ''}`} onClick={() => showTab('metas')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Metas</span>
             </div>
+            <div className={`nav-sub-item${activeTab === 'check' ? ' active' : ''}`} onClick={() => showTab('check')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Check Semanal</span>
+            </div>
             <div className={`nav-sub-item${activeTab === 'ops-epc' ? ' active' : ''}`} onClick={() => showTab('ops-epc')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · EPC</span>
             </div>
@@ -1379,6 +1383,21 @@ export default function ViniciusPage() {
               )
             }
 
+          </div>
+        </div>
+
+        {/* ── CHECK SEMANAL (dynamic) ── */}
+        <div className={`tab-content${activeTab === 'check' ? ' active' : ''}`}>
+          <div className="tab-header">
+            <div>
+              <div className="tab-eyebrow">Estratégia · Check Semanal</div>
+              <div className="tab-title">Acompanhamento <em>semanal</em></div>
+              <div className="tab-sub">Reflexão por semana + funil de conversão com taxas em tempo real.</div>
+            </div>
+            <div className="tab-header-phrase">Ou você bate a meta,<br /><em>ou aprende por que não bateu.</em></div>
+          </div>
+          <div className="tab-body" style={{ maxWidth: 'none' }}>
+            <ViniMetas />
           </div>
         </div>
 
