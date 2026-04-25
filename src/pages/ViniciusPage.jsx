@@ -95,28 +95,28 @@ const TAB_HTML = {
           <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S05</div>
           <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">25/05 – 29/05</div>
           <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#3DBFB0;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">5ª venda</span></div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.55;">1º Advisory ativo (R$3k/mês recorrente). LinkedIn gerando primeiros inbounds orgânicos.</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">1º Advisory ativo (R$5k/mês recorrente). LinkedIn gerando primeiros inbounds orgânicos.</div>
         </div>
 
         <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#FAFAF8;border-bottom:1px solid #F0EDE8;">
           <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S06</div>
           <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">01/06 – 05/06</div>
           <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#3DBFB0;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">6ª venda</span></div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.55;">2 Advisory ativos = R$6k/mês recorrente. 1ª reunião de Arcus Club realizada.</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">2 Advisory ativos = R$10k/mês recorrente. 1ª reunião de Arcus Club realizada.</div>
         </div>
 
         <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:15px 20px;gap:16px;align-items:center;background:#FBF7EE;border-bottom:1px solid #EDE5CC;border-left:3px solid #B8933A;">
           <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S07</div>
           <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">08/06 – 12/06</div>
           <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#B8933A;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:#6B4F1A;">7ª venda ★</span></div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:var(--ink);">R$168k+ realizados.</strong> 1ª Arcus Club fechada (R$48k). Recorrência mensal consolidando.</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:var(--ink);">R$168k+ realizados.</strong> 1ª Arcus Club fechada (R$96k). Recorrência mensal consolidando.</div>
         </div>
 
         <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#fff;border-bottom:1px solid #F0EDE8;">
           <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S08</div>
           <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">15/06 – 19/06</div>
           <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#3DBFB0;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">8ª venda</span></div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.55;">3 Advisory = R$9k/mês. Pipeline com 5+ leads em proposta. Primeiras indicações de clientes ativos.</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">3 Advisory = R$15k/mês. Pipeline com 5+ leads em proposta. Primeiras indicações de clientes ativos.</div>
         </div>
 
         <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#FAFAF8;border-bottom:1px solid #F0EDE8;">
@@ -209,45 +209,47 @@ const TAB_HTML = {
     <div class="tab-body" style="max-width:none;">
       <div class="compare" style="margin-bottom:1rem;">
         <div class="compare-card epc"><div class="compare-header"><div class="compare-name">Margin Machine</div><div class="compare-sub">Micro e pequeno empresário</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">Solo, 0–5 funcionários</div></div><div class="compare-row"><div class="compare-key">Diagnóstico inicial</div><div class="compare-val">Gratuito (comercial)</div></div><div class="compare-row"><div class="compare-key">Pacote fechado</div><div class="compare-val">R$24k</div></div><div class="compare-row"><div class="compare-key">Advisory</div><div class="compare-val">Opcional · recorrente</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">R$30k+</div></div></div>
-        <div class="compare-card arcus"><div class="compare-header"><div class="compare-name">Arcus Club</div><div class="compare-sub">PME com equipe</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">5–40 funcionários</div></div><div class="compare-row"><div class="compare-key">Consultoria</div><div class="compare-val">R$48k / 6 meses</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">Advisory R$36k/ano</div></div><div class="compare-row"><div class="compare-key">1º cliente</div><div class="compare-val">~R$22k (piloto)</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">~R$78k</div></div></div>
+        <div class="compare-card arcus"><div class="compare-header"><div class="compare-name">Arcus Club</div><div class="compare-sub">PME com equipe</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">5–40 funcionários</div></div><div class="compare-row"><div class="compare-key">Consultoria</div><div class="compare-val">R$96k / 12 meses</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">Advisory R$60k/ano</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">R$156k+</div></div></div>
       </div>
       <div class="rule-gold" style="margin-bottom:2rem;">
         <div class="rule-icon">↑</div>
-        <div class="rule-content"><div class="rule-label">A escada entre as ofertas</div><div class="rule-text">O cliente de Margin Machine que cresce vira candidato natural para a Arcus Club. Você entra cedo na trajetória dele com um investimento acessível — e quando ele tiver equipe e escala, a venda da Arcus já está quase feita.</div></div>
+        <div class="rule-content"><div class="rule-label">A escada entre as ofertas</div><div class="rule-text">Três tiers com uma lógica clara: o cliente entra pela Margin Machine (acessível, resultado rápido), migra para o Advisory (recorrência estratégica) e, quando tem equipe e escala, avança para a Arcus Club. Você acompanha a trajetória completa do empresário.</div></div>
       </div>
       <div class="strat-cols">
 
-        <!-- Etapa 1: Diagnóstico Inicial — ambos os produtos -->
+        <!-- Diagnóstico — processo de venda -->
         <div class="strat-full">
-          <div class="strat-stage">Etapa 1 · Diagnóstico Inicial — válido para ambas as ofertas</div>
+          <div class="strat-stage">Diagnóstico Inicial · Processo de venda</div>
           <div class="product-card">
             <div class="product-sidebar"><div><div class="product-type">Parte do comercial</div><div class="product-name">Diagnóstico Inicial</div><div class="product-duration">Conversa estruturada</div></div><div class="product-price"><div class="price-main">Grátis</div><div class="price-detail">sem compromisso</div></div></div>
-            <div class="product-body"><p class="product-desc">Conversa estruturada para entender as dores, oportunidades de atuação e o contexto do negócio. Define qual das duas ofertas faz sentido — ou se nenhuma se aplica.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de dores</span><span class="pillar-tag">Oportunidades de atuação</span><span class="pillar-tag">Fit comercial</span></div></div>
+            <div class="product-body"><p class="product-desc">Conversa estruturada para entender as dores, oportunidades de atuação e o contexto do negócio. Define qual produto faz sentido para o momento do cliente — ou se nenhum se aplica.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de dores</span><span class="pillar-tag">Oportunidades de atuação</span><span class="pillar-tag">Fit comercial</span></div></div>
           </div>
         </div>
 
-        <!-- Etapa 2: produto-específico, duas colunas de igual largura -->
-        <div>
-          <div class="strat-stage">Etapa 2 · Margin Machine</div>
+        <!-- Tier 1: Margin Machine -->
+        <div class="strat-full">
+          <div class="strat-stage" style="color:var(--indigo);">Produto Acessível · Margin Machine</div>
           <div class="product-card featured-indigo">
             <div class="product-sidebar"><div><div class="product-type">Pacote fechado</div><div class="product-name">Diagnóstico Aprofundado + Implementação</div><div class="product-duration">Escopo definido na proposta</div></div><div class="product-price"><div class="price-main">R$24k</div><div class="price-detail">valor fixo · sem surpresas</div></div></div>
-            <div class="product-body"><p class="product-desc">Diagnóstico profundo dos gargalos operacionais seguido da implementação dos processos e ferramentas prioritários. O cliente compra um pacote único com escopo e valor fechados.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico aprofundado</span><span class="pillar-tag">Processos implantados</span><span class="pillar-tag">Ferramentas configuradas</span><span class="pillar-tag">Resultado documentado</span></div></div>
-          </div>
-        </div>
-        <div>
-          <div class="strat-stage">Etapa 2 · Arcus Club</div>
-          <div class="product-card featured-teal">
-            <div class="product-sidebar"><div><div class="product-type">Produto core</div><div class="product-name">Consultoria de Implantação</div><div class="product-duration">6 meses de engajamento</div></div><div class="product-price"><div class="price-main">R$48k</div><div class="price-detail">R$8.000 / mês</div><div class="price-badge" style="background:rgba(184,147,58,0.2);color:#D4B06A;">1º cliente: ~R$22k</div></div></div>
-            <div class="product-body"><p class="product-desc">Diagnóstico dos principais gargalos seguido de implantação direta nos três pilares. Você entra, estrutura e sai com o resultado documentado — margem crescente e equipe com mais autonomia.</p><div class="product-pillars"><span class="pillar-tag">Cultura</span><span class="pillar-tag">Liderança</span><span class="pillar-tag">Processos</span><span class="pillar-tag">Margem mensurável</span></div></div>
+            <div class="product-body"><p class="product-desc">Diagnóstico profundo dos gargalos operacionais seguido da implementação dos processos e ferramentas prioritários. O cliente compra um pacote único com escopo e valor fechados. Resultado tangível em até 12 semanas.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico aprofundado</span><span class="pillar-tag">Processos implantados</span><span class="pillar-tag">Ferramentas configuradas</span><span class="pillar-tag">Resultado documentado</span></div></div>
           </div>
         </div>
 
-        <!-- Etapa 3: Advisory — ambos os produtos -->
+        <!-- Tier 2: Advisory Estratégico -->
         <div class="strat-full">
-          <div class="strat-stage">Etapa 3 · Advisory Estratégico — válido para ambas as ofertas</div>
-          <div class="product-card">
-            <div class="product-sidebar"><div><div class="product-type">Recorrência · opcional</div><div class="product-name">Advisory Estratégico</div><div class="product-duration">Mensal · renovação semestral</div></div><div class="product-price"><div class="price-main">R$36k</div><div class="price-detail">R$3.000 / mês · anual</div></div></div>
-            <div class="product-body"><p class="product-desc">Acompanhamento estratégico contínuo após a implementação ou consultoria. O Advisory é o portal de entrada para um clube de mentoria — onde clientes com perfis complementares crescem juntos.</p><div class="product-pillars"><span class="pillar-tag">Acompanhamento mensal</span><span class="pillar-tag">Acesso direto</span><span class="pillar-tag">Iterações nos processos</span><span class="pillar-tag">Base para o clube de mentoria</span></div></div>
+          <div class="strat-stage" style="color:var(--gold);">Produto High Ticket · Advisory Estratégico</div>
+          <div class="product-card" style="border:1.5px solid var(--gold);border-top:3px solid var(--gold);">
+            <div class="product-sidebar"><div><div class="product-type">Recorrência · anual</div><div class="product-name">Advisory Estratégico</div><div class="product-duration">Mensal · renovação anual</div></div><div class="product-price"><div class="price-main" style="color:var(--gold);">R$60k</div><div class="price-detail">R$5.000 / mês · anual</div></div></div>
+            <div class="product-body"><p class="product-desc">Acompanhamento estratégico contínuo com acesso direto ao consultor. Sessões mensais estruturadas, revisão de indicadores e iterações nos processos em curso. Ideal para o empresário que já tem clareza e precisa de um parceiro para acelerar.</p><div class="product-pillars"><span class="pillar-tag">Sessões mensais</span><span class="pillar-tag">Acesso direto</span><span class="pillar-tag">Revisão de KPIs</span><span class="pillar-tag">Iterações nos processos</span></div></div>
+          </div>
+        </div>
+
+        <!-- Tier 3: Arcus Club -->
+        <div class="strat-full">
+          <div class="strat-stage" style="color:var(--teal);">Produto Ultra High Ticket · Arcus Club</div>
+          <div class="product-card featured-teal">
+            <div class="product-sidebar"><div><div class="product-type">Mentoria exclusiva</div><div class="product-name">Consultoria de Implantação</div><div class="product-duration">12 meses de engajamento</div></div><div class="product-price"><div class="price-main">R$96k</div><div class="price-detail">R$8.000 / mês · anual</div></div></div>
+            <div class="product-body"><p class="product-desc">Implantação direta nos três pilares da metodologia Arcus: Cultura, Liderança e Processos. Você entra na operação, estrutura e acompanha por 12 meses — o empresário sai com equipe autônoma, margem crescente e negócio que funciona sem ele.</p><div class="product-pillars"><span class="pillar-tag">Cultura</span><span class="pillar-tag">Liderança</span><span class="pillar-tag">Processos</span><span class="pillar-tag">Margem mensurável</span></div></div>
           </div>
         </div>
 
@@ -793,7 +795,7 @@ const TAB_HTML = {
 
       <div class="strat-full" style="margin-top:1.5rem;">
         <div class="product-card featured-teal">
-          <div class="product-sidebar"><div><div class="product-type">Produto core</div><div class="product-name">Consultoria de Implantação</div><div class="product-duration">6 meses de engajamento</div></div><div class="product-price"><div class="price-main">R$48k</div><div class="price-detail">R$8.000 / mês</div><div class="price-badge" style="background:rgba(184,147,58,0.2);color:#D4B06A;">1º cliente: ~R$22k</div></div></div>
+          <div class="product-sidebar"><div><div class="product-type">Mentoria exclusiva</div><div class="product-name">Consultoria de Implantação</div><div class="product-duration">12 meses de engajamento</div></div><div class="product-price"><div class="price-main">R$96k</div><div class="price-detail">R$8.000 / mês · anual</div></div></div>
           <div class="product-body"><p class="product-desc">Escopo definido no diagnóstico do mês 1. Você entra, estrutura e sai com resultado documentado. O cliente tem margem crescente e equipe com mais autonomia ao final de 6 meses.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico completo</span><span class="pillar-tag">Implantação nos 3 pilares</span><span class="pillar-tag">Acompanhamento semanal</span><span class="pillar-tag">Entregáveis documentados</span><span class="pillar-tag">Relatório de resultados</span></div></div>
         </div>
       </div>
@@ -803,7 +805,7 @@ const TAB_HTML = {
         <ul class="discard-list">
           <li>Empresas com menos de 5 funcionários — nesse caso, o produto correto é Margin Machine</li>
           <li>Dono que não aceita desenvolver liderança interna — sem delegação, o produto não gera resultado</li>
-          <li>Faturamento abaixo de R$300k/ano — o ticket de R$48k não se sustenta na relação custo/benefício</li>
+          <li>Faturamento abaixo de R$500k/ano — o ticket de R$96k não se sustenta na relação custo/benefício</li>
         </ul>
       </div>
 
