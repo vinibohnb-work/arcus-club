@@ -2,21 +2,12 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import ViniMarketing from './ViniMarketing'
 import ViniMetas from './ViniMetas'
+import ViniDashboard from './ViniDashboard'
 import './ViniciusPage.css'
 
 // ─── Static tab HTML content ─────────────────────────────────────────────────
 
 const TAB_HTML = {
-  dashboard: `
-    <div class="tab-header" data-glyph="D">
-      <div>
-        <div class="tab-eyebrow">Dashboard</div>
-        <div class="tab-title">Visão <em>geral</em></div>
-      </div>
-      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
-    </div>
-    <div class="tab-body"></div>`,
-
   metas: `
     <div class="tab-header" data-glyph="M">
       <div>
@@ -1217,6 +1208,16 @@ export default function ViniciusPage() {
             dangerouslySetInnerHTML={{ __html: TAB_HTML[tab] }}
           />
         ))}
+
+        {/* ── DASHBOARD (dynamic) ── */}
+        <div className={`tab-content${activeTab === 'dashboard' ? ' active' : ''}`}>
+          <ViniDashboard
+            crmLeads={crmLeads}
+            contracts={contracts}
+            epcClients={epcClients}
+            arcusClients={arcusClients}
+          />
+        </div>
 
         {/* ── CRM (dynamic) ── */}
         <div className={`tab-content${activeTab === 'crm' ? ' active' : ''}`}>
