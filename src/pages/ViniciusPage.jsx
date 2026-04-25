@@ -20,90 +20,189 @@ const TAB_HTML = {
     <div class="tab-header" data-glyph="M">
       <div>
         <div class="tab-eyebrow">Estratégia · Metas</div>
-        <div class="tab-title">Metas de <em>vendas</em></div>
-        <div class="tab-sub">30, 90 e 180 dias — foco em fechamento.</div>
+        <div class="tab-title">A meta <em>absurda</em></div>
+        <div class="tab-sub">1 venda por semana · 14 semanas · prazo: 01 de agosto de 2026.</div>
       </div>
-      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
+      <div class="tab-header-phrase">Ou você bate a meta,<br><em>ou aprende por que não bateu.</em></div>
     </div>
     <div class="tab-body" style="max-width:none;">
-      <div class="metas-grid">
 
-        <!-- 30 dias -->
-        <div class="metas-col indigo">
-          <div class="metas-period-header indigo">
-            <div class="metas-period-eyebrow">Primeiros</div>
-            <div class="metas-period-num">30</div>
-            <div class="metas-period-unit">dias</div>
+      <!-- ── Hero ── -->
+      <div style="display:grid;grid-template-columns:1fr 260px;border-radius:10px;overflow:hidden;margin-bottom:2.5rem;border:1px solid #222;">
+        <div style="background:#0E0E0E;padding:52px 56px;display:flex;flex-direction:column;justify-content:space-between;min-height:260px;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#B8933A;">META ABSURDA · 01/08/2026</div>
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-size:clamp(80px,11vw,132px);font-weight:700;font-style:italic;color:#F5F2EC;line-height:0.85;letter-spacing:-0.02em;">14</div>
+            <div style="font-family:'Playfair Display',serif;font-size:28px;font-style:italic;color:#D4B06A;margin-top:6px;">vendas</div>
           </div>
-          <div class="metas-goal">
-            <div class="metas-goal-num">01</div>
-            <div><div class="metas-goal-title">2 contratos EPC fechados</div><div class="metas-goal-val">R$48k em caixa</div></div>
-          </div>
-          <div class="metas-goal">
-            <div class="metas-goal-num">02</div>
-            <div><div class="metas-goal-title">1 diagnóstico Arcus Club realizado</div><div class="metas-goal-val">proposta enviada</div></div>
-          </div>
-          <div class="metas-goal">
-            <div class="metas-goal-num">03</div>
-            <div><div class="metas-goal-title">Pipeline com 10 leads qualificados ativos</div><div class="metas-goal-val">rede quente + LinkedIn</div></div>
-          </div>
-          <div class="metas-total">
-            <div class="metas-total-label">Receita gerada</div>
-            <div class="metas-total-val">R$48k</div>
+          <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:18px;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;color:rgba(255,255,255,0.3);">1 por semana · sem pausa · sem semana "de repouso"</div>
           </div>
         </div>
-
-        <!-- 90 dias -->
-        <div class="metas-col teal">
-          <div class="metas-period-header teal">
-            <div class="metas-period-eyebrow">Primeiros</div>
-            <div class="metas-period-num">90</div>
-            <div class="metas-period-unit">dias</div>
+        <div style="background:#111;border-left:1px solid #222;padding:36px 32px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:5px;">Receita mínima</div>
+            <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;font-style:italic;color:#B8933A;line-height:1;">R$336k</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">14 × R$24k · só EPC base</div>
           </div>
-          <div class="metas-goal">
-            <div class="metas-goal-num">01</div>
-            <div><div class="metas-goal-title">6 contratos EPC fechados</div><div class="metas-goal-val">R$144k acumulados</div></div>
+          <div style="height:1px;background:#1E1E1E;"></div>
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:5px;">Com mix Arcus</div>
+            <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;font-style:italic;color:#D4B06A;line-height:1;">R$400k+</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">EPC + Arcus + Advisory</div>
           </div>
-          <div class="metas-goal">
-            <div class="metas-goal-num">02</div>
-            <div><div class="metas-goal-title">2 contratos Arcus Club fechados</div><div class="metas-goal-val">R$70k · 1 piloto + 1 full</div></div>
-          </div>
-          <div class="metas-goal">
-            <div class="metas-goal-num">03</div>
-            <div><div class="metas-goal-title">3 Advisory iniciados</div><div class="metas-goal-val">R$9k / mês recorrente</div></div>
-          </div>
-          <div class="metas-total">
-            <div class="metas-total-label">Receita gerada</div>
-            <div class="metas-total-val">R$214k</div>
+          <div style="height:1px;background:#1E1E1E;"></div>
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:5px;">Pipeline/semana</div>
+            <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;font-style:italic;color:#3DBFB0;line-height:1;">4 reun.</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">para fechar 1 · 25% close rate</div>
           </div>
         </div>
+      </div>
 
-        <!-- 180 dias -->
-        <div class="metas-col gold">
-          <div class="metas-period-header gold">
-            <div class="metas-period-eyebrow">Primeiros</div>
-            <div class="metas-period-num">180</div>
-            <div class="metas-period-unit">dias</div>
-          </div>
-          <div class="metas-goal">
-            <div class="metas-goal-num">01</div>
-            <div><div class="metas-goal-title">12 contratos EPC + 4 Arcus fechados</div><div class="metas-goal-val">R$288k + R$166k = R$454k</div></div>
-          </div>
-          <div class="metas-goal">
-            <div class="metas-goal-num">02</div>
-            <div><div class="metas-goal-title">6 Advisory ativos</div><div class="metas-goal-val">R$18k / mês recorrente</div></div>
-          </div>
-          <div class="metas-goal">
-            <div class="metas-goal-num">03</div>
-            <div><div class="metas-goal-title">Base do clube de mentoria estruturada</div><div class="metas-goal-val">Advisory como porta de entrada</div></div>
-          </div>
-          <div class="metas-total">
-            <div class="metas-total-label">Receita gerada</div>
-            <div class="metas-total-val">R$500k+</div>
-          </div>
+      <!-- ── Marcos semanais ── -->
+      <h3>Marcos semanais</h3>
+      <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:2rem;">
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;background:var(--ink);padding:10px 20px;gap:16px;align-items:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:rgba(255,255,255,0.35);">SEM</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:rgba(255,255,255,0.35);">PERÍODO</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:rgba(255,255,255,0.35);">FECHAMENTO</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:rgba(255,255,255,0.35);">MARCO / CHECKPOINT</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#fff;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S01</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">27/04 – 01/05</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#7B6FD4;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">1ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">Ativar lista BNI + rede quente. 20 abordagens enviadas, 5 ligações realizadas, 2 reuniões agendadas.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#FAFAF8;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S02</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">04/05 – 08/05</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#7B6FD4;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">2ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">Cadência estabelecida: 4 reuniões/semana no calendário. CRM atualizado ao fim de cada dia.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#fff;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S03</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">11/05 – 15/05</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#7B6FD4;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">3ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">Oferecer Advisory ao 1º cliente fechado. 3 propostas simultâneas em aberto no CRM.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:15px 20px;gap:16px;align-items:center;background:#FBF7EE;border-bottom:1px solid #EDE5CC;border-left:3px solid #B8933A;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S04</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">18/05 – 22/05</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#B8933A;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:#6B4F1A;">4ª venda ★</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:var(--ink);">R$96k realizados.</strong> 1ª prospecção de Arcus Club iniciada. Pipeline renovado com fontes além do BNI.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#fff;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S05</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">25/05 – 29/05</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#3DBFB0;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">5ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">1º Advisory ativo (R$3k/mês recorrente). LinkedIn gerando primeiros inbounds orgânicos.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#FAFAF8;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S06</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">01/06 – 05/06</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#3DBFB0;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">6ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">2 Advisory ativos = R$6k/mês recorrente. 1ª reunião de Arcus Club realizada.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:15px 20px;gap:16px;align-items:center;background:#FBF7EE;border-bottom:1px solid #EDE5CC;border-left:3px solid #B8933A;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S07</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">08/06 – 12/06</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#B8933A;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:#6B4F1A;">7ª venda ★</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:var(--ink);">R$168k+ realizados.</strong> 1ª Arcus Club fechada (R$48k). Recorrência mensal consolidando.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#fff;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S08</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">15/06 – 19/06</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#3DBFB0;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">8ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">3 Advisory = R$9k/mês. Pipeline com 5+ leads em proposta. Primeiras indicações de clientes ativos.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#FAFAF8;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S09</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">22/06 – 26/06</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#3DBFB0;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">9ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">LinkedIn: 3+ inbounds/semana. Primeiras indicações de clientes convertidas em reunião.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:15px 20px;gap:16px;align-items:center;background:#FBF7EE;border-bottom:1px solid #EDE5CC;border-left:3px solid #B8933A;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S10</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">29/06 – 03/07</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#B8933A;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:#6B4F1A;">10ª venda ★</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:var(--ink);">R$240k+ · 71% da meta.</strong> Recorrência mensal cobre o Advisory anual. Pipeline auto-sustentável.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#fff;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S11</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">06/07 – 10/07</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#7B6FD4;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">11ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">4 Advisory ativos ou 2ª Arcus Club prospectada. Foco em indicações de clientes atuais.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#FAFAF8;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S12</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">13/07 – 17/07</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#7B6FD4;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">12ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">R$288k+. Pipeline com as últimas 2 vendas já em negociação ativa. 3 semanas para o prazo.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#fff;border-bottom:1px solid #F0EDE8;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S13</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">20/07 – 24/07</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#7B6FD4;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">13ª venda</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">Penúltima semana. R$312k+. S14 já com reunião agendada e proposta pronta para apresentar.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:18px 20px;gap:16px;align-items:center;background:#FBF7EE;border-left:4px solid #B8933A;">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S14</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">27/07 – 01/08</div>
+          <div style="display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:#B8933A;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:15px;color:#6B4F1A;">14ª venda ★★</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:#6B4F1A;">META ABSURDA CONCLUÍDA.</strong> R$336k+ realizados em 14 semanas. Base de recorrência com Advisory ativo. Pronto para o próximo ciclo.</div>
         </div>
 
       </div>
+
+      <!-- ── Pipeline mínimo ── -->
+      <div class="rule-gold">
+        <div class="rule-icon">◎</div>
+        <div class="rule-content">
+          <div class="rule-label">Pipeline mínimo para sustentar 1 venda/semana</div>
+          <div class="rule-text">Para fechar 1 venda com consistência, você precisa de <strong>4 reuniões realizadas por semana</strong> (close rate de ~25%). Isso exige <strong>8 ligações</strong> (50% viram reunião) e <strong>15 abordagens ativas</strong> (55% chegam à ligação). São ~3 abordagens por dia útil. Semana sem abordagem = semana sem pipeline = venda comprometida daqui a 2–3 semanas.</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin-top:1rem;">
+        <div style="background:#fff;padding:20px 24px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Abordagens</div>
+          <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;font-style:italic;color:var(--ink);">15</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">por semana</div>
+        </div>
+        <div style="background:#fff;padding:20px 24px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Ligações</div>
+          <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;font-style:italic;color:#7B6FD4;">8</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">por semana</div>
+        </div>
+        <div style="background:#fff;padding:20px 24px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Reuniões</div>
+          <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;font-style:italic;color:#3DBFB0;">4</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">por semana</div>
+        </div>
+        <div style="background:#fff;padding:20px 24px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Fechamentos</div>
+          <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;font-style:italic;color:#B8933A;">1</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">por semana</div>
+        </div>
+      </div>
+
     </div>`,
 
   estrategia: `
