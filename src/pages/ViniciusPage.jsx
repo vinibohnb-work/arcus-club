@@ -44,13 +44,13 @@ const TAB_HTML = {
           <div>
             <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:5px;">Receita mínima</div>
             <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;font-style:italic;color:#B8933A;line-height:1;">R$336k</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">14 × R$24k · só EPC base</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">14 × R$24k · só MM base</div>
           </div>
           <div style="height:1px;background:#1E1E1E;"></div>
           <div>
             <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:5px;">Com mix Arcus</div>
             <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;font-style:italic;color:#D4B06A;line-height:1;">R$400k+</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">EPC + Arcus + Advisory</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">MM + Arcus + Advisory</div>
           </div>
           <div style="height:1px;background:#1E1E1E;"></div>
           <div>
@@ -217,12 +217,12 @@ const TAB_HTML = {
     </div>
     <div class="tab-body" style="max-width:none;">
       <div class="compare" style="margin-bottom:1rem;">
-        <div class="compare-card epc"><div class="compare-header"><div class="compare-name">Estrutura para Crescer</div><div class="compare-sub">Micro e pequeno empresário</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">Solo, 0–5 funcionários</div></div><div class="compare-row"><div class="compare-key">Diagnóstico inicial</div><div class="compare-val">Gratuito (comercial)</div></div><div class="compare-row"><div class="compare-key">Pacote fechado</div><div class="compare-val">R$24k</div></div><div class="compare-row"><div class="compare-key">Advisory</div><div class="compare-val">Opcional · recorrente</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">R$30k+</div></div></div>
+        <div class="compare-card epc"><div class="compare-header"><div class="compare-name">Margin Machine</div><div class="compare-sub">Micro e pequeno empresário</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">Solo, 0–5 funcionários</div></div><div class="compare-row"><div class="compare-key">Diagnóstico inicial</div><div class="compare-val">Gratuito (comercial)</div></div><div class="compare-row"><div class="compare-key">Pacote fechado</div><div class="compare-val">R$24k</div></div><div class="compare-row"><div class="compare-key">Advisory</div><div class="compare-val">Opcional · recorrente</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">R$30k+</div></div></div>
         <div class="compare-card arcus"><div class="compare-header"><div class="compare-name">Arcus Club</div><div class="compare-sub">PME com equipe</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">5–40 funcionários</div></div><div class="compare-row"><div class="compare-key">Consultoria</div><div class="compare-val">R$48k / 6 meses</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">Advisory R$36k/ano</div></div><div class="compare-row"><div class="compare-key">1º cliente</div><div class="compare-val">~R$22k (piloto)</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">~R$78k</div></div></div>
       </div>
       <div class="rule-gold" style="margin-bottom:2rem;">
         <div class="rule-icon">↑</div>
-        <div class="rule-content"><div class="rule-label">A escada entre as ofertas</div><div class="rule-text">O cliente de Estrutura para Crescer que cresce vira candidato natural para a Arcus Club. Você entra cedo na trajetória dele com um investimento acessível — e quando ele tiver equipe e escala, a venda da Arcus já está quase feita.</div></div>
+        <div class="rule-content"><div class="rule-label">A escada entre as ofertas</div><div class="rule-text">O cliente de Margin Machine que cresce vira candidato natural para a Arcus Club. Você entra cedo na trajetória dele com um investimento acessível — e quando ele tiver equipe e escala, a venda da Arcus já está quase feita.</div></div>
       </div>
       <div class="strat-cols">
 
@@ -237,7 +237,7 @@ const TAB_HTML = {
 
         <!-- Etapa 2: produto-específico, duas colunas de igual largura -->
         <div>
-          <div class="strat-stage">Etapa 2 · Estrutura para Crescer</div>
+          <div class="strat-stage">Etapa 2 · Margin Machine</div>
           <div class="product-card featured-indigo">
             <div class="product-sidebar"><div><div class="product-type">Pacote fechado</div><div class="product-name">Diagnóstico Aprofundado + Implementação</div><div class="product-duration">Escopo definido na proposta</div></div><div class="product-price"><div class="price-main">R$24k</div><div class="price-detail">valor fixo · sem surpresas</div></div></div>
             <div class="product-body"><p class="product-desc">Diagnóstico profundo dos gargalos operacionais seguido da implementação dos processos e ferramentas prioritários. O cliente compra um pacote único com escopo e valor fechados.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico aprofundado</span><span class="pillar-tag">Processos implantados</span><span class="pillar-tag">Ferramentas configuradas</span><span class="pillar-tag">Resultado documentado</span></div></div>
@@ -305,7 +305,7 @@ const TAB_HTML = {
         <div class="stair">
           <div class="stair-left"><div class="stair-stage">Etapa 03</div><div class="stair-name">Ligação — entender dores</div></div>
           <div class="stair-right">
-            <p><strong>Duração: 20–30 minutos.</strong> Pergunte mais do que fale. A ligação qualifica o lead, mapeia as dores reais e define qual produto se aplica (EPC ou Arcus). Ela alimenta o sketch se você decidir montar um.</p>
+            <p><strong>Duração: 20–30 minutos.</strong> Pergunte mais do que fale. A ligação qualifica o lead, mapeia as dores reais e define qual produto se aplica (MM ou Arcus). Ela alimenta o sketch se você decidir montar um.</p>
             <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Perguntas-chave:</strong></p>
             <ul style="margin:6px 0 0 16px;font-size:13px;color:var(--muted);line-height:1.85;">
               <li>"Me conta como está a operação hoje — o que mais toma o seu tempo?"</li>
@@ -313,7 +313,7 @@ const TAB_HTML = {
               <li>"Se você resolver isso, o que muda concretamente no negócio?"</li>
               <li>"Você já tentou resolver esse problema de alguma forma? O que aconteceu?"</li>
             </ul>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Output esperado:</strong> produto definido (EPC ou Arcus), 2–3 dores principais identificadas, decisão de avançar para reunião — e insumo para o sketch.</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Output esperado:</strong> produto definido (MM ou Arcus), 2–3 dores principais identificadas, decisão de avançar para reunião — e insumo para o sketch.</p>
             <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">RICOM → I: Identificação de dores + nível de urgência + quantificação</p>
           </div>
         </div>
@@ -433,7 +433,7 @@ const TAB_HTML = {
             <ul style="margin:0 0 0 16px;font-size:13px;color:var(--muted);line-height:1.9;">
               <li>O lead mencionou processos verbais, tudo na cabeça do dono ou falta de automação</li>
               <li>A ligação foi produtiva — ele abriu o jogo e as dores são claras e específicas</li>
-              <li>É ICP confirmado do Estrutura para Crescer (solo, 0–5 funcionários)</li>
+              <li>É ICP confirmado do Margin Machine (solo, 0–5 funcionários)</li>
               <li>As dores se encaixam em um dos templates de sketch pré-existentes</li>
               <li>Você tem pelo menos 24h até a reunião para montar e personalizar</li>
             </ul>
@@ -448,7 +448,7 @@ const TAB_HTML = {
               <li>Um fluxo de automação (Make, n8n, Zapier) com os processos do cliente mapeados</li>
               <li>Um dashboard de indicadores-chave para o negócio dele</li>
               <li>Uma estrutura de Notion com os processos do segmento</li>
-              <li>Um diagrama de como seria a operação <em>após</em> o EPC</li>
+              <li>Um diagrama de como seria a operação <em>após</em> o MM</li>
             </ul>
             <p style="margin-top:8px;font-size:13px;color:var(--muted);">Não precisa estar perfeito — precisa estar específico.</p>
           </div>
@@ -519,20 +519,20 @@ const TAB_HTML = {
       <div class="sale-steps" style="margin-bottom:1.5rem;">
         <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 01</div><div class="sale-step-name">Contato inicial</div></div><div class="sale-step-right"><p class="sale-step-desc">Objetivo único: marcar a conversa de diagnóstico. Não venda o serviço — venda a conversa.</p><p class="sale-step-tip">Meta de uma mensagem: gerar uma resposta, não fechar uma venda.</p></div></div>
         <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 02</div><div class="sale-step-name">Qualificação rápida</div></div><div class="sale-step-right"><p class="sale-step-desc">Antes da reunião: faturamento, tamanho da equipe, problema principal. Define qual oferta faz sentido antes de você sentar.</p><p class="sale-step-tip">Não avance para o diagnóstico com quem claramente não é ICP de nenhuma das duas ofertas.</p></div></div>
-        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 03</div><div class="sale-step-name">Diagnóstico</div></div><div class="sale-step-right"><p class="sale-step-desc">60–90 minutos. Faça perguntas, não apresentações. "Qual é o principal problema que está travando o seu crescimento?"</p><p class="sale-step-tip">Para EPC: o diagnóstico pode ser cobrado aqui (R$800–1.5k). Para Arcus: faz parte da venda.</p></div></div>
-        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 04</div><div class="sale-step-name">Proposta personalizada</div></div><div class="sale-step-right"><p class="sale-step-desc">Espelhe as palavras do cliente. Para EPC: apresente os módulos recomendados com escopo e preço. Para Arcus: apresente o plano de implantação baseado no que você encontrou.</p><p class="sale-step-tip">Você não é um cardápio — é um médico. Diagnostica e prescreve.</p></div></div>
+        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 03</div><div class="sale-step-name">Diagnóstico</div></div><div class="sale-step-right"><p class="sale-step-desc">60–90 minutos. Faça perguntas, não apresentações. "Qual é o principal problema que está travando o seu crescimento?"</p><p class="sale-step-tip">Para MM: o diagnóstico pode ser cobrado aqui (R$800–1.5k). Para Arcus: faz parte da venda.</p></div></div>
+        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 04</div><div class="sale-step-name">Proposta personalizada</div></div><div class="sale-step-right"><p class="sale-step-desc">Espelhe as palavras do cliente. Para MM: apresente os módulos recomendados com escopo e preço. Para Arcus: apresente o plano de implantação baseado no que você encontrou.</p><p class="sale-step-tip">Você não é um cardápio — é um médico. Diagnostica e prescreve.</p></div></div>
         <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 05</div><div class="sale-step-name">Fechamento</div></div><div class="sale-step-right"><p class="sale-step-desc">Peça o fechamento explicitamente. Entenda a objeção real antes de oferecer qualquer desconto.</p><p class="sale-step-tip">"Faz sentido para você começar em [data]?"</p></div></div>
       </div>
       <h3>Pitches por oferta</h3>
       <div class="pitch-blocks">
-        <div class="pitch-block epc"><div class="pitch-label">Estrutura para Crescer — empresário solo</div><p class="pitch-text">"Pelo que você me contou, você tem o negócio funcionando mas tudo passa por você — e isso está limitando o crescimento. A gente faz um diagnóstico da operação, identifica onde está o gargalo e implanta as soluções."</p></div>
+        <div class="pitch-block epc"><div class="pitch-label">Margin Machine — empresário solo</div><p class="pitch-text">"Pelo que você me contou, você tem o negócio funcionando mas tudo passa por você — e isso está limitando o crescimento. A gente faz um diagnóstico da operação, identifica onde está o gargalo e implanta as soluções."</p></div>
         <div class="pitch-block arcus"><div class="pitch-label">Arcus Club — PME com equipe</div><p class="pitch-text">"O problema não é falta de demanda — é que a empresa não está estruturada para crescer. Trabalho com empresários nesse estágio por 6 meses — diagnóstico, implantação nos pilares de cultura, liderança e processos, e margem mensurável ao final."</p></div>
       </div>
       <div class="never-do">
         <div class="never-label">O que nunca fazer</div>
         <div class="never-item"><span class="never-x">✕</span><span>Mencionar preço antes do diagnóstico.</span></div>
         <div class="never-item"><span class="never-x">✕</span><span>Apresentar as duas ofertas ao mesmo tempo como menu. A qualificação define qual se aplica — não o cliente.</span></div>
-        <div class="never-item"><span class="never-x">✕</span><span>Fazer o diagnóstico gratuito para Estrutura para Crescer. Quem paga pelo diagnóstico tem intenção real.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Fazer o diagnóstico gratuito para Margin Machine. Quem paga pelo diagnóstico tem intenção real.</span></div>
       </div>
       <h3>Pipeline</h3>
       <div class="pipeline" style="margin-top:0.75rem;">
@@ -810,7 +810,7 @@ const TAB_HTML = {
       <div class="discard-box" style="margin-top:1.5rem;">
         <div class="discard-label">Quem não é ICP para este produto</div>
         <ul class="discard-list">
-          <li>Empresas com menos de 5 funcionários — nesse caso, o produto correto é Estrutura para Crescer</li>
+          <li>Empresas com menos de 5 funcionários — nesse caso, o produto correto é Margin Machine</li>
           <li>Dono que não aceita desenvolver liderança interna — sem delegação, o produto não gera resultado</li>
           <li>Faturamento abaixo de R$300k/ano — o ticket de R$48k não se sustenta na relação custo/benefício</li>
         </ul>
@@ -850,11 +850,11 @@ const TAB_HTML = {
       <h3>Os dois perfis de ICP</h3>
       <div class="icp-grid">
         <div class="icp-card dark"><div class="icp-label">ICP Arcus Club</div><div class="icp-title">PME com equipe em expansão travada</div><p class="icp-text">Faturamento R$500k–R$5M. Empresa com 5–40 funcionários. O dono virou o gargalo. A margem some e ninguém sabe por quê.</p><div class="icp-tags"><span class="icp-tag" style="background:#E6F3EF;border-color:#1A6B5A;color:#1A6B5A;">Arcus Club</span></div></div>
-        <div class="icp-card indigo"><div class="icp-label">ICP Estrutura para Crescer</div><div class="icp-title">Micro e pequeno empresário solo</div><p class="icp-text">Dentista, médico, lojista, prestador de serviços. Fatura bem mas opera no improviso. Não tem estrutura, não tem automação, não tem tempo para resolver sozinho.</p><div class="icp-tags"><span class="icp-tag" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);">Estrutura para Crescer</span></div></div>
+        <div class="icp-card indigo"><div class="icp-label">ICP Margin Machine</div><div class="icp-title">Micro e pequeno empresário solo</div><p class="icp-text">Dentista, médico, lojista, prestador de serviços. Fatura bem mas opera no improviso. Não tem estrutura, não tem automação, não tem tempo para resolver sozinho.</p><div class="icp-tags"><span class="icp-tag" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);">Margin Machine</span></div></div>
       </div>
       <div class="icp-grid">
         <div class="icp-card"><div class="icp-label">A dor comum</div><div class="icp-title">"O negócio depende demais de mim"</div><p class="icp-text">A dor central é a mesma para os dois perfis. É essa dor que o seu conteúdo nomeia.</p></div>
-        <div class="icp-card"><div class="icp-label">A escada natural</div><div class="icp-title">Estrutura para Crescer alimenta a Arcus</div><p class="icp-text">O cliente que contrata EPC hoje, quando crescer e tiver equipe, é o candidato natural para a Arcus Club.</p></div>
+        <div class="icp-card"><div class="icp-label">A escada natural</div><div class="icp-title">Margin Machine alimenta a Arcus</div><p class="icp-text">O cliente que contrata MM hoje, quando crescer e tiver equipe, é o candidato natural para a Arcus Club.</p></div>
       </div>
       <div class="discard-box" style="margin-top:1.25rem;">
         <div class="discard-label">Quem não é seu ICP</div>
@@ -871,7 +871,7 @@ const TAB_HTML = {
         <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 3</div><div class="ff-name">Confiança</div></div><div class="ff-right">Após semanas consumindo seu conteúdo, ele te vê como referência. Você sabe do que fala. Ele sente isso.</div></div>
         <div class="ff-step highlight"><div class="ff-left"><div class="ff-stage">Etapa 4</div><div class="ff-name">Inbound</div></div><div class="ff-right">Quando o problema fica urgente, você já é a primeira pessoa que ele pensa. Ele te procura — sem você precisar prospectar.</div></div>
         <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 5</div><div class="ff-name">Conversa e diagnóstico</div></div><div class="ff-right">A reunião com quem veio por inbound começa com confiança estabelecida. O ciclo de venda é 3× mais curto que outbound frio.</div></div>
-        <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 6</div><div class="ff-name">Indicação e escada</div></div><div class="ff-right">Cliente com resultado vira seguidor ativo e indica. Clientes de EPC que crescem sobem para a Arcus Club.</div></div>
+        <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 6</div><div class="ff-name">Indicação e escada</div></div><div class="ff-right">Cliente com resultado vira seguidor ativo e indica. Clientes de MM que crescem sobem para a Arcus Club.</div></div>
       </div>
     </div>`,
 
@@ -880,9 +880,9 @@ const TAB_HTML = {
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const PRODUCT_LABELS = {
-  'epc-diagnostico': 'Diagnóstico EPC',
-  'epc-implementacao': 'Implementação EPC',
-  'epc-manutencao': 'Manutenção EPC',
+  'epc-diagnostico': 'Diagnóstico MM',
+  'epc-implementacao': 'Implementação MM',
+  'epc-manutencao': 'Manutenção MM',
   'arcus-consultoria': 'Consultoria Arcus',
   'arcus-advisory': 'Advisory Arcus',
 }
@@ -894,15 +894,18 @@ const PIPELINE_STAGES = [
   { key: 'abordagem1',        label: 'Abordagem 1' },
   { key: 'abordagem2',        label: 'Abordagem 2' },
   { key: 'abordagem3',        label: 'Abordagem 3' },
-  { key: 'reuniao_agendada',  label: 'Reunião Agendada' },
-  { key: 'reuniao_realizada', label: 'Reunião Realizada' },
-  { key: 'proposta',          label: 'Proposta Enviada' },
+  { key: 'whatsapp',          label: 'WhatsApp obtido' },
+  { key: 'ligacao',           label: 'Ligação realizada' },
+  { key: 'reuniao_agendada',  label: 'Reunião agendada' },
+  { key: 'reuniao_realizada', label: 'Reunião realizada' },
+  { key: 'proposta',          label: 'Proposta enviada' },
+  { key: 'fechado',           label: 'Fechado ✓' },
   { key: 'recusa',            label: 'Recusa' },
 ]
 
 const CRM_PRODUCTS  = [
   { key: null,    label: '—' },
-  { key: 'epc',   label: 'EPC' },
+  { key: 'epc',   label: 'MM' },
   { key: 'arcus', label: 'Arcus' },
 ]
 
@@ -1158,7 +1161,7 @@ export default function ViniciusPage() {
               <div className="nav-sub-dot" /><span className="nav-sub-label">Check Semanal</span>
             </div>
             <div className={`nav-sub-item${activeTab === 'ops-epc' ? ' active' : ''}`} onClick={() => showTab('ops-epc')} style={{ paddingLeft: '2.5rem' }}>
-              <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · EPC</span>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · MM</span>
             </div>
             <div className={`nav-sub-item${activeTab === 'ops-arcus' ? ' active' : ''}`} onClick={() => showTab('ops-arcus')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · Arcus</span>
@@ -1271,7 +1274,7 @@ export default function ViniciusPage() {
                             <div className="crm-card-foot">
                               {lead.product
                                 ? <span className="crm-product-tag" data-product={lead.product}>
-                                    {lead.product === 'epc' ? 'EPC' : 'Arcus'}
+                                    {lead.product === 'epc' ? 'MM' : 'Arcus'}
                                   </span>
                                 : <span />
                               }
@@ -1304,18 +1307,18 @@ export default function ViniciusPage() {
             <div>
               <div className="tab-eyebrow">Comercial · Clientes</div>
               <div className="tab-title">Clientes <em>ativos</em></div>
-              <div className="tab-sub">Todos os projetos em andamento — EPC e Arcus Club.</div>
+              <div className="tab-sub">Todos os projetos em andamento — MM e Arcus Club.</div>
             </div>
             <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
           </div>
           <div className="tab-body">
 
             <div className="vini-section-bar">
-              <h3 style={{ margin: 0 }}>Estrutura para Crescer</h3>
+              <h3 style={{ margin: 0 }}>Margin Machine</h3>
               <button className="vini-btn" onClick={() => openModal('epc')}>+ Novo cliente</button>
             </div>
             {epcClients.length === 0
-              ? <div className="vini-empty" style={{ marginBottom: '2rem' }}>Nenhum cliente EPC ativo ainda.</div>
+              ? <div className="vini-empty" style={{ marginBottom: '2rem' }}>Nenhum cliente MM ativo ainda.</div>
               : (
                 <div className="vini-table-wrap" style={{ marginBottom: '2.5rem' }}>
                   <table className="vini-table">
@@ -1397,7 +1400,7 @@ export default function ViniciusPage() {
             <div className="tab-header-phrase">Ou você bate a meta,<br /><em>ou aprende por que não bateu.</em></div>
           </div>
           <div className="tab-body" style={{ maxWidth: 'none' }}>
-            <ViniMetas />
+            <ViniMetas crmLeads={crmLeads} />
           </div>
         </div>
 
@@ -1443,7 +1446,7 @@ export default function ViniciusPage() {
               <div className="vini-kpi light indigo">
                 <div className="vini-kpi-label">Recorrência ativa</div>
                 <div className="vini-kpi-val">{fmtBRL(totalRecurring)}</div>
-                <div className="vini-kpi-sub">Advisory + Manutenção EPC</div>
+                <div className="vini-kpi-sub">Advisory + Manutenção MM</div>
               </div>
             </div>
 
@@ -1493,12 +1496,12 @@ export default function ViniciusPage() {
 
       </main>
 
-      {/* ── MODAL: Novo cliente EPC ── */}
+      {/* ── MODAL: Novo cliente MM ── */}
       {modal === 'epc' && (
         <div className="vini-modal-overlay" onClick={() => setModal(null)}>
           <div className="vini-modal" onClick={e => e.stopPropagation()}>
             <div className="vini-modal-header">
-              <div className="vini-modal-title">Novo cliente — Estrutura para Crescer</div>
+              <div className="vini-modal-title">Novo cliente — Margin Machine</div>
               <button className="vini-modal-close" onClick={() => setModal(null)}>×</button>
             </div>
             <form onSubmit={handleSaveEpc} className="vini-modal-form">
@@ -1751,7 +1754,7 @@ export default function ViniciusPage() {
                   {CRM_STEP_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
               </label>
-              <label>Título<input type="text" {...crmF('stepTitle')} placeholder="Ex: Enviar proposta EPC" /></label>
+              <label>Título<input type="text" {...crmF('stepTitle')} placeholder="Ex: Enviar proposta MM" /></label>
               <label>Data *<input type="date" required {...crmF('stepDate')} /></label>
               <label>Nota<textarea {...crmF('stepNote')} placeholder="Contexto adicional…" /></label>
               <div className="vini-modal-actions">
@@ -1780,9 +1783,9 @@ export default function ViniciusPage() {
                 Produto *
                 <select required {...f('product')}>
                   <option value="">Selecione…</option>
-                  <option value="epc-diagnostico">Diagnóstico EPC</option>
-                  <option value="epc-implementacao">Implementação EPC</option>
-                  <option value="epc-manutencao">Manutenção EPC (recorrência)</option>
+                  <option value="epc-diagnostico">Diagnóstico MM</option>
+                  <option value="epc-implementacao">Implementação MM</option>
+                  <option value="epc-manutencao">Manutenção MM (recorrência)</option>
                   <option value="arcus-consultoria">Consultoria Arcus Club</option>
                   <option value="arcus-advisory">Advisory Arcus (recorrência)</option>
                 </select>

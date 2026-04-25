@@ -4,7 +4,7 @@ const BRAND_FALLBACK = {
   corPrimaria: "#C9A84C", corSecundaria: "#0E0E0E", corTexto: "#F0EDE6",
   corDestaque: "#7B6FD4", fonteDisplay: "Cormorant Garamond", fonteCorpo: "Outfit",
   assinatura: "Vinícius Bohn",
-  ctaPadrao: "Quer estruturar sua empresa e aumentar a margem? Comenta EPC ou acessa o link na bio.",
+  ctaPadrao: "Quer estruturar sua empresa e aumentar a margem? Comenta MM ou acessa o link na bio.",
   hashtags: "#gestão #processos #empreendedorismo #viniciusbohn #margem #lucro",
   carrosselSlides: "7", reelsDuracao: "7–15s",
   tomDeVoz: "Direto, sem rodeios. Usa afirmações provocativas. Evita jargão acadêmico. Tom de autoridade, nunca arrogância.",

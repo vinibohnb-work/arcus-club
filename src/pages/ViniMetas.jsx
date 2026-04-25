@@ -3,20 +3,20 @@ import { useState, useEffect } from 'react'
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const WEEKS = [
-  { id: 'S01', period: '27/04–01/05' },
-  { id: 'S02', period: '04/05–08/05' },
-  { id: 'S03', period: '11/05–15/05' },
-  { id: 'S04', period: '18/05–22/05', milestone: true },
-  { id: 'S05', period: '25/05–29/05' },
-  { id: 'S06', period: '01/06–05/06' },
-  { id: 'S07', period: '08/06–12/06', milestone: true },
-  { id: 'S08', period: '15/06–19/06' },
-  { id: 'S09', period: '22/06–26/06' },
-  { id: 'S10', period: '29/06–03/07', milestone: true },
-  { id: 'S11', period: '06/07–10/07' },
-  { id: 'S12', period: '13/07–17/07' },
-  { id: 'S13', period: '20/07–24/07' },
-  { id: 'S14', period: '27/07–01/08', milestone: true, final: true },
+  { id: 'S01', period: '27/04–01/05', start: '2026-04-27', end: '2026-05-01' },
+  { id: 'S02', period: '04/05–08/05', start: '2026-05-04', end: '2026-05-08' },
+  { id: 'S03', period: '11/05–15/05', start: '2026-05-11', end: '2026-05-15' },
+  { id: 'S04', period: '18/05–22/05', start: '2026-05-18', end: '2026-05-22', milestone: true },
+  { id: 'S05', period: '25/05–29/05', start: '2026-05-25', end: '2026-05-29' },
+  { id: 'S06', period: '01/06–05/06', start: '2026-06-01', end: '2026-06-05' },
+  { id: 'S07', period: '08/06–12/06', start: '2026-06-08', end: '2026-06-12', milestone: true },
+  { id: 'S08', period: '15/06–19/06', start: '2026-06-15', end: '2026-06-19' },
+  { id: 'S09', period: '22/06–26/06', start: '2026-06-22', end: '2026-06-26' },
+  { id: 'S10', period: '29/06–03/07', start: '2026-06-29', end: '2026-07-03', milestone: true },
+  { id: 'S11', period: '06/07–10/07', start: '2026-07-06', end: '2026-07-10' },
+  { id: 'S12', period: '13/07–17/07', start: '2026-07-13', end: '2026-07-17' },
+  { id: 'S13', period: '20/07–24/07', start: '2026-07-20', end: '2026-07-24' },
+  { id: 'S14', period: '27/07–01/08', start: '2026-07-27', end: '2026-08-01', milestone: true, final: true },
 ]
 
 const QUESTIONS = [
@@ -27,31 +27,56 @@ const QUESTIONS = [
   { key: 'marco',     label: 'Qual marco semanal de avanço?' },
 ]
 
-// Conversion rate targets per stage (%)
 const RATE_TARGETS = { aw: 60, wl: 89, lr: 50, rf: 25 }
 
-// Funnel volume targets per week
 const VOLUME_TARGETS = {
   abordagens: 15, whatsapp: 9, ligacoes: 8, reunioes: 4, fechamentos: 1,
 }
 
-// ─── Tokens ───────────────────────────────────────────────────────────────────
-
-const T = {
-  ink:      '#0E0E0E',
-  paper:    '#F5F2EC',
-  cream:    '#EDE9DF',
-  gold:     '#B8933A',
-  goldBg:   '#FBF7EE',
-  muted:    '#888',
-  border:   '#E5E1D8',
-  teal:     '#1A6B5A',
-  tealBg:   '#E8F5F0',
-  red:      '#A03030',
-  redBg:    '#FBE8E8',
+// Stages that count as having reached each funnel step.
+// recusa leads are handled via recusa_from (where they were when they refused).
+const FUNNEL_SETS = {
+  abordagens:  ['abordagem1','abordagem2','abordagem3','whatsapp','ligacao','reuniao_agendada','reuniao_realizada','proposta','fechado'],
+  whatsapp:    ['whatsapp','ligacao','reuniao_agendada','reuniao_realizada','proposta','fechado'],
+  ligacoes:    ['ligacao','reuniao_agendada','reuniao_realizada','proposta','fechado'],
+  reunioes:    ['reuniao_realizada','proposta','fechado'],
+  fechamentos: ['fechado'],
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function stageForFunnel(lead) {
+  // Use recusa_from so refused leads count at the stage they reached
+  return lead.stage === 'recusa' ? (lead.recusa_from || 'mapeado') : lead.stage
+}
+
+function getWeekId(dateStr) {
+  if (!dateStr) return null
+  const d = new Date(dateStr)
+  const w = WEEKS.find(w => {
+    const s = new Date(w.start)
+    const e = new Date(w.end)
+    e.setHours(23, 59, 59, 999)
+    return d >= s && d <= e
+  })
+  return w?.id ?? null
+}
+
+function deriveFunnel(leads) {
+  const result = {}
+  for (const w of WEEKS) {
+    const wLeads = leads.filter(l => getWeekId(l.created_at) === w.id)
+    const s = stg => wLeads.filter(l => FUNNEL_SETS[stg].includes(stageForFunnel(l))).length
+    result[w.id] = {
+      abordagens:  s('abordagens'),
+      whatsapp:    s('whatsapp'),
+      ligacoes:    s('ligacoes'),
+      reunioes:    s('reunioes'),
+      fechamentos: s('fechamentos'),
+    }
+  }
+  return result
+}
 
 function pct(num, den) {
   const n = parseInt(num) || 0
@@ -76,20 +101,33 @@ function RateTag({ value, target }) {
   )
 }
 
+// ─── Tokens ───────────────────────────────────────────────────────────────────
+
+const T = {
+  ink:      '#0E0E0E',
+  paper:    '#F5F2EC',
+  cream:    '#EDE9DF',
+  gold:     '#B8933A',
+  goldBg:   '#FBF7EE',
+  muted:    '#888',
+  border:   '#E5E1D8',
+  teal:     '#1A6B5A',
+  tealBg:   '#E8F5F0',
+  red:      '#A03030',
+  redBg:    '#FBE8E8',
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function ViniMetas() {
+export default function ViniMetas({ crmLeads = [] }) {
   const [innerTab,     setInnerTab]     = useState('check')
   const [selectedWeek, setSelectedWeek] = useState('S01')
   const [checks,       setChecks]       = useState({})
-  const [funnel,       setFunnel]       = useState({})
 
   useEffect(() => {
     try {
       const c = localStorage.getItem('vini-weekly-checks')
-      const f = localStorage.getItem('vini-funnel-data')
       if (c) setChecks(JSON.parse(c))
-      if (f) setFunnel(JSON.parse(f))
     } catch {}
   }, [])
 
@@ -99,20 +137,13 @@ export default function ViniMetas() {
     localStorage.setItem('vini-weekly-checks', JSON.stringify(next))
   }
 
-  function saveFunnel(week, field, value) {
-    const v = value === '' ? '' : Math.max(0, parseInt(value) || 0)
-    const next = { ...funnel, [week]: { ...(funnel[week] || {}), [field]: v } }
-    setFunnel(next)
-    localStorage.setItem('vini-funnel-data', JSON.stringify(next))
-  }
-
-  const curWeek  = WEEKS.find(w => w.id === selectedWeek) || WEEKS[0]
+  const funnel    = deriveFunnel(crmLeads)
+  const curWeek   = WEEKS.find(w => w.id === selectedWeek) || WEEKS[0]
   const checkData = checks[selectedWeek] || {}
 
-  // Cumulative totals for "TOTAL" row
   const flds = ['abordagens', 'whatsapp', 'ligacoes', 'reunioes', 'fechamentos']
   const totals = Object.fromEntries(
-    flds.map(f => [f, WEEKS.reduce((s, w) => s + (parseInt(funnel[w.id]?.[f]) || 0), 0)])
+    flds.map(f => [f, WEEKS.reduce((s, w) => s + (funnel[w.id]?.[f] || 0), 0)])
   )
   const totalRates = {
     aw: pct(totals.whatsapp,    totals.abordagens),
@@ -138,24 +169,18 @@ export default function ViniMetas() {
     }}>{label}</button>
   )
 
-  const numInput = (week, field) => {
-    const d = funnel[week] || {}
-    const val = d[field]
-    const overTarget = parseInt(val) >= VOLUME_TARGETS[field]
+  const numCell = (weekId, field) => {
+    const val = funnel[weekId]?.[field] || 0
+    const overTarget = val >= VOLUME_TARGETS[field]
     return (
-      <td style={{ padding: '5px 4px', textAlign: 'center' }}>
-        <input
-          type="number" min="0"
-          value={val ?? ''}
-          onChange={e => saveFunnel(week, field, e.target.value)}
-          style={{
-            width: 48, textAlign: 'center', border: `1px solid ${T.border}`,
-            borderRadius: 4, padding: '4px 2px',
-            fontFamily: "'DM Mono', monospace", fontSize: 12, color: T.ink,
-            background: val !== '' && val !== undefined ? (overTarget ? '#F0FAF6' : '#FEF5F5') : '#fff',
-            outline: 'none',
-          }}
-        />
+      <td style={{ padding: '7px 8px', textAlign: 'center' }}>
+        <span style={{
+          fontFamily: "'DM Mono', monospace", fontSize: 13,
+          fontWeight: val > 0 ? 700 : 400,
+          color: val === 0 ? '#CCC' : overTarget ? T.teal : T.red,
+        }}>
+          {val > 0 ? val : '—'}
+        </span>
       </td>
     )
   }
@@ -231,6 +256,35 @@ export default function ViniMetas() {
                 MARCO ★
               </span>
             )}
+            {/* Mini funil snapshot for the selected week */}
+            {(() => {
+              const wf = funnel[selectedWeek] || {}
+              const hasData = Object.values(wf).some(v => v > 0)
+              if (!hasData) return null
+              return (
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: 12, alignItems: 'center' }}>
+                  {[
+                    { label: 'Ab', val: wf.abordagens, target: VOLUME_TARGETS.abordagens },
+                    { label: 'WA', val: wf.whatsapp,   target: VOLUME_TARGETS.whatsapp   },
+                    { label: 'Lig', val: wf.ligacoes,  target: VOLUME_TARGETS.ligacoes   },
+                    { label: 'Re', val: wf.reunioes,   target: VOLUME_TARGETS.reunioes   },
+                    { label: 'Fch', val: wf.fechamentos, target: VOLUME_TARGETS.fechamentos },
+                  ].map(s => (
+                    <div key={s.label} style={{ textAlign: 'center' }}>
+                      <div style={{
+                        fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 700,
+                        color: (s.val || 0) >= s.target ? T.teal : (s.val || 0) > 0 ? T.red : '#CCC',
+                      }}>
+                        {s.val || 0}
+                      </div>
+                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, color: T.muted, letterSpacing: '0.08em' }}>
+                        {s.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )
+            })()}
           </div>
 
           {/* 5 questions — 2-col grid, last spans full width */}
@@ -301,7 +355,7 @@ export default function ViniMetas() {
           {/* Target reference bar */}
           <div style={{
             background: T.ink, borderRadius: 8, padding: '14px 24px',
-            marginBottom: 20, display: 'flex', alignItems: 'center', gap: 0, flexWrap: 'wrap',
+            marginBottom: 8, display: 'flex', alignItems: 'center', gap: 0, flexWrap: 'wrap',
           }}>
             <div style={{
               fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: '0.14em',
@@ -310,13 +364,12 @@ export default function ViniMetas() {
             }}>
               META<br/>/ SEM
             </div>
-
             {[
-              { label: 'Abordagens', n: 15, conv: null       },
-              { label: 'WhatsApp',   n: 9,  conv: '→ 60%'   },
-              { label: 'Ligações',   n: 8,  conv: '→ 89%'   },
-              { label: 'Reuniões',   n: 4,  conv: '→ 50%'   },
-              { label: 'Fechamentos',n: 1,  conv: '→ 25%'   },
+              { label: 'Abordagens', n: 15, conv: null     },
+              { label: 'WhatsApp',   n: 9,  conv: '→ 60%' },
+              { label: 'Ligações',   n: 8,  conv: '→ 89%' },
+              { label: 'Reuniões',   n: 4,  conv: '→ 50%' },
+              { label: 'Fechamentos',n: 1,  conv: '→ 25%' },
             ].map((s, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
                 {s.conv && (
@@ -334,6 +387,17 @@ export default function ViniMetas() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Source note */}
+          <div style={{ marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 5,
+              fontFamily: "'DM Mono', monospace", fontSize: 10, color: T.muted,
+            }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: T.teal, display: 'inline-block' }} />
+              Dados derivados do CRM — semana = data de criação do lead
+            </span>
           </div>
 
           {/* Conversion table */}
@@ -367,7 +431,7 @@ export default function ViniMetas() {
               </thead>
               <tbody>
                 {WEEKS.map((w, idx) => {
-                  const d  = funnel[w.id] || {}
+                  const d   = funnel[w.id] || {}
                   const rAW = pct(d.whatsapp,    d.abordagens)
                   const rWL = pct(d.ligacoes,    d.whatsapp)
                   const rLR = pct(d.reunioes,    d.ligacoes)
@@ -380,22 +444,22 @@ export default function ViniMetas() {
                       borderLeft: w.milestone ? `3px solid ${T.gold}` : '3px solid transparent',
                     }}>
                       <td style={{
-                        padding: '7px 16px', whiteSpace: 'nowrap',
+                        padding: '9px 16px', whiteSpace: 'nowrap',
                         fontFamily: "'DM Mono', monospace", fontSize: 12,
                         fontWeight: w.milestone ? 700 : 400,
                         color: w.milestone ? T.gold : T.ink,
                       }}>
                         {w.id}{w.milestone ? ' ★' : ''}
                       </td>
-                      {numInput(w.id, 'abordagens')}
+                      {numCell(w.id, 'abordagens')}
                       {rateCell(rAW, RATE_TARGETS.aw)}
-                      {numInput(w.id, 'whatsapp')}
+                      {numCell(w.id, 'whatsapp')}
                       {rateCell(rWL, RATE_TARGETS.wl)}
-                      {numInput(w.id, 'ligacoes')}
+                      {numCell(w.id, 'ligacoes')}
                       {rateCell(rLR, RATE_TARGETS.lr)}
-                      {numInput(w.id, 'reunioes')}
+                      {numCell(w.id, 'reunioes')}
                       {rateCell(rRF, RATE_TARGETS.rf)}
-                      {numInput(w.id, 'fechamentos')}
+                      {numCell(w.id, 'fechamentos')}
                     </tr>
                   )
                 })}
@@ -444,9 +508,6 @@ export default function ViniMetas() {
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: "'DM Mono', monospace", fontSize: 10, color: T.red }}>
               <span style={{ width: 8, height: 8, borderRadius: 2, background: T.redBg, border: `1px solid ${T.red}`, display: 'inline-block' }} />
               Abaixo da meta
-            </span>
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: T.muted }}>
-              · Células de input ficam coloridas quando preenchidas
             </span>
           </div>
         </>
