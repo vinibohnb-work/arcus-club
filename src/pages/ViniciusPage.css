@@ -714,6 +714,39 @@
 .vini-page .crm-product-pill.active[data-product="epc"]       { background: var(--indigo-light); color: var(--indigo); border-color: var(--indigo); }
 .vini-page .crm-product-pill.active[data-product="arcus"]     { background: var(--teal-light);   color: var(--teal);   border-color: var(--teal); }
 
+.vini-page .crm-name-input {
+  font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 500;
+  color: var(--ink); background: transparent; border: none;
+  border-bottom: 1px solid transparent; outline: none; width: 100%;
+  transition: border-color 0.15s; padding: 0 0 1px;
+}
+.vini-page .crm-name-input:focus { border-bottom-color: var(--gold); }
+.vini-page .crm-company-input {
+  font-family: 'DM Sans', system-ui, sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--ink); background: transparent; border: none;
+  border-bottom: 1px solid transparent; outline: none; width: 100%;
+  transition: border-color 0.15s; padding: 0 0 1px; margin-top: 2px;
+}
+.vini-page .crm-company-input:focus { border-bottom-color: var(--gold); }
+.vini-page .crm-company-input::placeholder { color: var(--muted); font-weight: 400; }
+
+.vini-page .crm-contact-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.5rem; padding: 0.65rem 1.25rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.vini-page .crm-contact-field { display: flex; flex-direction: column; gap: 3px; }
+.vini-page .crm-contact-label {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.vini-page .crm-contact-input {
+  font-family: 'DM Sans', system-ui, sans-serif; font-size: 12.5px; color: var(--ink);
+  background: white; border: 0.5px solid var(--border); border-radius: 6px;
+  padding: 0.38rem 0.65rem; outline: none; transition: border-color 0.15s;
+}
+.vini-page .crm-contact-input:focus { border-color: var(--gold); }
+
 .vini-page .crm-notes-row { padding: 0.7rem 1.25rem; border-bottom: 0.5px solid var(--border); }
 .vini-page .crm-notes {
   width: 100%; min-height: 60px; resize: vertical;

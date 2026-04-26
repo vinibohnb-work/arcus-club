@@ -1036,12 +1036,13 @@ export default function ViniciusPage() {
     setCrmSaving(true)
     setCrmError(null)
     const { data, error } = await supabase.from('vini_leads').insert({
-      name:    crmForm.leadName,
-      company: crmForm.leadCompany || '',
-      phone:   crmForm.leadPhone   || '',
-      source:  crmForm.leadSource  || '',
-      stage:   crmForm.leadStage   || 'mapeado',
-      notes:   crmForm.leadNotes   || '',
+      name:     crmForm.leadName,
+      company:  crmForm.leadCompany  || '',
+      phone:    crmForm.leadPhone    || '',
+      linkedin: crmForm.leadLinkedin || '',
+      source:   crmForm.leadSource   || '',
+      stage:    crmForm.leadStage    || 'mapeado',
+      notes:    crmForm.leadNotes    || '',
     }).select().single()
     if (error) {
       setCrmError(error.message)
@@ -1553,10 +1554,20 @@ export default function ViniciusPage() {
           <div className="vini-modal-overlay" onClick={() => setCrmSelectedId(null)}>
             <div className="vini-modal" key={crmSelectedId} onClick={e => e.stopPropagation()} style={{ maxWidth: 600 }}>
               <div className="vini-modal-header">
-                <div>
-                  <div className="vini-modal-title">{lead.name}</div>
-                  {lead.company && <div style={{ fontSize: 13, color: 'var(--ink)', fontWeight: 500, marginTop: 1 }}>{lead.company}</div>}
-                  {lead.source && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{lead.source}</div>}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <input
+                    className="crm-name-input"
+                    defaultValue={lead.name}
+                    placeholder="Nome do lead"
+                    onBlur={e => { if (e.target.value.trim() && e.target.value !== lead.name) crmUpdateLead(lead.id, { name: e.target.value.trim() }) }}
+                  />
+                  <input
+                    className="crm-company-input"
+                    defaultValue={lead.company || ''}
+                    placeholder="Empresa"
+                    onBlur={e => { if (e.target.value !== (lead.company || '')) crmUpdateLead(lead.id, { company: e.target.value }) }}
+                  />
+                  {lead.source && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>{lead.source}</div>}
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                   <button
@@ -1564,6 +1575,28 @@ export default function ViniciusPage() {
                     onClick={() => crmDeleteLead(lead.id)}
                   >Excluir</button>
                   <button className="vini-modal-close" onClick={() => setCrmSelectedId(null)}>×</button>
+                </div>
+              </div>
+
+              {/* Contact info */}
+              <div className="crm-contact-row">
+                <div className="crm-contact-field">
+                  <span className="crm-contact-label">Celular</span>
+                  <input
+                    className="crm-contact-input"
+                    defaultValue={lead.phone || ''}
+                    placeholder="+55 51 9…"
+                    onBlur={e => { if (e.target.value !== (lead.phone || '')) crmUpdateLead(lead.id, { phone: e.target.value }) }}
+                  />
+                </div>
+                <div className="crm-contact-field">
+                  <span className="crm-contact-label">LinkedIn</span>
+                  <input
+                    className="crm-contact-input"
+                    defaultValue={lead.linkedin || ''}
+                    placeholder="linkedin.com/in/…"
+                    onBlur={e => { if (e.target.value !== (lead.linkedin || '')) crmUpdateLead(lead.id, { linkedin: e.target.value }) }}
+                  />
                 </div>
               </div>
 
@@ -1694,6 +1727,7 @@ export default function ViniciusPage() {
               <label>Nome *<input type="text" required {...crmF('leadName')} placeholder="Ex: João Silva" /></label>
               <label>Empresa<input type="text" {...crmF('leadCompany')} placeholder="Ex: Clínica Saúde Total" /></label>
               <label>Telefone<input type="text" {...crmF('leadPhone')} placeholder="+55 51 9…" /></label>
+              <label>LinkedIn<input type="text" {...crmF('leadLinkedin')} placeholder="linkedin.com/in/…" /></label>
               <label>Origem
                 <select {...crmF('leadSource')}>
                   <option value="">Selecione…</option>
