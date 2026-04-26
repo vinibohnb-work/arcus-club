@@ -117,73 +117,6 @@ body {
 .body-text strong { color: var(--text); font-weight: 500; }
 .body-text.ink strong { color: #0E0E0E; }
 
-/* ── PAINEL DE PREENCHIMENTO ──────────────────────────────────────────────── */
-#fillPanel {
-  background: #0D0D0D;
-  border-bottom: 1px solid var(--border);
-  padding: 32px 112px;
-  position: relative; z-index: 100;
-}
-#fillPanel h2 {
-  font-family: 'DM Mono', monospace; font-size: 10px;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 20px;
-}
-.fill-grid {
-  display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;
-}
-.fill-grid label { display: flex; flex-direction: column; gap: 5px; }
-.fill-grid span {
-  font-family: 'DM Mono', monospace; font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
-}
-.fill-grid input {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 3px;
-  padding: 8px 12px; color: var(--text); font-size: 13px;
-  font-family: 'Jost', sans-serif; outline: none; transition: border 0.15s;
-}
-.fill-grid input:focus { border-color: var(--gold); }
-.fill-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
-.fill-row textarea {
-  flex: 1;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 3px;
-  padding: 10px 14px; color: var(--text); font-size: 12px;
-  font-family: 'DM Mono', monospace; outline: none;
-  resize: vertical; min-height: 100px; line-height: 1.6;
-  transition: border 0.15s;
-}
-.fill-row textarea:focus { border-color: var(--gold); }
-.fill-row textarea::placeholder { color: var(--dim); }
-.fill-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
-.btn-gold {
-  font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 9px 20px; border-radius: 2px;
-  cursor: pointer; background: var(--gold); color: #0A0800; border: none;
-  transition: opacity 0.15s; font-weight: 600;
-}
-.btn-gold:hover { opacity: 0.85; }
-.btn-outline {
-  font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 9px 20px; border-radius: 2px;
-  cursor: pointer; background: transparent; color: var(--gold);
-  border: 1px solid rgba(201,168,76,0.4); transition: all 0.15s;
-}
-.btn-outline:hover { background: rgba(201,168,76,0.08); }
-.fill-note {
-  margin-top: 10px;
-  font-family: 'DM Mono', monospace; font-size: 10px;
-  letter-spacing: 0.08em; color: var(--dim);
-}
-#jsonInput {
-  flex: 1;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 3px;
-  padding: 10px 14px; color: var(--teal); font-size: 11px;
-  font-family: 'DM Mono', monospace; outline: none;
-  resize: vertical; min-height: 64px;
-  transition: border 0.15s;
-}
-#jsonInput:focus { border-color: var(--teal); }
-#jsonInput::placeholder { color: var(--dim); }
 
 /* ── 1. CAPA ───────────────────────────────────────────────────────────────── */
 .capa { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
@@ -436,8 +369,7 @@ body {
 
 /* ── impressão ─────────────────────────────────────────────────────────────── */
 @media print {
-  #fillPanel { display: none !important; }
-  .page { page-break-after: always; padding: 64px 80px; }
+.page { page-break-after: always; padding: 64px 80px; }
   .page.capa { min-height: 100vh; }
   .cta-page { page-break-after: avoid; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -446,52 +378,6 @@ body {
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════════════════════════════ -->
-<!-- PAINEL DE PREENCHIMENTO — oculto na impressão                             -->
-<!-- ══════════════════════════════════════════════════════════════════════════ -->
-<div id="fillPanel">
-  <h2>— Preencher proposta</h2>
-
-  <div class="fill-grid">
-    <label>
-      <span>Nome do lead</span>
-      <input type="text" id="inLead" placeholder="Ex: João da Silva" oninput="syncFields()">
-    </label>
-    <label>
-      <span>Empresa</span>
-      <input type="text" id="inCompany" placeholder="Ex: Construtora XYZ" oninput="syncFields()">
-    </label>
-    <label>
-      <span>Ramo de atividade</span>
-      <input type="text" id="inSegmento" placeholder="Ex: Construção Civil" oninput="syncFields()">
-    </label>
-    <label>
-      <span>Data da proposta</span>
-      <input type="text" id="inDate" placeholder="Ex: 21 de abril de 2026" oninput="syncFields()">
-    </label>
-  </div>
-
-  <div class="fill-row">
-    <textarea id="transcriptInput"
-      placeholder="Cole aqui a transcrição da reunião (pode ser bruta, direto do Whisper / Notion AI / Fireflies)..."></textarea>
-  </div>
-
-  <div class="fill-buttons" style="margin-bottom:16px;">
-    <button class="btn-gold" onclick="gerarPrompt()">Gerar prompt para o Claude →</button>
-    <button class="btn-outline" onclick="toggleJsonPanel()">Colar resposta do Claude (JSON)</button>
-  </div>
-
-  <div id="jsonPanel" style="display:none;">
-    <div class="fill-row">
-      <textarea id="jsonInput" placeholder='Cole aqui o JSON retornado pelo Claude: { "dores": [...], "diagnostico": {...}, ... }'></textarea>
-    </div>
-    <div class="fill-buttons">
-      <button class="btn-gold" onclick="aplicarJSON()">Aplicar na proposta →</button>
-    </div>
-  </div>
-
-  <div class="fill-note">Todos os campos abaixo também são editáveis diretamente na página.</div>
-</div>
 
 
 <!-- ══════════════════════════════════════════════════════════════════════════ -->
