@@ -598,7 +598,41 @@
 
 /* ── CRM BOARD ───────────────────────────────────────────────────────────── */
 .vini-page .crm-toolbar {
-  display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;
+  display: flex; gap: 1rem; align-items: center; margin-bottom: 0.6rem;
+}
+.vini-page .crm-filter-bar {
+  display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; align-items: center;
+}
+.vini-page .crm-filter-group {
+  display: flex; gap: 0.3rem; align-items: center;
+  padding-right: 0.65rem; border-right: 0.5px solid var(--border);
+}
+.vini-page .crm-filter-group:last-child { border-right: none; padding-right: 0; }
+.vini-page .crm-filter-label {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted); white-space: nowrap; margin-right: 2px;
+}
+.vini-page .crm-filter-pill {
+  font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.05em;
+  padding: 3px 10px; border-radius: 20px; cursor: pointer;
+  border: 0.5px solid var(--border); background: white; color: var(--muted);
+  transition: all 0.12s;
+}
+.vini-page .crm-filter-pill:hover { border-color: var(--ink); color: var(--ink); }
+.vini-page .crm-filter-pill.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.vini-page .crm-filter-pill.active.sdr  { background: #3D5FA0; border-color: #3D5FA0; }
+.vini-page .crm-filter-pill.active.li   { background: #0A66C2; border-color: #0A66C2; }
+.vini-page .crm-filter-pill.active.overdue { background: #B83030; border-color: #B83030; }
+
+.vini-page .crm-li-btn {
+  background: none; border: 0.5px solid rgba(14,14,14,0.15); border-radius: 4px;
+  font-family: 'DM Mono', monospace; font-size: 8px; font-weight: 700;
+  letter-spacing: 0.05em; padding: 2px 5px; cursor: pointer;
+  color: var(--muted); transition: all 0.12s; line-height: 1.4;
+}
+.vini-page .crm-li-btn:hover { border-color: #0A66C2; color: #0A66C2; }
+.vini-page .crm-li-btn.connected {
+  background: #0A66C2; border-color: #0A66C2; color: white;
 }
 .vini-page .crm-search {
   flex: 1; max-width: 300px;

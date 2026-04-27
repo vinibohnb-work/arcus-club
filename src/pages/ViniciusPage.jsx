@@ -945,6 +945,7 @@ export default function ViniciusPage() {
   const [crmForm, setCrmForm] = useState({})
   const [crmSaving, setCrmSaving] = useState(false)
   const [crmError, setCrmError] = useState(null)
+  const [crmFilters, setCrmFilters] = useState({ source: null, product: null, linkedin: null, overdue: false })
 
   useEffect(() => { fetchAll(); fetchCrmLeads() }, [])
 
@@ -1119,12 +1120,27 @@ export default function ViniciusPage() {
     return { value: crmForm[field] || '', onChange: e => setCrmForm({ ...crmForm, [field]: e.target.value }) }
   }
 
-  const filteredCrmLeads = crmLeads.filter(l =>
-    !crmSearch ||
-    l.name.toLowerCase().includes(crmSearch.toLowerCase()) ||
-    (l.company || '').toLowerCase().includes(crmSearch.toLowerCase()) ||
-    (l.source || '').toLowerCase().includes(crmSearch.toLowerCase())
-  )
+  const filteredCrmLeads = crmLeads.filter(l => {
+    if (crmSearch) {
+      const q = crmSearch.toLowerCase()
+      const match = l.name.toLowerCase().includes(q) ||
+        (l.company || '').toLowerCase().includes(q) ||
+        (l.source || '').toLowerCase().includes(q)
+      if (!match) return false
+    }
+    if (crmFilters.source === 'sdr'    && l.source !== 'SDR Agent') return false
+    if (crmFilters.source === 'manual' && l.source === 'SDR Agent') return false
+    if (crmFilters.product === 'epc'   && l.product !== 'epc')   return false
+    if (crmFilters.product === 'arcus' && l.product !== 'arcus') return false
+    if (crmFilters.linkedin === 'connected'    && !l.linkedin_connected)  return false
+    if (crmFilters.linkedin === 'notconnected' && l.linkedin_connected)   return false
+    if (crmFilters.overdue) {
+      const pending = (l.next_steps || []).filter(s => !s.done)
+      const next = pending.sort((a, b) => new Date(a.date) - new Date(b.date))[0]
+      if (!next || !next.date || new Date(next.date) >= new Date()) return false
+    }
+    return true
+  })
 
   return (
     <div className="vini-page">
@@ -1245,6 +1261,53 @@ export default function ViniciusPage() {
                 onClick={() => { setCrmForm({}); setCrmModal('lead') }}
               >+ Novo lead</button>
             </div>
+            <div className="crm-filter-bar">
+              <div className="crm-filter-group">
+                <span className="crm-filter-label">Origem</span>
+                {[
+                  { key: 'sdr',    label: 'SDR Agent', cls: 'sdr' },
+                  { key: 'manual', label: 'Manual',    cls: '' },
+                ].map(f => (
+                  <button
+                    key={f.key}
+                    className={`crm-filter-pill${crmFilters.source === f.key ? ` active ${f.cls}` : ''}`}
+                    onClick={() => setCrmFilters(p => ({ ...p, source: p.source === f.key ? null : f.key }))}
+                  >{f.label}</button>
+                ))}
+              </div>
+              <div className="crm-filter-group">
+                <span className="crm-filter-label">Produto</span>
+                {[
+                  { key: 'epc',   label: 'MM' },
+                  { key: 'arcus', label: 'Arcus' },
+                ].map(f => (
+                  <button
+                    key={f.key}
+                    className={`crm-filter-pill${crmFilters.product === f.key ? ' active' : ''}`}
+                    onClick={() => setCrmFilters(p => ({ ...p, product: p.product === f.key ? null : f.key }))}
+                  >{f.label}</button>
+                ))}
+              </div>
+              <div className="crm-filter-group">
+                <span className="crm-filter-label">LinkedIn</span>
+                {[
+                  { key: 'connected',    label: 'Conectado',     cls: 'li' },
+                  { key: 'notconnected', label: 'Não conectado', cls: '' },
+                ].map(f => (
+                  <button
+                    key={f.key}
+                    className={`crm-filter-pill${crmFilters.linkedin === f.key ? ` active ${f.cls}` : ''}`}
+                    onClick={() => setCrmFilters(p => ({ ...p, linkedin: p.linkedin === f.key ? null : f.key }))}
+                  >{f.label}</button>
+                ))}
+              </div>
+              <div className="crm-filter-group">
+                <button
+                  className={`crm-filter-pill${crmFilters.overdue ? ' active overdue' : ''}`}
+                  onClick={() => setCrmFilters(p => ({ ...p, overdue: !p.overdue }))}
+                >⚠ Atrasado</button>
+              </div>
+            </div>
             <div className="crm-board">
               {PIPELINE_STAGES.map(stage => {
                 const stageLeads = filteredCrmLeads.filter(l => l.stage === stage.key)
@@ -1283,11 +1346,21 @@ export default function ViniciusPage() {
                                   </span>
                                 : <span />
                               }
-                              {!isRecusa && next && (
-                                <span className={`crm-card-date${overdue ? ' overdue' : ''}`}>
-                                  {fmtDate(next.date)}
-                                </span>
-                              )}
+                              <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                                {!isRecusa && next && (
+                                  <span className={`crm-card-date${overdue ? ' overdue' : ''}`}>
+                                    {fmtDate(next.date)}
+                                  </span>
+                                )}
+                                <button
+                                  className={`crm-li-btn${lead.linkedin_connected ? ' connected' : ''}`}
+                                  title={lead.linkedin_connected ? 'Conectado no LinkedIn' : 'Marcar conexão LinkedIn'}
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    crmUpdateLead(lead.id, { linkedin_connected: !lead.linkedin_connected })
+                                  }}
+                                >LI</button>
+                              </div>
                             </div>
                           </div>
                         )
