@@ -1352,14 +1352,12 @@ export default function ViniciusPage() {
                                     {fmtDate(next.date)}
                                   </span>
                                 )}
-                                <button
-                                  className={`crm-li-btn${lead.linkedin_connected ? ' connected' : ''}`}
-                                  title={lead.linkedin_connected ? 'Conectado no LinkedIn' : 'Marcar conexão LinkedIn'}
-                                  onClick={e => {
-                                    e.stopPropagation()
-                                    crmUpdateLead(lead.id, { linkedin_connected: !lead.linkedin_connected })
-                                  }}
-                                >LI</button>
+                                {lead.linkedin_connected && (
+                                  <svg className="crm-li-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="24" height="24" rx="4" fill="#0A66C2"/>
+                                    <path d="M7.5 9.5H5V19H7.5V9.5ZM6.25 8.4C7.08 8.4 7.75 7.73 7.75 6.9C7.75 6.07 7.08 5.4 6.25 5.4C5.42 5.4 4.75 6.07 4.75 6.9C4.75 7.73 5.42 8.4 6.25 8.4ZM19 19H16.5V14.1C16.5 12.4 15.77 11.9 14.81 11.9C13.79 11.9 12.79 12.67 12.79 14.15V19H10.29V9.5H12.69V10.6H12.72C13.07 9.92 14.08 9.28 15.29 9.28C17.65 9.28 19 10.72 19 13.35V19Z" fill="white"/>
+                                  </svg>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -1664,7 +1662,19 @@ export default function ViniciusPage() {
                   />
                 </div>
                 <div className="crm-contact-field">
-                  <span className="crm-contact-label">LinkedIn</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span className="crm-contact-label">LinkedIn</span>
+                    <button
+                      className={`crm-li-connect-btn${lead.linkedin_connected ? ' connected' : ''}`}
+                      onClick={() => crmUpdateLead(lead.id, { linkedin_connected: !lead.linkedin_connected })}
+                    >
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ width: 10, height: 10, display: 'inline', verticalAlign: 'middle', marginRight: 3 }}>
+                        <rect width="24" height="24" rx="3" fill="currentColor"/>
+                        <path d="M7.5 9.5H5V19H7.5V9.5ZM6.25 8.4C7.08 8.4 7.75 7.73 7.75 6.9C7.75 6.07 7.08 5.4 6.25 5.4C5.42 5.4 4.75 6.07 4.75 6.9C4.75 7.73 5.42 8.4 6.25 8.4ZM19 19H16.5V14.1C16.5 12.4 15.77 11.9 14.81 11.9C13.79 11.9 12.79 12.67 12.79 14.15V19H10.29V9.5H12.69V10.6H12.72C13.07 9.92 14.08 9.28 15.29 9.28C17.65 9.28 19 10.72 19 13.35V19Z" fill="white"/>
+                      </svg>
+                      {lead.linkedin_connected ? 'Conectado' : 'Conectar'}
+                    </button>
+                  </div>
                   <input
                     className="crm-contact-input"
                     defaultValue={lead.linkedin || ''}

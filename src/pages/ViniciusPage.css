@@ -624,15 +624,18 @@
 .vini-page .crm-filter-pill.active.li   { background: #0A66C2; border-color: #0A66C2; }
 .vini-page .crm-filter-pill.active.overdue { background: #B83030; border-color: #B83030; }
 
-.vini-page .crm-li-btn {
-  background: none; border: 0.5px solid rgba(14,14,14,0.15); border-radius: 4px;
-  font-family: 'DM Mono', monospace; font-size: 8px; font-weight: 700;
-  letter-spacing: 0.05em; padding: 2px 5px; cursor: pointer;
-  color: var(--muted); transition: all 0.12s; line-height: 1.4;
+.vini-page .crm-li-icon {
+  width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0;
 }
-.vini-page .crm-li-btn:hover { border-color: #0A66C2; color: #0A66C2; }
-.vini-page .crm-li-btn.connected {
-  background: #0A66C2; border-color: #0A66C2; color: white;
+.vini-page .crm-li-connect-btn {
+  background: none; border: 0.5px solid rgba(14,14,14,0.18); border-radius: 20px;
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 600;
+  letter-spacing: 0.04em; padding: 2px 8px; cursor: pointer;
+  color: var(--muted); transition: all 0.12s;
+}
+.vini-page .crm-li-connect-btn:hover { border-color: #0A66C2; color: #0A66C2; }
+.vini-page .crm-li-connect-btn.connected {
+  background: #E8F0FA; border-color: #0A66C2; color: #0A66C2;
 }
 .vini-page .crm-search {
   flex: 1; max-width: 300px;
