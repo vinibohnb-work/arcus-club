@@ -1269,9 +1269,10 @@ export default function ViniciusPage() {
                             className={`crm-card${isRecusa ? ' recusa' : overdue ? ' overdue' : ''}`}
                             onClick={() => { setCrmSelectedId(lead.id); setCrmDetailTab('historico') }}
                           >
+                            {lead.source === 'SDR Agent' && <span className="crm-sdr-badge">SDR</span>}
                             <div className="crm-card-name">{lead.name}</div>
                             {lead.company && <div className="crm-card-company">{lead.company}</div>}
-                            {lead.source && <div className="crm-card-source">{lead.source}</div>}
+                            {lead.source && lead.source !== 'SDR Agent' && <div className="crm-card-source">{lead.source}</div>}
                             {recusaFromLabel && (
                               <div className="crm-recusa-from">← {recusaFromLabel}</div>
                             )}
@@ -1599,6 +1600,35 @@ export default function ViniciusPage() {
                   />
                 </div>
               </div>
+
+              {/* SDR metadata banner */}
+              {lead.source === 'SDR Agent' && lead.sdr_data && (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '0.75rem',
+                  padding: '0.5rem 1.25rem', borderBottom: '0.5px solid var(--border)',
+                  background: '#F0F4FF',
+                }}>
+                  <span className="crm-sdr-badge" style={{ marginBottom: 0 }}>SDR Agent</span>
+                  {lead.sdr_data.score != null && (
+                    <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: '#3D5FA0' }}>
+                      Score: <strong>{lead.sdr_data.score}</strong>/100
+                    </span>
+                  )}
+                  {lead.sdr_data.original_source && (
+                    <span style={{ fontSize: 11, color: 'var(--muted)' }}>
+                      via {lead.sdr_data.original_source}
+                    </span>
+                  )}
+                  {lead.sdr_data.source_url && (
+                    <a
+                      href={lead.sdr_data.source_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ fontSize: 11, color: '#3D5FA0', marginLeft: 'auto' }}
+                    >Ver fonte ↗</a>
+                  )}
+                </div>
+              )}
 
               {/* Stage pills */}
               <div className="crm-stage-row">
