@@ -1026,10 +1026,16 @@ export default function ViniciusPage() {
   }
 
   async function crmUpdateLead(id, updates) {
+    // Optimistic update — reflete na UI imediatamente
+    setCrmLeads(prev => prev.map(l => l.id === id ? { ...l, ...updates } : l))
     const { error } = await supabase.from('vini_leads')
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq('id', id)
-    if (!error) setCrmLeads(prev => prev.map(l => l.id === id ? { ...l, ...updates } : l))
+    // Reverte se o banco recusar
+    if (error) {
+      console.error('[CRM] update error:', error.message)
+      setCrmLeads(prev => prev.map(l => l.id === id ? { ...l, ...Object.fromEntries(Object.keys(updates).map(k => [k, l[k]])) } : l))
+    }
   }
 
   async function crmSaveLead(e) {
