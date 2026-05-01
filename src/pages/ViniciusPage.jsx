@@ -1224,13 +1224,14 @@ export default function ViniciusPage() {
     setCrmSaving(true)
     setCrmError(null)
     const { data, error } = await supabase.from('vini_leads').insert({
-      name:     crmForm.leadName,
-      company:  crmForm.leadCompany  || '',
-      phone:    crmForm.leadPhone    || '',
-      linkedin: crmForm.leadLinkedin || '',
-      source:   crmForm.leadSource   || '',
-      stage:    crmForm.leadStage    || 'mapeado',
-      notes:    crmForm.leadNotes    || '',
+      name:      crmForm.leadName,
+      company:   crmForm.leadCompany   || '',
+      phone:     crmForm.leadPhone     || '',
+      linkedin:  crmForm.leadLinkedin  || '',
+      instagram: crmForm.leadInstagram || '',
+      source:    crmForm.leadSource    || '',
+      stage:     crmForm.leadStage     || 'mapeado',
+      notes:     crmForm.leadNotes     || '',
     }).select().single()
     if (error) {
       setCrmError(error.message)
@@ -1546,6 +1547,23 @@ export default function ViniciusPage() {
                                   <svg className="crm-li-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <rect width="24" height="24" rx="4" fill="#0A66C2"/>
                                     <path d="M7.5 9.5H5V19H7.5V9.5ZM6.25 8.4C7.08 8.4 7.75 7.73 7.75 6.9C7.75 6.07 7.08 5.4 6.25 5.4C5.42 5.4 4.75 6.07 4.75 6.9C4.75 7.73 5.42 8.4 6.25 8.4ZM19 19H16.5V14.1C16.5 12.4 15.77 11.9 14.81 11.9C13.79 11.9 12.79 12.67 12.79 14.15V19H10.29V9.5H12.69V10.6H12.72C13.07 9.92 14.08 9.28 15.29 9.28C17.65 9.28 19 10.72 19 13.35V19Z" fill="white"/>
+                                  </svg>
+                                )}
+                                {lead.instagram_connected && (
+                                  <svg className="crm-ig-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                      <radialGradient id="ig-card-grad" cx="30%" cy="107%" r="150%">
+                                        <stop offset="0%" stopColor="#ffd676"/>
+                                        <stop offset="25%" stopColor="#f86f3e"/>
+                                        <stop offset="50%" stopColor="#e1306c"/>
+                                        <stop offset="75%" stopColor="#833ab4"/>
+                                        <stop offset="100%" stopColor="#4f5bd5"/>
+                                      </radialGradient>
+                                    </defs>
+                                    <rect width="24" height="24" rx="5" fill="url(#ig-card-grad)"/>
+                                    <rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="white" strokeWidth="1.6"/>
+                                    <circle cx="12" cy="12" r="3.1" fill="none" stroke="white" strokeWidth="1.6"/>
+                                    <circle cx="16.3" cy="7.7" r="0.9" fill="white"/>
                                   </svg>
                                 )}
                               </div>
@@ -1874,6 +1892,33 @@ export default function ViniciusPage() {
                 </div>
               </div>
 
+              {/* Instagram row */}
+              <div className="crm-contact-row">
+                <div className="crm-contact-field" style={{ gridColumn: '1 / -1' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span className="crm-contact-label">Instagram</span>
+                    <button
+                      className={`crm-ig-connect-btn${lead.instagram_connected ? ' connected' : ''}`}
+                      onClick={() => crmUpdateLead(lead.id, { instagram_connected: !lead.instagram_connected })}
+                    >
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ width: 10, height: 10, display: 'inline', verticalAlign: 'middle', marginRight: 3 }}>
+                        <rect width="24" height="24" rx="4" fill="currentColor"/>
+                        <rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="white" strokeWidth="2"/>
+                        <circle cx="12" cy="12" r="3" fill="none" stroke="white" strokeWidth="2"/>
+                        <circle cx="16.3" cy="7.7" r="1" fill="white"/>
+                      </svg>
+                      {lead.instagram_connected ? 'Seguindo' : 'Seguir'}
+                    </button>
+                  </div>
+                  <input
+                    className="crm-contact-input"
+                    defaultValue={lead.instagram || ''}
+                    placeholder="@usuario"
+                    onBlur={e => { if (e.target.value !== (lead.instagram || '')) crmUpdateLead(lead.id, { instagram: e.target.value }) }}
+                  />
+                </div>
+              </div>
+
               {/* SDR metadata banner */}
               {lead.source === 'SDR Agent' && lead.sdr_data && (
                 <div style={{
@@ -2031,6 +2076,7 @@ export default function ViniciusPage() {
               <label>Empresa<input type="text" {...crmF('leadCompany')} placeholder="Ex: Clínica Saúde Total" /></label>
               <label>Telefone<input type="text" {...crmF('leadPhone')} placeholder="+55 51 9…" /></label>
               <label>LinkedIn<input type="text" {...crmF('leadLinkedin')} placeholder="linkedin.com/in/…" /></label>
+              <label>Instagram<input type="text" {...crmF('leadInstagram')} placeholder="@usuario" /></label>
               <label>Origem
                 <select {...crmF('leadSource')}>
                   <option value="">Selecione…</option>
