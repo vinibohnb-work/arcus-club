@@ -903,34 +903,37 @@ const TAB_HTML = {
         <div class="stair">
           <div class="stair-left"><div class="stair-stage">Passo 04</div><div class="stair-name">Verificar reação antes do preço<br><span style="font-size:10px;font-weight:400;color:var(--muted);">45–55 min</span></div></div>
           <div class="stair-right">
-            <p><strong>Leia o sinal — só avance se estiver claro.</strong> Antes de qualquer número, confirme o interesse e trate qualquer dúvida restante. A objeção que aparece depois do preço é a que você não tratou aqui.</p>
-            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Antes de eu te falar o investimento — o que você achou do que viu até agora? Tem alguma dúvida sobre como funciona ou sobre o que está incluído?"</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Deixe ele falar. Não interrompa. Não defenda nada ainda. Se houver dúvida:</p>
-            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Essa dúvida faz sentido. [Aborde com um exemplo ou clareza de processo.] Tem mais alguma coisa que te preocupa?"</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Repita até não restar objeção em aberto. <strong>Só então apresente o preço.</strong> Se o sinal for negativo ou o interesse estiver baixo, não avance — volte para o passo 2 e aprofunde mais.</p>
+            <p><strong>Leia o sinal — só avance se estiver claro.</strong> Antes de qualquer número, use a pergunta de verificação abaixo. A objeção que aparece depois do preço é a que você não tratou aqui.</p>
+            <div style="margin-top:12px;background:var(--ink);color:var(--bg);border-radius:8px;padding:12px 16px;font-size:14px;font-style:italic;">"O que você achou até aqui?"</div>
+            <div style="margin-top:10px;background:rgba(255,255,255,0.04);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--muted);">
+              <p><strong style="color:var(--ink);">"É exatamente o que eu preciso"</strong> → sinal verde, avance para o preço.</p>
+              <p style="margin-top:8px;"><strong style="color:var(--ink);">"Interessante" / "Legal"</strong> → SINAL DE DESALINHAMENTO. Explore antes: <em>"O que especificamente faz sentido pra você? Tem algo que ainda não ficou claro?"</em></p>
+            </div>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Só apresente o preço depois que o sinal for inequivocamente positivo. Se o interesse estiver baixo, volte para o passo 2 e aprofunde mais.</p>
             <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: o produto não pode parecer risco. Objeção tratada aqui não volta no follow-up.</p>
           </div>
         </div>
 
         <div class="stair">
-          <div class="stair-left"><div class="stair-stage">Passo 05</div><div class="stair-name">Preço com firmeza e silêncio<br><span style="font-size:10px;font-weight:400;color:var(--muted);">55–65 min</span></div></div>
+          <div class="stair-left"><div class="stair-stage">Passo 05</div><div class="stair-name">Preço — com firmeza e silêncio<br><span style="font-size:10px;font-weight:400;color:var(--muted);">55–65 min</span></div></div>
           <div class="stair-right">
-            <p><strong>Fala e para. Quem falar primeiro, perde.</strong> Apresente o investimento com âncora de ROI — use os números que ele mesmo deu. Depois faça a pergunta de fechamento e espere em silêncio, por mais desconfortável que seja.</p>
-            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"O investimento total é R$24.000. Você me disse que esse problema custa em torno de R$[X] por mês — em 12 meses são R$[X×12]. O processo que a gente monta se paga em [cálculo] meses só com a redução desse custo, sem contar o crescimento de margem."</p>
-            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Faz sentido começar em [data]?"</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Silêncio total após essa pergunta.</strong> Não complemente, não justifique, não preencha. Espere. O próximo que falar, perde.</p>
-            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: dê a desculpa racional. Ele já decidiu emocionalmente — ajude-o a se sentir inteligente com a compra.</p>
+            <p><strong>Fala e para. Quem falar primeiro depois do preço, perde.</strong> Apresente o investimento com clareza, sem rodeio. Depois: silêncio total.</p>
+            <div style="margin-top:12px;background:var(--ink);color:var(--bg);border-radius:8px;padding:12px 16px;font-size:14px;font-style:italic;">"O investimento para essa mentoria é de R$24.000 — ou em 12 vezes de R$2.000 no cartão."</div>
+            <div style="margin-top:10px;background:rgba(255,255,255,0.04);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--muted);">
+              <p><strong style="color:var(--ink);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;">REGRA FUNDAMENTAL:</strong> Depois de falar o preço, pare. Não justifique, não preencha o silêncio. Quem falar primeiro depois do preço está em desvantagem. Espere.</p>
+            </div>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: dê a desculpa racional. Ela já decidiu emocionalmente — ajude-a a se sentir inteligente com a compra.</p>
           </div>
         </div>
 
         <div class="stair highlight">
-          <div class="stair-left"><div class="stair-stage">Passo 06</div><div class="stair-name">Fechamento<br><span style="font-size:10px;font-weight:400;color:var(--muted);">"Parabéns, não obrigado"</span></div></div>
+          <div class="stair-left"><div class="stair-stage">Passo 06</div><div class="stair-name">Fechamento<br><span style="font-size:10px;font-weight:400;color:var(--muted);">"Parabéns, não obrigada"</span></div></div>
           <div class="stair-right">
-            <p><strong>Quando ele disser sim: parabéns, não obrigado.</strong> "Obrigado" sinaliza que você precisava da venda. "Parabéns" sinaliza que ele tomou uma boa decisão. A forma como você reage ao fechamento ancora a percepção de valor para tudo que vem depois.</p>
-            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Ótimo. Parabéns pela decisão — empresários que resolvem isso agora ficam 6 meses à frente dos que esperam o momento certo. Vamos definir os próximos passos: [contrato, forma de pagamento, data de início]."</p>
+            <p><strong>Quando ela disser sim: parabéns, não obrigada.</strong> "Obrigada" coloca você em posição de gratidão. "Parabéns" reconhece a coragem dela — é ela que fez algo significativo.</p>
+            <div style="margin-top:12px;background:var(--ink);color:var(--bg);border-radius:8px;padding:12px 16px;font-size:14px;font-style:italic;">"Parabéns pela decisão. Esse é um passo importante e eu tenho certeza que vamos chegar lá juntas."</div>
             <p style="margin-top:10px;font-size:13px;color:var(--muted);">Defina tudo na sala: contrato, primeiro pagamento, data de início. Nada de "te mando por e-mail" sem prazo. O que não tem data não acontece.</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Se ele disser não:</strong> "Entendo. Posso te fazer uma última pergunta — o que teria que ser diferente para fazer sentido?" Ouça sem defender. Um não claro hoje vale mais do que um talvez que se arrasta por semanas.</p>
-            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: venda pertencimento. Ele não está comprando um serviço — está entrando num grupo seleto de empresários que resolveram isso.</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Se ela disser não:</strong> <em>"Entendo. Posso te fazer uma última pergunta — o que teria que ser diferente para fazer sentido?"</em> Ouça sem defender. Um não claro hoje vale mais do que um talvez que se arrasta por semanas.</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: venda pertencimento. Ela não está comprando um serviço — está entrando num grupo seleto de empresárias que resolveram isso.</p>
           </div>
         </div>
 
