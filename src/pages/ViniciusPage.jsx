@@ -817,7 +817,7 @@ const TAB_HTML = {
       <div>
         <div class="tab-eyebrow">Comercial · Script</div>
         <div class="tab-title">Script de <em>fechamento</em></div>
-        <div class="tab-sub">Etapa 05 destrinchada — do minuto zero ao sim.</div>
+        <div class="tab-sub">Reunião de vendas — do minuto zero ao sim.</div>
       </div>
       <div class="tab-header-phrase">Ele já decidiu emocionalmente.<br><em>Dê a ele a lógica para confirmar.</em></div>
     </div>
@@ -827,95 +827,110 @@ const TAB_HTML = {
         <div class="rule-icon">◎</div>
         <div class="rule-content">
           <div class="rule-label">Como usar este script</div>
-          <div class="rule-text">Este é um roteiro de conversa — não um texto para ler em voz alta. Cada bloco tem um objetivo único. <strong>Não avance para o próximo sem completar o atual.</strong> Ele fala 80% do tempo. Suas falas são gatilhos, não monólogos. O silêncio após uma pergunta é sua ferramenta mais poderosa — não o preencha.</div>
+          <div class="rule-text">Roteiro de conversa — não um texto para ler. Cada passo tem um objetivo único: <strong>não avance sem completar o anterior.</strong> Ele fala 80% do tempo. As suas falas são gatilhos, não monólogos. O silêncio após uma pergunta é a sua ferramenta mais poderosa — não o preencha.</div>
         </div>
       </div>
 
-      <h3>Antes de entrar na reunião</h3>
+      <h3>Antes de entrar</h3>
       <div class="staircase">
         <div class="stair highlight">
           <div class="stair-left"><div class="stair-stage">Prep</div><div class="stair-name">O que ter em mãos</div></div>
           <div class="stair-right">
             <ul style="margin:0 0 0 16px;font-size:13px;color:var(--muted);line-height:1.95;">
-              <li>As 2–3 dores exatas que ele mencionou na ligação — com as <strong>palavras dele</strong></li>
-              <li>O número que ele deu (custo estimado do problema, tempo que está assim)</li>
+              <li>As 2–3 dores exatas da ligação — com as <strong>palavras dele</strong></li>
+              <li>O número que ele estimou (custo do problema, tempo que está assim)</li>
               <li>O sketch personalizado, se os critérios foram atendidos</li>
-              <li>Um exemplo de cliente parecido (segmento ou dor similar) para reduzir incerteza</li>
-              <li>As condições de pagamento prontas: à vista e parcelado</li>
+              <li>Um caso de cliente parecido para reduzir incerteza</li>
+              <li>Condições de pagamento prontas: à vista e parcelado</li>
             </ul>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Confirme 1h antes que todos os decisores estarão presentes. Se um cancelou, remarque — não faça a reunião pela metade.</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Confirme 1h antes que <strong>todos os decisores</strong> estarão presentes. Se um cancelou, remarque — não faça a reunião pela metade.</p>
           </div>
         </div>
       </div>
 
-      <h3>Os cinco movimentos — em sequência</h3>
+      <h3>Os seis passos — em sequência</h3>
       <div class="staircase">
 
         <div class="stair highlight">
-          <div class="stair-left"><div class="stair-stage">Mov. 01</div><div class="stair-name">Venda o depois<br><span style="font-size:10px;font-weight:400;color:var(--muted);">0–5 min</span></div></div>
+          <div class="stair-left"><div class="stair-stage">Passo 01</div><div class="stair-name">Acordo sim/não<br><span style="font-size:10px;font-weight:400;color:var(--muted);">0–5 min</span></div></div>
           <div class="stair-right">
-            <p><strong>Abra com a imagem do resultado — não com apresentação nem diagnóstico.</strong> O cérebro decide pela expectativa. Se a primeira coisa que ele vê é o produto, você está vendendo; se a primeira coisa que ele vê é o futuro dele, você está guiando.</p>
-            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Antes de a gente entrar em qualquer detalhe, quero te mostrar como eu imagino que fica o teu negócio depois que a gente terminar de trabalhar juntos. Daqui a 180 dias: processo comercial definido e rodando sem depender de ti, equipe com clareza do que fazer em cada etapa, e margem que cresce junto com o faturamento — não separada dele. É essa a direção que a gente vai."</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Faça uma pausa. Deixe a imagem assentar. Só depois passe para o movimento 2.</p>
-            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: venda a expectativa primeiro. Emoção abre a porta; lógica confirma a entrada.</p>
+            <p><strong>Estabeleça as regras do jogo antes de começar.</strong> Isso elimina o "vou pensar" no final — a saída mais comum e mais custosa. Você não está sendo agressivo; está sendo respeitoso com o tempo dos dois.</p>
+            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Antes de a gente começar, quero combinar uma coisa: no final dessa conversa, eu vou te perguntar se faz sentido avançar. Quero que você me diga sim ou não — não 'vou pensar'. Pode ser não — eu prefiro um não claro do que um talvez que não leva a lugar nenhum. Combinado?"</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Espere a confirmação. Só siga quando ele concordar. Quem diz "combinado" aqui dificilmente foge com "preciso pensar" no final.</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: reduza a incerteza do processo. Ele sabe o que vai acontecer — isso tira o medo de ser surpreendido.</p>
           </div>
         </div>
 
         <div class="stair">
-          <div class="stair-left"><div class="stair-stage">Mov. 02</div><div class="stair-name">Espelhe e aprofunde<br><span style="font-size:10px;font-weight:400;color:var(--muted);">5–20 min</span></div></div>
+          <div class="stair-left"><div class="stair-stage">Passo 02</div><div class="stair-name">Aprofundar a dor<br><span style="font-size:10px;font-weight:400;color:var(--muted);">5–25 min</span></div></div>
           <div class="stair-right">
-            <p><strong>Repita as dores dele com as palavras dele — não com as suas.</strong> Isso prova que você ouviu, não que você decorou. Depois aprofunde: quantifique a perda e eleve a consciência sobre o custo de não agir.</p>
-            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Na nossa conversa, você me disse que [dor específica com as palavras dele]. Quero entender isso melhor antes de qualquer coisa — conta mais."</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Perguntas de aprofundamento — escolha 2 ou 3:</strong></p>
+            <p><strong>Ela fala, você escuta. Conecte com o que ele disse na ligação — com as palavras dele, não com as suas.</strong> Isso prova que você ouviu de verdade. Depois aprofunde: quantifique a perda e eleve a consciência sobre o custo de não agir.</p>
+            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Na nossa conversa, você me disse que [dor com as palavras exatas dele]. Quero entender isso melhor antes de qualquer coisa — me conta mais."</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Perguntas de aprofundamento — use 2 ou 3:</strong></p>
             <ul style="margin:6px 0 0 16px;font-size:13px;color:var(--muted);line-height:1.95;">
               <li>"Há quanto tempo está assim?"</li>
-              <li>"O que você já tentou fazer para resolver? O que funcionou, o que não funcionou?"</li>
-              <li>"Se eu te pedir para colocar um número nisso — quanto esse problema custa por mês?"</li>
-              <li>"O que acontece no teu negócio se daqui a 6 meses nada disso mudar?"</li>
+              <li>"O que você já tentou para resolver? O que funcionou, o que não funcionou?"</li>
+              <li>"Se eu te pedisse para colocar um número nisso — quanto esse problema custa por mês?"</li>
+              <li>"O que acontece no teu negócio se daqui a 6 meses nada mudar?"</li>
               <li>"Se isso estivesse resolvido, o que ficaria diferente no teu dia a dia?"</li>
             </ul>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Anote as respostas. Você vai usá-las no fechamento. Ele precisa ouvir as próprias palavras de volta — não as suas.</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Anote as respostas. Você vai usá-las nos passos 5 e 6. Ele precisa ouvir as próprias palavras de volta — não as suas.</p>
             <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: aversão a perda. "O que acontece se nada mudar?" pesa mais que "veja o que você ganha".</p>
           </div>
         </div>
 
         <div class="stair">
-          <div class="stair-left"><div class="stair-stage">Mov. 03</div><div class="stair-name">Apresente a solução<br><span style="font-size:10px;font-weight:400;color:var(--muted);">20–40 min</span></div></div>
+          <div class="stair-left"><div class="stair-stage">Passo 03</div><div class="stair-name">Apresentação da solução<br><span style="font-size:10px;font-weight:400;color:var(--muted);">25–45 min</span></div></div>
           <div class="stair-right">
-            <p><strong>Sketch primeiro — se tiver. Preço sempre por último.</strong> A solução que você apresenta é para as dores dele — não o serviço genérico. Cada coisa que você descreve deve ter um link direto com algo que ele mencionou.</p>
-            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Com base no que você me contou — e especificamente no [dor 1] e no [dor 2] — eu rascunhei como eu imagino a solução para o teu caso. Não é a proposta final; é a minha leitura do problema. Me diz se faz sentido."</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Como estruturar a apresentação da solução:</strong></p>
-            <ul style="margin:6px 0 0 16px;font-size:13px;color:var(--muted);line-height:1.95;">
-              <li><strong style="color:var(--ink);">Fase 1 (sem. 1–3):</strong> Diagnóstico — mapeamos exatamente onde está o problema e por que ele persiste</li>
-              <li><strong style="color:var(--ink);">Fase 2 (sem. 4–12):</strong> Implementação — construímos o processo comercial e operacional dentro do teu negócio</li>
-              <li><strong style="color:var(--ink);">Fase 3 (sem. 13–22):</strong> Consolidação — o time opera, você supervisiona; ajustamos o que for necessário</li>
-              <li><strong style="color:var(--ink);">Fase 4 (sem. 23–26):</strong> Entrega — documentação completa, handoff, teu negócio rodando sem depender de mim</li>
+            <p><strong>Credencial + o que você oferece + diferencial.</strong> Nessa ordem. A credencial ancora quem você é antes de explicar o que faz. O diferencial não é o produto — é o resultado específico para as dores dele.</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">1. Credencial (30 segundos):</strong></p>
+            <p style="margin-top:6px;font-size:13px;font-style:italic;color:var(--muted);">"Tenho trabalhado com empresários do Vale do Sinos que tinham exatamente esse perfil — bom faturamento, mas margem que não acompanha e operação que depende demais do dono. [Exemplo específico de resultado com cliente parecido, sem nome se necessário.]"</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">2. O que você oferece (sketch primeiro, se tiver):</strong></p>
+            <p style="margin-top:6px;font-size:13px;font-style:italic;color:var(--muted);">"Com base no que você me contou — especialmente no [dor 1] e no [dor 2] — rascunhei como imagino a solução para o teu caso. Não é a proposta final; é a minha leitura do problema. Me diz se faz sentido."</p>
+            <ul style="margin:8px 0 0 16px;font-size:13px;color:var(--muted);line-height:1.95;">
+              <li><strong style="color:var(--ink);">Fase 1 (sem. 1–3):</strong> Diagnóstico — onde está o problema e por que ele persiste</li>
+              <li><strong style="color:var(--ink);">Fase 2 (sem. 4–12):</strong> Implementação — processo comercial e operacional dentro do teu negócio</li>
+              <li><strong style="color:var(--ink);">Fase 3 (sem. 13–22):</strong> Consolidação — o time opera, você supervisiona</li>
+              <li><strong style="color:var(--ink);">Fase 4 (sem. 23–26):</strong> Entrega — handoff completo, negócio rodando sem depender de mim</li>
             </ul>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Depois de apresentar cada fase: <em>"Isso faz sentido dado o que você me contou?"</em> — não siga em frente sem a confirmação dele.</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">3. Diferencial:</strong></p>
+            <p style="margin-top:6px;font-size:13px;font-style:italic;color:var(--muted);">"A diferença não é o que eu vou te ensinar — é o que a gente vai construir dentro do teu negócio enquanto trabalhamos juntos. Você não recebe um curso; recebe o processo pronto, testado e documentado para rodar sem mim."</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Após cada fase: <em>"Isso faz sentido dado o que você me contou?"</em> Não avance sem a confirmação.</p>
             <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: reduza a incerteza. Quanto mais claro o "como funciona", maior a conversão.</p>
           </div>
         </div>
 
         <div class="stair">
-          <div class="stair-left"><div class="stair-stage">Mov. 04</div><div class="stair-name">Antecipe a objeção<br><span style="font-size:10px;font-weight:400;color:var(--muted);">40–50 min</span></div></div>
+          <div class="stair-left"><div class="stair-stage">Passo 04</div><div class="stair-name">Verificar reação antes do preço<br><span style="font-size:10px;font-weight:400;color:var(--muted);">45–55 min</span></div></div>
           <div class="stair-right">
-            <p><strong>Pergunte a objeção antes de apresentar o preço.</strong> A objeção que aparece no follow-up é a que você não tratou enquanto ele estava na sala. Antecipe aqui — antes de qualquer número na tela.</p>
-            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Antes de eu te falar o investimento — qual é a tua maior dúvida sobre avançar com algo assim?"</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Deixe ele responder. Não interrompa. Não defenda nada ainda. Ouça e anote. Depois:</p>
-            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Essa dúvida faz sentido. [Aborde a dúvida com um exemplo ou clareza de processo.] Tem mais alguma coisa que te preocupa?"</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Repita até não restar dúvida não respondida. Só então apresente o preço.</p>
-            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: o produto não pode parecer risco. Trate a objeção aqui — não no follow-up de dois dias depois.</p>
+            <p><strong>Leia o sinal — só avance se estiver claro.</strong> Antes de qualquer número, confirme o interesse e trate qualquer dúvida restante. A objeção que aparece depois do preço é a que você não tratou aqui.</p>
+            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Antes de eu te falar o investimento — o que você achou do que viu até agora? Tem alguma dúvida sobre como funciona ou sobre o que está incluído?"</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Deixe ele falar. Não interrompa. Não defenda nada ainda. Se houver dúvida:</p>
+            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Essa dúvida faz sentido. [Aborde com um exemplo ou clareza de processo.] Tem mais alguma coisa que te preocupa?"</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Repita até não restar objeção em aberto. <strong>Só então apresente o preço.</strong> Se o sinal for negativo ou o interesse estiver baixo, não avance — volte para o passo 2 e aprofunde mais.</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: o produto não pode parecer risco. Objeção tratada aqui não volta no follow-up.</p>
+          </div>
+        </div>
+
+        <div class="stair">
+          <div class="stair-left"><div class="stair-stage">Passo 05</div><div class="stair-name">Preço com firmeza e silêncio<br><span style="font-size:10px;font-weight:400;color:var(--muted);">55–65 min</span></div></div>
+          <div class="stair-right">
+            <p><strong>Fala e para. Quem falar primeiro, perde.</strong> Apresente o investimento com âncora de ROI — use os números que ele mesmo deu. Depois faça a pergunta de fechamento e espere em silêncio, por mais desconfortável que seja.</p>
+            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"O investimento total é R$24.000. Você me disse que esse problema custa em torno de R$[X] por mês — em 12 meses são R$[X×12]. O processo que a gente monta se paga em [cálculo] meses só com a redução desse custo, sem contar o crescimento de margem."</p>
+            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Faz sentido começar em [data]?"</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Silêncio total após essa pergunta.</strong> Não complemente, não justifique, não preencha. Espere. O próximo que falar, perde.</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: dê a desculpa racional. Ele já decidiu emocionalmente — ajude-o a se sentir inteligente com a compra.</p>
           </div>
         </div>
 
         <div class="stair highlight">
-          <div class="stair-left"><div class="stair-stage">Mov. 05</div><div class="stair-name">Preço e fechamento<br><span style="font-size:10px;font-weight:400;color:var(--muted);">50–70 min</span></div></div>
+          <div class="stair-left"><div class="stair-stage">Passo 06</div><div class="stair-name">Fechamento<br><span style="font-size:10px;font-weight:400;color:var(--muted);">"Parabéns, não obrigado"</span></div></div>
           <div class="stair-right">
-            <p><strong>Apresente o investimento com a âncora de ROI — não como custo, como retorno.</strong> Use os números que ele deu. Depois faça a pergunta de fechamento e pare de falar.</p>
-            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"O investimento total é R$24.000. Tu me disseste que esse problema custa em torno de R$[X] por mês — em 12 meses, são R$[X×12]. O processo que a gente monta se paga em [X÷2.000] meses só com a redução desse custo, sem contar o crescimento de margem. Faz sentido começar em [data]?"</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Depois da pergunta: silêncio total.</strong> O próximo que falar, perde. Espere a resposta dele, por mais desconfortável que seja a pausa.</p>
-            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Se pedir para pensar:</strong> "Claro. O que falta para você se sentir seguro em avançar?" — identifique o que está faltando antes de sair da sala. "Preciso pensar" quase sempre tem uma objeção específica embaixo.</p>
-            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: dê a desculpa racional. Ele já decidiu emocionalmente — ajude-o a se sentir inteligente com a compra.</p>
+            <p><strong>Quando ele disser sim: parabéns, não obrigado.</strong> "Obrigado" sinaliza que você precisava da venda. "Parabéns" sinaliza que ele tomou uma boa decisão. A forma como você reage ao fechamento ancora a percepção de valor para tudo que vem depois.</p>
+            <p style="margin-top:10px;font-size:13px;font-style:italic;color:var(--muted);">"Ótimo. Parabéns pela decisão — empresários que resolvem isso agora ficam 6 meses à frente dos que esperam o momento certo. Vamos definir os próximos passos: [contrato, forma de pagamento, data de início]."</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);">Defina tudo na sala: contrato, primeiro pagamento, data de início. Nada de "te mando por e-mail" sem prazo. O que não tem data não acontece.</p>
+            <p style="margin-top:10px;font-size:13px;color:var(--muted);"><strong style="color:var(--ink);">Se ele disser não:</strong> "Entendo. Posso te fazer uma última pergunta — o que teria que ser diferente para fazer sentido?" Ouça sem defender. Um não claro hoje vale mais do que um talvez que se arrasta por semanas.</p>
+            <p style="margin-top:10px;font-size:11px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:0.08em;">Princípio: venda pertencimento. Ele não está comprando um serviço — está entrando num grupo seleto de empresários que resolveram isso.</p>
           </div>
         </div>
 
@@ -928,35 +943,35 @@ const TAB_HTML = {
           <div class="stair-left"><div class="stair-stage">Objeção 01</div><div class="stair-name">"Está caro"</div></div>
           <div class="stair-right">
             <p style="font-size:13px;color:var(--muted);">Nunca responda com desconto. Primeiro entenda o que está por baixo:</p>
-            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Entendo. Caro em relação a quê — ao valor que você tem disponível agora, ou ao resultado que você espera?"</p>
-            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Se for disponibilidade: ofereça parcelamento sem alterar o total. Se for percepção de valor: volte ao número que ele deu. <em>"Tu me disseste que isso custa R$X por mês. Em 6 meses são R$Y. O investimento é R$24k — você está pagando para resolver um problema que custa mais do que isso."</em></p>
+            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Entendo. Caro em relação a quê — ao valor disponível agora, ou ao resultado que você espera?"</p>
+            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Se for disponibilidade: ofereça parcelamento sem alterar o total. Se for percepção de valor: volte ao número que ele deu. <em>"Você me disse que isso custa R$X por mês. Em 6 meses são R$Y. O investimento é R$24k — você está pagando para resolver um problema que custa mais do que isso."</em></p>
           </div>
         </div>
 
         <div class="stair">
           <div class="stair-left"><div class="stair-stage">Objeção 02</div><div class="stair-name">"Preciso pensar"</div></div>
           <div class="stair-right">
-            <p style="font-size:13px;color:var(--muted);">Nunca saia da sala sem saber o que está por baixo disso.</p>
-            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Faz sentido. O que especificamente você precisa avaliar? Se eu souber o que está te travando, posso te ajudar a chegar na resposta agora — em vez de você ficar com isso na cabeça."</p>
-            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Se ele não conseguir nomear o que precisa pensar, provavelmente é medo de errar — não falta de informação. Reduza o risco: <em>"O que aconteceria de errado se você avançasse e não funcionasse como esperado?"</em></p>
+            <p style="font-size:13px;color:var(--muted);">Lembre do acordo do passo 1. Nunca saia sem saber o que está por baixo.</p>
+            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"A gente combinou no início que ia sair com um sim ou não. O que especificamente você precisa avaliar? Se eu souber o que está te travando, posso te ajudar a chegar na resposta agora."</p>
+            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Se ele não conseguir nomear: provavelmente é medo de errar — não falta de informação. <em>"O que aconteceria de errado se você avançasse e não funcionasse como esperado?"</em> Reduza o risco, não o preço.</p>
           </div>
         </div>
 
         <div class="stair">
           <div class="stair-left"><div class="stair-stage">Objeção 03</div><div class="stair-name">"Não é o momento"</div></div>
           <div class="stair-right">
-            <p style="font-size:13px;color:var(--muted);">Use a aversão a perda — não a urgência artificial.</p>
-            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Entendo. Só quero te fazer uma pergunta: o que muda no teu negócio nos próximos 3 meses se esse problema continuar como está?"</p>
-            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Deixe ele responder. Depois: <em>"O processo que a gente implementa leva 180 dias. Se você começar em [mês], termina em [mês + 6]. Qual seria o melhor momento para estar com isso resolvido?"</em> — o prazo vem dele, não de você.</p>
+            <p style="font-size:13px;color:var(--muted);">Use aversão a perda — não urgência artificial.</p>
+            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Entendo. Só uma pergunta: o que muda no teu negócio nos próximos 3 meses se esse problema continuar como está?"</p>
+            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Deixe responder. Depois: <em>"O processo leva 180 dias. Se começar em [mês], termina em [mês+6]. Qual seria o melhor momento para estar com isso resolvido?"</em> — o prazo vem dele, não de você.</p>
           </div>
         </div>
 
         <div class="stair">
           <div class="stair-left"><div class="stair-stage">Objeção 04</div><div class="stair-name">"Vou falar com minha esposa / sócio"</div></div>
           <div class="stair-right">
-            <p style="font-size:13px;color:var(--muted);">Isso significa que o decisor certo não estava na sala — ou que ele quer uma saída. Descubra qual dos dois é.</p>
-            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Claro. Para te ajudar a ter essa conversa — qual é a tua posição sobre avançar? Se você estivesse decidindo sozinho, o que você faria?"</p>
-            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Se ele quiser avançar: ofereça uma reunião com todos presentes antes de qualquer contrato. Se estiver usando o sócio como escudo: a objeção real está em outro lugar — volte para as perguntas de aprofundamento.</p>
+            <p style="font-size:13px;color:var(--muted);">O decisor certo não estava na sala — ou ele está buscando uma saída. Descubra qual dos dois é.</p>
+            <p style="margin-top:8px;font-size:13px;font-style:italic;color:var(--muted);">"Claro. Para te ajudar nessa conversa — qual é a tua posição? Se você estivesse decidindo sozinho, o que você faria?"</p>
+            <p style="margin-top:8px;font-size:13px;color:var(--muted);">Se quiser avançar: ofereça reunião com todos antes de qualquer contrato. Se estiver usando o sócio como escudo: a objeção real está em outro lugar — volte para as perguntas de aprofundamento.</p>
           </div>
         </div>
 
@@ -964,12 +979,12 @@ const TAB_HTML = {
 
       <div class="never-do" style="margin-top:1.5rem;">
         <div class="never-label">O que nunca fazer nessa reunião</div>
-        <div class="never-item"><span class="never-x">✕</span><span>Começar explicando o produto — comece com o depois. Emoção antes de lógica, sempre.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Pular o acordo do passo 1 — sem ele, o "preciso pensar" no final é garantido.</span></div>
         <div class="never-item"><span class="never-x">✕</span><span>Falar mais de 20% do tempo — se você está falando mais, está empurrando. Volte para as perguntas.</span></div>
-        <div class="never-item"><span class="never-x">✕</span><span>Mostrar o preço antes de tratar a objeção — o número sem contexto é só um obstáculo.</span></div>
-        <div class="never-item"><span class="never-x">✕</span><span>Preencher o silêncio depois do fechamento — faça a pergunta e espere. O próximo que falar, perde.</span></div>
-        <div class="never-item"><span class="never-x">✕</span><span>Oferecer desconto antes de entender a objeção — reduz o valor percebido e não resolve o problema real.</span></div>
-        <div class="never-item"><span class="never-x">✕</span><span>Sair sem próximo passo definido — contrato, data de início, forma de pagamento. Se não ficou claro na sala, não vai acontecer.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Mostrar o preço antes de verificar a reação (passo 4) — número sem contexto emocional é só um obstáculo.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Preencher o silêncio após o preço — faça a pergunta e espere. O próximo que falar, perde.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Dizer "obrigado" ao fechar — diga "parabéns". Um sinalizao que você precisava; o outro, que ele decidiu bem.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Sair sem contrato, pagamento e data de início definidos na sala — o que não fica claro ali não acontece.</span></div>
       </div>
 
     </div>`,
