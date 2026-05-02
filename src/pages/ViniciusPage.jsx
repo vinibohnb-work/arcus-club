@@ -201,58 +201,37 @@ const TAB_HTML = {
     <div class="tab-header" data-glyph="E">
       <div>
         <div class="tab-eyebrow">Estratégia</div>
-        <div class="tab-title">As duas <em>ofertas</em></div>
-        <div class="tab-sub">Comparativo lado a lado e o detalhe de cada produto.</div>
+        <div class="tab-title">Os dois <em>produtos</em></div>
+        <div class="tab-sub">Diagnóstico e Margin Machine — o que é cada um e para quem.</div>
       </div>
       <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
     <div class="tab-body" style="max-width:none;">
-      <div class="compare" style="margin-bottom:1rem;">
-        <div class="compare-card epc"><div class="compare-header"><div class="compare-name">Margin Machine</div><div class="compare-sub">Micro e pequeno empresário</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">Solo, 0–5 funcionários</div></div><div class="compare-row"><div class="compare-key">Diagnóstico inicial</div><div class="compare-val">Gratuito (comercial)</div></div><div class="compare-row"><div class="compare-key">Pacote fechado</div><div class="compare-val">R$24k</div></div><div class="compare-row"><div class="compare-key">Advisory</div><div class="compare-val">Opcional · recorrente</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">R$30k+</div></div></div>
-        <div class="compare-card arcus"><div class="compare-header"><div class="compare-name">Arcus Club</div><div class="compare-sub">PME com equipe</div></div><div class="compare-row"><div class="compare-key">Cliente</div><div class="compare-val">5–40 funcionários</div></div><div class="compare-row"><div class="compare-key">Consultoria</div><div class="compare-val">R$96k / 12 meses</div></div><div class="compare-row"><div class="compare-key">Recorrência</div><div class="compare-val">Advisory R$60k/ano</div></div><div class="compare-row"><div class="compare-key">LTV estimado</div><div class="compare-val">R$156k+</div></div></div>
-      </div>
-      <div class="rule-gold" style="margin-bottom:2rem;">
-        <div class="rule-icon">↑</div>
-        <div class="rule-content"><div class="rule-label">A escada entre as ofertas</div><div class="rule-text">Três tiers com uma lógica clara: o cliente entra pela Margin Machine (acessível, resultado rápido), migra para o Advisory (recorrência estratégica) e, quando tem equipe e escala, avança para a Arcus Club. Você acompanha a trajetória completa do empresário.</div></div>
-      </div>
       <div class="strat-cols">
 
         <!-- Diagnóstico — processo de venda -->
         <div class="strat-full">
-          <div class="strat-stage">Diagnóstico Inicial · Processo de venda</div>
+          <div class="strat-stage">Entrada · Processo de venda</div>
           <div class="product-card">
             <div class="product-sidebar"><div><div class="product-type">Parte do comercial</div><div class="product-name">Diagnóstico Inicial</div><div class="product-duration">Conversa estruturada</div></div><div class="product-price"><div class="price-main">Grátis</div><div class="price-detail">sem compromisso</div></div></div>
-            <div class="product-body"><p class="product-desc">Conversa estruturada para entender as dores, oportunidades de atuação e o contexto do negócio. Define qual produto faz sentido para o momento do cliente — ou se nenhum se aplica.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de dores</span><span class="pillar-tag">Oportunidades de atuação</span><span class="pillar-tag">Fit comercial</span></div></div>
+            <div class="product-body"><p class="product-desc">Conversa estruturada para entender as dores, oportunidades de atuação e o contexto do negócio. Define se o Margin Machine faz sentido para o momento do cliente — ou se ainda não é a hora.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de dores</span><span class="pillar-tag">Oportunidades de atuação</span><span class="pillar-tag">Fit comercial</span></div></div>
           </div>
         </div>
 
-        <!-- Tier 1: Margin Machine -->
+        <!-- Margin Machine -->
         <div class="strat-full">
-          <div class="strat-stage" style="color:var(--indigo);">Produto Acessível · Margin Machine</div>
-          <div class="product-card featured-indigo">
-            <div class="product-sidebar"><div><div class="product-type">Pacote fechado</div><div class="product-name">Diagnóstico Aprofundado + Implementação</div><div class="product-duration">Escopo definido na proposta</div></div><div class="product-price"><div class="price-main">R$24k</div><div class="price-detail">valor fixo · sem surpresas</div></div></div>
-            <div class="product-body"><p class="product-desc">Diagnóstico profundo dos gargalos operacionais seguido da implementação dos processos e ferramentas prioritários. O cliente compra um pacote único com escopo e valor fechados. Resultado tangível em até 12 semanas.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico aprofundado</span><span class="pillar-tag">Processos implantados</span><span class="pillar-tag">Ferramentas configuradas</span><span class="pillar-tag">Resultado documentado</span></div></div>
-          </div>
-        </div>
-
-        <!-- Tier 2: Advisory Estratégico -->
-        <div class="strat-full">
-          <div class="strat-stage" style="color:var(--gold);">Produto High Ticket · Advisory Estratégico</div>
+          <div class="strat-stage" style="color:var(--gold);">Produto Principal · Margin Machine</div>
           <div class="product-card" style="border:1.5px solid var(--gold);border-top:3px solid var(--gold);">
-            <div class="product-sidebar"><div><div class="product-type">Recorrência · anual</div><div class="product-name">Advisory Estratégico</div><div class="product-duration">Mensal · renovação anual</div></div><div class="product-price"><div class="price-main" style="color:var(--gold);">R$60k</div><div class="price-detail">R$5.000 / mês · anual</div></div></div>
-            <div class="product-body"><p class="product-desc">Acompanhamento estratégico contínuo com acesso direto ao consultor. Sessões mensais estruturadas, revisão de indicadores e iterações nos processos em curso. Ideal para o empresário que já tem clareza e precisa de um parceiro para acelerar.</p><div class="product-pillars"><span class="pillar-tag">Sessões mensais</span><span class="pillar-tag">Acesso direto</span><span class="pillar-tag">Revisão de KPIs</span><span class="pillar-tag">Iterações nos processos</span></div></div>
+            <div class="product-sidebar"><div><div class="product-type">Mentoria individual · 180 dias</div><div class="product-name">Margin Machine</div><div class="product-duration">6 meses · resultado mensurável</div></div><div class="product-price"><div class="price-main" style="color:var(--gold);">R$24k</div><div class="price-detail">ou 12x R$2.000 no cartão</div></div></div>
+            <div class="product-body"><p class="product-desc">Programa de 180 dias focado em aumentar a margem através da organização da operação. Diagnóstico completo, estruturação dos processos críticos, implementação acompanhada e consolidação. O cliente sai com o negócio rodando com menos dependência do fundador e margem crescente documentada.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico aprofundado</span><span class="pillar-tag">Processos documentados</span><span class="pillar-tag">Implementação acompanhada</span><span class="pillar-tag">Dashboard de indicadores</span><span class="pillar-tag">Plano de continuidade</span></div></div>
           </div>
         </div>
 
-        <!-- Tier 3: Arcus Club -->
-        <div class="strat-full">
-          <div class="strat-stage" style="color:var(--teal);">Produto Ultra High Ticket · Arcus Club</div>
-          <div class="product-card featured-teal">
-            <div class="product-sidebar"><div><div class="product-type">Mentoria exclusiva</div><div class="product-name">Consultoria de Implantação</div><div class="product-duration">12 meses de engajamento</div></div><div class="product-price"><div class="price-main">R$96k</div><div class="price-detail">R$8.000 / mês · anual</div></div></div>
-            <div class="product-body"><p class="product-desc">Implantação direta nos três pilares da metodologia Arcus: Cultura, Liderança e Processos. Você entra na operação, estrutura e acompanha por 12 meses — o empresário sai com equipe autônoma, margem crescente e negócio que funciona sem ele.</p><div class="product-pillars"><span class="pillar-tag">Cultura</span><span class="pillar-tag">Liderança</span><span class="pillar-tag">Processos</span><span class="pillar-tag">Margem mensurável</span></div></div>
-          </div>
-        </div>
+      </div>
 
+      <div class="rule-gold" style="margin-top:2rem;">
+        <div class="rule-icon">◎</div>
+        <div class="rule-content"><div class="rule-label">A lógica dos dois produtos</div><div class="rule-text">O Diagnóstico é o comercial — uma conversa sem compromisso que define se há fit. O Margin Machine é o produto: 180 dias de trabalho direto no negócio do cliente. Simples, sem tiers intermediários.</div></div>
       </div>
     </div>`,
 
@@ -1054,11 +1033,8 @@ const TAB_HTML = {
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const PRODUCT_LABELS = {
-  'epc-diagnostico': 'Diagnóstico MM',
-  'epc-implementacao': 'Implementação MM',
-  'epc-manutencao': 'Manutenção MM',
-  'arcus-consultoria': 'Consultoria Arcus',
-  'arcus-advisory': 'Advisory Arcus',
+  'diagnostico':    'Diagnóstico',
+  'margin-machine': 'Margin Machine',
 }
 
 // ─── CRM constants ────────────────────────────────────────────────────────────
@@ -1078,9 +1054,9 @@ const PIPELINE_STAGES = [
 ]
 
 const CRM_PRODUCTS  = [
-  { key: null,    label: '—' },
-  { key: 'epc',   label: 'MM' },
-  { key: 'arcus', label: 'Arcus' },
+  { key: null,            label: '—' },
+  { key: 'diagnostico',   label: 'Diagnóstico' },
+  { key: 'margin-machine', label: 'Margin Machine' },
 ]
 
 const CRM_SOURCES    = ['LinkedIn', 'Rede quente', 'Indicação', 'Inbound', 'Evento', 'Outro']
@@ -1191,9 +1167,7 @@ export default function ViniciusPage() {
   }
 
   const totalReceived = contracts.reduce((s, c) => s + (Number(c.payments_received) || 0), 0)
-  const totalRecurring = contracts
-    .filter(c => c.product === 'epc-manutencao' || c.product === 'arcus-advisory')
-    .reduce((s, c) => s + (Number(c.next_payment_amount) || 0), 0)
+  const totalRecurring = 0 // sem produtos recorrentes ativos no momento
 
   function f(field) {
     return { value: form[field] || '', onChange: e => setForm({ ...form, [field]: e.target.value }) }
@@ -1318,8 +1292,8 @@ export default function ViniciusPage() {
     }
     if (crmFilters.source === 'sdr'    && l.source !== 'SDR Agent') return false
     if (crmFilters.source === 'manual' && l.source === 'SDR Agent') return false
-    if (crmFilters.product === 'epc'   && l.product !== 'epc')   return false
-    if (crmFilters.product === 'arcus' && l.product !== 'arcus') return false
+    if (crmFilters.product === 'diagnostico'    && l.product !== 'diagnostico')    return false
+    if (crmFilters.product === 'margin-machine' && l.product !== 'margin-machine') return false
     if (crmFilters.linkedin === 'connected'    && !l.linkedin_connected)  return false
     if (crmFilters.linkedin === 'notconnected' && l.linkedin_connected)   return false
     if (crmFilters.overdue) {
@@ -1469,8 +1443,8 @@ export default function ViniciusPage() {
               <div className="crm-filter-group">
                 <span className="crm-filter-label">Produto</span>
                 {[
-                  { key: 'epc',   label: 'MM' },
-                  { key: 'arcus', label: 'Arcus' },
+                  { key: 'diagnostico',    label: 'Diagnóstico' },
+                  { key: 'margin-machine', label: 'Margin Machine' },
                 ].map(f => (
                   <button
                     key={f.key}
@@ -1533,7 +1507,7 @@ export default function ViniciusPage() {
                             <div className="crm-card-foot">
                               {lead.product
                                 ? <span className="crm-product-tag" data-product={lead.product}>
-                                    {lead.product === 'epc' ? 'MM' : 'Arcus'}
+                                    {lead.product === 'margin-machine' ? 'MM' : lead.product === 'diagnostico' ? 'Diag.' : lead.product}
                                   </span>
                                 : <span />
                               }
@@ -1759,7 +1733,7 @@ export default function ViniciusPage() {
                         <tr key={c.id}>
                           <td className="name">{c.client_name}</td>
                           <td>
-                            <span className={`badge ${c.product.startsWith('arcus') ? 'teal' : 'indigo'}`}>
+                            <span className={`badge ${c.product === 'margin-machine' ? 'indigo' : 'gold'}`}>
                               {PRODUCT_LABELS[c.product] || c.product}
                             </span>
                           </td>
@@ -2169,11 +2143,8 @@ export default function ViniciusPage() {
                 Produto *
                 <select required {...f('product')}>
                   <option value="">Selecione…</option>
-                  <option value="epc-diagnostico">Diagnóstico MM</option>
-                  <option value="epc-implementacao">Implementação MM</option>
-                  <option value="epc-manutencao">Manutenção MM (recorrência)</option>
-                  <option value="arcus-consultoria">Consultoria Arcus Club</option>
-                  <option value="arcus-advisory">Advisory Arcus (recorrência)</option>
+                  <option value="diagnostico">Diagnóstico</option>
+                  <option value="margin-machine">Margin Machine</option>
                 </select>
               </label>
               <label>
