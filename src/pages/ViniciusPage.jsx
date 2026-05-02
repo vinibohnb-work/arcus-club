@@ -654,15 +654,7 @@ const TAB_HTML = {
 
     </div>`,
 
-  'ops-arcus': `
-    <div class="tab-header" data-glyph="O">
-      <div>
-        <div class="tab-eyebrow">Estratégia · Operações</div>
-        <div class="tab-title">Arcus <em>Club</em></div>
-        <div class="tab-sub">Como o produto funciona, o que entrega e como você executa.</div>
-      </div>
-      <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
-    </div>
+  'ops-arcus-removed': `<div></div>
     <div class="tab-body" style="max-width:none;">
 
       <div class="rule-gold">
@@ -1086,7 +1078,6 @@ function fmtDate(d) {
 export default function ViniciusPage() {
   const [activeTab, setActiveTab] = useState('dashboard')
   const [epcClients, setEpcClients] = useState([])
-  const [arcusClients, setArcusClients] = useState([])
   const [contracts, setContracts] = useState([])
   const [modal, setModal] = useState(null) // 'epc' | 'contract'
   const [form, setForm] = useState({})
@@ -1107,13 +1098,11 @@ export default function ViniciusPage() {
   useEffect(() => { fetchAll(); fetchCrmLeads() }, [])
 
   async function fetchAll() {
-    const [epc, arcus, conts] = await Promise.all([
+    const [epc, conts] = await Promise.all([
       supabase.from('vini_epc_clients').select('*').eq('status', 'ativo').order('created_at'),
-      supabase.from('mentees').select('id,name,stage,join_date,last_contact,tags').eq('stage', 'Ativo').order('name'),
       supabase.from('vini_contracts').select('*').eq('status', 'ativo').order('created_at'),
     ])
     setEpcClients(epc.data || [])
-    setArcusClients(arcus.data || [])
     setContracts(conts.data || [])
   }
 
@@ -1335,9 +1324,6 @@ export default function ViniciusPage() {
             <div className={`nav-sub-item${activeTab === 'ops-epc' ? ' active' : ''}`} onClick={() => showTab('ops-epc')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · MM</span>
             </div>
-            <div className={`nav-sub-item${activeTab === 'ops-arcus' ? ' active' : ''}`} onClick={() => showTab('ops-arcus')} style={{ paddingLeft: '2.5rem' }}>
-              <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · Arcus</span>
-            </div>
           </div>
 
           <div className="nav-divider" />
@@ -1399,7 +1385,6 @@ export default function ViniciusPage() {
             crmLeads={crmLeads}
             contracts={contracts}
             epcClients={epcClients}
-            arcusClients={arcusClients}
           />
         </div>
 
@@ -1565,7 +1550,7 @@ export default function ViniciusPage() {
             <div>
               <div className="tab-eyebrow">Comercial · Clientes</div>
               <div className="tab-title">Clientes <em>ativos</em></div>
-              <div className="tab-sub">Todos os projetos em andamento — MM e Arcus Club.</div>
+              <div className="tab-sub">Todos os projetos em andamento — Margin Machine.</div>
             </div>
             <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
           </div>
@@ -1605,44 +1590,6 @@ export default function ViniciusPage() {
               )
             }
 
-            <div className="vini-section-bar">
-              <h3 style={{ margin: 0 }}>Arcus Club</h3>
-            </div>
-            {arcusClients.length === 0
-              ? <div className="vini-empty">Nenhum cliente Arcus ativo ainda.</div>
-              : (
-                <div className="vini-table-wrap">
-                  <table className="vini-table">
-                    <thead>
-                      <tr>
-                        <th>Cliente</th>
-                        <th>Mês do ciclo</th>
-                        <th>Último contato</th>
-                        <th style={{ textAlign: 'right' }}>Advisory</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {arcusClients.map(m => {
-                        const hasAdvisory = (m.tags || []).some(t => /advisory/i.test(t))
-                        return (
-                          <tr key={m.id}>
-                            <td className="name">{m.name}</td>
-                            <td className="mono">{cycleMonth(m.join_date)} / 6</td>
-                            <td>{fmtDate(m.last_contact)}</td>
-                            <td style={{ textAlign: 'right' }}>
-                              {hasAdvisory
-                                ? <span className="badge teal">Ativo</span>
-                                : <span style={{ color: 'var(--muted)', fontSize: 12 }}>—</span>
-                              }
-                            </td>
-                          </tr>
-                        )
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              )
-            }
 
           </div>
         </div>
