@@ -544,8 +544,8 @@ const TAB_HTML = {
         </div>
         <div class="icp-card">
           <div class="icp-label">Dor central</div>
-          <div class="icp-title">"O negócio não funciona sem mim"</div>
-          <p class="icp-text">Processos verbais, decisões sem critério, nenhuma automação. O crescimento trava porque a estrutura não acompanha o dono.</p>
+          <div class="icp-title">"O negócio funciona, mas no improviso — e isso me custa caro."</div>
+          <p class="icp-text">A operação roda, mas por esforço e sorte. Processos na cabeça, decisões sem critério, eficiência que nunca chega. Qualquer variação — um funcionário que sai, um mês ruim — e tudo ameaça desmoronar.</p>
         </div>
       </div>
 
