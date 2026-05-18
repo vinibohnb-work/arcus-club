@@ -1046,6 +1046,18 @@ const PIPELINE_STAGES = [
   { key: 'recusa',            label: 'Recusa' },
 ]
 
+const COLD_STAGES = [
+  { key: 'cold_mapeado',  label: 'Mapeado' },
+  { key: 'cold_contato1', label: 'Primeiro Contato' },
+  { key: 'cold_contato2', label: 'Segundo Contato' },
+  { key: 'cold_contato3', label: 'Terceiro Contato' },
+  { key: 'cold_recusa',   label: 'Recusa' },
+]
+
+function isColdLead(lead) {
+  return lead?.stage?.startsWith('cold_')
+}
+
 const CRM_PRODUCTS  = [
   { key: null,            label: '—' },
   { key: 'diagnostico',   label: 'Diagnóstico' },
@@ -1095,6 +1107,8 @@ export default function ViniciusPage() {
   const [crmSaving, setCrmSaving] = useState(false)
   const [crmError, setCrmError] = useState(null)
   const [crmFilters, setCrmFilters] = useState({ source: null, product: null, linkedin: null, overdue: false })
+  const [crmPool, setCrmPool] = useState('hot') // 'hot' | 'cold'
+  const [sendToHot, setSendToHot] = useState(null) // { leadId, stage }
 
   useEffect(() => { fetchAll(); fetchCrmLeads() }, [])
 
@@ -1400,6 +1414,19 @@ export default function ViniciusPage() {
             <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
           </div>
           <div className="tab-body" style={{ maxWidth: 'none' }}>
+
+            {/* HOT / COLD toggle */}
+            <div className="crm-pool-toggle">
+              <button
+                className={`crm-pool-btn${crmPool === 'hot' ? ' active hot' : ''}`}
+                onClick={() => setCrmPool('hot')}
+              >🔥 HOT CRM</button>
+              <button
+                className={`crm-pool-btn${crmPool === 'cold' ? ' active cold' : ''}`}
+                onClick={() => setCrmPool('cold')}
+              >❄ COLD CRM</button>
+            </div>
+
             <div className="crm-toolbar">
               <input
                 className="crm-search"
@@ -1409,139 +1436,227 @@ export default function ViniciusPage() {
               />
               <button
                 className="vini-btn gold"
-                onClick={() => { setCrmForm({}); setCrmModal('lead') }}
+                onClick={() => {
+                  setCrmForm({ leadStage: crmPool === 'cold' ? 'cold_mapeado' : 'mapeado' })
+                  setCrmModal('lead')
+                }}
               >+ Novo lead</button>
             </div>
-            <div className="crm-filter-bar">
-              <div className="crm-filter-group">
-                <span className="crm-filter-label">Origem</span>
-                {[
-                  { key: 'sdr',    label: 'SDR Agent', cls: 'sdr' },
-                  { key: 'manual', label: 'Manual',    cls: '' },
-                ].map(f => (
+
+            {/* Filters — only on HOT */}
+            {crmPool === 'hot' && (
+              <div className="crm-filter-bar">
+                <div className="crm-filter-group">
+                  <span className="crm-filter-label">Origem</span>
+                  {[
+                    { key: 'sdr',    label: 'SDR Agent', cls: 'sdr' },
+                    { key: 'manual', label: 'Manual',    cls: '' },
+                  ].map(f => (
+                    <button
+                      key={f.key}
+                      className={`crm-filter-pill${crmFilters.source === f.key ? ` active ${f.cls}` : ''}`}
+                      onClick={() => setCrmFilters(p => ({ ...p, source: p.source === f.key ? null : f.key }))}
+                    >{f.label}</button>
+                  ))}
+                </div>
+                <div className="crm-filter-group">
+                  <span className="crm-filter-label">Produto</span>
+                  {[
+                    { key: 'diagnostico',    label: 'Diagnóstico' },
+                    { key: 'margin-machine', label: 'Margin Machine' },
+                  ].map(f => (
+                    <button
+                      key={f.key}
+                      className={`crm-filter-pill${crmFilters.product === f.key ? ' active' : ''}`}
+                      onClick={() => setCrmFilters(p => ({ ...p, product: p.product === f.key ? null : f.key }))}
+                    >{f.label}</button>
+                  ))}
+                </div>
+                <div className="crm-filter-group">
+                  <span className="crm-filter-label">LinkedIn</span>
+                  {[
+                    { key: 'connected',    label: 'Conectado',     cls: 'li' },
+                    { key: 'notconnected', label: 'Não conectado', cls: '' },
+                  ].map(f => (
+                    <button
+                      key={f.key}
+                      className={`crm-filter-pill${crmFilters.linkedin === f.key ? ` active ${f.cls}` : ''}`}
+                      onClick={() => setCrmFilters(p => ({ ...p, linkedin: p.linkedin === f.key ? null : f.key }))}
+                    >{f.label}</button>
+                  ))}
+                </div>
+                <div className="crm-filter-group">
                   <button
-                    key={f.key}
-                    className={`crm-filter-pill${crmFilters.source === f.key ? ` active ${f.cls}` : ''}`}
-                    onClick={() => setCrmFilters(p => ({ ...p, source: p.source === f.key ? null : f.key }))}
-                  >{f.label}</button>
-                ))}
+                    className={`crm-filter-pill${crmFilters.overdue ? ' active overdue' : ''}`}
+                    onClick={() => setCrmFilters(p => ({ ...p, overdue: !p.overdue }))}
+                  >⚠ Atrasado</button>
+                </div>
               </div>
-              <div className="crm-filter-group">
-                <span className="crm-filter-label">Produto</span>
-                {[
-                  { key: 'diagnostico',    label: 'Diagnóstico' },
-                  { key: 'margin-machine', label: 'Margin Machine' },
-                ].map(f => (
-                  <button
-                    key={f.key}
-                    className={`crm-filter-pill${crmFilters.product === f.key ? ' active' : ''}`}
-                    onClick={() => setCrmFilters(p => ({ ...p, product: p.product === f.key ? null : f.key }))}
-                  >{f.label}</button>
-                ))}
-              </div>
-              <div className="crm-filter-group">
-                <span className="crm-filter-label">LinkedIn</span>
-                {[
-                  { key: 'connected',    label: 'Conectado',     cls: 'li' },
-                  { key: 'notconnected', label: 'Não conectado', cls: '' },
-                ].map(f => (
-                  <button
-                    key={f.key}
-                    className={`crm-filter-pill${crmFilters.linkedin === f.key ? ` active ${f.cls}` : ''}`}
-                    onClick={() => setCrmFilters(p => ({ ...p, linkedin: p.linkedin === f.key ? null : f.key }))}
-                  >{f.label}</button>
-                ))}
-              </div>
-              <div className="crm-filter-group">
-                <button
-                  className={`crm-filter-pill${crmFilters.overdue ? ' active overdue' : ''}`}
-                  onClick={() => setCrmFilters(p => ({ ...p, overdue: !p.overdue }))}
-                >⚠ Atrasado</button>
-              </div>
-            </div>
-            <div className="crm-board">
-              {PIPELINE_STAGES.map(stage => {
-                const stageLeads = filteredCrmLeads.filter(l => l.stage === stage.key)
-                const isRecusa = stage.key === 'recusa'
-                return (
-                  <div key={stage.key} className={`crm-col${isRecusa ? ' recusa' : ''}`}>
-                    <div className="crm-col-header">
-                      <span className="crm-col-name">{stage.label}</span>
-                      <span className="crm-col-count">{stageLeads.length}</span>
+            )}
+
+            {/* ── HOT BOARD ── */}
+            {crmPool === 'hot' && (
+              <div className="crm-board">
+                {PIPELINE_STAGES.map(stage => {
+                  const stageLeads = filteredCrmLeads.filter(l => l.stage === stage.key)
+                  const isRecusa = stage.key === 'recusa'
+                  return (
+                    <div key={stage.key} className={`crm-col${isRecusa ? ' recusa' : ''}`}>
+                      <div className="crm-col-header">
+                        <span className="crm-col-name">{stage.label}</span>
+                        <span className="crm-col-count">{stageLeads.length}</span>
+                      </div>
+                      <div className="crm-cards">
+                        {stageLeads.map(lead => {
+                          const pending = (lead.next_steps || []).filter(s => !s.done)
+                          const next = pending.sort((a, b) => new Date(a.date) - new Date(b.date))[0]
+                          const overdue = next && next.date && new Date(next.date) < new Date()
+                          const recusaFromLabel = isRecusa && lead.recusa_from
+                            ? PIPELINE_STAGES.find(s => s.key === lead.recusa_from)?.label
+                            : null
+                          return (
+                            <div
+                              key={lead.id}
+                              className={`crm-card${isRecusa ? ' recusa' : overdue ? ' overdue' : ''}`}
+                              onClick={() => { setCrmSelectedId(lead.id); setCrmDetailTab('historico') }}
+                            >
+                              {lead.source === 'SDR Agent' && <span className="crm-sdr-badge">SDR</span>}
+                              <div className="crm-card-name">{lead.name}</div>
+                              {lead.company && <div className="crm-card-company">{lead.company}</div>}
+                              {lead.source && lead.source !== 'SDR Agent' && <div className="crm-card-source">{lead.source}</div>}
+                              {recusaFromLabel && <div className="crm-recusa-from">← {recusaFromLabel}</div>}
+                              <div className="crm-card-foot">
+                                {lead.product
+                                  ? <span className="crm-product-tag" data-product={lead.product}>
+                                      {lead.product === 'margin-machine' ? 'MM' : lead.product === 'diagnostico' ? 'Diag.' : lead.product}
+                                    </span>
+                                  : <span />
+                                }
+                                <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                                  {!isRecusa && next && (
+                                    <span className={`crm-card-date${overdue ? ' overdue' : ''}`}>{fmtDate(next.date)}</span>
+                                  )}
+                                  {lead.linkedin_connected && (
+                                    <svg className="crm-li-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                      <rect width="24" height="24" rx="4" fill="#0A66C2"/>
+                                      <path d="M7.5 9.5H5V19H7.5V9.5ZM6.25 8.4C7.08 8.4 7.75 7.73 7.75 6.9C7.75 6.07 7.08 5.4 6.25 5.4C5.42 5.4 4.75 6.07 4.75 6.9C4.75 7.73 5.42 8.4 6.25 8.4ZM19 19H16.5V14.1C16.5 12.4 15.77 11.9 14.81 11.9C13.79 11.9 12.79 12.67 12.79 14.15V19H10.29V9.5H12.69V10.6H12.72C13.07 9.92 14.08 9.28 15.29 9.28C17.65 9.28 19 10.72 19 13.35V19Z" fill="white"/>
+                                    </svg>
+                                  )}
+                                  {lead.instagram_connected && (
+                                    <svg className="crm-ig-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                      <defs>
+                                        <radialGradient id="ig-card-grad" cx="30%" cy="107%" r="150%">
+                                          <stop offset="0%" stopColor="#ffd676"/>
+                                          <stop offset="25%" stopColor="#f86f3e"/>
+                                          <stop offset="50%" stopColor="#e1306c"/>
+                                          <stop offset="75%" stopColor="#833ab4"/>
+                                          <stop offset="100%" stopColor="#4f5bd5"/>
+                                        </radialGradient>
+                                      </defs>
+                                      <rect width="24" height="24" rx="5" fill="url(#ig-card-grad)"/>
+                                      <rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="white" strokeWidth="1.6"/>
+                                      <circle cx="12" cy="12" r="3.1" fill="none" stroke="white" strokeWidth="1.6"/>
+                                      <circle cx="16.3" cy="7.7" r="0.9" fill="white"/>
+                                    </svg>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                      {!isRecusa && (
+                        <button
+                          className="crm-col-add"
+                          onClick={() => { setCrmForm({ leadStage: stage.key }); setCrmModal('lead') }}
+                        >+ lead</button>
+                      )}
                     </div>
-                    <div className="crm-cards">
-                      {stageLeads.map(lead => {
-                        const pending = (lead.next_steps || []).filter(s => !s.done)
-                        const next = pending.sort((a, b) => new Date(a.date) - new Date(b.date))[0]
-                        const overdue = next && next.date && new Date(next.date) < new Date()
-                        const recusaFromLabel = isRecusa && lead.recusa_from
-                          ? PIPELINE_STAGES.find(s => s.key === lead.recusa_from)?.label
-                          : null
-                        return (
-                          <div
-                            key={lead.id}
-                            className={`crm-card${isRecusa ? ' recusa' : overdue ? ' overdue' : ''}`}
-                            onClick={() => { setCrmSelectedId(lead.id); setCrmDetailTab('historico') }}
-                          >
-                            {lead.source === 'SDR Agent' && <span className="crm-sdr-badge">SDR</span>}
-                            <div className="crm-card-name">{lead.name}</div>
-                            {lead.company && <div className="crm-card-company">{lead.company}</div>}
-                            {lead.source && lead.source !== 'SDR Agent' && <div className="crm-card-source">{lead.source}</div>}
-                            {recusaFromLabel && (
-                              <div className="crm-recusa-from">← {recusaFromLabel}</div>
-                            )}
-                            <div className="crm-card-foot">
-                              {lead.product
-                                ? <span className="crm-product-tag" data-product={lead.product}>
-                                    {lead.product === 'margin-machine' ? 'MM' : lead.product === 'diagnostico' ? 'Diag.' : lead.product}
-                                  </span>
-                                : <span />
-                              }
-                              <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                                {!isRecusa && next && (
-                                  <span className={`crm-card-date${overdue ? ' overdue' : ''}`}>
-                                    {fmtDate(next.date)}
-                                  </span>
-                                )}
-                                {lead.linkedin_connected && (
-                                  <svg className="crm-li-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="24" height="24" rx="4" fill="#0A66C2"/>
-                                    <path d="M7.5 9.5H5V19H7.5V9.5ZM6.25 8.4C7.08 8.4 7.75 7.73 7.75 6.9C7.75 6.07 7.08 5.4 6.25 5.4C5.42 5.4 4.75 6.07 4.75 6.9C4.75 7.73 5.42 8.4 6.25 8.4ZM19 19H16.5V14.1C16.5 12.4 15.77 11.9 14.81 11.9C13.79 11.9 12.79 12.67 12.79 14.15V19H10.29V9.5H12.69V10.6H12.72C13.07 9.92 14.08 9.28 15.29 9.28C17.65 9.28 19 10.72 19 13.35V19Z" fill="white"/>
-                                  </svg>
-                                )}
-                                {lead.instagram_connected && (
-                                  <svg className="crm-ig-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                      <radialGradient id="ig-card-grad" cx="30%" cy="107%" r="150%">
-                                        <stop offset="0%" stopColor="#ffd676"/>
-                                        <stop offset="25%" stopColor="#f86f3e"/>
-                                        <stop offset="50%" stopColor="#e1306c"/>
-                                        <stop offset="75%" stopColor="#833ab4"/>
-                                        <stop offset="100%" stopColor="#4f5bd5"/>
-                                      </radialGradient>
-                                    </defs>
-                                    <rect width="24" height="24" rx="5" fill="url(#ig-card-grad)"/>
-                                    <rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="white" strokeWidth="1.6"/>
-                                    <circle cx="12" cy="12" r="3.1" fill="none" stroke="white" strokeWidth="1.6"/>
-                                    <circle cx="16.3" cy="7.7" r="0.9" fill="white"/>
-                                  </svg>
+                  )
+                })}
+              </div>
+            )}
+
+            {/* ── COLD BOARD ── */}
+            {crmPool === 'cold' && (
+              <div className="crm-board">
+                {COLD_STAGES.map(stage => {
+                  const stageLeads = filteredCrmLeads.filter(l => l.stage === stage.key)
+                  const isRecusa = stage.key === 'cold_recusa'
+                  return (
+                    <div key={stage.key} className={`crm-col${isRecusa ? ' recusa' : ''}`}>
+                      <div className="crm-col-header">
+                        <span className="crm-col-name">{stage.label}</span>
+                        <span className="crm-col-count">{stageLeads.length}</span>
+                      </div>
+                      <div className="crm-cards">
+                        {stageLeads.map(lead => {
+                          const recusaFromLabel = isRecusa && lead.recusa_from
+                            ? COLD_STAGES.find(s => s.key === lead.recusa_from)?.label
+                            : null
+                          return (
+                            <div
+                              key={lead.id}
+                              className={`crm-card${isRecusa ? ' recusa' : ''}`}
+                              onClick={() => { setCrmSelectedId(lead.id); setCrmDetailTab('historico') }}
+                            >
+                              {lead.source === 'SDR Agent' && <span className="crm-sdr-badge">SDR</span>}
+                              <div className="crm-card-name">{lead.name}</div>
+                              {lead.company && <div className="crm-card-company">{lead.company}</div>}
+                              {lead.source && lead.source !== 'SDR Agent' && <div className="crm-card-source">{lead.source}</div>}
+                              {recusaFromLabel && <div className="crm-recusa-from">← {recusaFromLabel}</div>}
+                              <div className="crm-card-foot">
+                                <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                                  {lead.linkedin_connected && (
+                                    <svg className="crm-li-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                      <rect width="24" height="24" rx="4" fill="#0A66C2"/>
+                                      <path d="M7.5 9.5H5V19H7.5V9.5ZM6.25 8.4C7.08 8.4 7.75 7.73 7.75 6.9C7.75 6.07 7.08 5.4 6.25 5.4C5.42 5.4 4.75 6.07 4.75 6.9C4.75 7.73 5.42 8.4 6.25 8.4ZM19 19H16.5V14.1C16.5 12.4 15.77 11.9 14.81 11.9C13.79 11.9 12.79 12.67 12.79 14.15V19H10.29V9.5H12.69V10.6H12.72C13.07 9.92 14.08 9.28 15.29 9.28C17.65 9.28 19 10.72 19 13.35V19Z" fill="white"/>
+                                    </svg>
+                                  )}
+                                  {lead.instagram_connected && (
+                                    <svg className="crm-ig-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                      <defs>
+                                        <radialGradient id="ig-cold-grad" cx="30%" cy="107%" r="150%">
+                                          <stop offset="0%" stopColor="#ffd676"/>
+                                          <stop offset="25%" stopColor="#f86f3e"/>
+                                          <stop offset="50%" stopColor="#e1306c"/>
+                                          <stop offset="75%" stopColor="#833ab4"/>
+                                          <stop offset="100%" stopColor="#4f5bd5"/>
+                                        </radialGradient>
+                                      </defs>
+                                      <rect width="24" height="24" rx="5" fill="url(#ig-cold-grad)"/>
+                                      <rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="white" strokeWidth="1.6"/>
+                                      <circle cx="12" cy="12" r="3.1" fill="none" stroke="white" strokeWidth="1.6"/>
+                                      <circle cx="16.3" cy="7.7" r="0.9" fill="white"/>
+                                    </svg>
+                                  )}
+                                </div>
+                                {!isRecusa && (
+                                  <button
+                                    className="crm-send-hot-btn"
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      setSendToHot({ leadId: lead.id, stage: 'mapeado' })
+                                    }}
+                                  >→ HOT</button>
                                 )}
                               </div>
                             </div>
-                          </div>
-                        )
-                      })}
+                          )
+                        })}
+                      </div>
+                      {!isRecusa && (
+                        <button
+                          className="crm-col-add"
+                          onClick={() => { setCrmForm({ leadStage: stage.key }); setCrmModal('lead') }}
+                        >+ lead</button>
+                      )}
                     </div>
-                    {!isRecusa && (
-                      <button
-                        className="crm-col-add"
-                        onClick={() => { setCrmForm({ leadStage: stage.key }); setCrmModal('lead') }}
-                      >+ lead</button>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
+            )}
+
           </div>
         </div>
 
@@ -1871,28 +1986,44 @@ export default function ViniciusPage() {
               )}
 
               {/* Stage pills */}
-              <div className="crm-stage-row">
-                {PIPELINE_STAGES.map(s => (
-                  <button
-                    key={s.key}
-                    className={`crm-stage-pill${lead.stage === s.key ? ' active' : ''}${s.key === 'recusa' ? ' recusa' : ''}`}
-                    onClick={() => {
-                      if (s.key === 'recusa') {
-                        crmUpdateLead(lead.id, { stage: 'recusa', recusa_from: lead.stage })
-                      } else {
-                        crmUpdateLead(lead.id, { stage: s.key, recusa_from: null })
-                      }
-                    }}
-                  >{s.label}</button>
-                ))}
-              </div>
-
-              {/* Recusa origin badge */}
-              {lead.stage === 'recusa' && lead.recusa_from && (
-                <div className="crm-recusa-banner">
-                  Recusou na etapa: <strong>{PIPELINE_STAGES.find(s => s.key === lead.recusa_from)?.label || lead.recusa_from}</strong>
-                </div>
-              )}
+              {(() => {
+                const isCold = isColdLead(lead)
+                const stages = isCold ? COLD_STAGES : PIPELINE_STAGES
+                const recusaKey = isCold ? 'cold_recusa' : 'recusa'
+                return (
+                  <>
+                    <div className="crm-stage-row">
+                      {stages.map(s => (
+                        <button
+                          key={s.key}
+                          className={`crm-stage-pill${lead.stage === s.key ? ' active' : ''}${s.key === recusaKey ? ' recusa' : ''}`}
+                          onClick={() => {
+                            if (s.key === recusaKey) {
+                              crmUpdateLead(lead.id, { stage: recusaKey, recusa_from: lead.stage })
+                            } else {
+                              crmUpdateLead(lead.id, { stage: s.key, recusa_from: null })
+                            }
+                          }}
+                        >{s.label}</button>
+                      ))}
+                    </div>
+                    {lead.stage === recusaKey && lead.recusa_from && (
+                      <div className="crm-recusa-banner">
+                        Recusou na etapa: <strong>{stages.find(s => s.key === lead.recusa_from)?.label || lead.recusa_from}</strong>
+                      </div>
+                    )}
+                    {isCold && (
+                      <div style={{ padding: '0.5rem 1.25rem 0', display: 'flex', justifyContent: 'flex-end' }}>
+                        <button
+                          className="crm-send-hot-btn"
+                          style={{ fontSize: 12, padding: '5px 14px' }}
+                          onClick={() => setSendToHot({ leadId: lead.id, stage: 'mapeado' })}
+                        >→ Mover para HOT CRM</button>
+                      </div>
+                    )}
+                  </>
+                )
+              })()}
 
               {/* Product tag */}
               <div className="crm-product-row">
@@ -2007,7 +2138,10 @@ export default function ViniciusPage() {
               </label>
               <label>Etapa do pipeline
                 <select {...crmF('leadStage')}>
-                  {PIPELINE_STAGES.filter(s => s.key !== 'recusa').map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
+                  {(isColdLead({ stage: crmForm.leadStage })
+                    ? COLD_STAGES.filter(s => s.key !== 'cold_recusa')
+                    : PIPELINE_STAGES.filter(s => s.key !== 'recusa')
+                  ).map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
                 </select>
               </label>
               <label>Notas<textarea {...crmF('leadNotes')} placeholder="Contexto inicial…" /></label>
@@ -2017,6 +2151,41 @@ export default function ViniciusPage() {
                 <button type="submit" disabled={crmSaving}>{crmSaving ? 'Salvando…' : 'Salvar lead'}</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── CRM: Send to HOT modal ── */}
+      {sendToHot && (
+        <div className="vini-modal-overlay" onClick={() => setSendToHot(null)} style={{ zIndex: 10001 }}>
+          <div className="vini-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 380 }}>
+            <div className="vini-modal-header">
+              <div className="vini-modal-title">Mover para HOT CRM</div>
+              <button className="vini-modal-close" onClick={() => setSendToHot(null)}>×</button>
+            </div>
+            <div className="vini-modal-form">
+              <label>Etapa no HOT CRM
+                <select
+                  value={sendToHot.stage}
+                  onChange={e => setSendToHot(p => ({ ...p, stage: e.target.value }))}
+                >
+                  {PIPELINE_STAGES.filter(s => s.key !== 'recusa').map(s => (
+                    <option key={s.key} value={s.key}>{s.label}</option>
+                  ))}
+                </select>
+              </label>
+              <div className="vini-modal-actions">
+                <button type="button" onClick={() => setSendToHot(null)}>Cancelar</button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await crmUpdateLead(sendToHot.leadId, { stage: sendToHot.stage, recusa_from: null })
+                    setSendToHot(null)
+                    setCrmPool('hot')
+                  }}
+                >Mover para HOT →</button>
+              </div>
+            </div>
           </div>
         </div>
       )}

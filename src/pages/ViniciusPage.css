@@ -651,6 +651,29 @@
   background: linear-gradient(135deg, rgba(255,214,118,0.15), rgba(225,48,108,0.15), rgba(131,58,180,0.15));
   border-color: #e1306c; color: #c13584;
 }
+/* HOT / COLD pool toggle */
+.vini-page .crm-pool-toggle {
+  display: flex; gap: 6px; padding: 0 0 1rem 0;
+}
+.vini-page .crm-pool-btn {
+  font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em; padding: 6px 16px; border-radius: 20px; cursor: pointer;
+  border: 1px solid var(--border-strong); background: none; color: var(--muted);
+  transition: all 0.15s;
+}
+.vini-page .crm-pool-btn:hover { color: var(--ink); border-color: var(--ink); }
+.vini-page .crm-pool-btn.active.hot  { background: #FFF1E6; border-color: #D4622A; color: #D4622A; }
+.vini-page .crm-pool-btn.active.cold { background: #E8F2FF; border-color: #2D6DB5; color: #2D6DB5; }
+
+/* Send to HOT button on cold cards */
+.vini-page .crm-send-hot-btn {
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.06em; padding: 2px 8px; border-radius: 20px; cursor: pointer;
+  border: 1px solid #D4622A; background: #FFF1E6; color: #D4622A;
+  transition: all 0.12s; white-space: nowrap;
+}
+.vini-page .crm-send-hot-btn:hover { background: #D4622A; color: white; }
+
 .vini-page .crm-search {
   flex: 1; max-width: 300px;
   padding: 0.55rem 0.9rem;
