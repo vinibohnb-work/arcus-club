@@ -1037,6 +1037,7 @@ const PIPELINE_STAGES = [
   { key: 'abordagem2',        label: 'Abordagem 2' },
   { key: 'abordagem3',        label: 'Abordagem 3' },
   { key: 'whatsapp',          label: 'WhatsApp obtido' },
+  { key: 'msg_pre_ligacao',   label: 'Mensagem pré-ligação' },
   { key: 'ligacao',           label: 'Ligação realizada' },
   { key: 'reuniao_agendada',  label: 'Reunião agendada' },
   { key: 'reuniao_realizada', label: 'Reunião realizada' },
