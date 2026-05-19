@@ -39,103 +39,121 @@ const FORMATS = ["Todos", "Estático", "Reels", "Carrossel"];
 // ── Temas dos arcos semanais ──────────────────────────────────────────────────
 const WEEK_THEMES = {
   W01: "Processo invisível que drena margem",
-  W02: "IA como amplificador, não solução",
-  W03: "Modelo de receita e compressão de margem",
-  W04: "Liderança e autonomia do time",
+  W02: "IA como amplificador, não substituto",
+  W03: "Automação: o que fazer primeiro",
+  W04: "Decisão e autonomia do time",
   W05: "Processo documentado como ativo",
-  W06: "IA e ganho real de capacidade",
+  W06: "Profissional liberal: escalar sem perder qualidade",
   W07: "Crescimento além da estrutura",
-  W08: "Cultura declarada vs. praticada",
+  W08: "IA na gestão de PMEs",
   W09: "Retrabalho e custo invisível",
-  W10: "Empresa que funciona sem você",
+  W10: "Indicadores que PMEs ignoram",
+  W11: "Empresa que funciona sem você",
+  W12: "Da execução para a gestão estratégica",
 };
 
-// ── Plano: 10 semanas · 30 posts · Jul–Set ───────────────────────────────────
+// ── Plano: 12 semanas · 36 posts · Mai–Ago ───────────────────────────────────
 // Ordem dentro de cada semana: Estático (seg) → Reels (qua) → Carrossel (sex)
 const ALL_POSTS = [
 
   // W01 — Processo invisível que drena margem
-  { id:"vw01e", week:"W01", date:"06/07", format:"Estático",  pilar:"Processos",
-    hook:"A maioria das empresas perde margem por processos que nunca aparecem no DRE" },
-  { id:"vw01r", week:"W01", date:"08/07", format:"Reels",     pilar:"Processos",
+  { id:"vw01e", week:"W01", date:"18/05", format:"Estático",  pilar:"Processos",
+    hook:"A maioria das PMEs perde margem em processos que nunca aparecem no DRE" },
+  { id:"vw01r", week:"W01", date:"20/05", format:"Reels",     pilar:"Processos",
     hook:"Como mapear em 3 passos os processos que mais consomem margem na sua operação" },
-  { id:"vw01c", week:"W01", date:"10/07", format:"Carrossel", pilar:"Processos",
-    hook:"Como encontrar os gargalos invisíveis de margem — e o que 5 empresas descobriram ao fazer isso" },
+  { id:"vw01c", week:"W01", date:"22/05", format:"Carrossel", pilar:"Processos",
+    hook:"Os 5 processos invisíveis que mais drenam margem em empresas de até 30 funcionários" },
 
-  // W02 — IA como amplificador, não solução
-  { id:"vw02e", week:"W02", date:"13/07", format:"Estático",  pilar:"Tecnologia e IA",
+  // W02 — IA como amplificador, não substituto
+  { id:"vw02e", week:"W02", date:"25/05", format:"Estático",  pilar:"Tecnologia e IA",
     hook:"IA não resolve processo ruim — só faz o processo ruim mais rápido" },
-  { id:"vw02r", week:"W02", date:"15/07", format:"Reels",     pilar:"Tecnologia e IA",
-    hook:"A sequência que a maioria pula: mapear, medir, simplificar — só então automatizar" },
-  { id:"vw02c", week:"W02", date:"17/07", format:"Carrossel", pilar:"Tecnologia e IA",
-    hook:"3 tentativas de automação que falharam e o que todas tinham em comum" },
+  { id:"vw02r", week:"W02", date:"27/05", format:"Reels",     pilar:"Tecnologia e IA",
+    hook:"A sequência que a maioria pula antes de implementar IA: mapear, medir, simplificar" },
+  { id:"vw02c", week:"W02", date:"29/05", format:"Carrossel", pilar:"Tecnologia e IA",
+    hook:"3 formas que PMEs estão usando IA hoje para ganhar capacidade sem contratar" },
 
-  // W03 — Modelo de receita e compressão de margem
-  { id:"vw03e", week:"W03", date:"20/07", format:"Estático",  pilar:"Estratégia",
-    hook:"Crescer o faturamento sem revisar o modelo de receita é trabalhar mais para ganhar o mesmo" },
-  { id:"vw03r", week:"W03", date:"22/07", format:"Reels",     pilar:"Estratégia",
-    hook:"As 3 alavancas de margem que funcionam sem precisar crescer o faturamento" },
-  { id:"vw03c", week:"W03", date:"24/07", format:"Carrossel", pilar:"Estratégia",
-    hook:"Antes e depois: como uma empresa aumentou 8pp de margem sem mudar o faturamento" },
+  // W03 — Automação: o que fazer primeiro
+  { id:"vw03e", week:"W03", date:"01/06", format:"Estático",  pilar:"Tecnologia e IA",
+    hook:"Automação sem critério é o novo retrabalho — só que mais caro" },
+  { id:"vw03r", week:"W03", date:"03/06", format:"Reels",     pilar:"Tecnologia e IA",
+    hook:"Como decidir o que automatizar primeiro: a matriz de priorização para PMEs" },
+  { id:"vw03c", week:"W03", date:"05/06", format:"Carrossel", pilar:"Processos",
+    hook:"Antes e depois: 3 automações simples que liberaram mais de 10h/semana em cada empresa" },
 
-  // W04 — Liderança e autonomia do time
-  { id:"vw04e", week:"W04", date:"27/07", format:"Estático",  pilar:"Liderança",
-    hook:"O time que espera o dono decidir tudo aprendeu que esperar é mais seguro do que errar" },
-  { id:"vw04r", week:"W04", date:"29/07", format:"Reels",     pilar:"Liderança",
-    hook:"Como descobrir se você é o gargalo das decisões — e como parar de ser" },
-  { id:"vw04c", week:"W04", date:"31/07", format:"Carrossel", pilar:"Liderança",
-    hook:"O que muda na operação quando o líder para de ser o aprovador de tudo: o antes e o depois" },
+  // W04 — Decisão e autonomia do time
+  { id:"vw04e", week:"W04", date:"08/06", format:"Estático",  pilar:"Liderança",
+    hook:"O dono que precisa aprovar tudo não tem empresa — tem um emprego com mais responsabilidade" },
+  { id:"vw04r", week:"W04", date:"10/06", format:"Reels",     pilar:"Liderança",
+    hook:"Como criar autonomia de decisão no time em 4 semanas sem abrir mão do controle" },
+  { id:"vw04c", week:"W04", date:"12/06", format:"Carrossel", pilar:"Liderança",
+    hook:"O antes e depois de uma PME que parou de ter o dono como gargalo das decisões" },
 
   // W05 — Processo documentado como ativo
-  { id:"vw05e", week:"W05", date:"03/08", format:"Estático",  pilar:"Processos",
-    hook:"Processo que existe só na cabeça de uma pessoa não é processo — é risco" },
-  { id:"vw05r", week:"W05", date:"05/08", format:"Reels",     pilar:"Processos",
-    hook:"Como documentar um processo em menos de 60 minutos sem precisar de consultor" },
-  { id:"vw05c", week:"W05", date:"07/08", format:"Carrossel", pilar:"Processos",
-    hook:"Quanto custa não ter processos documentados: o cálculo que a maioria nunca fez" },
+  { id:"vw05e", week:"W05", date:"15/06", format:"Estático",  pilar:"Processos",
+    hook:"Processo que existe só na cabeça de alguém não é processo — é risco de negócio" },
+  { id:"vw05r", week:"W05", date:"17/06", format:"Reels",     pilar:"Processos",
+    hook:"Como documentar qualquer processo em menos de 45 minutos sem consultor" },
+  { id:"vw05c", week:"W05", date:"19/06", format:"Carrossel", pilar:"Processos",
+    hook:"Quanto custa para uma PME não ter processos documentados: o cálculo real" },
 
-  // W06 — IA e ganho real de capacidade
-  { id:"vw06e", week:"W06", date:"10/08", format:"Estático",  pilar:"Tecnologia e IA",
-    hook:"Empresa que usa IA para fazer mais do mesmo só aumenta a velocidade do que já não funciona" },
-  { id:"vw06r", week:"W06", date:"12/08", format:"Reels",     pilar:"Tecnologia e IA",
-    hook:"Como usar IA para liberar capacidade operacional sem aumentar o headcount" },
-  { id:"vw06c", week:"W06", date:"14/08", format:"Carrossel", pilar:"Tecnologia e IA",
-    hook:"3 casos onde IA reduziu custo operacional real: o que cada empresa fez diferente" },
+  // W06 — Profissional liberal: escalar sem perder qualidade
+  { id:"vw06e", week:"W06", date:"22/06", format:"Estático",  pilar:"Estratégia",
+    hook:"Profissional liberal que não escala a entrega está trocando tempo por dinheiro para sempre" },
+  { id:"vw06r", week:"W06", date:"24/06", format:"Reels",     pilar:"Estratégia",
+    hook:"O modelo de entrega que permite ao profissional liberal atender mais sem trabalhar mais horas" },
+  { id:"vw06c", week:"W06", date:"26/06", format:"Carrossel", pilar:"Processos",
+    hook:"As 4 decisões operacionais que separam o profissional que cresce do que apenas trabalha mais" },
 
   // W07 — Crescimento além da estrutura
-  { id:"vw07e", week:"W07", date:"17/08", format:"Estático",  pilar:"Estratégia",
-    hook:"Crescimento sem estrutura não é escala — é faturamento que cria complexidade que você não consegue gerir" },
-  { id:"vw07r", week:"W07", date:"19/08", format:"Reels",     pilar:"Estratégia",
-    hook:"Os 3 sinais de que sua empresa cresceu além da estrutura que a sustenta" },
-  { id:"vw07c", week:"W07", date:"21/08", format:"Carrossel", pilar:"Estratégia",
-    hook:"Como construir a estrutura que permite escalar: o modelo em 4 camadas" },
+  { id:"vw07e", week:"W07", date:"29/06", format:"Estático",  pilar:"Estratégia",
+    hook:"Crescer sem estrutura não é escala — é faturamento que cria complexidade que você não consegue gerir" },
+  { id:"vw07r", week:"W07", date:"01/07", format:"Reels",     pilar:"Estratégia",
+    hook:"Os 3 sinais de que sua empresa já cresceu além da estrutura que a sustenta" },
+  { id:"vw07c", week:"W07", date:"03/07", format:"Carrossel", pilar:"Estratégia",
+    hook:"Como construir a estrutura operacional que permite escalar: o modelo em 4 camadas" },
 
-  // W08 — Cultura declarada vs. praticada
-  { id:"vw08e", week:"W08", date:"24/08", format:"Estático",  pilar:"Cultura",
-    hook:"Toda empresa tem duas culturas: a do mural e a do que o líder tolera às segundas-feiras" },
-  { id:"vw08r", week:"W08", date:"26/08", format:"Reels",     pilar:"Cultura",
-    hook:"Como medir a distância entre a cultura que você declara e a que você pratica" },
-  { id:"vw08c", week:"W08", date:"28/08", format:"Carrossel", pilar:"Cultura",
-    hook:"O que muda nos resultados quando cultura declarada e praticada se alinham" },
+  // W08 — IA na gestão de PMEs
+  { id:"vw08e", week:"W08", date:"06/07", format:"Estático",  pilar:"Tecnologia e IA",
+    hook:"PME que usa IA só para economizar tempo ainda não descobriu o principal benefício: clareza de gestão" },
+  { id:"vw08r", week:"W08", date:"08/07", format:"Reels",     pilar:"Tecnologia e IA",
+    hook:"5 aplicações de IA que qualquer PME pode implementar hoje sem equipe de tecnologia" },
+  { id:"vw08c", week:"W08", date:"10/07", format:"Carrossel", pilar:"Tecnologia e IA",
+    hook:"Antes e depois: como 3 PMEs usaram IA para melhorar a gestão operacional real" },
 
   // W09 — Retrabalho e custo invisível
-  { id:"vw09e", week:"W09", date:"31/08", format:"Estático",  pilar:"Processos",
+  { id:"vw09e", week:"W09", date:"13/07", format:"Estático",  pilar:"Processos",
     hook:"Retrabalho não é problema de disciplina — é sintoma de processo com design errado" },
-  { id:"vw09r", week:"W09", date:"02/09", format:"Reels",     pilar:"Processos",
-    hook:"Como identificar se o retrabalho da sua equipe é problema de pessoa ou de processo" },
-  { id:"vw09c", week:"W09", date:"04/09", format:"Carrossel", pilar:"Processos",
-    hook:"O índice de retrabalho: como medir e o que ele revela sobre a eficiência real da operação" },
+  { id:"vw09r", week:"W09", date:"15/07", format:"Reels",     pilar:"Processos",
+    hook:"Como calcular o custo real do retrabalho na sua operação em menos de 30 minutos" },
+  { id:"vw09c", week:"W09", date:"17/07", format:"Carrossel", pilar:"Processos",
+    hook:"O índice de retrabalho: o que ele revela sobre a eficiência real de uma PME" },
 
-  // W10 — Empresa que funciona sem você
-  { id:"vw10e", week:"W10", date:"07/09", format:"Estático",  pilar:"Estratégia",
-    hook:"Uma empresa que depende do dono para funcionar não é um negócio — é um emprego caro" },
-  { id:"vw10r", week:"W10", date:"09/09", format:"Reels",     pilar:"Estratégia",
-    hook:"O roteiro dos 90 dias para construir autonomia operacional" },
-  { id:"vw10c", week:"W10", date:"11/09", format:"Carrossel", pilar:"Estratégia",
-    hook:"Como funciona uma empresa que funciona sem o dono: os 4 sistemas que precisam estar no lugar" },
+  // W10 — Indicadores que PMEs ignoram
+  { id:"vw10e", week:"W10", date:"20/07", format:"Estático",  pilar:"Estratégia",
+    hook:"O empresário que só olha faturamento está pilotando às cegas — margem é o painel real" },
+  { id:"vw10r", week:"W10", date:"22/07", format:"Reels",     pilar:"Estratégia",
+    hook:"Os 5 indicadores que toda PME deveria acompanhar semanalmente — e quase nenhuma acompanha" },
+  { id:"vw10c", week:"W10", date:"24/07", format:"Carrossel", pilar:"Estratégia",
+    hook:"Como montar um painel de gestão simples que qualquer PME consegue manter vivo" },
+
+  // W11 — Empresa que funciona sem você
+  { id:"vw11e", week:"W11", date:"27/07", format:"Estático",  pilar:"Estratégia",
+    hook:"Uma empresa que para quando o dono para não é um negócio — é um emprego com CNPJ" },
+  { id:"vw11r", week:"W11", date:"29/07", format:"Reels",     pilar:"Estratégia",
+    hook:"O roteiro dos 90 dias para construir autonomia operacional do zero" },
+  { id:"vw11c", week:"W11", date:"31/07", format:"Carrossel", pilar:"Liderança",
+    hook:"Os 4 sistemas que precisam estar no lugar para a empresa funcionar sem o dono" },
+
+  // W12 — Da execução para a gestão estratégica
+  { id:"vw12e", week:"W12", date:"03/08", format:"Estático",  pilar:"Estratégia",
+    hook:"Gestor que ainda executa junto com o time está atrasando o crescimento — o dele e o da empresa" },
+  { id:"vw12r", week:"W12", date:"05/08", format:"Reels",     pilar:"Estratégia",
+    hook:"Como fazer a transição de executor para gestor estratégico sem perder o controle da operação" },
+  { id:"vw12c", week:"W12", date:"07/08", format:"Carrossel", pilar:"Estratégia",
+    hook:"O modelo de gestão que permite ao dono de PME trabalhar na empresa, não dentro dela" },
 ];
 
-const PLAN_TOTAL = ALL_POSTS.length; // 30
+const PLAN_TOTAL = ALL_POSTS.length; // 36
 
 // ── localStorage helpers ──────────────────────────────────────────────────────
 function loadLS(key, fallback) {
@@ -263,10 +281,10 @@ export default function ViniMarketing() {
           <div>
             <div style={eyebrow}>Plano Ativo</div>
             <div style={{ fontSize: 15, fontWeight: 500, color: T.ink, marginBottom: 3 }}>
-              10 semanas · 3 posts/semana · Estático → Reels → Carrossel
+              12 semanas · 3 posts/semana · Estático → Reels → Carrossel
             </div>
             <div style={{ fontSize: 12, color: T.muted }}>
-              6 Jul – 11 Set · 80% Processos/Estratégia/IA · 20% Liderança/Cultura
+              18 Mai – 7 Ago · PMEs e profissionais liberais · 80% Processos/Estratégia/IA · 20% Liderança/Cultura
             </div>
           </div>
           <div style={{ textAlign: "right", flexShrink: 0 }}>
