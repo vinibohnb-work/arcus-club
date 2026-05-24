@@ -35,13 +35,7 @@ const TAB_HTML = {
           <div>
             <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:5px;">Receita mínima</div>
             <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;font-style:italic;color:#B8933A;line-height:1;">R$336k</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">14 × R$24k · só MM base</div>
-          </div>
-          <div style="height:1px;background:#1E1E1E;"></div>
-          <div>
-            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:5px;">Com mix Arcus</div>
-            <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;font-style:italic;color:#D4B06A;line-height:1;">R$400k+</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">MM + Arcus + Advisory</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.28);margin-top:3px;">14 × R$24k · Scalasys</div>
           </div>
           <div style="height:1px;background:#1E1E1E;"></div>
           <div>
@@ -88,7 +82,7 @@ const TAB_HTML = {
           <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S04</div>
           <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">18/05 – 22/05</div>
           <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#B8933A;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:#6B4F1A;">4ª venda ★</span></div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:var(--ink);">R$96k realizados.</strong> 1ª prospecção de Arcus Club iniciada. Pipeline renovado com fontes além do BNI.</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:var(--ink);">R$96k realizados.</strong> Pipeline renovado com fontes além do BNI. Catálogo de módulos começa a tomar forma.</div>
         </div>
 
         <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#fff;border-bottom:1px solid #F0EDE8;">
@@ -102,14 +96,14 @@ const TAB_HTML = {
           <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S06</div>
           <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">01/06 – 05/06</div>
           <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#3DBFB0;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">6ª venda</span></div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.55;">2 Advisory ativos = R$10k/mês recorrente. 1ª reunião de Arcus Club realizada.</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">2 Advisory ativos = R$10k/mês recorrente. 1º módulo da biblioteca marcado como reutilizável.</div>
         </div>
 
         <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:15px 20px;gap:16px;align-items:center;background:#FBF7EE;border-bottom:1px solid #EDE5CC;border-left:3px solid #B8933A;">
           <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S07</div>
           <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">08/06 – 12/06</div>
           <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#B8933A;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:#6B4F1A;">7ª venda ★</span></div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:var(--ink);">R$168k+ realizados.</strong> 1ª Arcus Club fechada (R$96k). Recorrência mensal consolidando.</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;"><strong style="color:var(--ink);">R$168k+ realizados.</strong> 7º Scalasys fechado. Recorrência mensal consolidando.</div>
         </div>
 
         <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#fff;border-bottom:1px solid #F0EDE8;">
@@ -137,7 +131,7 @@ const TAB_HTML = {
           <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--ink);">S11</div>
           <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">06/07 – 10/07</div>
           <div style="display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;border-radius:50%;background:#7B6FD4;flex-shrink:0;"></span><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:14px;color:var(--ink);">11ª venda</span></div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.55;">4 Advisory ativos ou 2ª Arcus Club prospectada. Foco em indicações de clientes atuais.</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.55;">4 Advisory ativos. Foco em indicações de clientes atuais e expansão do catálogo de módulos.</div>
         </div>
 
         <div style="display:grid;grid-template-columns:58px 126px 152px 1fr;padding:13px 20px;gap:16px;align-items:center;background:#FAFAF8;border-bottom:1px solid #F0EDE8;">
@@ -202,7 +196,7 @@ const TAB_HTML = {
       <div>
         <div class="tab-eyebrow">Estratégia</div>
         <div class="tab-title">Os dois <em>produtos</em></div>
-        <div class="tab-sub">Diagnóstico e Margin Machine — o que é cada um e para quem.</div>
+        <div class="tab-sub">Diagnóstico e Scalasys — o que é cada um e para quem.</div>
       </div>
       <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
     </div>
@@ -214,15 +208,15 @@ const TAB_HTML = {
           <div class="strat-stage">Entrada · Processo de venda</div>
           <div class="product-card">
             <div class="product-sidebar"><div><div class="product-type">Parte do comercial</div><div class="product-name">Diagnóstico Inicial</div><div class="product-duration">Conversa estruturada</div></div><div class="product-price"><div class="price-main">Grátis</div><div class="price-detail">sem compromisso</div></div></div>
-            <div class="product-body"><p class="product-desc">Conversa estruturada para entender as dores, oportunidades de atuação e o contexto do negócio. Define se o Margin Machine faz sentido para o momento do cliente — ou se ainda não é a hora.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de dores</span><span class="pillar-tag">Oportunidades de atuação</span><span class="pillar-tag">Fit comercial</span></div></div>
+            <div class="product-body"><p class="product-desc">Conversa estruturada para entender as dores, oportunidades de atuação e o contexto do negócio. Define se o Scalasys faz sentido para o momento do cliente — ou se ainda não é a hora.</p><div class="product-pillars"><span class="pillar-tag">Mapeamento de dores</span><span class="pillar-tag">Oportunidades de atuação</span><span class="pillar-tag">Fit comercial</span></div></div>
           </div>
         </div>
 
-        <!-- Margin Machine -->
+        <!-- Scalasys -->
         <div class="strat-full">
-          <div class="strat-stage" style="color:var(--gold);">Produto Principal · Margin Machine</div>
+          <div class="strat-stage" style="color:var(--gold);">Produto Principal · Scalasys</div>
           <div class="product-card" style="border:1.5px solid var(--gold);border-top:3px solid var(--gold);">
-            <div class="product-sidebar"><div><div class="product-type">Mentoria individual · 180 dias</div><div class="product-name">Margin Machine</div><div class="product-duration">6 meses · resultado mensurável</div></div><div class="product-price"><div class="price-main" style="color:var(--gold);">R$24k</div><div class="price-detail">ou 12x R$2.000 no cartão</div></div></div>
+            <div class="product-sidebar"><div><div class="product-type">Programa de desenvolvimento · 180 dias</div><div class="product-name">Scalasys</div><div class="product-duration">6 meses · sistemas e automações sob medida</div></div><div class="product-price"><div class="price-main" style="color:var(--gold);">R$24k</div><div class="price-detail">ou 12x R$2.000 no cartão</div></div></div>
             <div class="product-body"><p class="product-desc">Programa de 180 dias focado em aumentar a margem através da organização da operação. Diagnóstico completo, estruturação dos processos críticos, implementação acompanhada e consolidação. O cliente sai com o negócio rodando com menos dependência do fundador e margem crescente documentada.</p><div class="product-pillars"><span class="pillar-tag">Diagnóstico aprofundado</span><span class="pillar-tag">Processos documentados</span><span class="pillar-tag">Implementação acompanhada</span><span class="pillar-tag">Dashboard de indicadores</span><span class="pillar-tag">Plano de continuidade</span></div></div>
           </div>
         </div>
@@ -231,7 +225,7 @@ const TAB_HTML = {
 
       <div class="rule-gold" style="margin-top:2rem;">
         <div class="rule-icon">◎</div>
-        <div class="rule-content"><div class="rule-label">A lógica dos dois produtos</div><div class="rule-text">O Diagnóstico é o comercial — uma conversa sem compromisso que define se há fit. O Margin Machine é o produto: 180 dias de trabalho direto no negócio do cliente. Simples, sem tiers intermediários.</div></div>
+        <div class="rule-content"><div class="rule-label">A lógica dos dois produtos</div><div class="rule-text">O Diagnóstico é o comercial — uma conversa sem compromisso que define se há fit. O Scalasys é o produto: 180 dias de trabalho direto no negócio do cliente. Simples, sem tiers intermediários.</div></div>
       </div>
     </div>`,
 
@@ -420,7 +414,7 @@ const TAB_HTML = {
             <ul style="margin:8px 0 0 16px;font-size:13px;color:var(--muted);line-height:1.85;">
               <li>Um fluxo de automação (Make, n8n) com os processos do cliente mapeados</li>
               <li>Um dashboard de indicadores-chave para o negócio dele</li>
-              <li>Um diagrama de como fica a operação <em>após</em> o MM</li>
+              <li>Um diagrama de como fica a operação <em>após</em> o Scalasys</li>
             </ul>
             <p style="margin-top:8px;font-size:13px;color:var(--muted);">Não precisa estar perfeito — precisa estar específico.</p>
           </div>
@@ -491,21 +485,21 @@ const TAB_HTML = {
       <h3>Processo de venda</h3>
       <div class="sale-steps" style="margin-bottom:1.5rem;">
         <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 01</div><div class="sale-step-name">Contato inicial</div></div><div class="sale-step-right"><p class="sale-step-desc">Objetivo único: marcar a conversa de diagnóstico. Não venda o serviço — venda a conversa.</p><p class="sale-step-tip">Meta de uma mensagem: gerar uma resposta, não fechar uma venda.</p></div></div>
-        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 02</div><div class="sale-step-name">Qualificação rápida</div></div><div class="sale-step-right"><p class="sale-step-desc">Antes da reunião: faturamento, tamanho da equipe, problema principal. Define qual oferta faz sentido antes de você sentar.</p><p class="sale-step-tip">Não avance para o diagnóstico com quem claramente não é ICP de nenhuma das duas ofertas.</p></div></div>
-        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 03</div><div class="sale-step-name">Diagnóstico</div></div><div class="sale-step-right"><p class="sale-step-desc">60–90 minutos. Faça perguntas, não apresentações. "Qual é o principal problema que está travando o seu crescimento?"</p><p class="sale-step-tip">Para MM: o diagnóstico pode ser cobrado aqui (R$800–1.5k). Para Arcus: faz parte da venda.</p></div></div>
-        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 04</div><div class="sale-step-name">Proposta personalizada</div></div><div class="sale-step-right"><p class="sale-step-desc">Espelhe as palavras do cliente. Para MM: apresente os módulos recomendados com escopo e preço. Para Arcus: apresente o plano de implantação baseado no que você encontrou.</p><p class="sale-step-tip">Você não é um cardápio — é um médico. Diagnostica e prescreve.</p></div></div>
+        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 02</div><div class="sale-step-name">Qualificação rápida</div></div><div class="sale-step-right"><p class="sale-step-desc">Antes da reunião: faturamento, tamanho da equipe, problema principal. Define qual oferta faz sentido antes de você sentar.</p><p class="sale-step-tip">Não avance para o diagnóstico com quem claramente não é ICP do Scalasys.</p></div></div>
+        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 03</div><div class="sale-step-name">Diagnóstico</div></div><div class="sale-step-right"><p class="sale-step-desc">60–90 minutos. Faça perguntas, não apresentações. "Qual é o principal problema que está travando o seu crescimento?"</p><p class="sale-step-tip">O diagnóstico pode ser cobrado aqui (R$800–1.5k) ou usado como porta de entrada para o Scalasys.</p></div></div>
+        <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 04</div><div class="sale-step-name">Proposta personalizada</div></div><div class="sale-step-right"><p class="sale-step-desc">Espelhe as palavras do cliente. Apresente os módulos recomendados, o escopo do projeto e o preço — baseado no que você encontrou no diagnóstico.</p><p class="sale-step-tip">Você não é um cardápio — é um médico. Diagnostica e prescreve.</p></div></div>
         <div class="sale-step"><div class="sale-step-left"><div class="sale-step-num">ETAPA 05</div><div class="sale-step-name">Fechamento</div></div><div class="sale-step-right"><p class="sale-step-desc">Peça o fechamento explicitamente. Entenda a objeção real antes de oferecer qualquer desconto.</p><p class="sale-step-tip">"Faz sentido para você começar em [data]?"</p></div></div>
       </div>
       <h3>Pitches por oferta</h3>
       <div class="pitch-blocks">
-        <div class="pitch-block epc"><div class="pitch-label">Margin Machine — empresário solo</div><p class="pitch-text">"Pelo que você me contou, você tem o negócio funcionando mas tudo passa por você — e isso está limitando o crescimento. A gente faz um diagnóstico da operação, identifica onde está o gargalo e implanta as soluções."</p></div>
+        <div class="pitch-block epc"><div class="pitch-label">Scalasys — empresário solo</div><p class="pitch-text">"Pelo que você me contou, você tem o negócio funcionando mas tudo passa por você — e isso está limitando o crescimento. A gente faz um diagnóstico da operação, identifica onde está o gargalo e implanta as soluções."</p></div>
         <div class="pitch-block arcus"><div class="pitch-label">Arcus Club — PME com equipe</div><p class="pitch-text">"O problema não é falta de demanda — é que a empresa não está estruturada para crescer. Trabalho com empresários nesse estágio por 6 meses — diagnóstico, implantação nos pilares de cultura, liderança e processos, e margem mensurável ao final."</p></div>
       </div>
       <div class="never-do">
         <div class="never-label">O que nunca fazer</div>
         <div class="never-item"><span class="never-x">✕</span><span>Mencionar preço antes do diagnóstico.</span></div>
         <div class="never-item"><span class="never-x">✕</span><span>Apresentar as duas ofertas ao mesmo tempo como menu. A qualificação define qual se aplica — não o cliente.</span></div>
-        <div class="never-item"><span class="never-x">✕</span><span>Fazer o diagnóstico gratuito para Margin Machine. Quem paga pelo diagnóstico tem intenção real.</span></div>
+        <div class="never-item"><span class="never-x">✕</span><span>Fazer o diagnóstico gratuito antes do Scalasys. Quem paga pelo diagnóstico tem intenção real.</span></div>
       </div>
       <h3>Pipeline</h3>
       <div class="pipeline" style="margin-top:0.75rem;">
@@ -518,11 +512,11 @@ const TAB_HTML = {
       </div>
     </div>`,
 
-  'ops-epc': `
+  'ops-scalasys': `
     <div class="tab-header" data-glyph="O">
       <div>
         <div class="tab-eyebrow">Estratégia · Operações</div>
-        <div class="tab-title">Margin <em>Machine</em></div>
+        <div class="tab-title"><em>Scalasys</em></div>
         <div class="tab-sub">Como o produto funciona, o que entrega e como você executa.</div>
       </div>
       <div class="tab-header-phrase">Eu faço você lucrar mais com<br><em>sua estrutura atual.</em></div>
@@ -646,7 +640,7 @@ const TAB_HTML = {
       <div class="discard-box" style="margin-top:1.5rem;">
         <div class="discard-label">Quem não é ICP para este produto</div>
         <ul class="discard-list">
-          <li>Empresas com mais de 5 funcionários — nesse caso, o produto correto é Arcus Club</li>
+          <li>Empresas que não querem investir em sistemas e automação sob medida</li>
           <li>Donos que não reconhecem o problema operacional — você diagnóstica, não converte crenças</li>
           <li>Quem quer consultoria pontual sem compromisso de implementação</li>
         </ul>
@@ -992,14 +986,10 @@ const TAB_HTML = {
         <div class="channel-card"><div class="channel-header"><div class="channel-name">WhatsApp</div><div class="channel-badge">Nutrição</div></div><div class="channel-row"><div class="channel-lbl">Conteúdo curto e relevante</div><div class="channel-val">1× / semana</div></div><div class="channel-row"><div class="channel-lbl">Mensagem conversacional</div><div class="channel-val">1× / semana</div></div></div>
         <div class="channel-card"><div class="channel-header"><div class="channel-name">Podcast</div><div class="channel-badge">Futuro</div></div><div class="channel-row"><div class="channel-lbl">Formato</div><div class="channel-val">Conversacional</div></div><div class="channel-row"><div class="channel-lbl">Tema central</div><div class="channel-val">Gestão e automação</div></div></div>
       </div>
-      <h3>Os dois perfis de ICP</h3>
+      <h3>O ICP do Scalasys</h3>
       <div class="icp-grid">
-        <div class="icp-card dark"><div class="icp-label">ICP Arcus Club</div><div class="icp-title">PME com equipe em expansão travada</div><p class="icp-text">Faturamento R$500k–R$5M. Empresa com 5–40 funcionários. O dono virou o gargalo. A margem some e ninguém sabe por quê.</p><div class="icp-tags"><span class="icp-tag" style="background:#E6F3EF;border-color:#1A6B5A;color:#1A6B5A;">Arcus Club</span></div></div>
-        <div class="icp-card indigo"><div class="icp-label">ICP Margin Machine</div><div class="icp-title">Micro e pequeno empresário solo</div><p class="icp-text">Dentista, médico, lojista, prestador de serviços. Fatura bem mas opera no improviso. Não tem estrutura, não tem automação, não tem tempo para resolver sozinho.</p><div class="icp-tags"><span class="icp-tag" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);">Margin Machine</span></div></div>
-      </div>
-      <div class="icp-grid">
-        <div class="icp-card"><div class="icp-label">A dor comum</div><div class="icp-title">"O negócio depende demais de mim"</div><p class="icp-text">A dor central é a mesma para os dois perfis. É essa dor que o seu conteúdo nomeia.</p></div>
-        <div class="icp-card"><div class="icp-label">A escada natural</div><div class="icp-title">Margin Machine alimenta a Arcus</div><p class="icp-text">O cliente que contrata MM hoje, quando crescer e tiver equipe, é o candidato natural para a Arcus Club.</p></div>
+        <div class="icp-card indigo"><div class="icp-label">Perfil principal</div><div class="icp-title">Micro e pequeno empresário solo</div><p class="icp-text">Dentista, médico, lojista, prestador de serviços. O negócio funciona, mas no improviso — e isso custa caro. Sem estrutura, sem automação, sem tempo para resolver sozinho.</p><div class="icp-tags"><span class="icp-tag" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);">Scalasys</span></div></div>
+        <div class="icp-card"><div class="icp-label">A dor central</div><div class="icp-title">"Funciona, mas no improviso"</div><p class="icp-text">A operação roda por esforço e sorte. Qualquer variação ameaça desmoronar. É essa dor que o seu conteúdo nomeia.</p></div>
       </div>
       <div class="discard-box" style="margin-top:1.25rem;">
         <div class="discard-label">Quem não é seu ICP</div>
@@ -1011,12 +1001,12 @@ const TAB_HTML = {
       </div>
       <h3>Como o FLG converte audiência em clientes</h3>
       <div class="funnel-flg">
-        <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 1</div><div class="ff-name">Visibilidade</div></div><div class="ff-right">Posts consistentes sobre a tese. Os dois perfis de ICP te encontram pelo conteúdo — não por anúncio.</div></div>
+        <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 1</div><div class="ff-name">Visibilidade</div></div><div class="ff-right">Posts consistentes sobre a tese. Seu ICP te encontra pelo conteúdo — não por anúncio.</div></div>
         <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 2</div><div class="ff-name">Identificação</div></div><div class="ff-right">Ele lê e pensa "isso sou eu". Salva o post. Começa a seguir. Você virou relevante — ainda sem nenhuma conversa.</div></div>
         <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 3</div><div class="ff-name">Confiança</div></div><div class="ff-right">Após semanas consumindo seu conteúdo, ele te vê como referência. Você sabe do que fala. Ele sente isso.</div></div>
         <div class="ff-step highlight"><div class="ff-left"><div class="ff-stage">Etapa 4</div><div class="ff-name">Inbound</div></div><div class="ff-right">Quando o problema fica urgente, você já é a primeira pessoa que ele pensa. Ele te procura — sem você precisar prospectar.</div></div>
         <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 5</div><div class="ff-name">Conversa e diagnóstico</div></div><div class="ff-right">A reunião com quem veio por inbound começa com confiança estabelecida. O ciclo de venda é 3× mais curto que outbound frio.</div></div>
-        <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 6</div><div class="ff-name">Indicação e escada</div></div><div class="ff-right">Cliente com resultado vira seguidor ativo e indica. Clientes de MM que crescem sobem para a Arcus Club.</div></div>
+        <div class="ff-step"><div class="ff-left"><div class="ff-stage">Etapa 6</div><div class="ff-name">Indicação</div></div><div class="ff-right">Cliente com resultado vira seguidor ativo e indica. Cada cliente entregue alimenta o pipeline orgânico e expande o catálogo de módulos.</div></div>
       </div>
     </div>`,
 
@@ -1025,8 +1015,8 @@ const TAB_HTML = {
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const PRODUCT_LABELS = {
-  'diagnostico':    'Diagnóstico',
-  'margin-machine': 'Margin Machine',
+  'diagnostico': 'Diagnóstico',
+  'scalasys':    'Scalasys',
 }
 
 // ─── CRM constants ────────────────────────────────────────────────────────────
@@ -1058,12 +1048,6 @@ function isColdLead(lead) {
   return lead?.stage?.startsWith('cold_')
 }
 
-const CRM_PRODUCTS  = [
-  { key: null,            label: '—' },
-  { key: 'diagnostico',   label: 'Diagnóstico' },
-  { key: 'margin-machine', label: 'Margin Machine' },
-]
-
 const CRM_SOURCES    = ['LinkedIn', 'Rede quente', 'Indicação', 'Inbound', 'Evento', 'Outro']
 const CRM_INT_TYPES  = ['Ligação', 'Mensagem', 'Reunião', 'E-mail', 'Outro']
 const CRM_STEP_TYPES = ['Ligar', 'Enviar mensagem', 'Enviar proposta', 'Agendar reunião', 'Reunião de fechamento', 'Follow-up', 'Outro']
@@ -1090,9 +1074,9 @@ function fmtDate(d) {
 
 export default function ViniciusPage() {
   const [activeTab, setActiveTab] = useState('dashboard')
-  const [epcClients, setEpcClients] = useState([])
+  const [scalasysClients, setScalasysClients] = useState([])
   const [contracts, setContracts] = useState([])
-  const [modal, setModal] = useState(null) // 'epc' | 'contract'
+  const [modal, setModal] = useState(null) // 'scalasys' | 'contract'
   const [form, setForm] = useState({})
   const [saving, setSaving] = useState(false)
   const [formError, setFormError] = useState(null)
@@ -1113,11 +1097,11 @@ export default function ViniciusPage() {
   useEffect(() => { fetchAll(); fetchCrmLeads() }, [])
 
   async function fetchAll() {
-    const [epc, conts] = await Promise.all([
-      supabase.from('vini_epc_clients').select('*').eq('status', 'ativo').order('created_at'),
+    const [scalasys, conts] = await Promise.all([
+      supabase.from('scalasys_clients').select('*').eq('status', 'ativo').order('created_at'),
       supabase.from('vini_contracts').select('*').eq('status', 'ativo').order('created_at'),
     ])
-    setEpcClients(epc.data || [])
+    setScalasysClients(scalasys.data || [])
     setContracts(conts.data || [])
   }
 
@@ -1131,16 +1115,13 @@ export default function ViniciusPage() {
     setModal(type)
   }
 
-  async function handleSaveEpc(e) {
+  async function handleSaveScalasys(e) {
     e.preventDefault()
     setSaving(true)
     setFormError(null)
-    const modules = form.modules
-      ? form.modules.split(',').map(s => s.trim()).filter(Boolean)
-      : []
-    const { error } = await supabase.from('vini_epc_clients').insert({
+    const { error } = await supabase.from('scalasys_clients').insert({
       name: form.name,
-      modules,
+      company: form.company || '',
       phase: form.phase || '',
       next_action: form.next_action || '',
       monthly_recurring: parseFloat(form.monthly_recurring) || 0,
@@ -1296,8 +1277,6 @@ export default function ViniciusPage() {
     }
     if (crmFilters.source === 'sdr'    && l.source !== 'SDR Agent') return false
     if (crmFilters.source === 'manual' && l.source === 'SDR Agent') return false
-    if (crmFilters.product === 'diagnostico'    && l.product !== 'diagnostico')    return false
-    if (crmFilters.product === 'margin-machine' && l.product !== 'margin-machine') return false
     if (crmFilters.linkedin === 'connected'    && !l.linkedin_connected)  return false
     if (crmFilters.linkedin === 'notconnected' && l.linkedin_connected)   return false
     if (crmFilters.overdue) {
@@ -1336,8 +1315,8 @@ export default function ViniciusPage() {
             <div className={`nav-sub-item${activeTab === 'check' ? ' active' : ''}`} onClick={() => showTab('check')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Check Semanal</span>
             </div>
-            <div className={`nav-sub-item${activeTab === 'ops-epc' ? ' active' : ''}`} onClick={() => showTab('ops-epc')} style={{ paddingLeft: '2.5rem' }}>
-              <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · MM</span>
+            <div className={`nav-sub-item${activeTab === 'ops-scalasys' ? ' active' : ''}`} onClick={() => showTab('ops-scalasys')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Operações · Scalasys</span>
             </div>
           </div>
 
@@ -1399,7 +1378,7 @@ export default function ViniciusPage() {
           <ViniDashboard
             crmLeads={crmLeads}
             contracts={contracts}
-            epcClients={epcClients}
+            scalasysClients={scalasysClients}
           />
         </div>
 
@@ -1460,19 +1439,6 @@ export default function ViniciusPage() {
                   ))}
                 </div>
                 <div className="crm-filter-group">
-                  <span className="crm-filter-label">Produto</span>
-                  {[
-                    { key: 'diagnostico',    label: 'Diagnóstico' },
-                    { key: 'margin-machine', label: 'Margin Machine' },
-                  ].map(f => (
-                    <button
-                      key={f.key}
-                      className={`crm-filter-pill${crmFilters.product === f.key ? ' active' : ''}`}
-                      onClick={() => setCrmFilters(p => ({ ...p, product: p.product === f.key ? null : f.key }))}
-                    >{f.label}</button>
-                  ))}
-                </div>
-                <div className="crm-filter-group">
                   <span className="crm-filter-label">LinkedIn</span>
                   {[
                     { key: 'connected',    label: 'Conectado',     cls: 'li' },
@@ -1526,12 +1492,7 @@ export default function ViniciusPage() {
                               {lead.source && lead.source !== 'SDR Agent' && <div className="crm-card-source">{lead.source}</div>}
                               {recusaFromLabel && <div className="crm-recusa-from">← {recusaFromLabel}</div>}
                               <div className="crm-card-foot">
-                                {lead.product
-                                  ? <span className="crm-product-tag" data-product={lead.product}>
-                                      {lead.product === 'margin-machine' ? 'MM' : lead.product === 'diagnostico' ? 'Diag.' : lead.product}
-                                    </span>
-                                  : <span />
-                                }
+                                <span />{/* product tag removido — tudo é Scalasys */}
                                 <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                                   {!isRecusa && next && (
                                     <span className={`crm-card-date${overdue ? ' overdue' : ''}`}>{fmtDate(next.date)}</span>
@@ -1666,18 +1627,18 @@ export default function ViniciusPage() {
             <div>
               <div className="tab-eyebrow">Comercial · Clientes</div>
               <div className="tab-title">Clientes <em>ativos</em></div>
-              <div className="tab-sub">Todos os projetos em andamento — Margin Machine.</div>
+              <div className="tab-sub">Todos os clientes em andamento — Scalasys.</div>
             </div>
             <div className="tab-header-phrase">Eu faço você lucrar mais com<br /><em>sua estrutura atual.</em></div>
           </div>
           <div className="tab-body">
 
             <div className="vini-section-bar">
-              <h3 style={{ margin: 0 }}>Margin Machine</h3>
-              <button className="vini-btn" onClick={() => openModal('epc')}>+ Novo cliente</button>
+              <h3 style={{ margin: 0 }}>Scalasys</h3>
+              <button className="vini-btn" onClick={() => openModal('scalasys')}>+ Novo cliente</button>
             </div>
-            {epcClients.length === 0
-              ? <div className="vini-empty" style={{ marginBottom: '2rem' }}>Nenhum cliente MM ativo ainda.</div>
+            {scalasysClients.length === 0
+              ? <div className="vini-empty" style={{ marginBottom: '2rem' }}>Nenhum cliente Scalasys ativo ainda.</div>
               : (
                 <div className="vini-table-wrap" style={{ marginBottom: '2.5rem' }}>
                   <table className="vini-table">
@@ -1690,7 +1651,7 @@ export default function ViniciusPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {epcClients.map(c => (
+                      {scalasysClients.map(c => (
                         <tr key={c.id}>
                           <td className="name">{c.name}</td>
                           <td>{c.phase || '—'}</td>
@@ -1767,7 +1728,7 @@ export default function ViniciusPage() {
               <div className="vini-kpi light indigo">
                 <div className="vini-kpi-label">Recorrência ativa</div>
                 <div className="vini-kpi-val">{fmtBRL(totalRecurring)}</div>
-                <div className="vini-kpi-sub">Advisory + Manutenção MM</div>
+                <div className="vini-kpi-sub">Advisory + Manutenção Scalasys</div>
               </div>
             </div>
 
@@ -1796,8 +1757,8 @@ export default function ViniciusPage() {
                         <tr key={c.id}>
                           <td className="name">{c.client_name}</td>
                           <td>
-                            <span className={`badge ${c.product === 'margin-machine' ? 'indigo' : 'gold'}`}>
-                              {PRODUCT_LABELS[c.product] || c.product}
+                            <span className={`badge ${c.product === 'scalasys' || c.product === 'margin-machine' ? 'indigo' : 'gold'}`}>
+                              {PRODUCT_LABELS[c.product] || (c.product === 'margin-machine' ? 'Scalasys' : c.product)}
                             </span>
                           </td>
                           <td className="mono">{fmtBRL(c.total_value)}</td>
@@ -1817,27 +1778,26 @@ export default function ViniciusPage() {
 
       </main>
 
-      {/* ── MODAL: Novo cliente MM ── */}
-      {modal === 'epc' && (
+      {/* ── MODAL: Novo cliente Scalasys ── */}
+      {modal === 'scalasys' && (
         <div className="vini-modal-overlay" onClick={() => setModal(null)}>
           <div className="vini-modal" onClick={e => e.stopPropagation()}>
             <div className="vini-modal-header">
-              <div className="vini-modal-title">Novo cliente — Margin Machine</div>
+              <div className="vini-modal-title">Novo cliente — Scalasys</div>
               <button className="vini-modal-close" onClick={() => setModal(null)}>×</button>
             </div>
-            <form onSubmit={handleSaveEpc} className="vini-modal-form">
+            <form onSubmit={handleSaveScalasys} className="vini-modal-form">
               <label>
                 Nome do cliente *
                 <input type="text" required {...f('name')} placeholder="Ex: João Silva" />
               </label>
               <label>
-                Módulos contratados
-                <input type="text" {...f('modules')} placeholder="SDR, Conteúdo, Processo crítico" />
-                <span className="vini-modal-hint">Separe por vírgula</span>
+                Empresa
+                <input type="text" {...f('company')} placeholder="Ex: Clínica Saúde Total" />
               </label>
               <label>
                 Fase atual
-                <input type="text" {...f('phase')} placeholder="Ex: Implementação, Handoff, Manutenção…" />
+                <input type="text" {...f('phase')} placeholder="Ex: Diagnóstico, Desenvolvimento, Revisão…" />
               </label>
               <label>
                 Próxima ação
@@ -2024,21 +1984,6 @@ export default function ViniciusPage() {
                   </>
                 )
               })()}
-
-              {/* Product tag */}
-              <div className="crm-product-row">
-                <span className="crm-product-row-label">Produto</span>
-                <div className="crm-product-row-pills">
-                  {CRM_PRODUCTS.map(p => (
-                    <button
-                      key={String(p.key)}
-                      className={`crm-product-pill${lead.product === p.key ? ' active' : ''}`}
-                      data-product={p.key}
-                      onClick={() => crmUpdateLead(lead.id, { product: p.key })}
-                    >{p.label}</button>
-                  ))}
-                </div>
-              </div>
 
               {/* Notes */}
               <div className="crm-notes-row">
@@ -2231,7 +2176,7 @@ export default function ViniciusPage() {
                   {CRM_STEP_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
               </label>
-              <label>Título<input type="text" {...crmF('stepTitle')} placeholder="Ex: Enviar proposta MM" /></label>
+              <label>Título<input type="text" {...crmF('stepTitle')} placeholder="Ex: Enviar proposta Scalasys" /></label>
               <label>Data *<input type="date" required {...crmF('stepDate')} /></label>
               <label>Nota<textarea {...crmF('stepNote')} placeholder="Contexto adicional…" /></label>
               <div className="vini-modal-actions">
@@ -2261,7 +2206,7 @@ export default function ViniciusPage() {
                 <select required {...f('product')}>
                   <option value="">Selecione…</option>
                   <option value="diagnostico">Diagnóstico</option>
-                  <option value="margin-machine">Margin Machine</option>
+                  <option value="scalasys">Scalasys</option>
                 </select>
               </label>
               <label>

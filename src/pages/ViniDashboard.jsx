@@ -96,7 +96,7 @@ function SignalDot({ type }) {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function ViniDashboard({ crmLeads = [], contracts = [], epcClients = [], arcusClients = [] }) {
+export default function ViniDashboard({ crmLeads = [], contracts = [], scalasysClients = [] }) {
 
   const derived = useMemo(() => {
     const today = new Date()
@@ -212,9 +212,9 @@ export default function ViniDashboard({ crmLeads = [], contracts = [], epcClient
       closed, proposals, recusados, active, reunioesPend,
       cf, rates, totalReceived, mrr, pipelineValue,
       signals: signals.slice(0, 5),
-      clientsTotal: epcClients.length + arcusClients.length,
+      clientsTotal: scalasysClients.length,
     }
-  }, [crmLeads, contracts, epcClients, arcusClients])
+  }, [crmLeads, contracts, scalasysClients])
 
   const d = derived
 
@@ -488,15 +488,9 @@ export default function ViniDashboard({ crmLeads = [], contracts = [], epcClient
 
           <div style={{ display: 'flex', gap: 16, paddingTop: 8 }}>
             <div>
-              <Label color={T.muted}>MM ativos</Label>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 700, color: epcClients.length > 0 ? T.indigo : '#CCC' }}>
-                {epcClients.length}
-              </div>
-            </div>
-            <div>
-              <Label color={T.muted}>Arcus ativos</Label>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 700, color: arcusClients.length > 0 ? T.teal : '#CCC' }}>
-                {arcusClients.length}
+              <Label color={T.muted}>Scalasys ativos</Label>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 700, color: scalasysClients.length > 0 ? T.indigo : '#CCC' }}>
+                {scalasysClients.length}
               </div>
             </div>
           </div>
