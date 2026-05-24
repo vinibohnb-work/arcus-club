@@ -1052,6 +1052,15 @@ const CRM_SOURCES    = ['LinkedIn', 'Rede quente', 'Indicação', 'Inbound', 'Ev
 const CRM_INT_TYPES  = ['Ligação', 'Mensagem', 'Reunião', 'E-mail', 'Outro']
 const CRM_STEP_TYPES = ['Ligar', 'Enviar mensagem', 'Enviar proposta', 'Agendar reunião', 'Reunião de fechamento', 'Follow-up', 'Outro']
 
+// ─── Scalasys Projects ───────────────────────────────────────────────────────
+
+const PROJECT_STAGES = [
+  { key: 'diagnostico',     label: 'Diagnóstico'    },
+  { key: 'desenvolvimento', label: 'Desenvolvimento' },
+  { key: 'revisao',         label: 'Revisão'        },
+  { key: 'entregue',        label: 'Entregue'       },
+]
+
 function fmtBRL(n) {
   if (!n && n !== 0) return '—'
   return `R$ ${Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`
@@ -1094,7 +1103,14 @@ export default function ViniciusPage() {
   const [crmPool, setCrmPool] = useState('hot') // 'hot' | 'cold'
   const [sendToHot, setSendToHot] = useState(null) // { leadId, stage }
 
-  useEffect(() => { fetchAll(); fetchCrmLeads() }, [])
+  // Projects state
+  const [scalasysProjects, setScalasysProjects] = useState([])
+  const [projectModal, setProjectModal] = useState(null) // null | 'new' | { id }
+  const [projectForm, setProjectForm] = useState({})
+  const [projectSaving, setProjectSaving] = useState(false)
+  const [projectError, setProjectError] = useState(null)
+
+  useEffect(() => { fetchAll(); fetchCrmLeads(); fetchProjects() }, [])
 
   async function fetchAll() {
     const [scalasys, conts] = await Promise.all([
@@ -1103,6 +1119,67 @@ export default function ViniciusPage() {
     ])
     setScalasysClients(scalasys.data || [])
     setContracts(conts.data || [])
+  }
+
+  async function fetchProjects() {
+    const { data, error } = await supabase
+      .from('scalasys_projects')
+      .select('*, client:scalasys_clients(id, name, company)')
+      .order('created_at', { ascending: false })
+    if (error) { console.error('[Projects] fetch:', error.message); return }
+    setScalasysProjects(data || [])
+  }
+
+  async function projectUpdate(id, updates) {
+    setScalasysProjects(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p))
+    const { error } = await supabase
+      .from('scalasys_projects')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+    if (error) {
+      console.error('[Projects] update:', error.message)
+      fetchProjects() // revert
+    }
+  }
+
+  async function projectSave(e) {
+    e?.preventDefault?.()
+    setProjectSaving(true)
+    setProjectError(null)
+
+    const isEdit = projectModal && projectModal !== 'new'
+    const payload = {
+      client_id:      projectForm.client_id || null,
+      name:           projectForm.name,
+      scope_summary:  projectForm.scope_summary || '',
+      status:         projectForm.status || 'diagnostico',
+      value:          parseFloat(projectForm.value) || 0,
+      deadline:       projectForm.deadline || null,
+      hours_per_week: parseFloat(projectForm.hours_per_week) || 0,
+      next_step:      projectForm.next_step || '',
+      next_step_date: projectForm.next_step_date || null,
+    }
+
+    const { error } = isEdit
+      ? await supabase.from('scalasys_projects').update({ ...payload, updated_at: new Date().toISOString() }).eq('id', projectModal.id)
+      : await supabase.from('scalasys_projects').insert(payload)
+
+    if (error) { setProjectError(error.message); setProjectSaving(false); return }
+    setProjectSaving(false)
+    setProjectModal(null)
+    setProjectForm({})
+    fetchProjects()
+  }
+
+  async function projectDelete(id) {
+    if (!confirm('Excluir este projeto?')) return
+    await supabase.from('scalasys_projects').delete().eq('id', id)
+    setProjectModal(null)
+    fetchProjects()
+  }
+
+  function projectF(field) {
+    return { value: projectForm[field] || '', onChange: e => setProjectForm({ ...projectForm, [field]: e.target.value }) }
   }
 
   function showTab(tab) {
@@ -1167,6 +1244,7 @@ export default function ViniciusPage() {
 
   async function crmUpdateLead(id, updates) {
     // Optimistic update — reflete na UI imediatamente
+    const prevLead = crmLeads.find(l => l.id === id)
     setCrmLeads(prev => prev.map(l => l.id === id ? { ...l, ...updates } : l))
     const { error } = await supabase.from('vini_leads')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -1175,6 +1253,57 @@ export default function ViniciusPage() {
     if (error) {
       console.error('[CRM] update error:', error.message)
       setCrmLeads(prev => prev.map(l => l.id === id ? { ...l, ...Object.fromEntries(Object.keys(updates).map(k => [k, l[k]])) } : l))
+      return
+    }
+    // Auto-criação de projeto quando lead vira "Fechado"
+    if (updates.stage === 'fechado' && prevLead && prevLead.stage !== 'fechado') {
+      await autoCreateProjectFromLead({ ...prevLead, ...updates })
+    }
+  }
+
+  async function autoCreateProjectFromLead(lead) {
+    try {
+      // 1. Cria (ou reutiliza) o cliente Scalasys
+      let clientId = null
+      const { data: existingClient } = await supabase
+        .from('scalasys_clients')
+        .select('id')
+        .eq('lead_id', lead.id)
+        .maybeSingle()
+
+      if (existingClient) {
+        clientId = existingClient.id
+      } else {
+        const { data: newClient, error: clientError } = await supabase
+          .from('scalasys_clients')
+          .insert({
+            name:     lead.name,
+            company:  lead.company || '',
+            status:   'ativo',
+            lead_id:  lead.id,
+            start_date: new Date().toISOString().split('T')[0],
+          })
+          .select('id')
+          .single()
+        if (clientError) { console.error('[Auto-project] client error:', clientError.message); return }
+        clientId = newClient.id
+      }
+
+      // 2. Cria o projeto na etapa Diagnóstico
+      const { error: projectError } = await supabase.from('scalasys_projects').insert({
+        client_id:     clientId,
+        name:          `Scalasys · ${lead.name}`,
+        scope_summary: lead.notes || '',
+        status:        'diagnostico',
+        value:         24000,
+        next_step:     'Agendar kickoff do diagnóstico',
+      })
+      if (projectError) { console.error('[Auto-project] project error:', projectError.message); return }
+
+      fetchAll()
+      fetchProjects()
+    } catch (err) {
+      console.error('[Auto-project] unexpected:', err)
     }
   }
 
@@ -1337,6 +1466,17 @@ export default function ViniciusPage() {
             </div>
             <div className={`nav-sub-item${activeTab === 'clientes' ? ' active' : ''}`} onClick={() => showTab('clientes')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Clientes Ativos</span>
+            </div>
+          </div>
+
+          <div className="nav-divider" />
+
+          <div className={`nav-item${activeTab === 'entrega' ? ' active' : ''}`} onClick={() => showTab('projetos')}>
+            <div className="nav-dot" /><span className="nav-label">Entrega</span>
+          </div>
+          <div style={{ padding: '0 0 0.25rem 0' }}>
+            <div className={`nav-sub-item${activeTab === 'projetos' ? ' active' : ''}`} onClick={() => showTab('projetos')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Projetos</span>
             </div>
           </div>
 
@@ -1776,7 +1916,139 @@ export default function ViniciusPage() {
           </div>
         </div>
 
+        {/* ── ENTREGA · PROJETOS (dynamic) ── */}
+        <div className={`tab-content${activeTab === 'projetos' ? ' active' : ''}`}>
+          <div className="tab-header">
+            <div>
+              <div className="tab-eyebrow">Entrega · Projetos</div>
+              <div className="tab-title">Pipeline de <em>entrega</em></div>
+              <div className="tab-sub">Cada projeto Scalasys do diagnóstico à entrega — clique nos cards para editar.</div>
+            </div>
+            <div className="tab-header-phrase">O lucro<br /><em>está na entrega.</em></div>
+          </div>
+          <div className="tab-body" style={{ maxWidth: 'none' }}>
+            <div className="crm-toolbar">
+              <div style={{ flex: 1 }} />
+              <button
+                className="vini-btn gold"
+                onClick={() => {
+                  setProjectForm({ status: 'diagnostico' })
+                  setProjectModal('new')
+                }}
+              >+ Novo projeto</button>
+            </div>
+
+            <div className="crm-board">
+              {PROJECT_STAGES.map(stage => {
+                const projects = scalasysProjects.filter(p => p.status === stage.key)
+                return (
+                  <div key={stage.key} className="crm-col">
+                    <div className="crm-col-header">
+                      <span className="crm-col-name">{stage.label}</span>
+                      <span className="crm-col-count">{projects.length}</span>
+                    </div>
+                    <div className="crm-cards">
+                      {projects.map(p => {
+                        const overdue = p.next_step_date && new Date(p.next_step_date) < new Date()
+                        return (
+                          <div
+                            key={p.id}
+                            className={`crm-card${overdue ? ' overdue' : ''}`}
+                            onClick={() => {
+                              setProjectForm({
+                                client_id:      p.client_id,
+                                name:           p.name,
+                                scope_summary:  p.scope_summary || '',
+                                status:         p.status,
+                                value:          p.value || '',
+                                deadline:       p.deadline || '',
+                                hours_per_week: p.hours_per_week || '',
+                                next_step:      p.next_step || '',
+                                next_step_date: p.next_step_date || '',
+                              })
+                              setProjectModal({ id: p.id })
+                            }}
+                          >
+                            <div className="crm-card-name">{p.name}</div>
+                            {p.client && (
+                              <div className="crm-card-company">{p.client.company || p.client.name}</div>
+                            )}
+                            {p.scope_summary && (
+                              <div className="crm-card-source" style={{ marginTop: 4 }}>{p.scope_summary.length > 80 ? p.scope_summary.slice(0, 80) + '…' : p.scope_summary}</div>
+                            )}
+                            <div className="crm-card-foot">
+                              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: 'var(--muted)' }}>
+                                {p.value ? fmtBRL(p.value) : '—'}
+                              </span>
+                              {p.next_step_date && (
+                                <span className={`crm-card-date${overdue ? ' overdue' : ''}`}>
+                                  {fmtDate(p.next_step_date)}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                    <button
+                      className="crm-col-add"
+                      onClick={() => {
+                        setProjectForm({ status: stage.key })
+                        setProjectModal('new')
+                      }}
+                    >+ projeto</button>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+
       </main>
+
+      {/* ── MODAL: Novo / Editar projeto Scalasys ── */}
+      {projectModal && (
+        <div className="vini-modal-overlay" onClick={() => { setProjectModal(null); setProjectError(null); setProjectForm({}) }}>
+          <div className="vini-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 520 }}>
+            <div className="vini-modal-header">
+              <div className="vini-modal-title">{projectModal === 'new' ? 'Novo projeto' : 'Editar projeto'}</div>
+              <button className="vini-modal-close" onClick={() => { setProjectModal(null); setProjectError(null); setProjectForm({}) }}>×</button>
+            </div>
+            <form onSubmit={projectSave} className="vini-modal-form">
+              <label>Cliente *
+                <select required {...projectF('client_id')}>
+                  <option value="">Selecione…</option>
+                  {scalasysClients.map(c => (
+                    <option key={c.id} value={c.id}>{c.company || c.name}</option>
+                  ))}
+                </select>
+              </label>
+              <label>Nome do projeto *<input type="text" required {...projectF('name')} placeholder="Ex: Scalasys · Clínica X" /></label>
+              <label>Escopo resumido<textarea {...projectF('scope_summary')} placeholder="Resumo do que vai ser construído…" /></label>
+              <label>Status
+                <select {...projectF('status')}>
+                  {PROJECT_STAGES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
+                </select>
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <label>Valor (R$)<input type="number" min="0" step="100" {...projectF('value')} placeholder="24000" /></label>
+                <label>Prazo<input type="date" {...projectF('deadline')} /></label>
+              </div>
+              <label>Horas/semana estimadas<input type="number" min="0" step="1" {...projectF('hours_per_week')} placeholder="8" /></label>
+              <label>Próximo passo<input type="text" {...projectF('next_step')} placeholder="Ex: Reunião de kickoff" /></label>
+              <label>Data do próximo passo<input type="date" {...projectF('next_step_date')} /></label>
+              {projectError && <div className="vini-error">{projectError}</div>}
+              <div className="vini-modal-actions">
+                {projectModal !== 'new' && (
+                  <button type="button" style={{ color: '#B83030', marginRight: 'auto' }} onClick={() => projectDelete(projectModal.id)}>Excluir</button>
+                )}
+                <button type="button" onClick={() => { setProjectModal(null); setProjectError(null); setProjectForm({}) }}>Cancelar</button>
+                <button type="submit" disabled={projectSaving}>{projectSaving ? 'Salvando…' : 'Salvar projeto'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* ── MODAL: Novo cliente Scalasys ── */}
       {modal === 'scalasys' && (
