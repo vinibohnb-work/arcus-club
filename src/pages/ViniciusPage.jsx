@@ -1126,6 +1126,9 @@ export default function ViniciusPage() {
   const [moduleError, setModuleError] = useState(null)
   const [moduleFilter, setModuleFilter] = useState(null) // null | 'chumbado' | 'parcial' | 'pronto'
 
+  // Comercial sub-tab
+  const [comercialView, setComercialView] = useState('prospeccao') // 'prospeccao' | 'metodo' | 'script-fechamento'
+
   useEffect(() => { fetchAll(); fetchCrmLeads(); fetchProjects(); fetchModules() }, [])
 
   async function fetchAll() {
@@ -1553,12 +1556,6 @@ export default function ViniciusPage() {
             <div className="nav-dot" /><span className="nav-label">Comercial</span>
           </div>
           <div style={{ padding: '0 0 0.25rem 0' }}>
-            <div className={`nav-sub-item${activeTab === 'metodo' ? ' active' : ''}`} onClick={() => showTab('metodo')} style={{ paddingLeft: '2.5rem' }}>
-              <div className="nav-sub-dot" /><span className="nav-sub-label">Método de Venda</span>
-            </div>
-            <div className={`nav-sub-item${activeTab === 'script-fechamento' ? ' active' : ''}`} onClick={() => showTab('script-fechamento')} style={{ paddingLeft: '2.5rem' }}>
-              <div className="nav-sub-dot" /><span className="nav-sub-label">Script Fechamento</span>
-            </div>
             <div className={`nav-sub-item${activeTab === 'crm' ? ' active' : ''}`} onClick={() => showTab('crm')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">CRM</span>
             </div>
@@ -1605,14 +1602,58 @@ export default function ViniciusPage() {
       {/* ── MAIN ── */}
       <main className="main">
 
-        {/* Static tabs */}
-        {Object.keys(TAB_HTML).map(tab => (
+        {/* Static tabs (excluindo comercial/metodo/script-fechamento — consolidados abaixo) */}
+        {Object.keys(TAB_HTML)
+          .filter(tab => !['comercial', 'metodo', 'script-fechamento'].includes(tab))
+          .map(tab => (
+            <div
+              key={tab}
+              className={`tab-content${activeTab === tab ? ' active' : ''}`}
+              dangerouslySetInnerHTML={{ __html: TAB_HTML[tab] }}
+            />
+          ))}
+
+        {/* ── COMERCIAL consolidado ── */}
+        <div className={`tab-content${activeTab === 'comercial' ? ' active' : ''}`}>
+          {/* Sub-tab switcher */}
+          <div style={{
+            display: 'flex', gap: 4, padding: '1.5rem 1.5rem 0',
+            borderBottom: '0.5px solid var(--border)',
+          }}>
+            {[
+              { key: 'prospeccao',        label: 'Prospecção & Processo' },
+              { key: 'metodo',            label: 'Método de Venda' },
+              { key: 'script-fechamento', label: 'Script de Fechamento' },
+            ].map(view => (
+              <button
+                key={view.key}
+                onClick={() => setComercialView(view.key)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: comercialView === view.key ? '2px solid var(--gold)' : '2px solid transparent',
+                  padding: '10px 16px',
+                  marginBottom: -1,
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 10,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  fontWeight: comercialView === view.key ? 700 : 500,
+                  color: comercialView === view.key ? 'var(--ink)' : 'var(--muted)',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                }}
+              >{view.label}</button>
+            ))}
+          </div>
           <div
-            key={tab}
-            className={`tab-content${activeTab === tab ? ' active' : ''}`}
-            dangerouslySetInnerHTML={{ __html: TAB_HTML[tab] }}
+            dangerouslySetInnerHTML={{
+              __html: TAB_HTML[
+                comercialView === 'prospeccao' ? 'comercial' : comercialView
+              ]
+            }}
           />
-        ))}
+        </div>
 
         {/* ── DASHBOARD (dynamic) ── */}
         <div className={`tab-content${activeTab === 'dashboard' ? ' active' : ''}`}>
