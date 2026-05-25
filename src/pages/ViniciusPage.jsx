@@ -1061,6 +1061,12 @@ const PROJECT_STAGES = [
   { key: 'entregue',        label: 'Entregue'       },
 ]
 
+const MODULE_LEVELS = [
+  { key: 'chumbado', label: 'Chumbado',          desc: 'Ainda preso a um cliente',     color: '#B83030', bg: '#FCE8E8' },
+  { key: 'parcial',  label: 'Parcialmente isolado', desc: 'Pode ser adaptado',         color: '#B8933A', bg: '#FBF3E2' },
+  { key: 'pronto',   label: 'Pronto pra reuso',  desc: 'Reutilizável / micro-SaaS',    color: '#1A6B5A', bg: '#E6F3EF' },
+]
+
 function fmtBRL(n) {
   if (!n && n !== 0) return '—'
   return `R$ ${Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`
@@ -1109,8 +1115,18 @@ export default function ViniciusPage() {
   const [projectForm, setProjectForm] = useState({})
   const [projectSaving, setProjectSaving] = useState(false)
   const [projectError, setProjectError] = useState(null)
+  const [projectLinks, setProjectLinks] = useState([]) // links do projeto sendo editado
 
-  useEffect(() => { fetchAll(); fetchCrmLeads(); fetchProjects() }, [])
+  // Modules state
+  const [scalasysModules, setScalasysModules] = useState([])
+  const [allProjectModules, setAllProjectModules] = useState([]) // todas as relações
+  const [moduleModal, setModuleModal] = useState(null) // null | 'new' | { id }
+  const [moduleForm, setModuleForm] = useState({})
+  const [moduleSaving, setModuleSaving] = useState(false)
+  const [moduleError, setModuleError] = useState(null)
+  const [moduleFilter, setModuleFilter] = useState(null) // null | 'chumbado' | 'parcial' | 'pronto'
+
+  useEffect(() => { fetchAll(); fetchCrmLeads(); fetchProjects(); fetchModules() }, [])
 
   async function fetchAll() {
     const [scalasys, conts] = await Promise.all([
@@ -1180,6 +1196,88 @@ export default function ViniciusPage() {
 
   function projectF(field) {
     return { value: projectForm[field] || '', onChange: e => setProjectForm({ ...projectForm, [field]: e.target.value }) }
+  }
+
+  // ─── Modules ─────────────────────────────────────────────────────────────
+
+  async function fetchModules() {
+    const [modulesRes, linksRes] = await Promise.all([
+      supabase.from('scalasys_modules').select('*').order('name'),
+      supabase.from('scalasys_project_modules').select('*'),
+    ])
+    if (modulesRes.error) { console.error('[Modules] fetch:', modulesRes.error.message); return }
+    setScalasysModules(modulesRes.data || [])
+    setAllProjectModules(linksRes.data || [])
+  }
+
+  async function moduleSave(e) {
+    e?.preventDefault?.()
+    setModuleSaving(true)
+    setModuleError(null)
+
+    const isEdit = moduleModal && moduleModal !== 'new'
+    const payload = {
+      name:             moduleForm.name,
+      description:      moduleForm.description || '',
+      decoupling_level: moduleForm.decoupling_level || 'chumbado',
+      notes:            moduleForm.notes || '',
+    }
+
+    const { error } = isEdit
+      ? await supabase.from('scalasys_modules').update({ ...payload, updated_at: new Date().toISOString() }).eq('id', moduleModal.id)
+      : await supabase.from('scalasys_modules').insert(payload)
+
+    if (error) { setModuleError(error.message); setModuleSaving(false); return }
+    setModuleSaving(false)
+    setModuleModal(null)
+    setModuleForm({})
+    fetchModules()
+  }
+
+  async function moduleDelete(id) {
+    if (!confirm('Excluir este módulo? Os vínculos com projetos também serão removidos.')) return
+    await supabase.from('scalasys_modules').delete().eq('id', id)
+    setModuleModal(null)
+    fetchModules()
+  }
+
+  function moduleF(field) {
+    return { value: moduleForm[field] || '', onChange: e => setModuleForm({ ...moduleForm, [field]: e.target.value }) }
+  }
+
+  // ─── Project ↔ Module links ─────────────────────────────────────────────
+
+  async function fetchProjectLinks(projectId) {
+    const { data } = await supabase
+      .from('scalasys_project_modules')
+      .select('*')
+      .eq('project_id', projectId)
+    setProjectLinks(data || [])
+  }
+
+  async function toggleProjectModule(projectId, moduleId, currentlyLinked, wasCreatedHere = false) {
+    if (currentlyLinked) {
+      await supabase
+        .from('scalasys_project_modules')
+        .delete()
+        .eq('project_id', projectId)
+        .eq('module_id', moduleId)
+    } else {
+      await supabase
+        .from('scalasys_project_modules')
+        .insert({ project_id: projectId, module_id: moduleId, was_created_here: wasCreatedHere })
+    }
+    fetchProjectLinks(projectId)
+    fetchModules()
+  }
+
+  async function setLinkCreatedHere(projectId, moduleId, value) {
+    await supabase
+      .from('scalasys_project_modules')
+      .update({ was_created_here: value })
+      .eq('project_id', projectId)
+      .eq('module_id', moduleId)
+    fetchProjectLinks(projectId)
   }
 
   function showTab(tab) {
@@ -1477,6 +1575,9 @@ export default function ViniciusPage() {
           <div style={{ padding: '0 0 0.25rem 0' }}>
             <div className={`nav-sub-item${activeTab === 'projetos' ? ' active' : ''}`} onClick={() => showTab('projetos')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Projetos</span>
+            </div>
+            <div className={`nav-sub-item${activeTab === 'modulos' ? ' active' : ''}`} onClick={() => showTab('modulos')} style={{ paddingLeft: '2.5rem' }}>
+              <div className="nav-sub-dot" /><span className="nav-sub-label">Catálogo de Módulos</span>
             </div>
           </div>
 
@@ -1933,6 +2034,7 @@ export default function ViniciusPage() {
                 className="vini-btn gold"
                 onClick={() => {
                   setProjectForm({ status: 'diagnostico' })
+                  setProjectLinks([])
                   setProjectModal('new')
                 }}
               >+ Novo projeto</button>
@@ -1967,6 +2069,7 @@ export default function ViniciusPage() {
                                 next_step_date: p.next_step_date || '',
                               })
                               setProjectModal({ id: p.id })
+                              fetchProjectLinks(p.id)
                             }}
                           >
                             <div className="crm-card-name">{p.name}</div>
@@ -1994,6 +2097,7 @@ export default function ViniciusPage() {
                       className="crm-col-add"
                       onClick={() => {
                         setProjectForm({ status: stage.key })
+                        setProjectLinks([])
                         setProjectModal('new')
                       }}
                     >+ projeto</button>
@@ -2004,7 +2108,174 @@ export default function ViniciusPage() {
           </div>
         </div>
 
+        {/* ── ENTREGA · MÓDULOS (dynamic) ── */}
+        <div className={`tab-content${activeTab === 'modulos' ? ' active' : ''}`}>
+          <div className="tab-header">
+            <div>
+              <div className="tab-eyebrow">Entrega · Catálogo</div>
+              <div className="tab-title">Biblioteca de <em>módulos</em></div>
+              <div className="tab-sub">Inventário do que você construiu — e o quanto disso já é ativo aproveitável.</div>
+            </div>
+            <div className="tab-header-phrase">Cada módulo pronto<br /><em>é uma venda mais rápida.</em></div>
+          </div>
+          <div className="tab-body" style={{ maxWidth: 'none' }}>
+            {/* KPIs */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem', marginBottom: '1.25rem' }}>
+              {(() => {
+                const total = scalasysModules.length
+                const chumbado = scalasysModules.filter(m => m.decoupling_level === 'chumbado').length
+                const parcial = scalasysModules.filter(m => m.decoupling_level === 'parcial').length
+                const pronto = scalasysModules.filter(m => m.decoupling_level === 'pronto').length
+                const kpis = [
+                  { label: 'Total no catálogo', val: total, color: 'var(--ink)' },
+                  { label: 'Chumbados', val: chumbado, color: '#B83030' },
+                  { label: 'Parcialmente isolados', val: parcial, color: '#B8933A' },
+                  { label: 'Prontos pra reuso', val: pronto, color: '#1A6B5A' },
+                ]
+                return kpis.map((k, i) => (
+                  <div key={i} style={{ background: 'white', border: '0.5px solid var(--border)', borderRadius: 8, padding: '14px 18px' }}>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 4 }}>{k.label}</div>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: k.color, lineHeight: 1 }}>{k.val}</div>
+                  </div>
+                ))
+              })()}
+            </div>
+
+            {/* Toolbar */}
+            <div className="crm-toolbar">
+              <div className="crm-filter-bar" style={{ flex: 1, paddingBottom: 0 }}>
+                <div className="crm-filter-group">
+                  <span className="crm-filter-label">Filtrar</span>
+                  {MODULE_LEVELS.map(lvl => (
+                    <button
+                      key={lvl.key}
+                      className={`crm-filter-pill${moduleFilter === lvl.key ? ' active' : ''}`}
+                      style={moduleFilter === lvl.key ? { background: lvl.color, borderColor: lvl.color, color: 'white' } : {}}
+                      onClick={() => setModuleFilter(moduleFilter === lvl.key ? null : lvl.key)}
+                    >{lvl.label}</button>
+                  ))}
+                </div>
+              </div>
+              <button
+                className="vini-btn gold"
+                onClick={() => { setModuleForm({ decoupling_level: 'chumbado' }); setModuleModal('new') }}
+              >+ Novo módulo</button>
+            </div>
+
+            {/* Lista */}
+            {scalasysModules.length === 0
+              ? <div className="vini-empty">Catálogo vazio. Comece adicionando os módulos que você já construiu.</div>
+              : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
+                  {scalasysModules
+                    .filter(m => !moduleFilter || m.decoupling_level === moduleFilter)
+                    .map(m => {
+                      const level = MODULE_LEVELS.find(l => l.key === m.decoupling_level) || MODULE_LEVELS[0]
+                      const usageCount = allProjectModules.filter(l => l.module_id === m.id).length
+                      return (
+                        <div
+                          key={m.id}
+                          onClick={() => {
+                            setModuleForm({
+                              name:             m.name,
+                              description:      m.description || '',
+                              decoupling_level: m.decoupling_level,
+                              notes:            m.notes || '',
+                            })
+                            setModuleModal({ id: m.id })
+                          }}
+                          style={{
+                            background: 'white',
+                            border: '0.5px solid var(--border)',
+                            borderLeft: `3px solid ${level.color}`,
+                            borderRadius: 8,
+                            padding: '14px 16px',
+                            cursor: 'pointer',
+                            transition: 'all 0.12s',
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)'}
+                          onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
+                            <div style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: 15, color: 'var(--ink)', lineHeight: 1.2 }}>{m.name}</div>
+                            <span style={{
+                              fontFamily: "'DM Mono', monospace", fontSize: 9, fontWeight: 600,
+                              letterSpacing: '0.04em', padding: '2px 7px', borderRadius: 10,
+                              background: level.bg, color: level.color, whiteSpace: 'nowrap',
+                            }}>{level.label}</span>
+                          </div>
+                          {m.description && (
+                            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.45, marginBottom: 8 }}>
+                              {m.description.length > 120 ? m.description.slice(0, 120) + '…' : m.description}
+                            </div>
+                          )}
+                          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: 'var(--muted)', letterSpacing: '0.04em' }}>
+                            Usado em <strong style={{ color: 'var(--ink)' }}>{usageCount}</strong> {usageCount === 1 ? 'projeto' : 'projetos'}
+                          </div>
+                        </div>
+                      )
+                    })}
+                </div>
+              )
+            }
+          </div>
+        </div>
+
       </main>
+
+      {/* ── MODAL: Novo / Editar módulo ── */}
+      {moduleModal && (
+        <div className="vini-modal-overlay" onClick={() => { setModuleModal(null); setModuleError(null); setModuleForm({}) }}>
+          <div className="vini-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 480 }}>
+            <div className="vini-modal-header">
+              <div className="vini-modal-title">{moduleModal === 'new' ? 'Novo módulo' : 'Editar módulo'}</div>
+              <button className="vini-modal-close" onClick={() => { setModuleModal(null); setModuleError(null); setModuleForm({}) }}>×</button>
+            </div>
+            <form onSubmit={moduleSave} className="vini-modal-form">
+              <label>Nome *<input type="text" required {...moduleF('name')} placeholder="Ex: Agendamento + IA · Clínica" /></label>
+              <label>O que faz<textarea {...moduleF('description')} placeholder="Função, ferramentas usadas, integrações…" /></label>
+              <label>Grau de desacoplamento
+                <select {...moduleF('decoupling_level')}>
+                  {MODULE_LEVELS.map(lvl => (
+                    <option key={lvl.key} value={lvl.key}>{lvl.label} — {lvl.desc}</option>
+                  ))}
+                </select>
+              </label>
+              <label>Notas<textarea {...moduleF('notes')} placeholder="O que falta para virar reusável, dependências, etc." /></label>
+
+              {/* Projetos vinculados (read-only) */}
+              {moduleModal !== 'new' && (() => {
+                const links = allProjectModules.filter(l => l.module_id === moduleModal.id)
+                if (links.length === 0) return null
+                return (
+                  <div style={{ background: '#FBFAF7', border: '0.5px solid var(--border)', borderRadius: 6, padding: '10px 12px' }}>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>Projetos vinculados</div>
+                    {links.map(l => {
+                      const proj = scalasysProjects.find(p => p.id === l.project_id)
+                      if (!proj) return null
+                      return (
+                        <div key={l.project_id} style={{ fontSize: 12, padding: '3px 0', display: 'flex', justifyContent: 'space-between' }}>
+                          <span>{proj.name}</span>
+                          {l.was_created_here && <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: '#1A6B5A' }}>★ criado aqui</span>}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )
+              })()}
+
+              {moduleError && <div className="vini-error">{moduleError}</div>}
+              <div className="vini-modal-actions">
+                {moduleModal !== 'new' && (
+                  <button type="button" style={{ color: '#B83030', marginRight: 'auto' }} onClick={() => moduleDelete(moduleModal.id)}>Excluir</button>
+                )}
+                <button type="button" onClick={() => { setModuleModal(null); setModuleError(null); setModuleForm({}) }}>Cancelar</button>
+                <button type="submit" disabled={moduleSaving}>{moduleSaving ? 'Salvando…' : 'Salvar módulo'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* ── MODAL: Novo / Editar projeto Scalasys ── */}
       {projectModal && (
@@ -2037,6 +2308,58 @@ export default function ViniciusPage() {
               <label>Horas/semana estimadas<input type="number" min="0" step="1" {...projectF('hours_per_week')} placeholder="8" /></label>
               <label>Próximo passo<input type="text" {...projectF('next_step')} placeholder="Ex: Reunião de kickoff" /></label>
               <label>Data do próximo passo<input type="date" {...projectF('next_step_date')} /></label>
+
+              {/* Módulos vinculados — só em modo edição */}
+              {projectModal !== 'new' && (
+                <div style={{ background: '#FBFAF7', border: '0.5px solid var(--border)', borderRadius: 6, padding: '12px 14px' }}>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 8 }}>
+                    Módulos usados neste projeto
+                  </div>
+                  {scalasysModules.length === 0
+                    ? <div style={{ fontSize: 12, color: 'var(--muted)', fontStyle: 'italic' }}>Nenhum módulo no catálogo ainda. Crie um na aba Catálogo de Módulos.</div>
+                    : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                        {scalasysModules.map(m => {
+                          const link = projectLinks.find(l => l.module_id === m.id)
+                          const isLinked = !!link
+                          const level = MODULE_LEVELS.find(l => l.key === m.decoupling_level)
+                          return (
+                            <div key={m.id} style={{
+                              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                              padding: '6px 8px', borderRadius: 4,
+                              background: isLinked ? 'white' : 'transparent',
+                              border: isLinked ? '0.5px solid var(--border)' : '0.5px solid transparent',
+                            }}>
+                              <label style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, cursor: 'pointer', padding: 0, background: 'none' }}>
+                                <input
+                                  type="checkbox"
+                                  checked={isLinked}
+                                  onChange={() => toggleProjectModule(projectModal.id, m.id, isLinked)}
+                                  style={{ margin: 0, width: 'auto' }}
+                                />
+                                <span style={{ fontSize: 12, color: 'var(--ink)' }}>{m.name}</span>
+                                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, color: level?.color || 'var(--muted)' }}>· {level?.label || m.decoupling_level}</span>
+                              </label>
+                              {isLinked && (
+                                <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, fontFamily: "'DM Mono', monospace", color: 'var(--muted)', padding: 0, background: 'none', cursor: 'pointer' }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={!!link.was_created_here}
+                                    onChange={e => setLinkCreatedHere(projectModal.id, m.id, e.target.checked)}
+                                    style={{ margin: 0, width: 'auto' }}
+                                  />
+                                  Criado aqui ★
+                                </label>
+                              )}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )
+                  }
+                </div>
+              )}
+
               {projectError && <div className="vini-error">{projectError}</div>}
               <div className="vini-modal-actions">
                 {projectModal !== 'new' && (
