@@ -1538,7 +1538,7 @@ export default function ViniciusPage() {
           <div className={`nav-item${activeTab === 'estrategia' ? ' active' : ''}`} onClick={() => showTab('estrategia')}>
             <div className="nav-dot" /><span className="nav-label">Estratégia</span>
           </div>
-          <div style={{ padding: '0 0 0.25rem 0' }}>
+          <div>
             <div className={`nav-sub-item${activeTab === 'metas' ? ' active' : ''}`} onClick={() => showTab('metas')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Metas</span>
             </div>
@@ -1555,7 +1555,7 @@ export default function ViniciusPage() {
           <div className={`nav-item${activeTab === 'comercial' ? ' active' : ''}`} onClick={() => showTab('comercial')}>
             <div className="nav-dot" /><span className="nav-label">Comercial</span>
           </div>
-          <div style={{ padding: '0 0 0.25rem 0' }}>
+          <div>
             <div className={`nav-sub-item${activeTab === 'crm' ? ' active' : ''}`} onClick={() => showTab('crm')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">CRM</span>
             </div>
@@ -1569,7 +1569,7 @@ export default function ViniciusPage() {
           <div className={`nav-item${activeTab === 'entrega' ? ' active' : ''}`} onClick={() => showTab('projetos')}>
             <div className="nav-dot" /><span className="nav-label">Entrega</span>
           </div>
-          <div style={{ padding: '0 0 0.25rem 0' }}>
+          <div>
             <div className={`nav-sub-item${activeTab === 'projetos' ? ' active' : ''}`} onClick={() => showTab('projetos')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Projetos</span>
             </div>
@@ -1583,7 +1583,7 @@ export default function ViniciusPage() {
           <div className={`nav-item${activeTab === 'marketing' ? ' active' : ''}`} onClick={() => showTab('marketing')}>
             <div className="nav-dot" /><span className="nav-label">Marketing</span>
           </div>
-          <div style={{ padding: '0 0 0.25rem 0' }}>
+          <div>
             <div className={`nav-sub-item${activeTab === 'calendario' ? ' active' : ''}`} onClick={() => showTab('calendario')} style={{ paddingLeft: '2.5rem' }}>
               <div className="nav-sub-dot" /><span className="nav-sub-label">Plano de Marketing</span>
             </div>
